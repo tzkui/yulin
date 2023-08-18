@@ -1,0 +1,320 @@
+<script setup>
+import ViewBox from "@/components/common/view-box.vue";
+import { onMounted, ref } from "vue";
+import { bg_config } from "../../config";
+
+import selectDialogVue from "@/views/natural/components/selectDialog.vue";
+import { getYjzy } from "@/api/modules/zrzh.js";
+const imgefileUrl = (url) => {
+  return new URL(url, import.meta.url).href;
+};
+const emit = defineEmits(["openDialog"]);
+let currentResources = ref("yjzy");
+let resources_list_all = ref([
+  [
+    { name: "应急队伍", num: 453, type: "jydw", icon: "yjdw" },
+    { name: "应急人员", num: 453, type: "yjry", icon: "yjry" },
+    { name: "应急专家", num: 453, type: "yjzj", icon: "yjzj" },
+    { name: "应急仓库", num: 453, type: "yjwzk", icon: "yjck" },
+    { name: "避难场所", num: 453, type: "bncs", icon: "bncs" },
+    { name: "应急装备", num: 453, type: "yjzb", icon: "yjzb" },
+  ],
+  [
+    { name: "应急单兵", num: 453, type: "yjdb", icon: "yjdb" },
+    { name: "无人机", num: 453, type: "wrj", icon: "wrj" },
+    { name: "卫星电话", num: 453, type: "wxdh", icon: "wxdh" },
+    { name: "窄带通信", num: 453, type: "zdtx", icon: "zdtx" },
+    { name: "通讯录", num: 453, type: "txl", icon: "txl" },
+    { name: "视频会商", num: 453, type: "sphs", icon: "sphs" },
+  ],
+  [
+    { name: "华为", type: "hw", icon: "sphs" },
+    { name: "科达", type: "kd", icon: "sphs" },
+  ],
+  [
+    { name: "危化企业", num: 453, type: "spjk", icon: "spjk" },
+    { name: "公安", num: 453, type: "spjk", icon: "spjk" },
+    { name: "交警", num: 453, type: "spjk", icon: "spjk" },
+    { name: "水利", num: 453, type: "spjk", icon: "spjk" },
+    { name: "住建", num: 453, type: "spjk", icon: "spjk" },
+    { name: "综合执法", num: 453, type: "spjk", icon: "spjk" },
+  ],
+]);
+let resources_list = ref([]);
+// 应急资源
+const resources_tab = ref([
+  {
+    name: "应急救援",
+    icon: "../../../../assets/home/resources_tab1.png",
+    type: "yjzy",
+  },
+  {
+    name: "融合通信",
+    icon: "../../../../assets/home/resources_tab2.png",
+    type: "rhtx",
+  },
+  {
+    name: "视频会商",
+    icon: "../../../../assets/home/resources_tab3.png",
+    type: "sphs",
+  },
+  {
+    name: "视频监控",
+    icon: "../../../../assets/home/resources_tab4.png",
+    type: "spjk",
+  },
+]);
+const markerDatas = Object.create(null);
+const search_value = ref();
+
+const showSelect = ref(false);
+const selectDatas = ref({});
+const getYjzyList = function () {
+  getYjzy().then((res) => {
+    console.log(res);
+    for (let key in res.data) {
+      markerDatas[key] = res.data[key];
+    }
+    changeResources(currentResources.value, 0);
+  });
+};
+// 切换应急资源
+const changeResources = (type, index) => {
+  currentResources.value = type;
+  resources_list.value = resources_list_all.value[index];
+  resources_list.value.map((item) => {
+    item.url = bg_config[item.icon].url;
+    return;
+  });
+};
+const openDialog = (item, index) => {
+  console.log(item, markerDatas);
+  if (markerDatas[item.type]) {
+    let info = markerDatas[item.type];
+    selectDatas.value = {
+      name: item.name,
+      listData: info.jh.map((item) => {
+        return {
+          ...item,
+          label: item.title,
+          num: item.count,
+          treeId: item.dataType + "--" + item.id,
+        };
+      }),
+      listType: info.lx,
+      dialogType: item.type,
+    };
+    showSelect.value = true;
+  } else {
+    emit("openDialog", item, index);
+  }
+};
+const closeDialog = function () {
+  showSelect.value = false;
+};
+onMounted(() => {
+  getYjzyList();
+});
+</script>
+<template>
+  <ViewBox title="应急资源">
+    <div class="emergency_resources">
+      <!-- 搜索框 -->
+      <div class="search_box">
+        <el-input v-model="search_value" placeholder="请输入关键字" />
+        <img class="img" src="@/assets/home/icon_search.png" alt="" />
+      </div>
+      <!-- tab -->
+      <div class="resources_tab">
+        <div
+          class="tab_item"
+          v-for="(item, index) in resources_tab"
+          :key="index"
+          :class="item.type == currentResources ? 'active' : ''"
+          @click="changeResources(item.type, index)"
+        >
+          <img :src="imgefileUrl(item.icon)" class="img" alt="" />
+          {{ item.name }}
+        </div>
+      </div>
+      <!-- 内容 -->
+      <div class="resources_list" :class="currentResources">
+        <div
+          class="list_item"
+          v-for="(item, index) in resources_list"
+          :key="index"
+          @click="openDialog(item, index)"
+        >
+          <img class="img" :src="item.url" alt="" />
+          <div class="item_cont">
+            <span class="cont_name">{{ item.name }}</span>
+            <span class="cont_num" :data-num="item.num || 0"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ViewBox>
+  <selectDialogVue
+    :name="selectDatas.name"
+    :listData="selectDatas.listData"
+    :listType="selectDatas.listType"
+    @closeDialog="closeDialog"
+    :dialogType="selectDatas.dialogType"
+    v-if="showSelect"
+  >
+  </selectDialogVue>
+</template>
+<style lang="scss" scoped>
+.emergency_resources {
+  height: 250px;
+  padding: 11px 20px 11px 6px;
+  position: relative;
+
+  .search_box {
+    position: absolute;
+    right: 24px;
+    top: -42px;
+    display: flex;
+    align-items: center;
+    width: 161px;
+    height: 32px;
+    background: rgba(9, 39, 67, 0.7);
+    border: 1px solid #1e89fd;
+    padding-right: 12px;
+
+    :deep(.el-input__inner) {
+      &::-webkit-input-placeholder {
+        font-size: 16px;
+        color: #aacbf6 !important;
+      }
+    }
+
+    .img {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+    }
+  }
+
+  .resources_tab {
+    display: flex;
+    // justify-content: space-between;
+    padding: 0px 0 12px;
+    border-bottom: 1px solid #a1d0db;
+
+    .tab_item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 74px;
+      margin-right: 32px;
+      cursor: pointer;
+
+      &:last-child {
+        margin: 0;
+      }
+
+      width: calc((100% - 96px) / 4);
+
+      &.active {
+        background: rgba(95, 209, 236, 0.1);
+        border-radius: 4px 4px 4px 4px;
+        border: 1px solid;
+        border-image: linear-gradient(
+            180deg,
+            rgba(95, 209, 236, 1),
+            rgba(95, 209, 236, 0)
+          )
+          1 1;
+        clip-path: inset(0 0 round 5px);
+      }
+
+      font-size: 16px;
+      font-family: Source Han Sans SC-Medium, Source Han Sans SC;
+      font-weight: 500;
+      color: #ffffff;
+      line-height: 23px;
+    }
+
+    .img {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 4px;
+    }
+  }
+
+  .resources_list {
+    display: flex;
+    flex-wrap: wrap;
+    padding-top: 12px;
+
+    .list_item {
+      margin: 0 12px 16px 0;
+      cursor: pointer;
+
+      &:nth-child(3n) {
+        margin: 0;
+      }
+
+      width: calc((100% - 24px) / 3);
+      display: flex;
+      font-family: Source Han Sans SC-Regular, Source Han Sans SC;
+      font-weight: 400;
+
+      .img {
+        width: 56px;
+        height: 56px;
+        margin-right: 7px;
+      }
+
+      .item_cont {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+
+        .cont_name {
+          font-size: 16px;
+          color: #ffffff;
+          line-height: 23px;
+          margin-bottom: 6px;
+        }
+
+        .cont_num {
+          display: inline-block;
+          height: 30px;
+          background: rgba(69, 120, 167, 0.27);
+          text-align: center;
+
+          &::after {
+            content: attr(data-num);
+            font-size: 18px;
+            font-weight: bold;
+            line-height: 30px;
+            background: linear-gradient(180deg, #ffdf53 0%, #ffffff 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+          }
+        }
+      }
+    }
+
+    &.sphs {
+      .list_item {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .img {
+          margin: 0 0 7px 0;
+        }
+
+        .cont_num {
+          display: none;
+        }
+      }
+    }
+  }
+}
+</style>

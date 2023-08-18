@@ -1,0 +1,43 @@
+/* flex 布局 */
+.fl-f {
+    display: flex;
+}
+.fl-cen{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.fl-al{
+    display: flex;
+    align-items: center;
+}
+.fl-fw{
+    display: flex;
+    flex-wrap: wrap;
+}
+.fl-co{
+    display: flex;
+    flex-direction: column;
+}
+.fl-coa{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.fl-coc{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.fl-sb{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.fl-sbw {
+    flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

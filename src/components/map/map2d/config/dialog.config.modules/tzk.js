@@ -1,0 +1,716 @@
+import { assetsUrl } from '@/components/map/map2d/hook/index';
+import { viewDetail } from '@/utils/funcNames/tzk';
+export default {
+  yjry: {
+    title: "应急人员",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx",如果是行内布局，加上inline: true
+    rows: [
+      { name: '姓名', key: 'name' },
+      { name: '职务', key: 'job' },
+      { name: '所属机构', key: 'compony' },
+      { name: '分机号码', key: 'aphone', iconUrl: assetsUrl('/icons/video.png'), funcName: "phone" },
+      { name: '移动号码', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
+      { name: '主要职责', key: 'duty' },
+
+    ],
+    // 右下角的按钮
+    btns: [
+      {
+        name: "轨迹",
+        funcName: viewDetail
+      },
+      {
+        name: "调度",
+        funcName: "dispatch"
+      }
+    ],
+    // 左下角的列表
+    leftBtns: [
+      {
+        imgUrl: assetsUrl('/icons/leftBtn1.png'),
+        hoverTitle: "",
+        funcName: viewDetail
+      },
+      {
+        imgUrl: assetsUrl('/icons/leftBtn2.png'),
+        hoverTitle: "",
+        funcName: viewDetail
+      },
+      {
+        imgUrl: assetsUrl('/icons/leftBtn3.png'),
+        hoverTitle: "",
+        funcName: viewDetail
+      }
+    ]
+  },
+  yjzj: {
+    title: "应急专家",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '姓名', key: 'name' },
+      { name: '职务', key: 'job' },
+      { name: '研究方向', key: 'dir' },
+      { name: '移动号码', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
+      { name: '所属机构', key: 'compony' },
+
+    ],
+    // 右下角的按钮
+    btns: [
+      {
+        name: "调度",
+        funcName: "dispatch"
+      }
+    ],
+    // 左下角的列表
+    leftBtns: [
+      {
+        imgUrl: assetsUrl('/icons/leftBtn1.png'),
+        hoverTitle: "",
+        funcName: viewDetail
+      },
+      {
+        imgUrl: assetsUrl('/icons/leftBtn2.png'),
+        hoverTitle: "",
+        funcName: viewDetail
+      },
+      {
+        imgUrl: assetsUrl('/icons/leftBtn3.png'),
+        hoverTitle: "",
+        funcName: viewDetail
+      }
+    ]
+  },
+  jydw: {
+    title: "救援队伍",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '队伍名称:', key: 'name' },
+      { name: '队伍类型:', key: 'type' },
+      { name: '总人数:', key: 'total' },
+      { name: '负责人:', key: 'person' },
+      { name: '联系电话:', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
+
+    ],
+    // 右下角的按钮
+    btns: [
+      {
+        name: "调度",
+        funcName: "dispatch"
+      },
+      {
+        name: "查看",
+        funcName: viewDetail
+      }
+    ],
+    // 左下角的列表
+    leftBtns: []
+  },
+  yjwzk: {
+    title: "应急物资库",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '物资库:', key: 'name' },
+      { name: '负责人:', key: 'person' },
+      { name: '联系电话:', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
+      { name: '地址', key: 'address' }
+    ],
+    // 右下角的按钮
+    btns: [
+      {
+        name: "物资调拨",
+        funcName: "wzdb"
+      },
+      {
+        name: "查看 ",
+        funcName: viewDetail
+      }
+    ],
+    // 左下角的列表
+    leftBtns: []
+  },
+  bncs: {
+    title: "避难场所",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '名称', key: 'name' },
+      { name: '面积:', key: 'area' },
+      { name: '可容纳人数', key: 'person' },
+      { name: '地址', key: 'address' }
+    ],
+    // 右下角的按钮
+    btns: [
+      {
+        name: "监控",
+        funcName: viewDetail
+      }
+    ],
+  },
+  spjk: {
+    title: "视频监控",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx",然后在传输数据的时候传入相应的key
+    rows: [
+      { name: '监控名称', key: 'name' },
+      { name: '监控类型', key: 'type' },
+      { name: '状态', key: 'status', colorKey: "#00AB3A" },
+      { name: '地址', key: 'address' }
+    ],
+    // 右下角的按钮
+    btns: [
+      {
+        name: "查看",
+        funcName: viewDetail
+      }
+    ],
+  },
+  ylzd: {
+    title: "雨量监测站",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '测站名称', key: 'name' },
+      { name: '更新时间', key: 'time' },
+      { name: '1小时雨量', key: 'h1' },
+      { name: '3小时雨量', key: 'h2' },
+      { name: '6小时雨量', key: 'h3' },
+      { name: '12小时雨量', key: 'h4' },
+      { name: '24小时雨量', key: 'h5' },
+    ],
+    // 右下角的按钮
+    btns: [
+      {
+        name: "查 看",
+        funcName: viewDetail
+      }
+    ],
+  },
+  swzd: {
+    title: "水位站点",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '测站名称', key: 'name' },
+      { name: '站类', key: 'type' },
+      { name: '水系名称', key: 'sxmc' },
+      { name: '站址', key: 'address' },
+    ],
+    // 右下角的按钮
+    btns: [
+      {
+        name: "查看",
+        funcName: viewDetail
+      }
+    ],
+  },
+  sk: {
+    title: "水库水情",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '当前水位', key: 'dqsw', colorKey: "status" },
+      { name: '汛限水位', key: 'xxsw' },
+      { name: '高水位', key: 'gsw' },
+      { name: '站址', key: 'address' },
+    ],
+    // 右下角的按钮
+    btns: [
+      {
+        name: "查看",
+        funcName: viewDetail
+      }
+    ],
+  },
+  jsd: {
+    title: "积水点信息",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '积水点名称', key: 'name' },
+      { name: '积水点信息', key: 'info' },
+      { name: '责任人', key: 'person' },
+      { name: '联系电话', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
+    ],
+    // 右下角的按钮
+    btns: [
+      {
+        name: "查看",
+        funcName: viewDetail
+      }
+    ],
+  },
+  hdzd: {
+    title: "河道水位站信息",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '监测站名称', key: 'name' },
+      { name: '站类', key: 'type' },
+      { name: '水系名称', key: 'sxmc' },
+      { name: '站址', key: 'address', },
+    ],
+    // 右下角的按钮
+    btns: [
+      {
+        name: "查看",
+        funcName: viewDetail
+      }
+    ],
+  },
+  dzyhd: {
+    title: "地质灾害点信息",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '灾害名称', key: 'name' },
+      { name: '灾害类型', key: 'type' },
+      { name: '影响户数', key: 'houseNum' },
+      { name: '影响人数', key: 'personNum' },
+      { name: '责任人员', key: 'person' },
+      { name: '联系电话', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
+      { name: '地址', key: 'address' }
+
+    ],
+    // 右下角的按钮
+    btns: [
+      {
+        name: "查看",
+        funcName: viewDetail
+      }
+    ],
+  },
+  lswjf: {
+    title: "房屋信息",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '所属村镇', key: 'name' },
+      { name: '户主姓名', key: 'person' },
+      { name: '家庭人数', key: 'houseNum' },
+      { name: '鉴定等级:', key: 'level' },
+      { name: '户主电话', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
+      { name: '农户经济条件', key: 'type' },
+      { name: '房屋地址', key: 'address' }
+
+    ],
+    // 右下角的按钮
+    btns: [
+      {
+        name: "查看",
+        funcName: viewDetail
+      }
+    ],
+  },
+  dzyfq: {
+    title: "地质灾害区域",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '灾害区域', key: 'area' },
+      { name: '灾害等级', key: 'level' },
+      { name: '影响人数', key: 'personNum' },
+      { name: '影响户数', key: 'houseNum' },
+
+    ],
+    // 右下角的按钮
+    btns: [
+      {
+        name: "查看",
+        funcName: viewDetail
+      }
+    ],
+  },
+  shyhd: {
+
+  },
+  shzh: {
+    title: "山洪灾害",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '风险类别', key: 'type' },
+      { name: '风险地址', key: 'address' },
+      { name: '影响户数', key: 'houseNum' },
+      { name: '影响人数', key: 'personNum' },
+      { name: '责任人员', key: 'person' },
+      { name: '联系电话', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
+      { name: '防范措施', key: 'do' }
+
+    ],
+    // 右下角的按钮
+    btns: [
+      {
+        name: "查看",
+        funcName: viewDetail
+      }
+    ],
+  },
+  csyld: {
+    title: "城市易涝点",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '风险地址', key: 'address' },
+      { name: '责任单位', key: 'unit' },
+
+    ],
+    // 右下角的按钮
+    btns: [
+      {
+        name: "查看",
+        funcName: viewDetail
+      }
+    ],
+  },
+  // 企业信息
+  qyxx: {
+    title: "企业信息",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '企业名称', key: 'name' },
+      { name: '企业地址', key: 'address' },
+      { name: '联系人', key: 'person' },
+      { name: '联系电话', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
+      { name: '企业类型', key: 'type' },
+      { name: '所属区域', key: 'area' },
+
+    ],
+    // 右下角的按钮
+    btns: [
+      {
+        name: "查看",
+        funcName: viewDetail
+      }
+    ],
+  },
+  fmks: {
+    title: "非煤矿山",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '矿山名称', key: 'name' },
+      { name: '矿山地址', key: 'address' },
+      { name: '联系人', key: 'person' },
+      { name: '联系电话', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
+
+    ],
+    // 右下角的按钮
+    btns: [
+      // {
+      //   name: "查看",
+      //   funcName: viewDetail
+      // }
+    ],
+  },
+  gmqy: {
+    title: "工贸企业",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '企业名称', key: 'name' },
+      { name: '企业地址', key: 'address' },
+      { name: '联系人', key: 'person' },
+      { name: '联系电话', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
+
+    ],
+    // 右下角的按钮
+    btns: [
+      // {
+      //   name: "查看",
+      //   funcName: viewDetail
+      // }
+    ],
+  },
+  yhbzqy: {
+    title: "烟花爆竹企业",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '企业名称', key: 'name' },
+      { name: '企业地址', key: 'address' },
+      { name: '联系人', key: 'person' },
+      { name: '联系电话', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
+
+    ],
+    // 右下角的按钮
+    btns: [
+      // {
+      //   name: "查看",
+      //   funcName: viewDetail
+      // }
+    ],
+  },
+  mk: {
+    title: "煤矿",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '企业名称', key: 'name' },
+      { name: '企业地址', key: 'address' },
+      { name: '联系人', key: 'person' },
+      { name: '联系电话', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
+
+    ],
+    // 右下角的按钮
+    btns: [
+      // {
+      //   name: "查看",
+      //   funcName: viewDetail
+      // }
+    ],
+  },
+  wkk: {
+    title: "尾矿库",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '企业名称', key: 'name' },
+      { name: '企业地址', key: 'address' },
+      { name: '联系人', key: 'person' },
+      { name: '联系电话', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
+
+    ],
+    // 右下角的按钮
+    btns: [
+      // {
+      //   name: "查看",
+      //   funcName: viewDetail
+      // }
+    ],
+  },
+  jsjgy: {
+    title: "金属加工业",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '企业名称', key: 'name' },
+      { name: '企业地址', key: 'address' },
+      { name: '联系人', key: 'person' },
+      { name: '联系电话', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
+
+    ],
+    // 右下角的按钮
+    btns: [
+      // {
+      //   name: "查看",
+      //   funcName: viewDetail
+      // }
+    ],
+  },
+  fjsjgy: {
+    title: "非金属加工业",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '企业名称', key: 'name' },
+      { name: '企业地址', key: 'address' },
+      { name: '联系人', key: 'person' },
+      { name: '联系电话', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
+
+    ],
+    // 右下角的按钮
+    btns: [
+      // {
+      //   name: "查看",
+      //   funcName: viewDetail
+      // }
+    ],
+  },
+  yqt: {
+    title: "油气田",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '企业名称', key: 'name' },
+      { name: '企业地址', key: 'address' },
+      { name: '联系人', key: 'person' },
+      { name: '联系电话', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
+
+    ],
+    // 右下角的按钮
+    btns: [
+      // {
+      //   name: "查看",
+      //   funcName: viewDetail
+      // }
+    ],
+  },
+  csc: {
+    title: "采石场",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '企业名称', key: 'name' },
+      { name: '企业地址', key: 'address' },
+      { name: '联系人', key: 'person' },
+      { name: '联系电话', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
+
+    ],
+    // 右下角的按钮
+    btns: [
+      // {
+      //   name: "查看",
+      //   funcName: viewDetail
+      // }
+    ],
+  },
+  ltkc: {
+    title: "露天矿场",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '企业名称', key: 'name' },
+      { name: '企业地址', key: 'address' },
+      { name: '联系人', key: 'person' },
+      { name: '联系电话', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
+
+    ],
+    // 右下角的按钮
+    btns: [
+      // {
+      //   name: "查看",
+      //   funcName: viewDetail
+      // }
+    ],
+  },
+  wxy1: {
+    title: "一级危险源",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '企业名称', key: 'name' },
+      { name: '企业地址', key: 'address' },
+      { name: '联系人', key: 'person' },
+      { name: '联系电话', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
+
+    ],
+    // 右下角的按钮
+    btns: [
+      // {
+      //   name: "查看",
+      //   funcName: viewDetail
+      // }
+    ],
+  },
+  wxy2: {
+    title: "二级危险源",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '企业名称', key: 'name' },
+      { name: '企业地址', key: 'address' },
+      { name: '联系人', key: 'person' },
+      { name: '联系电话', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
+
+    ],
+    // 右下角的按钮
+    btns: [
+      // {
+      //   name: "查看",
+      //   funcName: viewDetail
+      // }
+    ],
+  },
+  wxy3: {
+    title: "三级危险源",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '企业名称', key: 'name' },
+      { name: '企业地址', key: 'address' },
+      { name: '联系人', key: 'person' },
+      { name: '联系电话', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
+
+    ],
+    // 右下角的按钮
+    btns: [
+      // {
+      //   name: "查看",
+      //   funcName: viewDetail
+      // }
+    ],
+  },
+  wxy4: {
+    title: "四级危险源",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '企业名称', key: 'name' },
+      { name: '企业地址', key: 'address' },
+      { name: '联系人', key: 'person' },
+      { name: '联系电话', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
+
+    ],
+    // 右下角的按钮
+    btns: [
+      // {
+      //   name: "查看",
+      //   funcName: viewDetail
+      // }
+    ],
+  },
+  gajk: {
+    title: "公安监控",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '企业名称', key: 'name' },
+      { name: '企业地址', key: 'address' },
+      { name: '联系人', key: 'person' },
+      { name: '联系电话', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
+
+    ],
+    // 右下角的按钮
+    btns: [
+      // {
+      //   name: "查看",
+      //   funcName: viewDetail
+      // }
+    ],
+  },
+  zjjjk: {
+    title: "住建局监控",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '企业名称', key: 'name' },
+      { name: '企业地址', key: 'address' },
+      { name: '联系人', key: 'person' },
+      { name: '联系电话', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
+
+    ],
+    // 右下角的按钮
+    btns: [
+      // {
+      //   name: "查看",
+      //   funcName: viewDetail
+      // }
+    ],
+  },
+  sljjk: {
+    title: "水利局监控",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '企业名称', key: 'name' },
+      { name: '企业地址', key: 'address' },
+      { name: '联系人', key: 'person' },
+      { name: '联系电话', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
+
+    ],
+    // 右下角的按钮
+    btns: [
+      // {
+      //   name: "查看",
+      //   funcName: viewDetail
+      // }
+    ],
+  },
+  zrzhjk: {
+    title: "自然灾害监控",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '企业名称', key: 'name' },
+      { name: '企业地址', key: 'address' },
+      { name: '联系人', key: 'person' },
+      { name: '联系电话', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
+
+    ],
+    // 右下角的按钮
+    btns: [
+      // {
+      //   name: "查看",
+      //   funcName: viewDetail
+      // }
+    ],
+  },
+  hgyqjk: {
+    title: "化工园区监控",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: '企业名称', key: 'name' },
+      { name: '企业地址', key: 'address' },
+      { name: '联系人', key: 'person' },
+      { name: '联系电话', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
+
+    ],
+    // 右下角的按钮
+    btns: [
+      // {
+      //   name: "查看",
+      //   funcName: viewDetail
+      // }
+    ],
+  },
+}

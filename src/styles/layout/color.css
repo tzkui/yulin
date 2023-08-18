@@ -1,0 +1,36 @@
+/* 字体颜色 */
+.fc-999 {
+    color: #999 !important;
+}
+
+.fc-666 {
+    color: #666 !important;
+}
+
+.fc-000 {
+    color: #000 !important;
+}
+
+.fc-333 {
+    color: #333 !important;
+}
+
+.fc-fff {
+    color: #fff !important;
+}
+
+.fc-d00 {
+    color: #D0000D !important;
+}
+
+.fc-b13 {
+    color: #B13430 !important;
+}
+
+.fc-5f5 {
+    color: #5F5F5F !important;
+}
+
+.bg-fff {
+    background-color: #fff !important;
+}

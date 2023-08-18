@@ -1,0 +1,794 @@
+.communicationViewMain {
+    padding-top: 30px;
+    box-sizing: border-box;
+    display: flex;
+    color: #d4e8f8;
+    height: 100%;
+  
+    .sideBar {
+      display: flex;
+      box-sizing: border-box;
+      padding-bottom: 32px;
+  
+      .sideBarGroup {
+        display: flex;
+        flex-direction: column;
+        width: 48px;
+        position: relative;
+        margin-right: 16px;
+  
+        .btn {
+          cursor: pointer;
+          line-height: 23px;
+          padding: 44px 15px 38px 13px;
+          background: url("../../assets/communication/tab_off@2x.png") no-repeat;
+          background-size: 100% 100%;
+          font-size: 20px;
+          font-family: Source Han Sans SC-Bold, Source Han Sans SC;
+          color: #7b9cc4;
+  
+          &.active {
+            color: #fff;
+            font-weight: bold;
+            background: url("../../assets/communication/tab_on@2x.png") no-repeat;
+            background-size: 100% 100%;
+          }
+  
+          &:last-child {
+            position: relative;
+            top: -26px;
+          }
+        }
+      }
+  
+      .btnGroup {
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+        padding-bottom: 20px;
+  
+        &::after {
+          content: "";
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 3px;
+          width: 100%;
+          background: url("../../assets/communication/line@2x.png") no-repeat;
+          background-size: 100% 100%;
+        }
+  
+        .searchGroup {
+          flex: 1;
+          height: 40px;
+          line-height: 40px;
+          border: 1px solid rgba(93, 161, 248, 0.12);
+          background: rgba(93, 161, 248, 0.1);
+          border-radius: 4px;
+          position: relative;
+  
+          input {
+            font-size: 14px;
+            font-family: Source Han Sans SC-Regular, Source Han Sans SC;
+            border: none;
+            background: none;
+            outline: none;
+            color: #7b9cc4;
+            padding: 9px 72px 9px 16px;
+            box-sizing: border-box;
+            width: 100%;
+          }
+  
+          .btnSearch {
+            cursor: pointer;
+            width: 56px;
+            position: absolute;
+            right: 0;
+            height: 100%;
+            text-align: center;
+            background: linear-gradient(
+              180deg,
+              #3a89ff 0%,
+              rgba(58, 137, 255, 0.32) 100%
+            );
+            border-radius: 4px;
+            border: 1px solid rgba(93, 161, 248, 0.65);
+  
+            &::after {
+              content: "";
+              display: inline-block;
+              width: 100%;
+              height: 100%;
+              background: url("../../assets/communication/icon_search@2x.png")
+                no-repeat;
+              background-size: 20px;
+              background-position: center;
+            }
+          }
+        }
+  
+        .btnAdd {
+          margin-left: 8px;
+          cursor: pointer;
+          width: 56px;
+          height: 100%;
+          background: linear-gradient(
+            180deg,
+            #3a89ff 0%,
+            rgba(58, 137, 255, 0.32) 100%
+          );
+          border-radius: 4px;
+          border: 1px solid rgba(93, 161, 248, 0.65);
+  
+          &::after {
+            content: "";
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+            background: url("../../assets/communication/icon_add@2x.png")
+              no-repeat;
+            background-size: 20px;
+            background-position: center;
+          }
+        }
+      }
+  
+      .treeMain {
+        padding: 10px 0;
+        box-sizing: border-box;
+        height: 100%;
+        position: relative;
+        overflow-y: auto;
+        :deep(.el-tree-node) {
+          .el-checkbox__input.is-disabled {
+            display: none;
+          }
+        }
+  
+        //滚动条样式重写
+        &::-webkit-scrollbar {
+          width: 0;
+          height: 0;
+          background: transparent;
+        }
+      }
+  
+      .btnMeetingWrap {
+        padding-top: 20px;
+        position: relative;
+  
+        &::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 3px;
+          width: 100%;
+          background: url("../../assets/communication/line@2x.png") no-repeat;
+          background-size: 100% 100%;
+        }
+  
+        .btnMeeting {
+          cursor: pointer;
+          width: 100%;
+          text-align: center;
+          height: 40px;
+          line-height: 40px;
+          background: linear-gradient(
+            180deg,
+            #3a89ff 0%,
+            rgba(58, 137, 255, 0.32) 100%
+          );
+          box-shadow: 0px 3px 5px 0px rgba(58, 97, 194, 0.56);
+          border-radius: 4px;
+          &.disabled {
+            cursor: not-allowed;
+            opacity: 0.8;
+          }
+        }
+      }
+    }
+  
+    .contentMain {
+      display: flex;
+      flex-direction: column;
+      width: calc(100% - 484px);
+      flex: 1;
+      position: relative;
+      height: 100%;
+  
+      &::before {
+        content: "";
+        position: absolute;
+        background: url("../../assets/layout/bg_foot@2x.png") no-repeat;
+        background-size: 100% 100%;
+        width: 100%;
+        height: 42px;
+        bottom: 0;
+      }
+  
+      .typeGroup,
+      .contactListGroup,
+      .contactBtnGroupWrap .btnGroup {
+        display: flex;
+      }
+  
+      .typeGroup {
+        background: url("../../assets/communication/bg_contactGroup@2x.png")
+          no-repeat;
+        background-size: 1092px 24.5px;
+        background-position: 304px top;
+  
+        .btn {
+          width: 80px;
+          text-align: center;
+          height: 38px;
+          line-height: 38px;
+          font-size: 20px;
+          font-family: Source Han Sans SC-Regular, Source Han Sans SC;
+          color: #7b9cc4;
+          background: url("../../assets/communication/tab_contact_off@2x.png")
+            no-repeat;
+          background-size: 100% 100%;
+          margin-right: 24px;
+  
+          &.active {
+            color: #3a89ff;
+            background: url("../../assets/communication/tab_contact_on@2x.png")
+              no-repeat;
+            background-size: 100% 100%;
+          }
+        }
+      }
+  
+      .contactListGroup {
+        flex-wrap: wrap;
+        height: 794px;
+        width: 100%;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        align-content: flex-start;
+        //滚动条重置
+        &::-webkit-scrollbar {
+          display: none;
+        }
+  
+        .contactList {
+          width: 180px;
+          height: 246px;
+          margin-top: 20px;
+          background: url("../../assets/communication/card_base_defult@2x.png")
+            no-repeat;
+          background-size: 100% 100%;
+          margin-right: 24px;
+          display: flex;
+          justify-content: space-between;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          box-sizing: border-box;
+          padding-bottom: 2px;
+  
+          .name {
+            font-size: 18px;
+            font-family: Source Han Sans SC-Medium, Source Han Sans SC;
+            font-weight: 500;
+            color: #d4e8f8;
+            width: 128px;
+            height: 29px;
+            line-height: 29px;
+            background: url("../../assets/communication/card_top_defult@2x.png")
+              no-repeat;
+            background-size: 100%;
+          }
+  
+          .state {
+            padding-top: 132px;
+            width: 132px;
+            background: url("../../assets/communication/card_icon@2x.png")
+              no-repeat;
+            background-size: 132px 132px;
+            background-position-y: top;
+            font-size: 18px;
+            font-family: Source Han Sans SC-Medium, Source Han Sans SC;
+            font-weight: 500;
+            color: #7b9cc4;
+            line-height: 24px;
+            letter-spacing: 4px;
+          }
+  
+          .btnCallGroup {
+            width: 168px;
+            height: 28px;
+            line-height: 28px;
+            background: url("../../assets/communication/card_bottom_defult@2x.png")
+              no-repeat;
+            background-size: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+  
+            .btn {
+              width: 24px;
+              height: 24px;
+              cursor: pointer;
+  
+              &.call {
+                background: url("../../assets/communication/icon_phone@2x.png")
+                  no-repeat;
+                background-size: 100%;
+              }
+  
+              &.video {
+                background: url("../../assets/communication/icon_live@2x.png")
+                  no-repeat;
+                background-size: 100%;
+                margin: 0 16px;
+              }
+  
+              &.more {
+                background: url("../../assets/communication/icon_more@2x.png")
+                  no-repeat;
+                background-size: 100%;
+              }
+            }
+          }
+  
+          &.active {
+            background: url("../../assets/communication/card_base_active@2x.png")
+              no-repeat;
+            background-size: 100% 100%;
+  
+            .name {
+              background: url("../../assets/communication/card_top_active@2x.png")
+                no-repeat;
+              background-size: 100%;
+            }
+  
+            .state {
+              background: url("../../assets/communication/card_icon_active@2x.png")
+                no-repeat;
+              background-size: 132px 132px;
+              background-position-y: top;
+              color: #d4e8f8;
+            }
+  
+            .btnCallGroup {
+              background: url("../../assets/communication/card_bottom_active@2x.png")
+                no-repeat;
+              background-size: 100%;
+            }
+          }
+  
+          &.calling {
+            background: url("../../assets/communication/card_base_calling@2x.png")
+              no-repeat;
+            background-size: 100% 100%;
+  
+            .name {
+              background: url("../../assets/communication/card_top_calling@2x.png")
+                no-repeat;
+              background-size: 100%;
+            }
+  
+            .state {
+              background: url("../../assets/communication/card_icon_calling@2x.png")
+                no-repeat;
+              background-size: 132px 132px;
+              background-position-y: top;
+              color: #0ad160;
+            }
+  
+            .btnCallGroup {
+              background: url("../../assets/communication/card_bottom_calling@2x.png")
+                no-repeat;
+              background-size: 100%;
+            }
+          }
+  
+          &.work,
+          &.off {
+            background: url("../../assets/communication/card_base_off@2x.png")
+              no-repeat;
+            background-size: 100% 100%;
+  
+            .name {
+              color: #7b9cc4;
+              background: url("../../assets/communication/card_top_off@2x.png")
+                no-repeat;
+              background-size: 100%;
+            }
+  
+            .state {
+              background: url("../../assets/communication/card_icon_off@2x.png")
+                no-repeat;
+              background-size: 132px 132px;
+              background-position-y: top;
+              color: #7b9cc4;
+            }
+  
+            .btnCallGroup {
+              background: url("../../assets/communication/card_bottom_off@2x.png")
+                no-repeat;
+              background-size: 100%;
+  
+              .btn {
+                &.call {
+                  background: url("../../assets/communication/icon_phone_off@2x.png")
+                    no-repeat;
+                  background-size: 100%;
+                }
+  
+                &.video {
+                  background: url("../../assets/communication/icon_live_off@2x.png")
+                    no-repeat;
+                  background-size: 100%;
+                  margin: 0 16px;
+                }
+  
+                &.more {
+                  background: url("../../assets/communication/icon_more_off@2x.png")
+                    no-repeat;
+                  background-size: 100%;
+                }
+              }
+            }
+          }
+  
+          &.work {
+            .state {
+              background: url("../../assets/communication/card_icon_work@2x.png")
+                no-repeat;
+              background-size: 132px 132px;
+              background-position-y: top;
+              color: #f53f3f;
+            }
+          }
+        }
+      }
+  
+      .contactBtnGroupWrap {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+  
+        .btnGroup {
+          justify-content: center;
+          position: relative;
+          transition: bottom .3s ease-in-out;
+  
+          .btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+  
+            &:not(:first-child) {
+              margin-left: 32px;
+            }
+  
+            .icon {
+              width: 68px;
+              height: 60px;
+              background: url("../../assets/communication/btn_contact_defult@2x.png")
+                no-repeat;
+              background-size: 100% 100%;
+              position: relative;
+              cursor: pointer;
+  
+              &.disabled {
+                cursor: not-allowed;
+                background: url("../../assets/communication/btn_contact_disable@2x.png")
+                  no-repeat;
+                background-size: 100% 100%;
+              }
+  
+              &::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+              }
+  
+              &.call::after {
+                background: url("../../assets/communication/icon_call@2x.png")
+                  no-repeat;
+                background-size: 32px 32px;
+                background-position: center;
+              }
+  
+              &.callSingle::after {
+                background: url("../../assets/communication/icon_callSingle@2x.png")
+                  no-repeat;
+                background-size: 32px 32px;
+                background-position: center;
+              }
+  
+              &.callGroup::after {
+                background: url("../../assets/communication/icon_callGroup@2x.png")
+                  no-repeat;
+                background-size: 32px 32px;
+                background-position: center;
+              }
+  
+              &.callMulti::after {
+                background: url("../../assets/communication/icon_callMulti@2x.png")
+                  no-repeat;
+                background-size: 32px 32px;
+                background-position: center;
+              }
+  
+              &.callPoint::after {
+                background: url("../../assets/communication/icon_callPoint@2x.png")
+                  no-repeat;
+                background-size: 32px 32px;
+                background-position: center;
+              }
+  
+              &.callBroadcast::after {
+                background: url("../../assets/communication/icon_callBroadcast@2x.png")
+                  no-repeat;
+                background-size: 32px 32px;
+                background-position: center;
+              }
+  
+              &.callTransfer::after {
+                background: url("../../assets/communication/icon_callTransfer@2x.png")
+                  no-repeat;
+                background-size: 32px 32px;
+                background-position: center;
+              }
+  
+              &.callHold::after {
+                background: url("../../assets/communication/icon_callHold@2x.png")
+                  no-repeat;
+                background-size: 32px 32px;
+                background-position: center;
+              }
+  
+              &.callMonitor::after {
+                background: url("../../assets/communication/icon_callMonitor@2x.png")
+                  no-repeat;
+                background-size: 32px 32px;
+                background-position: center;
+              }
+  
+              &.callSplit::after {
+                background: url("../../assets/communication/icon_callSplit@2x.png")
+                  no-repeat;
+                background-size: 32px 32px;
+                background-position: center;
+              }
+  
+              &.callInsert::after {
+                background: url("../../assets/communication/icon_callInsert@2x.png")
+                  no-repeat;
+                background-size: 32px 32px;
+                background-position: center;
+              }
+            }
+  
+            .txt {
+              margin-top: 4px;
+              height: 24px;
+              font-size: 18px;
+              font-family: Source Han Sans SC-Medium, Source Han Sans SC;
+              font-weight: 500;
+              color: #d4e8f8;
+              line-height: 24px;
+            }
+          }
+        }
+  
+        .btnToggle {
+          width: 228px;
+          height: 23px;
+          background: url("../../assets/communication/btn_contactGroup@2x.png")
+            no-repeat;
+          background-size: 100% 100%;
+          background-position: center bottom;
+          align-self: center;
+          position: relative;
+          cursor: pointer;
+  
+          &::after {
+            content: "";
+            position: absolute;
+            top: 10px;
+            left: calc(50% - 10px);
+            width: 22px;
+            height: 6px;
+            background: url("../../assets/communication/btn_contactGroup_toggle@2x.png")
+              no-repeat;
+            background-size: 100% 100%;
+            background-position: center bottom;
+          }
+  
+          &.active::after {
+            transform: rotateX(180deg);
+          }
+        }
+      }
+    }
+  }
+  // 弹屏窗样式
+  .floatW {
+    position: fixed;
+    right: 0px;
+    bottom: 100px;
+    // width: 240px;
+    // height: 160px;
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+    // background: rgba(10, 43, 112, 0.96);
+    // box-shadow: 0px 0px 18px 0px rgba(0, 0, 0, 0.15);
+    border-radius: 8px 8px 8px 8px;
+    color: #fff;
+    text-align: center;
+    box-sizing: border-box;
+    padding: 15px;
+    letter-spacing: 2px;
+    transition: all 0.4s linear;
+    h2 {
+      margin-bottom: 10px;
+      font-size: 24px;
+    }
+    p {
+      font-size: 18px;
+    }
+    .BtnBtm {
+      // margin-top: 10px;
+      .BtnBtmItem {
+        text-align: center;
+        P {
+          font-size: 16px;
+        }
+        img {
+          width: 60px;
+          height: 60px;
+        }
+      }
+    }
+  }
+  .hidFloatw {
+    right: -260px;
+  }
+
+  // @mixin bg($url) {
+  //   background: url($url) no-repeat;
+  //   background-size: 100% 100%;
+  // }
+
+  // .diaPopu {
+  //   position: absolute;
+  //   z-index: 20;
+  //   right: 0px;
+  //   bottom: 56px;
+  //   overflow: hidden;
+  //   transition: all 0.4s linear;
+  //   // padding: 20px 26px;
+  //   padding: 0 20px 16px;
+  //   // @include bg("@/assets/communication/call_textbox.png");
+  //   width: 336px;
+  //   .videoName {
+  //     position: absolute;
+  //     top: 20px;
+  //     left: 50%;
+  //     transform: translate(-50%, -50%);
+  //   }
+  //   .closPopu {
+  //     position: absolute;
+  //     width: 24px;
+  //     height: 24px;
+  //     border-radius: 50%;
+  //     border: 1px #eee solid;
+  //     right: 0px;
+  //     top: 0px;
+  //   }
+
+  //   .btns {
+  //     display: flex;
+  //     align-items: center;
+  //     justify-content: flex-start;
+  //     font-size: 14px;
+  //     flex-wrap: wrap;
+  //   }
+  //   .btn_hangUp {
+  //     position: absolute;
+  //     right: 36px;
+  //     bottom: 30px;
+  //     padding: 12px 20px;
+  //     @include bg("@/assets/communication/btn_endBg.png");
+  //     display: flex;
+  //     align-items: center;
+  //     cursor: pointer;
+  //     &:hover {
+  //       opacity: 0.8;
+  //     }
+  //     img {
+  //       width: 18px;
+  //       height: 18px;
+  //       margin-right: 6px;
+  //     }
+  //     span {
+  //       line-height: 18px;
+  //     }
+  //   }
+  //   .btn_hangUpR {
+  //     right: 56px;
+  //   }
+  // }
+  // .videoPlay {
+  //   @include bg("@/assets/communication/textbox.png");
+  //   color: #fff;
+  //   font-size: 14px;
+  //   bottom: 120px;
+  //   right: 16px;
+  //   width: 604px;
+  //   height: 312px;
+  //   box-sizing: border-box;
+  //   .diaTop {
+  //     display: flex;
+  //     align-items: center;
+  //     justify-content: space-between;
+  //     height: 40px;
+  //     .isCallTxt {
+  //       height: 40px;
+  //       line-height: 40px;
+  //     }
+  //     .diaBtns {
+  //       flex: 1;
+  //       height: 40px;
+  //       display: flex;
+  //       align-items: center;
+  //       justify-content: flex-end;
+  //       .btn_blowUp {
+  //         width: 28px;
+  //         height: 28px;
+  //         @include bg("@/assets/communication/btn_blowUp.png");
+  //         margin-right: 2px;
+  //         cursor: pointer;
+  //       }
+  //       .btn_shrink {
+  //         width: 18px;
+  //         height: 18px;
+  //         margin-right: 8px;
+  //         @include bg("@/assets/communication/btn_shrink.png");
+  //       }
+  //       .btn_close {
+  //         width: 18px;
+  //         height: 18px;
+  //         @include bg("@/assets/communication/btn_close.png");
+  //         cursor: pointer;
+  //       }
+  //     }
+  //   }
+  // }
+  // .videoPlagBig {
+  //   width: 70%;
+  //   height: 50%;
+  //   padding: 0 40px 16px;
+  // }
+  .dial{
+    position: fixed;
+    cursor: pointer;
+    right: 20px;
+    bottom: 180px;
+    width: 48px;
+    height: 48px;
+    @include bg('@/assets/communication/map-1-on@2x.png');
+    &:after {
+      content: '';
+      position: absolute;
+      width: 48px;
+      height: 48px;
+      background: url('@/assets/communication/icon_phone-f@2x.png') no-repeat;
+      background-size: 28px 28px;
+      background-position: center;
+    }
+  }

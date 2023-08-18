@@ -1,0 +1,69 @@
+.bbb {
+    color: aquamarine;
+}
+/* 层级选择器的样式 */
+.el-cascader {
+    border: 0 !important;
+    width: 550px;
+    height: 30px;
+    margin: 50px;
+}
+
+/* 里面的内容框 */
+.el-input {
+    border: none !important;
+    height: 100%;
+    /* background-color: aliceblue; */
+    color: #AACBF6;
+}
+.el-input .el-input__icon {
+  color: #AACBF6;
+}
+
+/* 设置背景颜色 */
+.el-input__wrapper {
+    background: rgba(9,39,67,0.9) !important;
+    border: none !important;
+    color: #000;
+    box-shadow: none !important;
+}
+/* 下面这个是弹出来来的这个背景框的颜色选择,也可以决定位置呢 */
+.el-cascader-panel {
+    background: #193B93;
+}
+
+/* 里面类容的位置了 */
+.el-popper {
+    inset: none;
+}
+/* 这个就是移入选择的时候的相关的样式的了 */
+.el-cascader-node:not(.is-disabled):focus,
+.el-cascader-node:not(.is-disabled):hover {
+    background: #193B93 !important;
+    color: #66E1DF !important;
+    font-weight: bold;
+}
+/* 选择的样式 */
+.el-cascader-node__label:hover{
+    color: #66E1DF !important;
+}
+/* 没有选择的样式 */
+.el-cascader-node{
+    color: #fff;
+}
+input::placeholder {
+    color: #fff !important;
+}
+/* 最后选择出来内容字体的样式 */
+.el-input__inner{
+    color: #AACBF6 !important;
+}
+/* 下面是这个弹出框的位置 */
+/* .el-cascader__dropdown{
+    inset: 30px auto auto 0px !important
+} */
+/* 那个小三角形状箭头的样式 */
+/* .el-popper__arrow{
+    position: absolute;
+    left: 30px !important;
+} */

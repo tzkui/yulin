@@ -1,0 +1,148 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  outline: none;
+}
+
+html,
+body {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  line-height: 1;
+  height: 100%;
+  width: 100%;
+}
+
+ul,li{
+  list-style: none;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+  /* background-color: rgba(0, 0, 0, 0.1); */
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+.amap-logo {
+  display: none;
+  opacity: 0 !important;
+}
+
+.amap-copyright {
+  opacity: 0;
+}
+
+.news-title:hover div {
+  color: #08DCF4 !important;
+}
+
+.news-title:hover span {
+  color: #08DCF4 !important;
+}
+
+.map-title:hover {
+  color: #fff !important;
+}
+
+.tl-1 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tl-2 {
+  word-break: break-all;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.tl-3 {
+  word-break: break-all;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.c-p {
+  cursor: pointer;
+}
+
+/* element select style */
+.el-input__inner {
+  width: 40px;
+  height: 20px;
+  background: #001e7f;
+  color: #75cdff;
+  font-size: 12px;
+}
+
+.el-select-dropdown {
+  min-width: 70px !important;
+}
+
+.el-select-dropdown__wrap {
+  text-align: center !important;
+}
+
+.el-select__popper.el-popper {
+  /* background: rgba(6, 10, 59, 0.9) !important;
+    box-shadow: inset 0px 0px 7px 0px #0d5af5 !important;
+    border: 0 !important;
+  width: 70px; */
+  background: #001e7f;
+  border: 1px solid #75cdff;
+  border-radius: 4px;
+}
+
+.el-select-dropdown__item {
+  padding: 0 !important;
+  color: #8dc6eb !important;
+  font-size: 12px !important;
+  height: 20px !important;
+  line-height: 20px !important;
+}
+
+.el-select-dropdown__item:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: #53befc !important;
+  z-index: 999;
+}
+
+.el-select-dropdown__item.hover {
+  background-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.el-popper__arrow::before {
+  width: 0;
+  height: 0;
+}
+
+.el-popper.is-light .el-popper__arrow::before {
+  border: 0 !important;
+}
+
+.el-select .el-input .el-select__caret {
+  color: #75e3ff !important;
+}
+
+.el-input__wrapper {
+  background-color: #001e7f !important;
+  border: 1px solid #75cdff !important;
+  box-shadow: none;
+}
+
+.el-input__inner::placeholder {
+  color: #75cdff;
+}
