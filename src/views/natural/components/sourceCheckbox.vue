@@ -93,7 +93,6 @@ const setTypes = function () {
     });
     console.log(base);
     base[0].maekerList = list;
-    console.log("xxxx", base);
     markerListDict[item.id] = base;
   });
 };
@@ -121,57 +120,30 @@ watch(selectedList, (val, old) => {
       }
     }
   }
+  console.log("李斯特：", list, markerListDict);
   if (val.length > old.length) {
     list.forEach((item) => {
-      $mitt.emit("addMarker", item);
+      item.maekerList.forEach((info) => {
+        if (info.lat && info.lng) {
+          $mitt.emit("addMarker", info);
+        }
+      });
     });
     if (list.length > 0) {
-      $mitt.emit("flyTo", list[0].maekerList[0]);
+      let firstInfo = list[0].maekerList[0];
+      if (firstInfo.lat && firstInfo.lng) {
+        $mitt.emit("flyTo", firstInfo);
+      }
     }
   } else {
-    console.log(list);
     list.forEach((item) => {
       for (const point of item.maekerList) {
-        $mitt.emit("changeMarkerState", point);
+        if (point.lat && point.lng) {
+          $mitt.emit("changeMarkerState", point);
+        }
       }
     });
   }
-  // if (val.length > old.length) {
-  //   const list = [];
-  //   for (const id of val) {
-  //     console.log(markerListDict, id);
-  //     if (markerListDict[id]) {
-  //       if (markerListDict[id][0].maekerList.length > 0) {
-  //         list.push(...markerListDict[id]);
-  //       }
-  //     }
-  //   }
-  //   console.log("zzzz,", list);
-  //   list.forEach((item) => {
-  //     $mitt.emit("addMarker", item);
-  //   });
-  // } else {
-  //   // 需要删除marker的列表
-  //   const list = [];
-  //   for (const id of old) {
-  //     if (!val.includes(id)) {
-  //       if (markerListDict[id]) {
-  //         for (const info of markerListDict[id]) {
-  //           info.maekerList.forEach((item) => {
-  //             list.push({
-  //               markerType: item.markerType,
-  //               id: item.id,
-  //               show: false,
-  //             });
-  //           });
-  //         }
-  //       }
-  //     }
-  //   }
-  //   list.forEach((item) => {
-  //     $mitt.emit("changeMarkerState", item);
-  //   });
-  // }
 });
 watch(
   () => props.infos,

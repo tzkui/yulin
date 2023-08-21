@@ -256,8 +256,8 @@ export const yjzyLists = {
           icon: "/images/marker/icon_duiwu.png",
           lng: '109.7485',
           lat: "37.2718",
-          name: "队伍一",
-          label: { text: "队伍一", font_size: 16 },
+          name: "救援队伍",
+          label: { text: "救援队伍", font_size: 16 },
           dialogType: "jydw",
           details: {
             name: "神木市应急救援队",
@@ -344,8 +344,8 @@ export const yjzyLists = {
           icon: "/images/marker/icon_shelter.png",
           lng: '109.74485',
           lat: "38.97187",
-          name: "场所1",
-          label: { text: "场所1", font_size: 16 },
+          name: "避难场所",
+          label: { text: "避难场所", font_size: 16 },
           dialogType: "bncs",
           details: {
             name: "榆阳区避灾场所",

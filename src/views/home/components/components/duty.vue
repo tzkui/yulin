@@ -1,7 +1,11 @@
 <script setup>
 import ViewBox from "@/components/common/view-box.vue";
 import { ref, onMounted } from "vue";
-import { getZbxx, getFxyh, getFxgz, getYjzy } from "@/api/modules/zrzh.js";
+import { getZbxx } from "@/api/modules/zrzh.js";
+const phoneCallRef = ref()
+const phone = function(info){
+  phoneCallRef.value.phoneCall()
+}
 const list = ref([]);
 const getList = function () {
   getZbxx().then((res) => {
@@ -29,12 +33,13 @@ onMounted(() => {
           <div class="duty">{{ item.job }}</div>
           <div>
             <span class="name"> {{ item.name }} </span>
-            <img class="img" src="@/assets/home/icon_phone.png" alt="" />
+            <img class="img" src="@/assets/home/icon_phone.png" @click="phone(item)" alt="" />
           </div>
         </div>
       </div>
     </div>
   </ViewBox>
+  <PhoneCall ref="phoneCallRef"></PhoneCall>
 </template>
 <style lang="scss" scoped>
 .onduty_information {
@@ -74,6 +79,7 @@ onMounted(() => {
         height: 19px;
         margin-left: 6px;
         vertical-align: top;
+        cursor: pointer;
       }
 
       .duty {

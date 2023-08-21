@@ -4,7 +4,7 @@ import pageHeader from "@/components/common/nav.vue";
 // 地图交互菜单组
 import mapGeomtryGroup from "@/components/common/mapGeomtryGroup.vue";
 import { ref, onMounted, reactive, inject, watch } from "vue";
-
+import videoConferencing from './videoConferencing.vue';
 import map2d from "@/components/map/map2d/map.vue";
 import { assetsUrl } from "@/components/map/map2d/hook/index";
 // import Mixin from "@/utils/drawMixin";
@@ -111,6 +111,7 @@ const handleScreenAuto = () => {
       <mapGeomtryGroup @toggleGeomtryGroupClick="toggleGeomtryGroupClick">
         <!-- <mapGeomtryGroup v-if="nowPath !== '/home'" @toggleGeomtryGroupClick="toggleGeomtryGroupClick"> -->
       </mapGeomtryGroup>
+      <videoConferencing></videoConferencing>
       <router-view></router-view>
     </div>
   </div>

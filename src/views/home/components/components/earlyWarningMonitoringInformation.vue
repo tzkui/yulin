@@ -1,7 +1,11 @@
 <script setup>
 import ViewBox from "@/components/common/view-box.vue";
-import { ref, inject, onMounted } from "vue";
+import { ref, inject, onMounted, computed } from "vue";
 import { getFxgz } from "@/api/modules/zrzh.js";
+import ylzdFirDialog from "@/views/natural/components/syqxxFirDialogs/ylzd.vue";
+import hdzdFirDialog from "@/views/natural/components/syqxxFirDialogs/hdzd.vue";
+import skFirDialog from "@/views/natural/components/syqxxFirDialogs/sk.vue";
+
 const $mitt = inject("$mitt");
 const currentWarningType = ref("");
 const warning_detail = ref();
@@ -9,7 +13,7 @@ const warning_detail = ref();
 const warning_type = ref([
   { name: "雨情监测", type: "ylz", num: "0" },
   { name: "河道监测", type: "hdz", num: "0" },
-  { name: "地质监测", type: "dzjc", num: "-1" },
+  { name: "地质监测", type: "dzjc", num: "0" },
   { name: "水库监测", type: "skz", num: "0" },
   { name: "安全生产监测", type: "aqscjc", num: "0" },
   { name: "林火监测", type: "lhjc", num: "0" },
@@ -17,26 +21,33 @@ const warning_type = ref([
 const datas = {
   ylz: {},
   hdz: {},
-  skz: {}
-}
-const getDatas = function(){
-  getFxgz().then(res=>{
-    console.log("风险感知信息： ", res)
-    for(let key in datas){
-      datas[key] = res.data[key]
+  skz: {},
+};
+const dataList = computed(()=>{
+  return datas[currentWarningType.value]?.jh || []
+})
+const getDatas = function () {
+  getFxgz().then((res) => {
+    for (let key in datas) {
+      datas[key] = res.data[key];
     }
-    console.log("拿到的数据：", datas)
-  })
-}
+    for (const info of warning_type.value) {
+      if (datas[info.type]) {
+        info.num = datas[info.type].sl;
+      }
+    }
+  });
+};
 const checkWarningType = (item) => {
   // console.log('选择监测类型=====>', item);
-  if (item.num == 0) return;
+  // if (item.num == 0) return;
   if (currentWarningType.value == item.type) {
     currentWarningType.value = "";
-    $mitt.emit("changeMarkerState", { markerType: item.type, show: false });
+    // $mitt.emit("changeMarkerState", { markerType: item.type, show: false });
   } else {
     currentWarningType.value = item.type;
-    warning_detail.value = getDetail(item);
+    console.log("xxxxx:", currentWarningType)
+    // warning_detail.value = getDetail(item);
   }
 };
 const getDetail = (item) => {
@@ -173,9 +184,12 @@ const getDetail = (item) => {
   }
   return object;
 };
-onMounted(()=>{
-  getDatas()
-})
+const closeDialog = function(){
+  currentWarningType.value = ""
+}
+onMounted(() => {
+  getDatas();
+});
 </script>
 <template>
   <ViewBox title="预警监测信息">
@@ -204,6 +218,27 @@ onMounted(()=>{
       </div>
     </div>
   </ViewBox>
+  <!-- 雨量站点一级弹框 -->
+  <ylzdFirDialog
+    v-if="currentWarningType === 'ylz'"
+    @closeDialog="closeDialog"
+    :list="dataList"
+    style="right: 460px;left: unset;"
+  ></ylzdFirDialog>
+  <!-- 河道站点一级弹框 -->
+  <hdzdFirDialog
+    v-if="currentWarningType === 'hdz'"
+    @closeDialog="closeDialog"
+    :list="dataList"
+    style="right: 460px;left: unset;"
+  ></hdzdFirDialog>
+  <!-- 水库一级弹窗 -->
+  <skFirDialog
+    v-if="currentWarningType === 'skz'"
+    @closeDialog="closeDialog"
+    :list="dataList"
+    style="right: 460px;left: unset;"
+  ></skFirDialog>
 </template>
 <style lang="scss" scoped>
 .warning_monitoring {

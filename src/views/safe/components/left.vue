@@ -242,11 +242,11 @@ const getdatasj = async function () {
   if (res.code == 200) {
     secureList.value = res.data.map((item) => {
       return {
+        ...item,
         name: item.eventLvl == 0 ? "一般" : "较大",
         title: item.title,
         time: item.rqStr,
-        content: item.content,
-        ...item,
+        content: item.contentText,
       };
     });
   }

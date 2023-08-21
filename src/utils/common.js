@@ -164,7 +164,21 @@ export default function Common() {
         }
     })
     return jsonTree
-}
+  }
+  const calcDiff = function(arr1, arr2) {
+    const dict = Object.create(null);
+    for (const val of arr1) {
+      dict[val] = 1;
+    }
+    for (const val of arr2) {
+      if (dict[val] === 1) {
+        delete dict[val];
+      } else {
+        dict[val] = 1;
+      }
+    }
+    return Object.keys(dict);
+  };
   // 导出
   // function exportModsHandle(title, head, arr, isMore) {
   //     let data = [];
@@ -291,6 +305,7 @@ export default function Common() {
     getYearList,
     hexToRgba,
     initTree,
+    calcDiff,
     // exportModsHandle
   }
 }

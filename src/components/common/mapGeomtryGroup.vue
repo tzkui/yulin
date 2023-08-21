@@ -16,6 +16,7 @@
 </template>
 <script setup>
 import { onMounted, ref, inject } from "vue";
+import { useEventBus } from "@vueuse/core";
 const $mitt = inject("$mitt");
 const toggleGeomtryGroup = ref(false);
 
@@ -41,6 +42,10 @@ const mapDrawPic = () => {
   console.log("标绘");
   $mitt.emit("drawGraph", { type: "polygon" });
 };
+const videoConferencingBus = useEventBus("openVideoConferencing")
+const mapLayer = function(){
+  videoConferencingBus.emit({id:1})
+}
 </script>
 <style lang="scss" scoped>
 .mapGeomtryWrap {

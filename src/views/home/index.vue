@@ -23,7 +23,7 @@
       @closeVideoDialog="closeDialog('video_conference')"
     >
     </videoConferencing>
-
+    <!-- <videoConferencing></videoConferencing> -->
     <!-- 事假列表弹窗 -->
     <dialogVue
       :dialogValue="showDialog.eventList"
@@ -139,6 +139,7 @@ import right from "./components/right.vue";
 import dialogVue from "../../components/common/dialog.vue";
 import integratedCommunication from "@/views/safe/components/integratedCommunication.vue";
 import videoConferencing from "./components/videoConferencing.vue";
+// import videoConferencing from "@/components/common/videoConferencing.vue";
 
 const $mitt = inject("$mitt");
 const showDialog = ref({

@@ -2,7 +2,12 @@
   <div v-if="showDialog" class="video_dialog animate__animated animate__zoomIn">
     <div class="dialog_head">
       <h2 class="dialog_title">视频会商</h2>
-      <img @click="closeDialog" class="dialog_close" src="@/assets/integratedCommunication/dialog_close.png" alt="">
+      <img
+        @click="closeDialog"
+        class="dialog_close"
+        src="@/assets/integratedCommunication/dialog_close.png"
+        alt=""
+      />
     </div>
     <div class="dialog_body">
       <div class="cont_left">
@@ -15,22 +20,41 @@
         </div> -->
         <!-- 树结构列表 -->
         <div class="tree_list">
-          <el-tree :data="treeData" :props="treeProps" show-checkbox @check-change="handleCheckChange">
+          <el-tree
+            :data="treeData"
+            :props="treeProps"
+            show-checkbox
+            @check-change="handleCheckChange"
+          >
           </el-tree>
         </div>
       </div>
       <div class="cont_right" id="cont-right">
         <!-- 视频列表 -->
         <div :class="videoStyleClass">
-          <div v-for="item in currentFence" :key="item" class="monitorVideoFence">
+          <div
+            v-for="item in currentFence"
+            :key="item"
+            class="monitorVideoFence"
+          >
             <!-- 假装是视屏 -->
             <div class="video"></div>
             <!-- 视频移入  顶部遮罩 -->
             <div class="video_top_model">
-              <div class="video_title">监控名称监控名称监控名称监控名称监控名称监控名称</div>
+              <div class="video_title">
+                监控名称监控名称监控名称监控名称监控名称监控名称
+              </div>
               <div class="icon_box">
-                <img class="video_box_icon" src="@/assets/integratedCommunication/icon_fullscreen.png" alt="">
-                <img class="video_box_icon" src="@/assets/integratedCommunication/icon_close.png" alt="">
+                <img
+                  class="video_box_icon"
+                  src="@/assets/integratedCommunication/icon_fullscreen.png"
+                  alt=""
+                />
+                <img
+                  class="video_box_icon"
+                  src="@/assets/integratedCommunication/icon_close.png"
+                  alt=""
+                />
               </div>
             </div>
           </div>
@@ -39,11 +63,18 @@
         <div class="fences_box">
           <div class="fences">
             <!-- :style="{ 'background-image': `url(${'src/assets/integratedCommunication/video_fence_' + item.num + '.png'})` }" -->
-            <div v-for="(item, index) in fencesData" :key="index"
-              :class="currentFence == item.num ? item.active : item.normal" @click="changeFence(item.num)">
-            </div>
-            <div :class="fullscreenFlag ? 'fence fence_expand' : 'fence fence_retract'" @click="changeFullscreen">
-            </div>
+            <div
+              v-for="(item, index) in fencesData"
+              :key="index"
+              :class="currentFence == item.num ? item.active : item.normal"
+              @click="changeFence(item.num)"
+            ></div>
+            <div
+              :class="
+                fullscreenFlag ? 'fence fence_expand' : 'fence fence_retract'
+              "
+              @click="changeFullscreen"
+            ></div>
           </div>
           <div class="mute_btn">开始会商</div>
           <div class="mute_btn red">结束会商</div>
@@ -53,16 +84,19 @@
   </div>
 </template>
 <script setup>
-import { ref } from "vue";
-defineProps({
-  showDialog: Boolean,
+import { onUnmounted, ref } from "vue";
+import { useEventBus } from "@vueuse/core";
+
+const showDialog = ref(false);
+const openDialog = function (e) {
+  showDialog.value = true;
+  console.log("视频会商参数：", e);
+};
+const openVideoConferencingBus = useEventBus("openVideoConferencing");
+openVideoConferencingBus.on(openDialog);
+onUnmounted(() => {
+  openVideoConferencingBus.off(openDialog);
 });
-const emit = defineEmits(["closeVideoDialog"]);
-// const videoOptions = {
-//       access_type: 2,
-//       key: "88b6bb347f2c4890bec4c76522cb4e4a",
-//       devices: [{ id: phone, type: "TEMP_MOBILEPHONE" }],
-// }
 
 // 树结构数据
 const treeData = ref([
@@ -134,8 +168,6 @@ const fencesData = ref([
   { normal: "fence fence_2", active: "fence fence_2 active", num: 2 },
   { normal: "fence fence_4", active: "fence fence_4 active", num: 4 },
   { normal: "fence fence_9", active: "fence fence_9 active", num: 9 },
-  // { normal: "fence fence_12", active: "fence fence_12 active", num: 12 },
-  // { normal: "fence fence_16", active: "fence fence_16 active", num: 16 },
 ]);
 // 当前分屏数
 const currentFence = ref(4);
@@ -148,7 +180,7 @@ const handleCheckChange = (data, checked, indeterminate) => {
 };
 // 关闭弹框
 const closeDialog = () => {
-  emit("closeVideoDialog");
+  showDialog.value = false;
 };
 // 切换分屏
 const changeFence = (num) => {
@@ -170,14 +202,14 @@ const changeFullscreen = () => {
 .video_dialog {
   width: 986px;
   height: 676px;
-  background: #051E3A;
+  background: #051e3a;
   box-shadow: inset 0px 0px 15px 0px rgba(19, 148, 241, 0.57);
   border-radius: 12px;
   border: 1px solid rgba(10, 148, 220, 0.5);
   position: absolute;
   top: calc((100% - 676px) / 2);
   left: calc((100% - 986px) / 2);
-  z-index: 11;
+  z-index: 1111;
   display: flex;
   flex-direction: column;
 
@@ -187,7 +219,8 @@ const changeFullscreen = () => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: url("@/assets/integratedCommunication/dialog_head_bg.png") center/965px 54px no-repeat;
+    background: url("@/assets/integratedCommunication/dialog_head_bg.png")
+      center/965px 54px no-repeat;
 
     .dialog_title {
       font-size: 20px;
@@ -224,9 +257,11 @@ const changeFullscreen = () => {
           cursor: pointer;
           width: 43px;
           height: 100%;
-          background: linear-gradient(180deg,
-              #3a89ff 0%,
-              rgba(58, 137, 255, 0.32) 100%);
+          background: linear-gradient(
+            180deg,
+            #3a89ff 0%,
+            rgba(58, 137, 255, 0.32) 100%
+          );
           border-radius: 0px 4px 4px 0px;
           border: none;
 
@@ -284,11 +319,11 @@ const changeFullscreen = () => {
             }
           }
 
-          .el-tree-node:focus>.el-tree-node__content {
+          .el-tree-node:focus > .el-tree-node__content {
             background: #09415d;
           }
 
-          >.el-tree-node> {
+          > .el-tree-node > {
             position: relative;
             margin: 0 0 10px 0;
 
@@ -302,7 +337,10 @@ const changeFullscreen = () => {
             }
           }
 
-          .el-tree-node.is-expanded>.el-tree-node__children>.el-tree-node:nth-child(odd)>.el-tree-node__content {
+          .el-tree-node.is-expanded
+            > .el-tree-node__children
+            > .el-tree-node:nth-child(odd)
+            > .el-tree-node__content {
             background: rgba(255, 255, 255, 0.05);
           }
 
@@ -320,7 +358,8 @@ const changeFullscreen = () => {
 
           .el-checkbox__input.is-checked .el-checkbox__inner {
             border: none;
-            background: url("@/assets/integratedCommunication/checked_tree.png") center/100% no-repeat;
+            background: url("@/assets/integratedCommunication/checked_tree.png")
+              center/100% no-repeat;
           }
 
           .el-checkbox__input.is-indeterminate .el-checkbox__inner {
@@ -444,35 +483,43 @@ const changeFullscreen = () => {
             // background-repeat: no-repeat;
 
             &.fence_1 {
-              background: url("@/assets/integratedCommunication/video_fence_1.png") center/18px no-repeat;
+              background: url("@/assets/integratedCommunication/video_fence_1.png")
+                center/18px no-repeat;
             }
 
             &.fence_2 {
-              background: url("@/assets/integratedCommunication/video_fence_2.png") center/18px no-repeat;
+              background: url("@/assets/integratedCommunication/video_fence_2.png")
+                center/18px no-repeat;
             }
 
             &.fence_4 {
-              background: url("@/assets/integratedCommunication/video_fence_4.png") center/18px no-repeat;
+              background: url("@/assets/integratedCommunication/video_fence_4.png")
+                center/18px no-repeat;
             }
 
             &.fence_9 {
-              background: url("@/assets/integratedCommunication/video_fence_9.png") center/18px no-repeat;
+              background: url("@/assets/integratedCommunication/video_fence_9.png")
+                center/18px no-repeat;
             }
 
             &.fence_12 {
-              background: url("@/assets/integratedCommunication/video_fence_12.png") center/18px no-repeat;
+              background: url("@/assets/integratedCommunication/video_fence_12.png")
+                center/18px no-repeat;
             }
 
             &.fence_16 {
-              background: url("@/assets/integratedCommunication/video_fence_16.png") center/18px no-repeat;
+              background: url("@/assets/integratedCommunication/video_fence_16.png")
+                center/18px no-repeat;
             }
 
             &.fence_expand {
-              background: url("@/assets/integratedCommunication/video_box_expand.png") center/18px no-repeat;
+              background: url("@/assets/integratedCommunication/video_box_expand.png")
+                center/18px no-repeat;
             }
 
             &.fence_retract {
-              background: url("@/assets/integratedCommunication/video_box_retract.png") center/18px no-repeat;
+              background: url("@/assets/integratedCommunication/video_box_retract.png")
+                center/18px no-repeat;
             }
 
             &.active {
@@ -503,7 +550,7 @@ const changeFullscreen = () => {
           &.red {
             background: rgba(255, 35, 21, 0.2);
             box-shadow: inset 0px 0px 6px 0px rgba(255, 153, 153, 0.6);
-            border: 1px solid #FF4D15;
+            border: 1px solid #ff4d15;
           }
         }
       }

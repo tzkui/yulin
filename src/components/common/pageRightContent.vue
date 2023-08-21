@@ -16,7 +16,7 @@ const toggleRightBottomList = function () {
 </script>
 
 <template>
-  <div ref="right_content" :class="['right_content animate__animated  animate__fadeInRight', isHide ? 'hide' : '']">
+  <div ref="right_content" :class="['right_content animate__animated  animate__fadeInRight', isHide ? 'hide_content' : '']">
     <div class="rightContent">
       <slot></slot>
     </div>
@@ -155,7 +155,7 @@ const toggleRightBottomList = function () {
   }
 }
 
-.hide {
+.hide_content {
   right: -(@padding_right + @boxWidth);
 }
 

@@ -1,9 +1,9 @@
 <script setup>
-import { onMounted, ref, inject } from "vue";
+import { onMounted, ref, inject, watch } from "vue";
 import firDialog from "./firDialog.vue";
 import commonFun from "@/utils/common.js";
-const { initTree } = commonFun();
-import {fxyhLists, yjzyLists} from '@/api/mock_tzk.js'
+const { initTree, calcDiff } = commonFun();
+import { fxyhLists, yjzyLists } from "@/api/mock_tzk.js";
 const $mitt = inject("$mitt");
 
 const props = defineProps({
@@ -29,8 +29,8 @@ const props = defineProps({
   },
   dialogType: {
     type: String,
-    default: ""
-  }
+    default: "",
+  },
 });
 const emits = defineEmits(["closeDialog"]);
 const idInfoDict = Object.create(null);
@@ -53,46 +53,27 @@ const initData = function () {
     treeData.value = props.listData.map((item) => {
       return {
         ...item,
-        label: item.name,
+        label: item.name || item.jswz,
       };
     });
   }
 };
-console.log(props.dialogType)
+console.log(props.dialogType);
+const selectedMarkers = ref([]);
 const onCheckedChange = function (data) {
-  console.log(data);
-  const markerList = [];
   let checkedList = treeRef.value.getCheckedKeys();
   // 树的情况
   if (props.listType === "tree") {
-    for (const treeId of checkedList) {
-      if (treeId.startsWith("2--")) {
-        const info = idInfoDict[treeId];
-        if (info.mapX && info.mapY) {
-          let marker = getMarkerInfoByType(info)
-          if(marker){
-            markerList.push(marker)
-          }
-        }
-      }
-    }
-    if (markerList.length > 0) {
-      $mitt.emit("addMarker", {
-        markerType: props.dialogType,
-        id: "1000",
-        icon: "/images/marker/mapdot-scientific.png",
-        name: "地灾隐患点",
-        maekerList: markerList,
-      });
-      $mitt.emit("flyTo", markerList[0]);
-    }
+    selectedMarkers.value = checkedList.filter((item) =>
+      item.startsWith("2--")
+    );
   } else {
     // 列表的情况
   }
 };
 const getMarkerInfoByType = function (info) {
   const model = fxyhLists[props.dialogType] || yjzyLists[props.dialogType];
-  if(model){
+  if (model) {
     let base = JSON.parse(JSON.stringify(model[0].maekerList[0]));
     base.id = info.id;
     base.lng = info.mapX;
@@ -103,6 +84,36 @@ const getMarkerInfoByType = function (info) {
 };
 onMounted(() => {
   initData();
+});
+watch(selectedMarkers, (val, old) => {
+  if (val.length === old.length) return;
+  const list = calcDiff(val, old);
+  let markerList = [];
+  for (const treeId of list) {
+    const info = idInfoDict[treeId];
+    if (info.mapX && info.mapY) {
+      let marker = getMarkerInfoByType(info);
+      if (marker) {
+        markerList.push(marker);
+      }
+    }
+  }
+  if (val.length > old.length) {
+    if(markerList.length===0) return ;
+    $mitt.emit("addMarker", {
+      markerType: props.dialogType,
+      id: "1000",
+      icon: markerList[0].icon,
+      name: "地灾隐患点",
+      maekerList: markerList,
+    });
+    $mitt.emit("flyTo", markerList[0]);
+  } else {
+    markerList.forEach((item) => {
+      console.log(item)
+      $mitt.emit("changeMarkerState", item);
+    });
+  }
 });
 </script>
 <template>
@@ -119,7 +130,7 @@ onMounted(() => {
         <template #default="{ node, data }">
           <span class="custom-tree-node">
             <span>{{ node.label }}</span>
-            <span class="yellow">
+            <span class="yellow" v-if="data.dataType === 1">
               {{ data.num }}
             </span>
           </span>

@@ -192,7 +192,7 @@ const getWarnings = function () {
         type: types[item.eventLvl],
         name: levels[item.eventLvl],
         title: item.title,
-        content: item.content,
+        content: item.contentText,
       };
     });
   });

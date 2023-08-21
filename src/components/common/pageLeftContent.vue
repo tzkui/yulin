@@ -5,7 +5,6 @@ import { Search } from "@element-plus/icons-vue";
 import dialogVue from "@/components/common/dialog.vue";
 
 const isHide = ref(false);
-const searchValue = ref("");
 const tooglePosition = function () {
   isHide.value = !isHide.value;
 };
@@ -52,7 +51,7 @@ const okC = function () {
 </script>
 
 <template>
-  <div :class="['left_content animate__animated  animate__fadeInLeft', isHide ? 'hide' : '']">
+  <div :class="['left_content animate__animated  animate__fadeInLeft', isHide ? 'hide_content' : '']">
     <div class="leftContent">
       <slot></slot>
     </div>
@@ -157,7 +156,7 @@ const okC = function () {
   }
 }
 
-.hide {
+.hide_content {
   left: -(@padding_left + @boxWidth);
 }
 

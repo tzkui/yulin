@@ -2,6 +2,7 @@
 import { onMounted, ref, inject, computed, watch, onUnmounted } from "vue";
 import viewDialog1 from "@/components/common/dialog.vue";
 import sourceCheckbox from "./components/sourceCheckbox.vue";
+import duty from '../home/components/components/duty.vue'
 import firDialog from "./components/firDialog.vue";
 import { assetsUrl } from "@/components/map/map2d/hook/index";
 import { useEventBus } from "@vueuse/core";
@@ -24,6 +25,9 @@ import hdzdFirDialog from "./components/syqxxFirDialogs/hdzd.vue";
 import { getZbxx, getFxyh, getFxgz, getYjzy } from "@/api/modules/zrzh.js";
 import commonFun from "@/utils/common.js";
 const { initTree } = commonFun();
+
+const treeConfig = ref({})
+
 const nowThreeDialogType = ref("");
 const nowSyqxxInfo = computed(() => {
   return threePopupData1[nowThreeDialogType.value] || {};
@@ -376,9 +380,6 @@ const setMarker = function (type, info = {}) {
       dialogFlags.value[type] = true;
       qxxx_dialog_info.value = info;
     } else if (type === "yjzy") {
-      // 点击列表就相当于点击右侧的多选框
-      // let select_dom = document.getElementById(info.id + "_select");
-      // select_dom?.click();
       if (info.num === 0) return;
       if (selectedFxyh.value === info.id) {
         selectedFxyh.value = "";
@@ -483,20 +484,7 @@ watch(selectedModule, function (val, old) {
 
 <template>
   <div class="natural_left">
-    <ViewBox title="值班信息">
-      <div class="moreBtn">
-        <img src="@/assets/natural/more.png" alt="" />
-      </div>
-      <ul class="duty_list">
-        <li class="duty_list_item" v-for="item in dutyList" :key="item.id">
-          <div class="job">{{ item.job }}</div>
-          <div class="name">
-            {{ item.name }}
-            <img src="@/assets/natural/phone.png" alt="" />
-          </div>
-        </li>
-      </ul>
-    </ViewBox>
+    <duty></duty>
     <ViewBox title="风险隐患">
       <div class="fxyh">
         <div class="line line1">
@@ -713,6 +701,7 @@ watch(selectedModule, function (val, old) {
     @closeDialog="closeDialog"
     :dialogType="checkBoxPopupData.dialogType"
     v-if="dialogFlags.select"
+    :treeConfig="treeConfig"
   >
   </selectDialogVue>
 </template>

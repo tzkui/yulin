@@ -1,13 +1,15 @@
 <script setup>
 import ViewBox from "@/components/common/view-box.vue";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, nextTick } from "vue";
 import { bg_config } from "../../config";
 
+import { useEventBus } from "@vueuse/core";
 import selectDialogVue from "@/views/natural/components/selectDialog.vue";
 import { getYjzy } from "@/api/modules/zrzh.js";
 const imgefileUrl = (url) => {
   return new URL(url, import.meta.url).href;
 };
+const openVideoConferencingBus = useEventBus("openVideoConferencing");
 const emit = defineEmits(["openDialog"]);
 let currentResources = ref("yjzy");
 let resources_list_all = ref([
@@ -71,10 +73,15 @@ const showSelect = ref(false);
 const selectDatas = ref({});
 const getYjzyList = function () {
   getYjzy().then((res) => {
-    console.log(res);
+    console.log("应急资源：", res);
     for (let key in res.data) {
       markerDatas[key] = res.data[key];
     }
+    console.log(markerDatas);
+    resources_list_all.value[0].forEach((item) => {
+      item.num = markerDatas[item.type]?.sl;
+      console.log(item.num);
+    });
     changeResources(currentResources.value, 0);
   });
 };
@@ -88,7 +95,6 @@ const changeResources = (type, index) => {
   });
 };
 const openDialog = (item, index) => {
-  console.log(item, markerDatas);
   if (markerDatas[item.type]) {
     let info = markerDatas[item.type];
     selectDatas.value = {
@@ -104,7 +110,12 @@ const openDialog = (item, index) => {
       listType: info.lx,
       dialogType: item.type,
     };
-    showSelect.value = true;
+    showSelect.value = false;
+    nextTick(() => {
+      showSelect.value = true;
+    });
+  } else if(item.type==='sphs'){
+    openVideoConferencingBus.emit()
   } else {
     emit("openDialog", item, index);
   }
