@@ -5,6 +5,7 @@ import pageHeader from "@/components/common/nav.vue";
 import mapGeomtryGroup from "@/components/common/mapGeomtryGroup.vue";
 import { ref, onMounted, reactive, inject, watch } from "vue";
 import videoConferencing from './videoConferencing.vue';
+import videoMonitoring from "./videoMonitoring.vue";
 import map2d from "@/components/map/map2d/map.vue";
 import { assetsUrl } from "@/components/map/map2d/hook/index";
 // import Mixin from "@/utils/drawMixin";
@@ -47,6 +48,7 @@ const initMap = function () {
   //导入区域边界的geo数据 进行绘制
   let mittData = {
     url: assetsUrl("/geoJson/yl.json"),
+    // url: "http://1.85.55.225:8085/YouMapServer/rest/service/sxwwCGCS2000/VectorTileServer/styles/blue_yj-225.json",
     geoType: "maskGeo",
     mask: true,
     type: "mask",
@@ -112,6 +114,7 @@ const handleScreenAuto = () => {
         <!-- <mapGeomtryGroup v-if="nowPath !== '/home'" @toggleGeomtryGroupClick="toggleGeomtryGroupClick"> -->
       </mapGeomtryGroup>
       <videoConferencing></videoConferencing>
+      <videoMonitoring></videoMonitoring>
       <router-view></router-view>
     </div>
   </div>

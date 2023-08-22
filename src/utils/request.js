@@ -44,7 +44,7 @@ instance.interceptors.response.use(
   (response) => {
     if (response.data === "") return;
     const res = response.data;
-    if (response.status === 200 && (res.code === 200 || res.errCode === 200)) {
+    if (response.status === 200 && (res.code === 200 || res.errCode === 200 || res.code === 0)) {
       return res;
     } else {
       if (res.code === 401) {

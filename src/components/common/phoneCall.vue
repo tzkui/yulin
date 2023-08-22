@@ -10,6 +10,7 @@ const phoneCall = function (phone = "15682381478") {
       access_type: 1,
       key: "88b6bb347f2c4890bec4c76522cb4e4a",
       devices: [{ id: phone, type: "TEMP_MOBILEPHONE" }],
+      isDemo:true
     };
     window.kdDispatchConference.createMeeting(
       "#phone_call",

@@ -1,11 +1,11 @@
 <script setup>
 import ViewBox from "@/components/common/view-box.vue";
 import { onMounted, ref, inject } from "vue";
-import Common from '@/utils/common.js'
-let commonFunc = Common()
+import Common from "@/utils/common.js";
+let commonFunc = Common();
 
-const emits = defineEmits(["clickEcharts"])
-
+const emits = defineEmits(["clickEcharts"]);
+import { getQyfb } from "@/api/modules/home.js";
 // echarts实例
 const echarts = inject("echarts");
 const initChart = (option) => {
@@ -57,21 +57,30 @@ const initChart = (option) => {
 
   Mychart.on("click", (params) => {
     // console.log('params', params);
-    emits("clickEcharts", params)
+    emits("clickEcharts", params);
   });
 };
 // 图表内容
 const option = ref({
-  color: ['#2276FC', '#5FD5EC', '#FFCF5F', '#C669FF', '#22FCA0', '#BFEC5F', '#6C5FFF', '#FF6996'],
+  color: [
+    "#2276FC",
+    "#5FD5EC",
+    "#FFCF5F",
+    "#C669FF",
+    "#22FCA0",
+    "#BFEC5F",
+    "#6C5FFF",
+    "#FF6996",
+  ],
   grid: {
-    top: '25%',
-    left: '3%',
-    right: '4%',
-    bottom: '8%',
-    containLabel: true
+    top: "25%",
+    left: "3%",
+    right: "4%",
+    bottom: "8%",
+    containLabel: true,
   },
   tooltip: {
-    trigger: 'axis',
+    trigger: "axis",
     backgroundColor: "rgba(13,20,26,1)",
     showContent: true,
     borderColor: "rgba(255,255,255,0)", //设置自定义边框颜色
@@ -90,103 +99,129 @@ const option = ref({
     },
   },
   legend: {
-    icon: 'circle',
+    icon: "circle",
     top: 12,
     itemGap: 20,
     itemHeight: 8,
     itemWidth: 8,
     padding: [0, 20],
-    textStyle: {
-    },
+    textStyle: {},
     data: [
       // { name: '非煤矿山', itemStyle: { color: '#2276FC', } }
     ],
     formatter: (name) => {
-      let str = name.length >= 5 ? name : `{a|${name}}`
-      return echarts.format.truncateText(str, 68, '14px', '…');
+      let str = name.length >= 5 ? name : `{a|${name}}`;
+      return echarts.format.truncateText(str, 68, "14px", "…");
     },
     textStyle: {
-      color: 'rgba(255,255,255,0.85)',
+      color: "rgba(255,255,255,0.85)",
       rich: {
         a: {
           width: 60,
-          backgroundColor: 'transparent',
-        }
-      }
-    }
-
+          backgroundColor: "transparent",
+        },
+      },
+    },
   },
   xAxis: [
     {
       axisTick: {
-        show: false
+        show: false,
       },
       axisLine: {
         show: true,
         lineStyle: {
-          color: '#aaa',
-        }
+          color: "#aaa",
+        },
       },
-      data: ['榆阳区', '横山区', '神木县', '府谷县', '靖边县', '定边县', '绥德县', '米脂县', '佳县', '吴堡县', '清涧县', '子洲县'],
+      data: [
+        "榆阳区",
+        "横山区",
+        "神木县",
+        "府谷县",
+        "靖边县",
+        "定边县",
+        "绥德县",
+        "米脂县",
+        "佳县",
+        "吴堡县",
+        "清涧县",
+        "子洲县",
+      ],
     },
   ],
 
   yAxis: {
-    type: 'value',
+    type: "value",
     splitNumber: 4,
     axisLabel: {
       textStyle: {
-        color: '#B4C0CC',
+        color: "#B4C0CC",
       },
     },
     splitLine: {
       lineStyle: {
-        type: 'dashed',
-        color: '#3F4F5E'
-      }
-    }
+        type: "dashed",
+        color: "#3F4F5E",
+      },
+    },
   },
-  series: [
-    // {
-    //   name: "应到人数",
-    //   barWidth: '35%',
-    //   type: "bar",
-    //   stack: "1", // 如果stack一樣就會堆疊
-    //   data: [45, 50, 100, 25, 0, 0, 0],
-    //   itemStyle: {
-    //     color: new echarts.graphic.LinearGradient(
-    //       0, 0, 0, 1,
-    //       [{
-    //         offset: 0,
-    //         color: 'rgba(231,142,102,0.8)'
-    //       },
-    //       {
-    //         offset: 0.5,
-    //         color: 'rgba(154,88,80,0.8)'
-    //       },
-    //       {
-    //         offset: 1,
-    //         color: 'rgba(91,46,70,0.8)'
-    //       }
-    //       ]
-    //     )
-    //   },
-    // },
-  ]
-})
+  series: [],
+});
 // 图表数据
 const company_chart_data = ref([
-  { name: '非煤矿山', data: [45, 50, 100, 25, 10, 0, 1, 0, 0, 0, 0, 30] },
-  { name: '危险化学品', data: [5, 0, 10, 25, 20, 10, 0, 0, 0, 0, 0, 0] },
-  { name: '冶金', data: [0, 11, 11, 0, 11, 10, 10, 0, 0, 0, 0, 0] },
-  { name: '有色金属', data: [10, 11, 0, 70, 11, 10, 0, 20, 0, 20, 0, 0] },
-  { name: '建材', data: [10, 11, 0, 11, 0, 10, 0, 0, 100, 10, 0, 0] },
-  { name: '机械', data: [0, 0, 11, 0, 70, 10, 0, 0, 0, 0, 10, 0] },
-  { name: '轻工业', data: [0, 0, 0, 0, 0, 100, 10, 0, 0, 30, 0, 0] },
-  { name: '纺织业', data: [0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 20, 0] },
+  { name: "非煤矿山", data: [45, 50, 100, 25, 10, 0, 1, 0, 0, 0, 0, 30] },
+  { name: "危险化学品", data: [5, 0, 10, 25, 20, 10, 0, 0, 0, 0, 0, 0] },
+  { name: "冶金", data: [0, 11, 11, 0, 11, 10, 10, 0, 0, 0, 0, 0] },
+  { name: "有色金属", data: [10, 11, 0, 70, 11, 10, 0, 20, 0, 20, 0, 0] },
+  { name: "建材", data: [10, 11, 0, 11, 0, 10, 0, 0, 100, 10, 0, 0] },
+  { name: "机械", data: [0, 0, 11, 0, 70, 10, 0, 0, 0, 0, 10, 0] },
+  { name: "轻工业", data: [0, 0, 0, 0, 0, 100, 10, 0, 0, 30, 0, 0] },
+  { name: "纺织业", data: [0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 20, 0] },
 ]);
+const getInfos = function () {
+  getQyfb().then((res) => {
+    console.log("企业分布：", res);
+    const arr = [
+      { name: "非煤矿山", key: "fmks", data: [] },
+      { name: "危险化学品", key: "wxhxp", data: [] },
+      { name: "冶金", key: "yj", data: [] },
+      { name: "有色金属", key: "ysjs", data: [] },
+      { name: "建材", key: "jc", data: [] },
+      { name: "机械", key: "jx", data: [] },
+      { name: "轻工业", key: "qgy", data: [] },
+      { name: "纺织业", key: "fzy", data: [] },
+    ];
+    res.data.forEach(item=>{
+      arr.forEach(info=>{
+        info.data.push(item[info.key]+2)
+      })
+    })
+    company_chart_data.value = arr;
+    option.value.xAxis[0].data = res.data.map(item=>item.mc)
+    // company_chart_data.value = res.data.map((item) => {
+    //   return {
+    //     name: item.mc,
+    //     data: [
+    //       item.fmks,
+    //       item.wxhxp,
+    //       item.yj,
+    //       item.ysjs,
+    //       item.jc,
+    //       item.jx,
+    //       item.qgy,
+    //       item.fzy,
+    //     ],
+    //   };
+    // });
+    // company_chart_data.value = company_chart_data.value.map((item) => item + 2);
+    // console.log(company_chart_data.value);
+    initChart(option.value);
+  });
+};
 onMounted(() => {
-  initChart(option.value);
+  // initChart(option.value);
+  getInfos();
 });
 </script>
 <template>

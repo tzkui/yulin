@@ -1,7 +1,7 @@
 <template>
   <div v-if="showDialog" class="video_dialog animate__animated animate__zoomIn">
     <div class="dialog_head">
-      <h2 class="dialog_title">视频会商</h2>
+      <h2 class="dialog_title">视频监控</h2>
       <img
         @click="closeDialog"
         class="dialog_close"
@@ -20,20 +20,14 @@
         </div> -->
         <!-- 树结构列表 -->
         <div class="tree_list">
-          <!-- <el-tree
+          <el-tree
             :data="treeData"
             :props="treeProps"
             show-checkbox
             @check-change="handleCheckChange"
-            lazy
-            :load="loadOrgNode"
-          >
-          </el-tree> -->
-          <el-tree
-            :data="treeData"
-            :props="treeProps"
-            @check-change="handleCheckChange"
             @node-click="onNodeClick"
+            ref="treeRef"
+            node-key="id"
           >
           </el-tree>
         </div>
@@ -71,8 +65,7 @@
         <div id="meeting_box" v-show="showMeeting"></div>
         <!-- 分屏切换 -->
         <div class="fences_box">
-          <div class="fences">
-            <!-- :style="{ 'background-image': `url(${'src/assets/integratedCommunication/video_fence_' + item.num + '.png'})` }" -->
+          <!-- <div class="fences">
             <div
               v-for="(item, index) in fencesData"
               :key="index"
@@ -85,9 +78,7 @@
               "
               @click="changeFullscreen"
             ></div>
-          </div>
-          <div class="mute_btn" @click="beginConferencing">开始会商</div>
-          <div class="mute_btn red" @click="closeMeeting">结束会商</div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -96,44 +87,13 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from "vue";
 import { useEventBus } from "@vueuse/core";
-import { getOrgRoot, getOrgById } from "@/api/modules/videoConferencing.js";
 const showDialog = ref(false);
 const openDialog = function (e) {
   showDialog.value = true;
   console.log("视频会商参数：", e);
-  if (e.type === "onlyConferencing") {
-    treeData.value = [
-      {
-        id: 3,
-        label: "视频监控",
-        children: [
-          {
-            id: "1000000000137",
-            type: "TEMP_MT",
-            label: "地址一视频监控",
-          },
-        ],
-      },
-    ];
-  }
 };
 const meetingList = ref([]);
-const loadOrgNode = async function (node, resolve) {
-  console.log("node: ", node);
-  if (node.level === 0) {
-    let res = await getOrgRoot();
-    return resolve(res.data);
-  } else {
-    const param = {
-      xzqh: node.data.id,
-      grade: node.data.grade,
-      type: "all",
-    };
-    let res = await getOrgById(param);
-    return resolve(res.data);
-  }
-};
-const openVideoConferencingBus = useEventBus("openVideoConferencing");
+const openVideoConferencingBus = useEventBus("openVideoMonitoring");
 openVideoConferencingBus.on(openDialog);
 onMounted(() => {
   // getOrgs();
@@ -142,30 +102,9 @@ onUnmounted(() => {
   openVideoConferencingBus.off(openDialog);
 });
 
+const treeRef = ref();
 // 树结构数据
 const treeData = ref([
-  {
-    id: 1,
-    label: "通讯录",
-    children: [
-      {
-        id: "18983808184",
-        type: "TEMP_VOLTE",
-        label: "廖军-值班员",
-      },
-    ],
-  },
-  {
-    id: 2,
-    label: "单兵",
-    children: [
-      {
-        id: "320571000013270000021",
-        type: "TEMP_GB",
-        label: "单兵1",
-      },
-    ],
-  },
   {
     id: 3,
     label: "视频监控",
@@ -175,49 +114,15 @@ const treeData = ref([
         type: "TEMP_MT",
         label: "地址一视频监控",
       },
-    ],
-  },
-  {
-    id: 4,
-    label: "视频会议终端",
-    children: [
-      {
-        id: "32057100001327000002",
-        type: "TEMP_GB",
-        label: "视频会议终端1",
-      },
-    ],
-  },
-  {
-    id: 5,
-    label: "无人机",
-    children: [
       {
         id: "10000000001371",
         type: "TEMP_MT",
-        label: "无人机1",
+        label: "地址二视频监控",
       },
-    ],
-  },
-  {
-    id: 6,
-    label: "卫星电话",
-    children: [
       {
-        id: "17828998020",
-        type: "TEMP_VOLTE",
-        label: "卫星电话1",
-      },
-    ],
-  },
-  {
-    id: 7,
-    label: "窄带对讲",
-    children: [
-      {
-        id: "111111111",
-        type: "TEMP_VOLTE",
-        label: "对讲机1",
+        id: "10000000001374",
+        type: "TEMP_MT",
+        label: "地址三视频监控",
       },
     ],
   },
@@ -241,7 +146,13 @@ const fullscreenFlag = ref(true);
 // 视屏列表不同分屏布局样式
 const videoStyleClass = ref("videos videos_4");
 const handleCheckChange = (data, checked, indeterminate) => {
-  console.log(data, checked, indeterminate);
+  meetingList.value = treeRef.value
+    .getCheckedNodes()
+    .filter((item) => !item.children);
+  console.log("menuList: ", meetingList.value);
+  if (meetingList.value.length > 0) {
+    beginConferencing();
+  }
 };
 // 关闭弹框
 const closeDialog = () => {
@@ -266,7 +177,8 @@ const changeFullscreen = () => {
 const showMeeting = ref(false);
 let meetingIns = null;
 const beginConferencing = function () {
-  if (meetingIns || meetingList.value.length === 0) return;
+  closeMeeting();
+  if (meetingList.value.length === 0) return;
   showMeeting.value = true;
   let options = {
     access_type: 2,
@@ -301,17 +213,17 @@ const closeMeeting = function () {
   }
 };
 const onNodeClick = function (info) {
-  console.log(info);
-  if (!info.children) {
-    let id = info.id;
-    let index = meetingList.value.findIndex((item) => item.id === id);
-    if (index === -1) {
-      meetingList.value.push(info);
-    } else {
-      meetingList.value.splice(index, 1);
-    }
-    console.log(meetingList.value);
-  }
+  // console.log(info);
+  // if (!info.children) {
+  //   let id = info.id;
+  //   let index = meetingList.value.findIndex((item) => item.id === id);
+  //   if (index === -1) {
+  //     meetingList.value.push(info);
+  //   } else {
+  //     meetingList.value.splice(index, 1);
+  //   }
+  //   console.log(meetingList.value);
+  // }
 };
 </script>
 
@@ -672,7 +584,7 @@ const onNodeClick = function (info) {
     }
   }
   #meeting_box {
-    height: 500px;
+    height: 540px;
   }
 }
 </style>

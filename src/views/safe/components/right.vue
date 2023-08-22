@@ -2,11 +2,18 @@
 import selectDate from "./selectDate.vue";
 import { inject, onMounted, reactive, ref, onUnmounted } from "vue";
 import { getSgdjfx, getSglxfx, getZdddspjk } from "../../../api/modules/aqsc";
+import { useEventBus } from "@vueuse/core";
 const dataSelectors = reactive({
   sgdj: "day",
   sglx: "day",
   qylx: "day",
 });
+
+const videoConferencingBus = useEventBus("openVideoMonitoring")
+const openVideoConferencing = function(){
+  videoConferencingBus.emit({type:"onlyConferencing"})
+
+}
 const toogleDate = function (key, val) {
   if (dataSelectors[key] !== val) {
     dataSelectors[key] = val;
@@ -692,7 +699,7 @@ const qylxcl = (item) => {
           <li
             v-for="item in monitorList"
             :key="item.id"
-            @click="openDialog('video', item)"
+            @click="openVideoConferencing"
           >
             <div class="imgBox">
               <img :src="item.imgUrl" alt="" />

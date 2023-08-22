@@ -34,5 +34,16 @@ export default {
       method: "upload",
       params
     });
-  }
+  },
+  postForm (url, params = {}) {
+    let formData = new FormData();
+    for(let key in params){
+      formData.append(key,params[key])
+    }
+    return request({
+      url: url,
+      method: "post",
+      params: formData
+    });
+  },
 }

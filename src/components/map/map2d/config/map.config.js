@@ -20,7 +20,8 @@ export let mapDeafultOps = {
       icon: "img/basemaps/tiandituimage.png",
       type: "tdt",
       layer: "img",
-      show: true
+      show: true,
+      // url: "http://1.85.55.225:8085/YouMapServer/rest/service/sxwwCGCS2000/VectorTileServer/styles/blue_yj-225.json"
     },
     {
       pid: 10,
