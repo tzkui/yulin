@@ -37,12 +37,19 @@ const scale = () => {
     throttle("resize", "optimizedResize");
   })();
 };
-const getTokenSuccess = ref(false)
+const getTokenSuccess = ref(false);
 // 模拟登录
-login().then(res=>{
-  localStorage.setItem("token", res.data.password)
-  getTokenSuccess.value = true;
-})
+const initLogin = function () {
+  console.log(1)
+  let token = sessionStorage.getItem("token");
+  console.log(2,token)
+  if(token) return getTokenSuccess.value = true;;
+  login().then((res) => {
+    sessionStorage.setItem("token", res.data.password);
+    getTokenSuccess.value = true;
+  });
+};
+initLogin()
 onMounted(() => {
   // scale();
 
@@ -58,12 +65,11 @@ onMounted(() => {
 });
 </script>
 
-
 <template>
   <router-view v-if="getTokenSuccess"></router-view>
 </template>
 
-<style >
+<style>
 @import "./styles/index.css";
 .el-loading-parent--relative {
   width: 100% !important;

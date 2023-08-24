@@ -88,7 +88,9 @@ const setTypes = function () {
       baseChild.lng = v.mapX;
       baseChild.lat = v.mapY;
       baseChild.id = v.id;
-      baseChild.details.name = v.title;
+      for (let key in baseChild.details) {
+        baseChild.details[key] = v[key] || "--";
+      }
       return baseChild;
     });
     console.log(base);
@@ -120,7 +122,6 @@ watch(selectedList, (val, old) => {
       }
     }
   }
-  console.log("李斯特：", list, markerListDict);
   if (val.length > old.length) {
     list.forEach((item) => {
       item.maekerList.forEach((info) => {
@@ -133,6 +134,7 @@ watch(selectedList, (val, old) => {
       let firstInfo = list[0].maekerList[0];
       if (firstInfo.lat && firstInfo.lng) {
         $mitt.emit("flyTo", firstInfo);
+        $mitt.emit("openPopup", firstInfo);
       }
     }
   } else {

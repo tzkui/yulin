@@ -127,6 +127,13 @@
         </div>
       </div>
     </dialogVue>
+    
+
+    <twoTableThreeePopup
+        :type="twoTableThreeePopupType"
+        v-if="showTwoTableThreePopup"
+        @close-handle="showTwoTableThreePopup = false"
+      ></twoTableThreeePopup>
   </div>
 </template>
 
@@ -139,6 +146,9 @@ import right from "./components/right.vue";
 import dialogVue from "../../components/common/dialog.vue";
 import integratedCommunication from "@/views/safe/components/integratedCommunication.vue";
 import videoConferencing from "./components/videoConferencing.vue";
+import { viewDetail } from "../../utils/funcNames/tzk";
+import { useEventBus } from "@vueuse/core";
+import twoTableThreeePopup from "@/views/natural/components/twoTableThreeePopup.vue";
 // import videoConferencing from "@/components/common/videoConferencing.vue";
 
 const $mitt = inject("$mitt");
@@ -148,6 +158,20 @@ const showDialog = ref({
   video: false,
   video_conference: false,
 });
+
+const twoTableThreeePopupType = ref(1);
+const showTwoTableThreePopup = ref(false)
+const bus = useEventBus(viewDetail);
+const eventListener = function (e) {
+  if (e.dialogType === "jydw") {
+    showTwoTableThreePopup.value = true;
+    twoTableThreeePopupType.value = 1;
+  } else if (e.dialogType === "yjwzk") {
+    showTwoTableThreePopup.value = true;
+    twoTableThreeePopupType.value = 2;
+  }
+};
+bus.on(eventListener);
 // 事故等级||事故类型 数据
 const eventLevelPopupData = ref({
   title: "一般事件",

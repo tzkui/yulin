@@ -294,6 +294,15 @@ const hideMarker = (data) => {
     }
   }
 };
+
+const hideAllMarker = () => {
+  for(let key in markerLayer){
+    markerLayer[key].eachGraphic((info)=>{
+      markerLayer[key].removeGraphic(info)
+    })
+  }
+}
+
 //绘制路线
 const drawLine = (drawLineParms) => {
   let style = deepmerge(drawLineStyle, drawLineParms.style || {});
@@ -855,6 +864,9 @@ onMounted(() => {
     //修改标记状态
     hideMarker(data);
   });
+  $mitt.on('hideAllMarker',()=>{
+    hideAllMarker()
+  })
   $mitt.on("drawPolyline", (data) => {
     //绘制路线
     console.log("drawPolyline--->", data);

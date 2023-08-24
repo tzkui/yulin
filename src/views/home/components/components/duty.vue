@@ -4,7 +4,7 @@ import { ref, onMounted } from "vue";
 import { getZbxx } from "@/api/modules/zrzh.js";
 const phoneCallRef = ref()
 const phone = function(info){
-  phoneCallRef.value.phoneCall()
+  phoneCallRef.value.phoneCall(info.phone)
 }
 const list = ref([]);
 const getList = function () {

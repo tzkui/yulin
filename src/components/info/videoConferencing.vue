@@ -98,25 +98,16 @@ import { onMounted, onUnmounted, ref } from "vue";
 import { useEventBus } from "@vueuse/core";
 import { getOrgRoot, getOrgById } from "@/api/modules/videoConferencing.js";
 const showDialog = ref(false);
+import {addressBook} from '@/api/addressBook.js'
+
 const openDialog = function (e) {
   showDialog.value = true;
   console.log("视频会商参数：", e);
-  if (e.type === "onlyConferencing") {
-    treeData.value = [
-      {
-        id: 3,
-        label: "视频监控",
-        children: [
-          {
-            id: "1000000000137",
-            type: "TEMP_MT",
-            label: "地址一视频监控",
-          },
-        ],
-      },
-    ];
-  }
 };
+
+defineExpose({
+  openDialog,
+});
 const meetingList = ref([]);
 const loadOrgNode = async function (node, resolve) {
   console.log("node: ", node);
@@ -147,13 +138,14 @@ const treeData = ref([
   {
     id: 1,
     label: "通讯录",
-    children: [
-      {
-        id: "18983808184",
+    children: addressBook.map(item=>{
+      return {
+        ...item,
         type: "TEMP_VOLTE",
-        label: "廖军-值班员",
-      },
-    ],
+        label: item.name,
+        id: item.phone
+      }
+    })
   },
   {
     id: 2,
@@ -204,7 +196,7 @@ const treeData = ref([
     label: "卫星电话",
     children: [
       {
-        id: "17828998020",
+        id: "17323215510",
         type: "TEMP_VOLTE",
         label: "卫星电话1",
       },

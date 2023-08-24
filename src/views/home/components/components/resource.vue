@@ -1,16 +1,49 @@
 <script setup>
 import ViewBox from "@/components/common/view-box.vue";
-import { onMounted, ref, nextTick } from "vue";
+import { onMounted, ref, nextTick, inject } from "vue";
 import { bg_config } from "../../config";
 
 import { useEventBus } from "@vueuse/core";
 import selectDialogVue from "@/views/natural/components/selectDialog.vue";
-import { getYjzy } from "@/api/modules/zrzh.js";
+import addressBoox from "./dialogs/addressBoox.vue";
+import { getYjjy, getRhtx, getSpjk } from "@/api/modules/home.js";
 const imgefileUrl = (url) => {
   return new URL(url, import.meta.url).href;
 };
+const mockData = function () {
+  console.log(markerDatas);
+  markerDatas.zj = {
+    lx: "list",
+    sl: 1,
+    jh: [
+      {
+        id: "zjmock",
+        monitorName: "住建监控1-1",
+        typeName: "住建监控",
+        location: "榆林市横山区郭家沟西南约40米",
+        mapX: 109.93561,
+        mapY: 37.57452
+      },
+    ],
+  };
+  markerDatas.zhzf = {
+    lx: "list",
+    sl: 1,
+    jh: [
+      {
+        id: "zhzfmock",
+        monitorName: "综合执法监控1",
+        typeName: "综合执法监控",
+        location: "榆林市郭家沟西南约4000米",
+        mapX: 109.43561,
+        mapY: 37.57452
+      },
+    ],
+  };
+};
+const $mitt = inject("$mitt");
 const openVideoConferencingBus = useEventBus("openVideoConferencing");
-const emit = defineEmits(["openDialog"]);
+const emit = defineEmits(["openDialog","closeAllDialog"]);
 let currentResources = ref("yjzy");
 let resources_list_all = ref([
   [
@@ -22,24 +55,24 @@ let resources_list_all = ref([
     { name: "应急装备", num: 453, type: "yjzb", icon: "yjzb" },
   ],
   [
-    { name: "应急单兵", num: 453, type: "yjdb", icon: "yjdb" },
-    { name: "无人机", num: 453, type: "wrj", icon: "wrj" },
-    { name: "卫星电话", num: 453, type: "wxdh", icon: "wxdh" },
-    { name: "窄带通信", num: 453, type: "zdtx", icon: "zdtx" },
-    { name: "通讯录", num: 453, type: "txl", icon: "txl" },
-    { name: "视频会商", num: 453, type: "sphs", icon: "sphs" },
+    { name: "应急单兵", num: 5, type: "yjdb", icon: "yjdb" },
+    { name: "无人机", num: 3, type: "wrj", icon: "wrj" },
+    { name: "卫星电话", num: 6, type: "wxdh", icon: "wxdh" },
+    { name: "窄带通信", num: 10, type: "zdtx", icon: "zdtx" },
+    { name: "通讯录", num: 10, type: "txl", icon: "txl" },
+    { name: "视频会商", num: 16, type: "sphs", icon: "sphs" },
   ],
   [
     { name: "华为", type: "hw", icon: "sphs" },
     { name: "科达", type: "kd", icon: "sphs" },
   ],
   [
-    { name: "危化企业", num: 453, type: "spjk", icon: "spjk" },
-    { name: "公安", num: 453, type: "spjk", icon: "spjk" },
-    { name: "交警", num: 453, type: "spjk", icon: "spjk" },
-    { name: "水利", num: 453, type: "spjk", icon: "spjk" },
-    { name: "住建", num: 453, type: "spjk", icon: "spjk" },
-    { name: "综合执法", num: 453, type: "spjk", icon: "spjk" },
+    { name: "危化企业", num: 453, type: "whqy", icon: "spjk" },
+    { name: "公安", num: 453, type: "ga", icon: "spjk" },
+    { name: "交警", num: 453, type: "jj", icon: "spjk" },
+    { name: "水利", num: 453, type: "sl", icon: "spjk" },
+    { name: "住建", num: 1, type: "zj", icon: "spjk" },
+    { name: "综合执法", num: 1, type: "zhzf", icon: "spjk" },
   ],
 ]);
 let resources_list = ref([]);
@@ -71,18 +104,42 @@ const search_value = ref();
 
 const showSelect = ref(false);
 const selectDatas = ref({});
-const getYjzyList = function () {
-  getYjzy().then((res) => {
+const getYjjyList = function () {
+  getYjjy().then((res) => {
     console.log("应急资源：", res);
     for (let key in res.data) {
       markerDatas[key] = res.data[key];
     }
-    console.log(markerDatas);
     resources_list_all.value[0].forEach((item) => {
       item.num = markerDatas[item.type]?.sl;
-      console.log(item.num);
     });
     changeResources(currentResources.value, 0);
+  });
+};
+
+const getRhtxList = function () {
+  getRhtx().then((res) => {
+    console.log("融合通信：", res);
+    // for (let key in res.data) {
+    //   markerDatas[key] = res.data[key];
+    // }
+    // resources_list_all.value[1].forEach((item) => {
+    //   item.num = 1;
+    // });
+    // changeResources(currentResources.value, 1);
+  });
+};
+const getSpjkList = function () {
+  getSpjk().then((res) => {
+    const list = resources_list_all.value[3];
+    for (const info of list) {
+      for (const data of res.data) {
+        if (data.mc.startsWith(info.name)) {
+          info.num = data.sz;
+          markerDatas[info.type] = { ...data, lx: "list", sl: data.sz };
+        }
+      }
+    }
   });
 };
 // 切换应急资源
@@ -94,37 +151,58 @@ const changeResources = (type, index) => {
     return;
   });
 };
+const showTxl = ref(false)
 const openDialog = (item, index) => {
+  $mitt.emit("hideAllMarker");
+  if(item.type==='txl'){
+    showSelect.value = false;
+    emit("closeAllDialog");
+    showTxl.value = true;
+    return;
+  }
+  showTxl.value = false;
   if (markerDatas[item.type]) {
     let info = markerDatas[item.type];
+    let dialogType = item.type;
+    if (currentResources.value === "spjk") {
+      dialogType = "spjk";
+    }
     selectDatas.value = {
       name: item.name,
       listData: info.jh.map((item) => {
+        let treeId = item.id;
+        if (item.dataType) {
+          treeId = item.dataType + "--" + item.id;
+        }
         return {
           ...item,
-          label: item.title,
+          label: item.title || item.monitorName,
           num: item.count,
-          treeId: item.dataType + "--" + item.id,
+          treeId: treeId,
         };
       }),
       listType: info.lx,
-      dialogType: item.type,
+      dialogType: dialogType,
     };
     showSelect.value = false;
     nextTick(() => {
       showSelect.value = true;
     });
-  } else if(item.type==='sphs'){
-    openVideoConferencingBus.emit()
+  } else if (item.type === "sphs") {
+    openVideoConferencingBus.emit();
   } else {
     emit("openDialog", item, index);
   }
 };
 const closeDialog = function () {
+  $mitt.emit("hideAllMarker");
   showSelect.value = false;
 };
 onMounted(() => {
-  getYjzyList();
+  getYjjyList();
+  getRhtxList();
+  getSpjkList();
+  mockData();
 });
 </script>
 <template>
@@ -174,6 +252,7 @@ onMounted(() => {
     v-if="showSelect"
   >
   </selectDialogVue>
+  <addressBoox v-if="showTxl" @close-dialog="showTxl=false"></addressBoox>
 </template>
 <style lang="scss" scoped>
 .emergency_resources {

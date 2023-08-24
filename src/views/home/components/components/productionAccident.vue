@@ -2,6 +2,8 @@
 import ViewBox from "@/components/common/view-box.vue";
 import { ref, onMounted, inject } from "vue";
 import Common from "@/utils/common.js";
+// 获取安全事故数据的接口
+import { getaqscsgfx } from "../../../../api/modules/home"
 let commonFunc = Common();
 // echarts实例
 const echarts = inject("echarts");
@@ -11,6 +13,8 @@ const safe_chart_data = ref([
   { name: "类型二", data: [15, 30, 35, 20, 40, 66, 25] },
   { name: "类型三", data: [25, 20, 15, 40, 20, 36, 55] },
 ]);
+// 定义给是图表底部的区域数据
+const quyuData = ref(["榆阳区"])
 // 图表内容
 let Mychart = null;
 // let chartInterval = null; //轮播 interval
@@ -60,7 +64,7 @@ const option = ref({
   xAxis: {
     type: "category",
     boundaryGap: false,
-    data: ["榆阳县", "横山区", "神木县", "府谷县", "佳县", "定边县", "子洲县"],
+    data: quyuData.value,
     axisLine: {
       lineStyle: {
         width: 2,
@@ -71,6 +75,10 @@ const option = ref({
       textStyle: {
         color: "#B4C0CC",
       },
+      interval: 0,
+      formatter: function (value) {
+        return value.split("").join("\n");
+      }
     },
     axisTick: {
       show: false,
@@ -94,8 +102,46 @@ const option = ref({
   series: [],
 });
 onMounted(() => {
-  initChart(option.value);
+  getEchartsData()
+  // initChart(option.value);
 });
+// 获取图表数据的
+const getEchartsData = async () => {
+  let res = await getaqscsgfx()
+  safe_chart_data.value=[]
+  quyuData.value = []
+  res.data.forEach((v, i) => {
+    quyuData.value.push(v.mc)
+  })
+  option.value.xAxis.data = quyuData.value
+  delete res.data[0].mc
+  for(let key in res.data[0]){
+    safe_chart_data.value.push({
+       name: key, data: [] 
+    })
+  }
+  res.data.forEach((v, i) => {
+    delete v.mc
+  })
+  // 定义这个新的数据
+  let newxdata=[]
+  res.data.forEach((v,i)=>{
+    v=Object.values(v)
+    newxdata.push(v)
+  })
+  newxdata.forEach((v,i)=>{
+    v.forEach((v2,i2)=>{
+      safe_chart_data.value[i2].data.push(v[i2])
+    })
+  })
+  safe_chart_data.value = [
+    { name: "类型一", data: [45, 60, 45, 50, 60, 39, 35, 45, 50, 60, 39, 35, 48] },
+    { name: "类型二", data: [15, 30, 35, 20, 40, 66, 25, 45, 50, 60, 39, 35, 99] },
+    { name: "类型三", data: [25, 20, 15, 40, 20, 36, 55, 45, 50, 60, 39, 35, 85] },
+  ]
+  console.log(safe_chart_data.value,"我就是最后的数据的了")
+  initChart(option.value);
+}
 const initChart = (option) => {
   option.series = safe_chart_data.value.map((item, index) => {
     return {

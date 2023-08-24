@@ -45,6 +45,7 @@
             暂无数据
           </div>
         </div>
+
         <div v-show="!showDetail" class="affairmain">
           <!-- 还是判断循环渲染添加进行 -->
           <template v-for=" (item, index) in disaster_synthesis">
@@ -373,7 +374,7 @@ const initDisasterTypes = async () => {
 // 灾情分析等级与区域
 const initZqfxLeveldata = async (id) => {
   let res = await getZqfxLeveldata({ typeId: id })
-  // console.log('getZqfxLeveldata=========>', res);
+  console.log('getZqfxLeveldata=========>灾情', res);
   chartData.value = res.data
   changeChart(current_disater_tab.value)
 }
@@ -481,6 +482,10 @@ const changeChart = (item) => {
         show: true,
         color: "#fff", //X轴文字颜色
         fontSize: 16,
+        interval: 0,
+        formatter: function (value) {
+          return value.split("").join("\n");
+        }
       },
     },
     yAxis: [
@@ -613,7 +618,7 @@ const changeChart = (item) => {
       noption.series = [{
         name: "数量",
         type: "bar",
-        barWidth: 25,
+        barWidth: 14,
         label: {
           show: true,
           position: "top",
@@ -803,6 +808,7 @@ const setMarker = (type, data) => {
         flex-direction: row;
         align-items: center;
         padding: 8px 8px;
+        padding-right: 2px;
         border-bottom: 2px solid rgba(10, 54, 72, 1);
 
         .itemtitle {
@@ -817,12 +823,12 @@ const setMarker = (type, data) => {
 
         // 中间内容
         .centers {
-          width: 178px;
+          width: 174px;
           height: 100%;
           display: flex;
           justify-content: space-around;
           flex-direction: column;
-          margin-right: 16px;
+          margin-right: 10px;
           font-size: 14px;
           color: rgba(208, 222, 238, 1);
 
@@ -839,7 +845,7 @@ const setMarker = (type, data) => {
             margin-bottom: 10px;
 
             .one {
-              width: 64px;
+              width: 79px;
               height: 26px;
               background-color: #061b42;
               display: flex;
@@ -913,6 +919,7 @@ const setMarker = (type, data) => {
         flex-direction: row;
         align-items: center;
         padding: 8px 8px;
+        padding-right: 2px;
         border-bottom: 2px solid rgba(10, 54, 72, 1);
         background-color: transparent;
 
@@ -928,12 +935,12 @@ const setMarker = (type, data) => {
 
         // 中间内容
         .centers {
-          width: 178px;
+          width: 174px;
           height: 100%;
           display: flex;
           justify-content: space-around;
           flex-direction: column;
-          margin-right: 16px;
+          margin-right: 10px;
           font-size: 14px;
           color: rgba(208, 222, 238, 1);
         }

@@ -2,13 +2,15 @@
 import ViewBox from "@/components/common/view-box.vue";
 import { ref, inject, onMounted, computed } from "vue";
 import { getFxgz } from "@/api/modules/zrzh.js";
+import { getYjjcxx } from "@/api/modules/home.js";
 import ylzdFirDialog from "@/views/natural/components/syqxxFirDialogs/ylzd.vue";
 import hdzdFirDialog from "@/views/natural/components/syqxxFirDialogs/hdzd.vue";
 import skFirDialog from "@/views/natural/components/syqxxFirDialogs/sk.vue";
-
+import dzjc from "./dialogs/dzjc.vue";
+import aqscjc from "./dialogs/aqscjc.vue";
+import lhjc from "./dialogs/lhjc.vue";
 const $mitt = inject("$mitt");
 const currentWarningType = ref("");
-const warning_detail = ref();
 // 监测预警
 const warning_type = ref([
   { name: "雨情监测", type: "ylz", num: "0" },
@@ -18,175 +20,193 @@ const warning_type = ref([
   { name: "安全生产监测", type: "aqscjc", num: "0" },
   { name: "林火监测", type: "lhjc", num: "0" },
 ]);
-const datas = {
-  ylz: {},
-  hdz: {},
-  skz: {},
-};
-const dataList = computed(()=>{
-  return datas[currentWarningType.value]?.jh || []
-})
+const dataList = ref([]);
+const titleInfo = ref("");
 const getDatas = function () {
-  getFxgz().then((res) => {
-    for (let key in datas) {
-      datas[key] = res.data[key];
-    }
+  getYjjcxx().then((res) => {
+    console.log("预警监测信息：", res);
+    titleInfo.value = res.data.zxyj[0]?.contentText;
+    const list = res.data.jcxx;
     for (const info of warning_type.value) {
-      if (datas[info.type]) {
-        info.num = datas[info.type].sl;
+      for (const data of list) {
+        if (info.name === data.mc) {
+          info.num = data.sl;
+          info.markerList = data.jh;
+        }
       }
     }
   });
 };
+const getDataList = function (item) {
+  let list = [];
+  if (item.type === "ylz") {
+    list = item.markerList.map((item) => {
+      return {
+        id: item.id,
+        name: item.stnm,
+        num: "--",
+        markerInfo: {
+          markerType: "ylzd",
+          id: item.id,
+          icon: "/images/marker/icon-worn.png",
+          lng: item.lgtd,
+          lat: item.lttd,
+          name: "雨量监测站",
+          label: { text: "雨量监测站", font_size: 16 },
+          dialogType: "ylzd",
+          details: {
+            name: item.stnm,
+            time: "2023-07-09\t16:20:00",
+            h1: "0mm",
+            h2: "0mm",
+            h3: "0mm",
+            h4: "0mm",
+            h5: "0mm",
+          },
+        },
+      };
+    });
+  } else if (item.type === "hdz") {
+    list = item.markerList.map((item) => {
+      return {
+        id: item.id,
+        name: item.stnm,
+        address: item.stlc,
+        markerInfo: {
+          markerType: "hdzd",
+          id: item.id,
+          icon: "/images/marker/icon-worn.png",
+          lng: item.lgtd,
+          lat: item.lttd,
+          name: "河道站点",
+          label: { text: "河道站点", font_size: 16 },
+          dialogType: "hdzd",
+          details: {
+            name: item.stnm,
+            type: item.sttp,
+            sxmc: item.hnnm,
+            address: item.stlc,
+          },
+        },
+      };
+    });
+  } else if (item.type === "dzjc") {
+    list = item.markerList.map((item) => {
+      return {
+        id: item.id,
+        disasterSite: item.disasterSite,
+        disasterType: item.disasterType,
+        markerInfo: {
+          markerType: "dzjc",
+          id: item.id,
+          icon: "/images/marker/icon-worn.png",
+          lng: item.mapX,
+          lat: item.mapY,
+          name: "地质监测",
+          label: { text: "地质监测", font_size: 16 },
+          dialogType: "dzjc",
+          details: {
+            disasterSite: item.disasterSite,
+            disasterType: item.disasterType,
+          },
+        },
+      };
+    });
+  } else if (item.type === "skz") {
+    list = item.markerList.map((item) => {
+      return {
+        id: item.id,
+        name: item.stnm,
+        num1: "--",
+        num2: "--",
+        num3: "--",
+        markerInfo: {
+          markerType: "sk",
+          id: item.id,
+          icon: "/images/marker/icon-worn.png",
+          lng: item.lgtd,
+          lat: item.lttd,
+          name: "水库",
+          label: { text: "水库", font_size: 16 },
+          dialogType: "sk",
+          details: {
+            dqsw: "123",
+            xxsw: "123",
+            gsw: "123",
+            address: "0mm",
+            status: "#25E3D8",
+          },
+        },
+      };
+    });
+  } else if (item.type === "aqscjc") {
+    list = item.markerList.map((item) => {
+      return {
+        id: item.id,
+        equipmentName: item.equipmentName,
+        orgName: item.orgName,
+        surveyObject: item.surveyObject,
+        markerInfo: {
+          markerType: "aqscjc",
+          id: item.id,
+          icon: "/images/marker/icon-worn.png",
+          lng: item.mapX,
+          lat: item.mapY,
+          name: "安全生产监测",
+          label: { text: "安全生产监测", font_size: 16 },
+          dialogType: "aqscjc",
+          details: {
+            equipmentName: item.equipmentName,
+            orgName: item.orgName,
+            surveyObject: item.surveyObject,
+            location: item.location,
+          },
+        },
+      };
+    });
+  } else if (item.type === "lhjc") {
+    list = item.markerList.map((item) => {
+      return {
+        id: item.id,
+        areaName: item.areaName,
+        areaMeasue: item.areaMeasue,
+        typeName: item.typeName,
+        markerInfo: {
+          markerType: "lhjc",
+          id: item.id,
+          icon: "/images/marker/icon-worn.png",
+          lng: item.mapX,
+          lat: item.mapY,
+          name: "林火监测",
+          label: { text: "林火监测", font_size: 16 },
+          dialogType: "lhjc",
+          details: {
+            areaName: item.areaName,
+            areaMeasue: item.areaMeasue,
+            typeName: item.typeName,
+            areaAddr: item.areaAddr,
+            areaPerson: item.areaPerson,
+            phone: item.areaPhone,
+          },
+        },
+      };
+    });
+  }
+  dataList.value = list;
+};
 const checkWarningType = (item) => {
-  // console.log('选择监测类型=====>', item);
-  // if (item.num == 0) return;
+  $mitt.emit("hideAllMarker");
+  getDataList(item);
   if (currentWarningType.value == item.type) {
     currentWarningType.value = "";
-    // $mitt.emit("changeMarkerState", { markerType: item.type, show: false });
   } else {
     currentWarningType.value = item.type;
-    console.log("xxxxx:", currentWarningType)
-    // warning_detail.value = getDetail(item);
   }
 };
-const getDetail = (item) => {
-  let object = {};
-  object.type = item.type;
-  object.name = item.name;
-  switch (item.type) {
-    case "yqjc":
-      object.column = [{ label: "排名" }, { label: "名称" }, { label: "雨量" }];
-      object.data = [
-        {
-          id: "test_" + item.type,
-          name: "雨量监测站点",
-          num: "--",
-          markerInfo: {
-            markerType: item.type,
-            id: "test_" + item.type,
-            icon: "/images/marker/icon-worn.png",
-            lng: 109.00449,
-            lat: 37.95844,
-            name: "雨量监测站",
-            label: { text: "雨量监测站", font_size: 16 },
-            dialogType: "ylzd",
-            details: {
-              name: "榆林雨量监测站",
-              time: "2023-07-09\t16:20:00",
-              h1: "0mm",
-              h2: "0mm",
-              h3: "0mm",
-              h4: "0mm",
-              h5: "0mm",
-            },
-          },
-        },
-      ];
-      break;
-    case "hdjc":
-      object.column = [];
-      object.data = [
-        {
-          id: "test_" + item.type,
-          name: "无定河一号监测站",
-          address: "榆林市佳县峪口乡任家畔村20号",
-          markerInfo: {
-            markerType: item.type,
-            id: "test_" + item.type,
-            icon: "/images/marker/icon-worn.png",
-            lng: 110.00449,
-            lat: 37.04025,
-            name: "河道监测站",
-            label: { text: "河道监测站", font_size: 16 },
-            dialogType: "hdzd",
-            details: {
-              name: "榆林河道监测站",
-              time: "2023-07-09\t16:20:00",
-              h1: "0mm",
-              h2: "0mm",
-              h3: "0mm",
-              h4: "0mm",
-              h5: "0mm",
-            },
-          },
-        },
-      ];
-      break;
-    case "dzjc":
-    case "aqscjc":
-    case "lhjc":
-      object.column = [
-        { label: "序号" },
-        { label: "监测点" },
-        { label: "数量" },
-      ];
-      object.data = [
-        {
-          id: "test_" + item.type,
-          name: "葛富村1号崩塌",
-          num: "2",
-          markerInfo: {
-            markerType: item.type,
-            id: "test_" + item.type,
-            icon: "/images/marker/icon-worn.png",
-            lng: 109.27378,
-            lat: 37.95844,
-            name: "监测站",
-            label: { text: item.name + "站", font_size: 16 },
-            dialogType: "ylzd",
-            details: {
-              name: "榆林监测站",
-              time: "2023-07-09\t16:20:00",
-              h1: "0mm",
-              h2: "0mm",
-              h3: "0mm",
-              h4: "0mm",
-              h5: "0mm",
-            },
-          },
-        },
-      ];
-      break;
-    case "skjc":
-      object.column = [];
-      object.data = [
-        {
-          id: "test_" + item.type,
-          name: "寺沟水库",
-          num1: "123",
-          num2: "123",
-          num3: "123",
-          markerInfo: {
-            markerType: item.type,
-            id: "test_" + item.type,
-            icon: "/images/marker/icon-worn.png",
-            lng: 107.86835,
-            lat: 37.87737,
-            name: "水库",
-            label: { text: "水库", font_size: 16 },
-            dialogType: "hdzd",
-            details: {
-              name: "榆林水库",
-              time: "2023-07-09\t16:20:00",
-              h1: "0mm",
-              h2: "0mm",
-              h3: "0mm",
-              h4: "0mm",
-              h5: "0mm",
-            },
-          },
-        },
-      ];
-    default:
-      () => {};
-      break;
-  }
-  return object;
+const closeDialog = function () {
+  currentWarningType.value = "";
+  $mitt.emit("hideAllMarker");
 };
-const closeDialog = function(){
-  currentWarningType.value = ""
-}
 onMounted(() => {
   getDatas();
 });
@@ -196,7 +216,7 @@ onMounted(() => {
     <div class="warning_monitoring">
       <div class="warning_info">
         <p class="info_box">
-          5月26日11时，陕西省气象台发布暴雨蓝色预警。受高空槽和低层切变线共同影响，预计5月26日20时至27日20时榆林东部局地、延安中东部、关中东部、商洛西北部、汉中东部，安排人员前往
+          {{ titleInfo }}
         </p>
       </div>
       <div class="monitor_box">
@@ -223,22 +243,40 @@ onMounted(() => {
     v-if="currentWarningType === 'ylz'"
     @closeDialog="closeDialog"
     :list="dataList"
-    style="right: 460px;left: unset;"
+    style="right: 460px; left: unset"
   ></ylzdFirDialog>
   <!-- 河道站点一级弹框 -->
   <hdzdFirDialog
     v-if="currentWarningType === 'hdz'"
     @closeDialog="closeDialog"
     :list="dataList"
-    style="right: 460px;left: unset;"
+    style="right: 460px; left: unset"
   ></hdzdFirDialog>
   <!-- 水库一级弹窗 -->
   <skFirDialog
     v-if="currentWarningType === 'skz'"
     @closeDialog="closeDialog"
     :list="dataList"
-    style="right: 460px;left: unset;"
+    style="right: 460px; left: unset"
   ></skFirDialog>
+  <dzjc
+    v-if="currentWarningType === 'dzjc'"
+    @closeDialog="closeDialog"
+    :list="dataList"
+    style="right: 460px; left: unset"
+  ></dzjc>
+  <aqscjc
+    v-if="currentWarningType === 'aqscjc'"
+    @closeDialog="closeDialog"
+    :list="dataList"
+    style="right: 460px; left: unset"
+  ></aqscjc>
+  <lhjc
+    v-if="currentWarningType === 'lhjc'"
+    @closeDialog="closeDialog"
+    :list="dataList"
+    style="right: 460px; left: unset"
+  ></lhjc>
 </template>
 <style lang="scss" scoped>
 .warning_monitoring {

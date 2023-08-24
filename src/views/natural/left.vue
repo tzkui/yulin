@@ -355,6 +355,7 @@ onMounted(() => {
 });
 let syqxxMarkerList = ref([]); // 判断水雨情信息选中与否
 const setMarker = function (type, info = {}) {
+  $mitt.emit("hideAllMarker")
   selectedModule.value = type;
   closeAllDialog();
   setTimeout(() => {
@@ -404,17 +405,17 @@ const setMarker = function (type, info = {}) {
         };
       }
     } else if (type === "fxyh") {
-      $mitt.emit("clearAll", { ignore: ["geo绘制图层"] });
-      $mitt.emit("geoSetCenterTxt", {
-        url: assetsUrl("/geoJson/yjqx.json"),
-        style: { color: "#fff", font_size: 14 },
-      });
+      $mitt.emit("hideAllMarker")
       let list = fxyhInfo.value[info.id].jh.map((item) => {
+        let treeId = item.id;
+        if(item.dataType){
+          treeId = item.dataType + "--" + treeId
+        }
         return {
           ...item,
           label: item.title,
           num: item.count,
-          treeId: item.dataType + "--" + item.id,
+          treeId: treeId
         };
       });
       if (selectedFxyh.value === info.id) {
@@ -449,6 +450,7 @@ const setMarker = function (type, info = {}) {
 };
 
 const closeDialog = function (type) {
+  $mitt.emit("hideAllMarker")
   dialogFlags.value[type] = false;
 };
 const selectedFxyh = ref("");
@@ -476,7 +478,8 @@ watch(selectedModule, function (val, old) {
       sourceCheckboxRef.value.clearAll();
       dialogFlags.value.select = false;
     } else {
-      $mitt.emit("clearAll", { ignore: ["geo绘制图层"] });
+      // $mitt.emit("clearAll", { ignore: ["geo绘制图层"] });
+      $mitt.emit("hideAllMarker")
     }
   }
 });

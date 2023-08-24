@@ -10,8 +10,8 @@ const dataSelectors = reactive({
 });
 
 const videoConferencingBus = useEventBus("openVideoMonitoring")
-const openVideoConferencing = function(){
-  videoConferencingBus.emit({type:"onlyConferencing"})
+const openVideoConferencing = function () {
+  videoConferencingBus.emit({ type: "onlyConferencing" })
 
 }
 const toogleDate = function (key, val) {
@@ -261,13 +261,14 @@ const getRandom = function (max = 100) {
 
 // 获取事故等级分析数据
 const getAccidentLevelList = async function (type = "1") {
-  let res = await getSgdjfx({ type: type });
-  if(res.code == 200){
-    accidentData.value = res.data.map((item,index) =>{
+  let res = await getSgdjfx(type);
+  console.log(res, "我现在看看res的一个数据的呢")
+  if (res.code == 200) {
+    accidentData.value = res.data.map((item, index) => {
       return {
-        name:item.mc,
-        value:item.sz,
-        id:index,
+        name: item.mc,
+        value: item.sz,
+        id: index,
         ...item
       }
     })
@@ -275,19 +276,19 @@ const getAccidentLevelList = async function (type = "1") {
     option.series[1].data = accidentData.value;
     setAccidentTypeChart(option);
     setChartAction();
-  }else{
+  } else {
     setTimeout(() => {
-    accidentData.value = [
-      { name: "一般", value: getRandom(), id: "dj1" },
-      { name: "重大", value: getRandom(), id: "dj2" },
-      { name: "较大", value: getRandom(), id: "dj3" },
-      { name: "特大", value: getRandom(), id: "dj4" },
-    ];
-    option.series[0].data = accidentData.value;
-    option.series[1].data = accidentData.value;
-    setAccidentTypeChart(option);
-    setChartAction();
-  }, 50);
+      accidentData.value = [
+        { name: "一般", value: getRandom(), id: "dj1" },
+        { name: "重大", value: getRandom(), id: "dj2" },
+        { name: "较大", value: getRandom(), id: "dj3" },
+        { name: "特大", value: getRandom(), id: "dj4" },
+      ];
+      option.series[0].data = accidentData.value;
+      option.series[1].data = accidentData.value;
+      setAccidentTypeChart(option);
+      setChartAction();
+    }, 50);
   }
 
 };
@@ -298,8 +299,8 @@ import img3 from "../../../assets/safe/type3.png";
 import img4 from "../../../assets/safe/type4.png";
 // '/src/assets/safe/num' + (index + 1) + '.png'
 // import imm1 from "../../../assets/safe/num1.png"
-const getAccidentTypeList = async function (type = "1") {
-  let res = await getSglxfx({ type });
+const getAccidentTypeList = async function (type = "4") {
+  let res = await getSglxfx(type);
   const IMGLIST = [img1, img2, img3, img4];
   if (res.code == 200) {
     setTimeout(() => {
@@ -356,38 +357,38 @@ import imms2 from "../../../assets/safe/num2.png";
 import imms3 from "../../../assets/safe/num3.png";
 import imms4 from "../../../assets/safe/num4.png";
 const getEnterpriseTypeList = async function (type = "1") {
-    setTimeout(() => {
-      enterpriseTypeList.value = [
-        {
-          num: getRandom(200),
-          percent: "20%",
-          type: "危化行业",
-          id: 1,
-          img: imms1,
-        },
-        {
-          num: getRandom(200),
-          percent: "20%",
-          type: "工贸行业",
-          id: 2,
-          img: imms2,
-        },
-        {
-          num: getRandom(200),
-          percent: "20%",
-          type: "工贸行业",
-          id: 3,
-          img: imms3,
-        },
-        {
-          num: getRandom(200),
-          percent: "20%",
-          type: "工贸行业",
-          id: 4,
-          img: imms4,
-        },
-      ];
-    }, 50);
+  setTimeout(() => {
+    enterpriseTypeList.value = [
+      {
+        num: getRandom(200),
+        percent: "20%",
+        type: "危化行业",
+        id: 1,
+        img: imms1,
+      },
+      {
+        num: getRandom(200),
+        percent: "20%",
+        type: "工贸行业",
+        id: 2,
+        img: imms2,
+      },
+      {
+        num: getRandom(200),
+        percent: "20%",
+        type: "工贸行业",
+        id: 3,
+        img: imms3,
+      },
+      {
+        num: getRandom(200),
+        percent: "20%",
+        type: "工贸行业",
+        id: 4,
+        img: imms4,
+      },
+    ];
+  }, 50);
 };
 // 获取重点地点视频监控列表
 const getmonitorList = async function (type = "1") {
@@ -444,7 +445,7 @@ const setAccidentTypeChart = function (option) {
       name: params.name + "事故",
       id: params.data.id,
       num: params.data.sz,
-      jh:params.data.jh
+      jh: params.data.jh
     });
   });
 };
@@ -612,11 +613,7 @@ const qylxcl = (item) => {
           <div class="header">
             <div class="title">事故等级分析</div>
             <div class="dates">
-              <selectDate
-                :now-date="dataSelectors.sgdj"
-                dateType="sgdj"
-                @toogleDate="toogleDate"
-              ></selectDate>
+              <selectDate :now-date="dataSelectors.sgdj" dateType="sgdj" @toogleDate="toogleDate"></selectDate>
             </div>
           </div>
           <div class="main">
@@ -628,21 +625,13 @@ const qylxcl = (item) => {
           <div class="header">
             <div class="title">事故类型分析</div>
             <div class="dates">
-              <selectDate
-                :now-date="dataSelectors.sglx"
-                dateType="sglx"
-                @toogleDate="toogleDate"
-              ></selectDate>
+              <selectDate :now-date="dataSelectors.sglx" dateType="sglx" @toogleDate="toogleDate"></selectDate>
             </div>
           </div>
           <div class="main">
             <div class="typeList">
-              <div
-                class="typeItem"
-                @click="openDialog('eventLevel', item)"
-                v-for="item in accidentTypeList"
-                :key="item.id"
-              >
+              <div class="typeItem" @click="openDialog('eventLevel', item)" v-for="item in accidentTypeList"
+                :key="item.id">
                 <div class="imgBox">
                   <img :src="item.imgSrc" alt="" />
                 </div>
@@ -661,11 +650,7 @@ const qylxcl = (item) => {
           <div class="header">
             <div class="title">危化企业事故类型分析</div>
             <div class="dates">
-              <selectDate
-                :now-date="dataSelectors.qylx"
-                dateType="qylx"
-                @toogleDate="toogleDate"
-              ></selectDate>
+              <selectDate :now-date="dataSelectors.qylx" dateType="qylx" @toogleDate="toogleDate"></selectDate>
             </div>
           </div>
           <div class="type_list_item list_header">
@@ -674,12 +659,7 @@ const qylxcl = (item) => {
             <div class="line3">事故占比</div>
           </div>
           <ul class="type_list">
-            <li
-              class="type_list_item"
-              v-for="(item, index) in newenterpriseTypeList"
-              :key="index"
-              @click="qylxcl(item)"
-            >
+            <li class="type_list_item" v-for="(item, index) in newenterpriseTypeList" :key="index" @click="qylxcl(item)">
               <div class="line1">
                 <img :src="item.img" alt="" />
                 <div class="word" :style="{ color: item.color }">
@@ -696,11 +676,7 @@ const qylxcl = (item) => {
     <ViewBox title="重点地点视频监控" :height="198">
       <div class="box2">
         <ul class="monitorList">
-          <li
-            v-for="item in monitorList"
-            :key="item.id"
-            @click="openVideoConferencing"
-          >
+          <li v-for="item in monitorList" :key="item.id" @click="openVideoConferencing">
             <div class="imgBox">
               <img :src="item.imgUrl" alt="" />
             </div>
@@ -864,12 +840,9 @@ const qylxcl = (item) => {
           margin-bottom: 4px;
           box-sizing: border-box;
           border: 1px solid;
-          border-image: linear-gradient(
-              180deg,
+          border-image: linear-gradient(180deg,
               rgba(0, 96, 128, 0.56),
-              rgba(0, 96, 128, 0.23)
-            )
-            1 1;
+              rgba(0, 96, 128, 0.23)) 1 1;
           border-radius: 4px;
           cursor: pointer;
 
@@ -881,6 +854,7 @@ const qylxcl = (item) => {
             width: 176px;
             margin-left: 15px;
             font-size: 14px;
+
             img {
               width: 31px;
               height: 21px;

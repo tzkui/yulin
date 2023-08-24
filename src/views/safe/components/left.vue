@@ -239,6 +239,7 @@ const $mitt = inject("$mitt");
 const secureList = ref([]);
 const getdatasj = async function () {
   let res = await getWhqyjcyj();
+  console.log(res,"=================>看看数据")
   if (res.code == 200) {
     secureList.value = res.data.map((item) => {
       return {
@@ -404,11 +405,12 @@ let myChart = null;
 // let totalData = 0;
 const getco = async function () {
   let res = await getXqqytjfx();
+  console.log(res,"看看具体到底的是写什么鬼子数据的呢")
   if (res.code == 200) {
     coxdata.value = [];
     cxydata.value = [];
-    coxdata.value = res.data.map((item) => item.mc);
-    cxydata.value =res.data.map((item) => item.sz);
+    coxdata.value = res.data.tj.map((item) => item.mc);
+    cxydata.value =res.data.tj.map((item) => item.sz);
     console.log(coxdata.value, cxydata.value);
   }
   // 下面就是柱状图的一些配置的了

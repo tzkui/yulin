@@ -5,7 +5,7 @@
             <div class="resources">
                 <div class="effect_radius">
                     影响半径<span class="blue">{{ radius.effect_radius }}米</span>
-                    <el-slider v-model="radius.effect_radius" :max="1000"
+                    <el-slider v-model="radius.effect_radius" :max="100000"
                         @input="$event => { changeRaduis('effect_radius', $event) }" :show-tooltip="false"></el-slider>
                     <!-- 受灾内容 -->
                     <div class="effect_cont_lists">
@@ -94,6 +94,33 @@ const props = defineProps({
 /**
  * 灾情资源分析 数据
  */
+
+//  定义打点的数据
+const ddlist = ref({
+    markerType: "bncs",
+    id: "104",
+    icon: "/images/marker/icon_shelter.png",
+    name: "避难场所",
+    maekerList: [
+        {
+            markerType: "bncs",
+            id: "104_1",
+            icon: "/images/marker/icon_shelter.png",
+            lng: '109.74485',
+            lat: "38.97187",
+            name: "避难场所",
+            label: { text: "避难场所", font_size: 16 },
+            dialogType: "bncs",
+            details: {
+                title: "榆阳区避灾场所",
+                area: "2000㎡",
+                person: "1332",
+                address: "长兴路榆林人民大厦",
+            }
+        },
+    ]
+})
+
 // 灾情影响 统计内容
 const effect_cont = ref([
     {
@@ -227,6 +254,7 @@ let objConfig = {
 };
 const initType = async () => {
     let effect = await getZdfhmbType()
+    console.log(effect, "看看这个里面是什么的数据")
     disaster_check_data.value = Array.isArray(effect.data) ? effect.data : [effect.data]
     let analysis = await getYybzfxType()
     analysis_check_data.value = Array.isArray(analysis.data) ? analysis.data : [analysis.data]
@@ -238,11 +266,13 @@ const onCheck = async (type, item) => {
     let currentData, currentList, radius, funcName;
 
     if (type == 'effect') {
+        console.log(11)
         currentData = disaster_checked_data.value
         currentList = disaster_resources_list.value
         radius = props.radius.effect_radius
         funcName = getZdfhmb
     } else if (type == 'analysis') {
+        console.log(22)
         currentData = analysis_checked_data.value
         currentList = application_object_list.value
         radius = props.radius.analysis_radius
@@ -273,9 +303,25 @@ const onCheck = async (type, item) => {
 
     let res = await funcName(params)
     console.log('获取列表=====》', res);
-    for (const key in res.data) {
-        
+    // 点击上面的
+    if (type == 'effect') {
+        effect_cont.value[0].num = res.data.totalArea || 0
+        effect_cont.value[1].num = res.data.total || 0
+        // 下面就是点击下面的
+    } else if (type == 'analysis') {
+        console.log("下面的")
+        $mitt.emit("addMarker", ddlist.value)
+        $mitt.emit("flyTo", ddlist.value.maekerList[0])
+        $mitt.emit("openPopup", ddlist.value.maekerList[0])
+        setTimeout(() => {
+        $mitt.emit("hideAllMarker")
+        }, 2000);
     }
+
+
+    // for (const key in res.data) {
+
+    // }
 
     // currentList
 

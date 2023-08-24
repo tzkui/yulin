@@ -25,9 +25,14 @@ const routes = [
         path: '/decisionAnalysis',
         component: () => import('@/views/decisionAnalysis/index.vue'),
         meta: { title: '决策分析' }
-      }
+      },
     ]
   },
+  {
+    path: "/bg_page",
+    component: () => import('@/views/pagesForOther/index.vue'),
+    meta: { title: "后端跳转页面" }
+  }
 ]
 const router = createRouter({
   history: createWebHashHistory("http://171.217.93.33:9007"), // 后端服务器文件包路径

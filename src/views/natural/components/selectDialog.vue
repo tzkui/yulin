@@ -3,7 +3,7 @@ import { onMounted, ref, inject, watch } from "vue";
 import firDialog from "./firDialog.vue";
 import commonFun from "@/utils/common.js";
 const { initTree, calcDiff } = commonFun();
-import { fxyhLists, yjzyLists } from "@/api/mock_tzk.js";
+import { fxyhLists, yjzyLists, spjkLists } from "@/api/mock_tzk.js";
 const $mitt = inject("$mitt");
 
 const props = defineProps({
@@ -40,7 +40,6 @@ const closeDialog = function () {
 };
 const treeData = ref([]);
 const initData = function () {
-  console.log(props.listType);
   if (props.listType === "tree") {
     for (const info of props.listData) {
       if (info.dataType === 2) {
@@ -51,16 +50,19 @@ const initData = function () {
     treeData.value = arr.filter((item) => item.children?.length > 0);
   } else {
     treeData.value = props.listData.map((item) => {
+      console.log("sssssssssss",item)
+      idInfoDict[item.id] = item;
       return {
         ...item,
-        label: item.name || item.jswz,
+        label: item.name || item.jswz || item.monitorName,
       };
     });
   }
 };
 console.log(props.dialogType);
 const selectedMarkers = ref([]);
-const onCheckedChange = function (data) {
+const selectedListMarkers = ref([])
+const onCheckedChange = function (data,flag) {
   let checkedList = treeRef.value.getCheckedKeys();
   // 树的情况
   if (props.listType === "tree") {
@@ -68,7 +70,8 @@ const onCheckedChange = function (data) {
       item.startsWith("2--")
     );
   } else {
-    // 列表的情况
+    console.log(selectedListMarkers, idInfoDict)
+    selectedMarkers.value = treeRef.value.getCheckedKeys()
   }
 };
 const getMarkerInfoByType = function (info) {
@@ -78,7 +81,11 @@ const getMarkerInfoByType = function (info) {
     base.id = info.id;
     base.lng = info.mapX;
     base.lat = info.mapY;
-    base.details.name = info.title;
+    // base.details.name = info.title;
+    console.log(info)
+    for(let key in base.details){
+      base.details[key] = info[key] || '-'
+    }
     return base;
   }
 };
@@ -88,6 +95,7 @@ onMounted(() => {
 watch(selectedMarkers, (val, old) => {
   if (val.length === old.length) return;
   const list = calcDiff(val, old);
+  console.log(list)
   let markerList = [];
   for (const treeId of list) {
     const info = idInfoDict[treeId];
@@ -108,6 +116,7 @@ watch(selectedMarkers, (val, old) => {
       maekerList: markerList,
     });
     $mitt.emit("flyTo", markerList[0]);
+    $mitt.emit("openPopup", markerList[0]);
   } else {
     markerList.forEach((item) => {
       console.log(item)

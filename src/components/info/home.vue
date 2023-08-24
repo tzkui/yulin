@@ -6,6 +6,8 @@ import mapGeomtryGroup from "@/components/common/mapGeomtryGroup.vue";
 import { ref, onMounted, reactive, inject, watch } from "vue";
 import videoConferencing from './videoConferencing.vue';
 import videoMonitoring from "./videoMonitoring.vue";
+import phoneCall from "./phoneCall.vue";
+
 import map2d from "@/components/map/map2d/map.vue";
 import { assetsUrl } from "@/components/map/map2d/hook/index";
 // import Mixin from "@/utils/drawMixin";
@@ -59,7 +61,7 @@ const initMap = function () {
   };
   $mitt.emit("drawGeoGraph", mittData);
 
-  //导入包含行政区划的geo数据 进行绘制
+  // //导入包含行政区划的geo数据 进行绘制
   let mittLineData = {
     url: assetsUrl("/geoJson/yjqx.json"),
     geoType: "line",
@@ -69,7 +71,7 @@ const initMap = function () {
       outlineColor: "rgba(0, 107, 206, 0.80)",
       fill: false, //是否覆盖
       outline: true,
-      outlineWidth: 2, //宽度
+      outlineWidth: 5, //宽度
     },
   };
   $mitt.emit("drawGeoGraph", mittLineData);
@@ -79,7 +81,7 @@ const initMap = function () {
       url: assetsUrl("/geoJson/yjqx.json"),
       style: { color: "#fff", font_size: 14 },
     });
-  }, 1000);
+  }, 500);
 };
 
 // 数据大屏自适应函数
@@ -115,6 +117,7 @@ const handleScreenAuto = () => {
       </mapGeomtryGroup>
       <videoConferencing></videoConferencing>
       <videoMonitoring></videoMonitoring>
+      <phoneCall></phoneCall>
       <router-view></router-view>
     </div>
   </div>

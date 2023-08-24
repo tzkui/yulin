@@ -5,7 +5,7 @@ import Common from "@/utils/common.js";
 let commonFunc = Common();
 
 const emits = defineEmits(["clickEcharts"]);
-import { getQyfb } from "@/api/modules/home.js";
+import { getQyfb, getQyfbTree } from "@/api/modules/home.js";
 // echarts实例
 const echarts = inject("echarts");
 const initChart = (option) => {
@@ -55,9 +55,11 @@ const initChart = (option) => {
     Mychart.resize();
   };
 
-  Mychart.on("click", (params) => {
+  Mychart.on("click", async (params) => {
+    let res = await getQyfbTree()
+    // console.log(res,"看看数据是什么")
     // console.log('params', params);
-    emits("clickEcharts", params);
+    emits("clickEcharts", res.data);
   });
 };
 // 图表内容
@@ -183,22 +185,22 @@ const getInfos = function () {
   getQyfb().then((res) => {
     console.log("企业分布：", res);
     const arr = [
+      { name: "煤炭", key: "mt", data: [] },
       { name: "非煤矿山", key: "fmks", data: [] },
-      { name: "危险化学品", key: "wxhxp", data: [] },
-      { name: "冶金", key: "yj", data: [] },
-      { name: "有色金属", key: "ysjs", data: [] },
-      { name: "建材", key: "jc", data: [] },
+      { name: "烟花爆竹", key: "yhbz", data: [] },
+      { name: "化工", key: "hg", data: [] },
+      { name: "危险物品", key: "wxwp", data: [] },
+      { name: "烟草", key: "yc", data: [] },
+      { name: "金属冶炼", key: "jsyl", data: [] },
       { name: "机械", key: "jx", data: [] },
-      { name: "轻工业", key: "qgy", data: [] },
-      { name: "纺织业", key: "fzy", data: [] },
     ];
-    res.data.forEach(item=>{
-      arr.forEach(info=>{
-        info.data.push(item[info.key]+2)
+    res.data.forEach(item => {
+      arr.forEach(info => {
+        info.data.push(item[info.key])
       })
     })
     company_chart_data.value = arr;
-    option.value.xAxis[0].data = res.data.map(item=>item.mc)
+    option.value.xAxis[0].data = res.data.map(item => item.mc)
     // company_chart_data.value = res.data.map((item) => {
     //   return {
     //     name: item.mc,

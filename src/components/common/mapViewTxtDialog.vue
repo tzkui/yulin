@@ -7,11 +7,11 @@ import { useEventBus } from "@vueuse/core";
 const emits = defineEmits(["closeDialog"]);
 
 const doSomething = function (info) {
-  console.log(info, info.funcName)
+  console.log(info, info.funcName);
   if (info.funcName) {
     useEventBus(info.funcName).emit({
       dialogType: props.dialogType,
-      ...props.details
+      ...props.details,
     });
   } else {
     throw new Error("请传入funcName");
@@ -53,31 +53,71 @@ if (dialogConfigs[props.dialogType]) {
 </script>
 
 <template>
-  <viewDialog :title="title" :showDialog="true" @closeDialog="closeDialog('syqxx')">
+  <viewDialog
+    :title="title"
+    :showDialog="true"
+    @closeDialog="closeDialog('syqxx')"
+  >
     <div class="dialog_content">
       <ul v-if="main_list.length" class="info_list">
-        <li class="info_list_item" v-for="item in  main_list " :key="item.key" :class="item.inline ? 'inline_item' : ''">
+        <li
+          class="info_list_item"
+          v-for="item in main_list"
+          :key="item.key"
+          :class="item.inline ? 'inline_item' : ''"
+        >
           <div class="left">{{ item.name }}：</div>
           <div class="right">
-            <span :style="{ color: item.colorKey ? details[item.colorKey] : '' }">{{ details[item.key] }}</span>
-            <img v-if="item.iconUrl" @click="doSomething(item)" class="icon" :src="item.iconUrl" alt="">
+            <span
+              :style="{ color: item.colorKey ? details[item.colorKey] : '' }"
+              >{{ details[item.key] }}</span
+            >
+            <img
+              v-if="item.iconUrl"
+              @click="doSomething(item)"
+              class="icon"
+              :src="item.iconUrl"
+              alt=""
+            />
           </div>
         </li>
+        <template v-if="details.activeList">
+          <li
+            class="info_list_item"
+            v-for="(item, index) in details.activeList"
+            :key="index"
+          >
+            <div class="left">{{ item.label }}：</div>
+            <div class="right">
+              <span :style="item.style">{{ item.value }}</span>
+            </div>
+          </li>
+        </template>
       </ul>
-      <div class="empty_data" v-else>
-        暂无数据
-      </div>
+      <div class="empty_data" v-else>暂无数据</div>
     </div>
     <template #footer>
       <div class="dialog_footer">
         <div class="leftBtns" v-if="leftBtns.length > 0">
           <div class="imgBox" v-for="item in leftBtns" :key="item.imgUrl">
-            <img :src="item.imgUrl" :title="item.title" alt="" @click="doSomething(item)">
+            <img
+              :src="item.imgUrl"
+              :title="item.title"
+              alt=""
+              @click="doSomething(item)"
+            />
           </div>
         </div>
         <template v-if="btns.length > 0">
-          <div class="btn" v-for="item in btns" v-show="item.name !== '查看'" :key="item.name" @click="doSomething(item)">{{
-            item.name }}</div>
+          <div
+            class="btn"
+            v-for="item in btns"
+            v-show="item.name !== '查看'"
+            :key="item.name"
+            @click="doSomething(item)"
+          >
+            {{ item.name }}
+          </div>
         </template>
       </div>
     </template>

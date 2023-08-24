@@ -1,6 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { ElMessage, ElMessageBox } from "element-plus";
+import { login } from "@/api/modules/login";
 // const requetUrl = process.env.NODE_ENV === 'development' ? process.env.VUE_APP_API_DEV_URL : process.env.VUE_APP_API_DEV_WRITE;
 const requetUrl = window.baseRequestUrl;
 let instance = axios.create({
@@ -10,7 +11,7 @@ let instance = axios.create({
 instance.interceptors.request.use((config) => {
   const questStatus = config.method;
   config.params = config.params ? config.params : {};
-  const access_token = localStorage.getItem("token");
+  const access_token = sessionStorage.getItem("token");
   if (access_token) {
     config.headers["Authorization"] = "Bearer " + access_token;
   }
@@ -40,11 +41,15 @@ instance.interceptors.request.use((config) => {
   return config;
 });
 // 防止同时调用多个接口时调用多次自动登录
+let timer = null;
 instance.interceptors.response.use(
   (response) => {
     if (response.data === "") return;
     const res = response.data;
-    if (response.status === 200 && (res.code === 200 || res.errCode === 200 || res.code === 0)) {
+    if (
+      response.status === 200 &&
+      (res.code === 200 || res.errCode === 200 || res.code === 0)
+    ) {
       return res;
     } else {
       if (res.code === 401) {
@@ -56,6 +61,15 @@ instance.interceptors.response.use(
         //   Cookies.remove('GH_TOKEN');
         //   location.reload();
         // });
+        if (timer) {
+          clearTimeout(timer);
+        }
+        timer = setTimeout(() => {
+          login().then((res) => {
+            sessionStorage.setItem("token", res.data.password);
+            // window.location.reload()
+          });
+        }, 50);
       } else {
         // ElMessage({
         //   message: res.msg,

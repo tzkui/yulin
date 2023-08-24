@@ -516,7 +516,7 @@ export function getMarkerData (id, value, type, name, count) {
           job: "应急人员",
           compony: "青山路街道办事处",
           aphone: "36563",
-          phone: "14590909876",
+          phone: "17323215510",
           duty: "日常巡逻发现隐患",
           id: id
         },

@@ -2,10 +2,10 @@ import request from '../index'
 
 
 // 获取事故等级分析
-export const getSgdjfx = data => request.post("/aqsc/sgdjfx", data)
+export const getSgdjfx = data => request.post(`/aqsc/sgdjfx?type=${data}`)
 
 // 获取事故类型分析
-export const getSglxfx = data => request.post("/aqsc/sglxfx", data)
+export const getSglxfx = data => request.post(`/aqsc/sglxfx?type=${data}`)
 
 // 获取危化企业监测预警
 export const getWhqyjcyj = data => request.post("/aqsc/whqyjcyj", data)

@@ -74,22 +74,13 @@
       <div class="affairmain">
         <!-- 还是判断循环渲染添加进行 -->
         <template v-for="(item, index) in events" :key="index">
-          <div
-            class="item"
-            :class="{ active: currentIndex === index }"
-            v-if="item.type == 1"
-            @click="setMarker('affair', item, index)"
-            :key="index"
-          >
+          <div class="item" :class="{ active: currentIndex === index }" v-if="item.type == 1"
+            @click="setMarker('affair', item, index)" :key="index">
             <p class="itemtitle">{{ item.name }}</p>
             <p class="centers">
-              <span class="ellipsis" :title="item.info"
-                >详情: {{ item.info }}</span
-              >
+              <span class="ellipsis" :title="item.info">详情: {{ item.info }}</span>
               <span>时间: {{ item.time }}</span>
-              <span class="ellipsis" :title="item.location"
-                >地点: {{ item.location }}</span
-              >
+              <span class="ellipsis" :title="item.location">地点: {{ item.location }}</span>
             </p>
             <div class="labels">
               <p class="labels-top">
@@ -107,12 +98,8 @@
             </div>
           </div>
           <!-- 下面这个就是较大事件的 -->
-          <div
-            class="itempro"
-            :class="{ active: currentIndex === index }"
-            v-else
-            @click="setMarker('affair', item, index)"
-          >
+          <div class="itempro" :class="{ active: currentIndex === index }" v-else
+            @click="setMarker('affair', item, index)">
             <p class="itemtitle">{{ item.name }}</p>
             <p class="centers">
               <span class="ellipsis">详情: {{ item.info }}</span>
@@ -139,17 +126,8 @@
     </div>
   </div>
   <div class="isss">
-    <eject
-      title="应急事件"
-      :data="data"
-      :buttondata="buttondata"
-      :imgs="imgs"
-      :islook="islook"
-      @FatherMethod="FatherMethod"
-      @closeDialog="closeDialog"
-      :top="top"
-      :left="left"
-    ></eject>
+    <eject title="应急事件" :data="data" :buttondata="buttondata" :imgs="imgs" :islook="islook" @FatherMethod="FatherMethod"
+      @closeDialog="closeDialog" :top="top" :left="left"></eject>
   </div>
   <eventInfo ref="eventInfoRef" :info="nowEventInfo"></eventInfo>
 </template>
@@ -230,7 +208,7 @@ const getEvents = function () {
             des: item.eventContent,
           },
         },
-        detailInfo: {...item}
+        detailInfo: { ...item }
       };
     });
   });
@@ -346,7 +324,7 @@ const data = reactive([
     name: "事件名称",
   },
   {
-    content: "17828998020",
+    content: "17323215510",
     name: "事件名称",
     img: "https://img1.baidu.com/it/u=3302184040,3713353210&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1689958800&t=c5544548483d80e372afb5e9f2ecfefc",
   },
@@ -415,11 +393,13 @@ const weathers = ref([
   background-color: #09212f !important;
   cursor: pointer;
 }
+
 .ellipsis {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
 // 首先就是整个的一共样式
 .right {
   height: 100%;
@@ -603,18 +583,23 @@ const weathers = ref([
             justify-content: center;
             padding: 6px 8px;
           }
+
           .blue_level {
             background: #357ebd;
           }
+
           .yellow_level {
             background-color: #8e8e07;
           }
+
           .orange_level {
             background-color: #eead0e;
           }
+
           .red_level {
             background-color: red;
           }
+
           p {
             width: 180px;
             white-space: nowrap;
@@ -664,6 +649,7 @@ const weathers = ref([
       flex-direction: row;
       align-items: center;
       padding: 8px 8px;
+      padding-right: 2px;
       border-bottom: 2px solid rgba(10, 54, 72, 1);
 
       .itemtitle {
@@ -678,12 +664,12 @@ const weathers = ref([
 
       // 中间内容
       .centers {
-        width: 178px;
+        width: 174px;
         height: 100%;
         display: flex;
         justify-content: space-around;
         flex-direction: column;
-        margin-right: 16px;
+        margin-right: 10px;
         font-size: 14px;
         color: rgba(208, 222, 238, 1);
       }
@@ -699,7 +685,7 @@ const weathers = ref([
           margin-bottom: 10px;
 
           .one {
-            width: 64px;
+            width: 79px;
             height: 26px;
             background-color: #061b42;
             display: flex;
@@ -712,12 +698,19 @@ const weathers = ref([
           .two {
             width: 52px;
             height: 26px;
+            padding: 0px 2px;
             background-color: #061b42;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #1a73d8;
             border: 1px solid #1d75d6;
+            display: inline-block;
+            text-align: center;
+            line-height: 26px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
 
           .twopro {
@@ -729,6 +722,12 @@ const weathers = ref([
             justify-content: center;
             color: #b9ca3a;
             border: 1px solid #1d75d6;
+            display: inline-block;
+            text-align: center;
+            line-height: 26px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
         }
 
@@ -763,6 +762,7 @@ const weathers = ref([
       flex-direction: row;
       align-items: center;
       padding: 8px 8px;
+      padding-right: 2px;
       border-bottom: 2px solid rgba(10, 54, 72, 1);
 
       .itemtitle {
@@ -777,12 +777,12 @@ const weathers = ref([
 
       // 中间内容
       .centers {
-        width: 178px;
+        width: 174px;
         height: 100%;
         display: flex;
         justify-content: space-around;
         flex-direction: column;
-        margin-right: 16px;
+        margin-right: 10px;
         font-size: 14px;
         color: rgba(208, 222, 238, 1);
       }
@@ -798,7 +798,7 @@ const weathers = ref([
           margin-bottom: 10px;
 
           .one {
-            width: 64px;
+            width: 79px;
             height: 26px;
             background-color: #061b42;
             display: flex;
@@ -817,6 +817,12 @@ const weathers = ref([
             justify-content: center;
             color: #1a73d8;
             border: 1px solid #1d75d6;
+            display: inline-block;
+            text-align: center;
+            line-height: 26px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
 
           .twopro {
@@ -828,6 +834,12 @@ const weathers = ref([
             justify-content: center;
             color: #b9ca3a;
             border: 1px solid #1d75d6;
+            display: inline-block;
+            text-align: center;
+            line-height: 26px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
         }
 

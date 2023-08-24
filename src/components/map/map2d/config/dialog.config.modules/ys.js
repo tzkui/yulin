@@ -156,5 +156,27 @@ export default {
       //     funcName: "openMap"
       //   }
     ]
+  },
+  // 下面这个就是企业类型的打点的东西的了
+  sgxx: {
+    title: "事故信息",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 color: "xxx"
+    rows: [
+      { name: '事故名称', key: 'eventName' },
+      { name: '事故地址', key: 'eventAddress' },
+      { name: '事故类型', key: 'typeName' },
+      { name: '事故等级', key: 'eventLevelName' },
+      { name: '所属区域', key: 'xzqhName', },
+    ],
+    // 右下角的按钮
+    btns: [
+      {
+        name: "查看",
+        funcName: viewDetailqilx
+      },
+    ],
+    // 左下角的列表
+    leftBtns: [
+    ]
   }
 }

@@ -138,7 +138,7 @@ export const syqxxLists = {
           name: "榆林市神木市尔林兔镇贾家梁村",
           info: "0.95米深度",
           person: "王厅夏",
-          phone: "14590909876",
+          phone: "17323215510",
         }
       },
     ]
@@ -191,7 +191,7 @@ export const yjzyLists = {
             job: "应急人员",
             compony: "青山路街道办事处",
             aphone: "36563",
-            phone: "14590909876",
+            phone: "17323215510",
             duty: "日常巡逻发现隐患"
           }
         },
@@ -219,7 +219,7 @@ export const yjzyLists = {
             job: "大学教授",
             compony: "陕西XX大学XX系",
             dir: "山体滑坡",
-            phone: "14590909876",
+            phone: "17323215510",
           }
         },
         {
@@ -237,7 +237,7 @@ export const yjzyLists = {
             job: "大学教授fff",
             compony: "陕西XX大学XX系",
             dir: "山体滑坡",
-            phone: "14590909876",
+            phone: "17323215510",
           }
         }
       ]
@@ -260,11 +260,11 @@ export const yjzyLists = {
           label: { text: "救援队伍", font_size: 16 },
           dialogType: "jydw",
           details: {
-            name: "神木市应急救援队",
+            title: "神木市应急救援队",
             type: "地质灾害应急指挥部",
             total: "45",
             person: "于国平",
-            phone: "14590909876",
+            phone: "17323215510",
           }
         },
         {
@@ -282,7 +282,7 @@ export const yjzyLists = {
             type: "地质灾害应急指挥部22",
             total: "4533",
             person: "于国平",
-            phone: "14590909876",
+            phone: "17323215510",
           }
         }
       ]
@@ -305,10 +305,10 @@ export const yjzyLists = {
           label: { text: "仓库", font_size: 16 },
           dialogType: "yjwzk",
           details: {
-            name: "榆阳区应急物资库",
+            title: "榆阳区应急物资库",
             person: "于国平",
             address: "上郡中路龙沙绿园小区西南侧",
-            phone: "14590909876",
+            phone: "17323215510",
           }
         },
         // {
@@ -325,7 +325,7 @@ export const yjzyLists = {
         //     name: "榆阳区应急物资库11",
         //     person: "于国平22",
         //     address: "上郡中路龙沙绿园小区西南侧33",
-        //     phone: "14590909876",
+        //     phone: "17323215510",
         //   }
         // }
       ]
@@ -348,29 +348,12 @@ export const yjzyLists = {
           label: { text: "避难场所", font_size: 16 },
           dialogType: "bncs",
           details: {
-            name: "榆阳区避灾场所",
+            title: "榆阳区避灾场所",
             area: "2000㎡",
             person: "1332",
             address: "长兴路榆林人民大厦",
           }
         },
-        // {
-        //   markerType: "bncs",
-        //   id: "104_2",
-        //   lng: '109.78450',
-        //   lat: "38.97180",
-        //   name: "场所二",
-        //   phone: "13511117659",
-        //   icon: "/images/marker/icon_shelter.png",
-        //   label: { text: "场所二", font_size: 16 },
-        //   dialogType: "bncs",
-        //   details: {
-        //     name: "榆阳区避灾场所",
-        //     area: "2000㎡",
-        //     person: "1332",
-        //     address: "长兴路榆林人民大厦",
-        //   }
-        // }
       ]
     }
   ],
@@ -381,22 +364,6 @@ export const yjzyLists = {
       icon: "/images/marker/mapdot-scientific.png",
       name: "物资标记",
       maekerList: [
-        // {
-        //   markerType: "spjk",
-        //   id: "105_1",
-        //   icon: "/images/marker/mapdot-scientific.png",
-        //   lng: '109.78485',
-        //   lat: "38.9787",
-        //   name: "监控一",
-        //   label: { text: "监控一", font_size: 16 },
-        //   dialogType: "spjk",
-        //   details: {
-        //     name: "榆阳区",
-        //     type: "自然灾害",
-        //     status: "正常",
-        //     address: "长兴路榆林人民大厦",
-        //   }
-        // },
         {
           markerType: "spjk",
           id: "105_2",
@@ -408,10 +375,34 @@ export const yjzyLists = {
           label: { text: "监控2", font_size: 16 },
           dialogType: "spjk",
           details: {
-            name: "榆阳区",
-            type: "自然灾害",
-            status: "正常",
-            address: "长兴路榆林人民大厦",
+            monitorName: "榆阳区",
+            typeName: "自然灾害",
+            location: "长兴路榆林人民大厦",
+          }
+        }
+      ]
+    }
+  ],
+  yjzb: [
+    {
+      markerType: "yjzb",
+      id: "105",
+      icon: "/images/marker/mapdot-scientific.png",
+      name: "应急装备",
+      maekerList: [
+        {
+          markerType: "yjzb",
+          id: "105_2",
+          lng: '109.7840',
+          lat: "38.9180",
+          name: "应急装备",
+          phone: "13511117659",
+          icon: "/images/marker/mapdot-scientific.png",
+          label: { text: "应急装备", font_size: 16 },
+          dialogType: "yjzb",
+          details: {
+            title: "",
+            address: "",
           }
         }
       ]
@@ -438,7 +429,7 @@ export const fxyhLists = {
           label: { text: "地灾隐患点", font_size: 16 },
           dialogType: "dzyhd",
           details: {
-            name: "榆林市横山区胡石窑村",
+            title: "榆林市横山区胡石窑村",
             type: "泥石流",
             houseNum: "13",
             personNum: "34",
@@ -468,7 +459,7 @@ export const fxyhLists = {
           label: { text: "历史危旧房", font_size: 16 },
           dialogType: "lswjf",
           details: {
-            name: "庙沟门镇",
+            title: "庙沟门镇",
             person: "张达芳",
             houseNum: "3",
             level: "A",
@@ -498,10 +489,10 @@ export const fxyhLists = {
           label: { text: "地灾易发区", font_size: 16 },
           dialogType: "dzyfq",
           details: {
-            area: "榆林市横山区胡石窑村",
-            level: "Ⅰ级响应",
-            personNum: "34",
-            houseNum: "13",
+            name: "榆林市横山区胡石窑村",
+            address: "Ⅰ级响应",
+            linkName: "34",
+            linkPhone: "13",
           }
         }
       ]
@@ -509,26 +500,25 @@ export const fxyhLists = {
   ],
   shyhd: [
     {
-      markerType: "dzyhd",
+      markerType: "shyhd",
       id: "1000",
       icon: "/images/marker/mapdot-scientific.png",
       name: "物资标记",
       maekerList: [
         {
-          markerType: "dzyhd",
+          markerType: "shyhd",
           id: "1000_2",
           lng: '109.796245',
           lat: "38.389572",
-          name: "监控2",
+          name: "森火隐患点",
           phone: "13511117659",
           icon: "/images/marker/mapdot-scientific.png",
-          label: { text: "监控2", font_size: 16 },
-          dialogType: "dzyhd",
+          label: { text: "森火隐患点", font_size: 16 },
+          dialogType: "shyhd",
           details: {
             name: "榆阳区",
-            type: "自然灾害",
-            status: "正常",
-            address: "长兴路榆林人民大厦",
+            yxfw: "自然灾害",
+            ffcs: "正常",
           }
         }
       ]
@@ -552,7 +542,7 @@ export const fxyhLists = {
           label: { text: "山洪灾害", font_size: 16 },
           dialogType: "shzh",
           details: {
-            type: "洪水灾害特别危险区",
+            title: "洪水灾害特别危险区",
             address: "榆林市横山区胡石窑村",
             houseNum: "13",
             personNum: "34",
@@ -582,13 +572,10 @@ export const fxyhLists = {
           label: { text: "森火隐患点", font_size: 16 },
           dialogType: "csyld",
           details: {
-            address: "长兴路榆林人民大厦",
-            unit: '应急管理局、交警大队',
-            rows: [
-              { name: "董小博", val: "18900493799", iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
-              { name: "任天平", val: "18922493799", iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
-              { name: "杨成平", val: "18966493799", iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
-            ]
+            jswz: "",
+            jsyy: '',
+            zrdw: '',
+            zrr: '',
           }
         }
       ]
@@ -1423,4 +1410,21 @@ export const safeCheckboxPoints = {
       address: "陕西省榆林市横山区",
     }
   },
+}
+
+export const spjkLists = {
+  spjk:{
+    markerType: "spjk",
+    id: "100_111",
+    icon: "/images/marker/mapdot-scientific.png",
+    lng: '109.85485',
+    lat: "38.27187",
+    name: "视频监控",
+    label: { text: "视频监控", font_size: 16 },
+    dialogType: "spjk",
+    details: {
+      name: "监控1",
+      address: "xxx",
+    }
+  }
 }

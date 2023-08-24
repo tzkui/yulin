@@ -127,6 +127,7 @@ const blform = ref({
 const enterpriseList = ref([]);
 // 开启弹窗
 const openDialog = function (key, info) {
+  // $mitt.emit("hideAllMarker")
   // 应急事件
   if (key === "yjsj") {
     yjsjDetail.value = yjsjDetails[info.id];
@@ -150,28 +151,25 @@ const openDialog = function (key, info) {
       console.log(info.jh,"[index]")
       console.log(info.jh[index],"ppp")
       // 差不多在此范围内随机生成点位
-      // let lng = (position[0] + '').replace(/^(.{4})(.{3})(.*)$/, '$1' + Math.round(Math.random() * (999 - 100) + 100) + '$3')
-      // let lat = (position[1] + '').replace(/^(.{4})(.{3})(.*)$/, '$1' + Math.round(Math.random() * (999 - 100) + 100) + '$3')
       arr.push({
         // title: index + '号化工厂' + info.id,
-        title: info.name,
-        id: info.id,//如此唯一
+        title: info.jh[index].eventName,
+        id: info.jh[index].id,//如此唯一
         mardata: {
-          markerType: "wxx",
+          markerType: "sgxx",
           id: info.jh[index].id + '_' + index,
           icon: "/images/marker/icon_jigou.png",
           lng: info.jh[index].mapX,
           lat: info.jh[index].mapY,
           name: '化工厂',
-          label: { text: info.id + '-' + index + '号化工厂', font_size: 16 },
-          dialogType: "qylxxx",
+          label: { text: info.jh[index].eventName, font_size: 16 },
+          dialogType: "sgxx",
           details: {
-            name: info.id + '-' + index + '号化工厂',
-            job: "榆阳区12号",
-            compony: "陕西省双翼有限公司",
-            aphone: "白位于",
-            phone: "14598989876",
-            duty: "榆阳区"
+            eventName: info.jh[index].eventName,
+            eventAddress: info.jh[index].eventAddress,
+            typeName: info.jh[index].typeName,
+            eventLevelName: info.jh[index].eventLevelName,
+            xzqhName: info.jh[index].xzqhName,
           }
         },
         rows: [
@@ -200,6 +198,7 @@ const openDialog = function (key, info) {
           },
         ]
       })
+      console.log("zzzzzzzzzzzzz",arr)
     }
     eventLevelPopupData.value.data = arr
 
@@ -715,7 +714,7 @@ const closeqyxxshow = function () {
       <div class="event_list" v-for="(item, index) in eventLevelPopupData.data" :key="index"
         @click="clickEventLevel(item)">
         <div class="event_title">
-          事故发生单位：{{ item.title }}
+          事故名称：{{ item.title }}
         </div>
         <div class="event_cont_box">
           <div :class="{ 'event_cont': true, [child.inline]: true }" v-for="(child, cindex) in item.rows" :key="cindex">

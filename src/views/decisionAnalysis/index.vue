@@ -37,7 +37,7 @@ const centerPoint = ref([])
 
 // 改变事件
 const changeEvent = (item) => {
-    // console.log('item============>', item);
+    console.log('item============>', item);
     centerPoint.value = [item.mapX, item.mapY]
 
     // 圈选半径

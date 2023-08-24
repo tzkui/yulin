@@ -1,6 +1,9 @@
 <script setup>
 import ViewBox from "@/components/common/view-box.vue";
 import { ref, onMounted, onUnmounted } from "vue";
+import { getZqqxfx } from "../../../../api/modules/home"
+//灾情分析的下拉框
+import { getZqfxDropdowndata } from "../../../../api/decision_analysis.js"
 
 // highchart
 import HighCharts from "highcharts";
@@ -8,33 +11,75 @@ import Highcharts3D from "highcharts/highcharts-3d";
 Highcharts3D(HighCharts);
 
 const checkTime = ref([
-  { label: "近三天", num: 3 },
-  { label: "近五天", num: 5 },
-  { label: "近七天", num: 7 },
+  { name: "近三天", num: 1 },
+  { name: "近五天", num: 2 },
+  { name: "近七天", num: 3 },
 ]);
 // 灾情区域
 const disaster_type = ref([
-  { label: "洪涝灾害", value: "" },
-  { label: "森火事件", value: "" },
-  { label: "地质灾害", value: "" },
-  { label: "地震灾害", value: "" },
+  { name: "洪涝灾害", value: "" },
+  { name: "森火事件", value: "" },
+  { name: "地质灾害", value: "" },
+  { name: "地震灾害", value: "" },
 ]);
-const currentCheckTime = ref(3);
+// 定义一个是这个关于获取图表时间和类型的数据
+let echatssj = ref("1")
+let echatslx = ref('')
+const currentCheckTime = ref(1);
 const currentDisasterType = ref("");
 let timer = ref(null);
-const changeTime = (num) => {
+const changeTime = async (num) => {
   currentCheckTime.value = num;
+  echatssj.value = num
+  title.value=0
+  // 点击的时候重新调取获取图表的方法
+  getechartsData()
 };
-const checkDisaster = function (name) {
-  currentDisasterType.value = name;
+let color3D = ref(["#39BFFA", "#71D6E5", "#E9BD4B", "#ACEFF3"])
+let data3D = ref([
+  { name: "洪涝灾害", y: 6, h: 36, percent: "45.23", color: color3D.value[0] },
+  { name: "森火事件", y: 2, h: 12, percent: "12.23", color: color3D.value[1] },
+  { name: "地质灾害", y: 6, h: 60, percent: "45.23", color: color3D.value[2] },
+  { name: "地震灾害", y: 4, h: 24, percent: "40.23", color: color3D.value[3] },
+]);
+// 定义一个代表这个图表的数据
+const checkDisaster = function (value) {
+  // console.log(value, "点击")
+  currentDisasterType.value = value;
+  title.value=0
+  echatslx.value = value
+  // 点击的时候重新调取获取图表的方法
+  getechartsData()
 };
-let color3D = ["#39BFFA", "#71D6E5", "#E9BD4B", "#ACEFF3"];
-let data3D = [
-  { name: "标签1", y: 6, h: 36, percent: "45.23", color: color3D[0] },
-  { name: "标签2", y: 2, h: 12, percent: "12.23", color: color3D[1] },
-  { name: "标签3", y: 6, h: 60, percent: "45.23", color: color3D[2] },
-  { name: "标签4", y: 4, h: 24, percent: "40.23", color: color3D[3] },
-];
+// 获取zqqy的类型选择数据
+const getxlType = async () => {
+  let res = await getZqfxDropdowndata()
+  disaster_type.value = res.data
+  // console.log(res, "数据看")
+}
+// 定义一个头部的数据
+let title=ref(0)
+// 获取图表数据的接口
+const getechartsData = async () => {
+  let res = await getZqqxfx(echatssj.value, echatslx.value)
+  data3D.value = []
+  // 定义一个求和的数据
+  let sumdata=[]
+  res.data.forEach((v, i) => {
+    data3D.value.push(
+      { name: v.mc, y: v.sz, h: 60, percent: v.sz, color: color3D.value[i] }
+    )
+    sumdata.push(v.sz)
+  })
+  sumdata.forEach(v=>{
+    title.value+=v
+  })
+  // console.log(title.value,"看看这个到底是什么")
+  highOptions.value.series[0].data = data3D.value
+  highOptions.value.title.text =  title.value
+  HighCharts.chart("disaster-area-chart", highOptions.value);
+}
+
 const highOptions = ref({
   chart: {
     type: "pie",
@@ -65,9 +110,9 @@ const highOptions = ref({
     },
   },
   title: {
-    text: "200", // 饼图的标题
+    text: title.value, // 饼图的标题
     y: 55,
-    x: 66,
+    x: 78,
     align: "left",
     style: {
       color: "#fff",
@@ -124,9 +169,8 @@ const highOptions = ref({
     useHTML: true,
     formatter: function () {
       // console.log(this);
-      let str = `<div class='tooltip3D'><span style=font-size:22px;color:${
-        this.color
-      }>●</span> ${this.key} : ${this.percentage.toFixed(2)}%</div>`;
+      let str = `<div class='tooltip3D'><span style=font-size:22px;color:${this.color
+        }>●</span> ${this.key} : ${this.percentage.toFixed(2)}%</div>`;
       return str;
     },
   },
@@ -135,15 +179,20 @@ const highOptions = ref({
   },
   series: [
     {
-      colors: color3D,
+      colors: color3D.value,
       name: "洪涝",
       type: "pie",
-      data: data3D,
+      data: data3D.value,
     },
   ],
 });
+
 onMounted(() => {
-  HighCharts.chart("disaster-area-chart", highOptions.value);
+  // HighCharts.chart("disaster-area-chart", highOptions.value);
+  // 图表数据
+  getechartsData()
+  // 类型选择数据
+  getxlType()
 });
 onUnmounted(() => {
   clearInterval(timer.value);
@@ -154,25 +203,13 @@ onUnmounted(() => {
     <div class="disaster_area">
       <!-- tab -->
       <div class="tab_box title_tab">
-        <span
-          @click="changeTime(item.num)"
-          v-for="(item, index) in checkTime"
-          :key="index"
-          class="tab"
-          :class="currentCheckTime == item.num ? 'active' : ''"
-          >{{ item.label }}</span
-        >
+        <span @click="changeTime(item.num)" v-for="(item, index) in checkTime" :key="index" class="tab"
+          :class="currentCheckTime == item.num ? 'active' : ''">{{ item.name }}</span>
       </div>
       <div class="disaster_area_cont">
         <div class="tab_box">
-          <span
-            @click="checkDisaster(item.label)"
-            class="tab"
-            :class="currentDisasterType == item.label ? 'active' : ''"
-            v-for="(item, index) in disaster_type"
-            :key="index"
-            >{{ item.label }}</span
-          >
+          <span @click="checkDisaster(item.value)" class="tab" :class="currentDisasterType == item.value ? 'active' : ''"
+            v-for="(item, index) in disaster_type" :key="index">{{ item.name }}</span>
         </div>
       </div>
       <div class="disaster_area_chart" id="disaster-area-chart"></div>
@@ -187,8 +224,9 @@ onUnmounted(() => {
 
   .tab_box {
     .tab {
+      // margin-bottom: 4px;
       display: inline-block;
-      padding: 3px 10px;
+      padding: 3px 3px;
       margin-right: 14px;
       height: 26px;
       line-height: 20px;
