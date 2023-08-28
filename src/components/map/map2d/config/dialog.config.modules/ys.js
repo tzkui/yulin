@@ -179,4 +179,6 @@ export default {
     leftBtns: [
     ]
   }
+
+  // 下面配置其他需要的一些东西的了
 }

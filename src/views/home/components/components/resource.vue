@@ -11,7 +11,6 @@ const imgefileUrl = (url) => {
   return new URL(url, import.meta.url).href;
 };
 const mockData = function () {
-  console.log(markerDatas);
   markerDatas.zj = {
     lx: "list",
     sl: 1,
@@ -40,6 +39,19 @@ const mockData = function () {
       },
     ],
   };
+  // markerDatas.yjdb = {
+  //   lx: "list",
+  //   sl: 5,
+  //   jh: [
+  //     {
+  //       id: "yjdbmock1",
+  //       name: "应急单兵1",
+  //       typeName: "综合执法监控",
+  //       location: "榆林市郭家沟西南约4000米",
+  //       mapX: 109.43561,
+  //       mapY: 37.57452
+  //     },
+  //   ],}
 };
 const $mitt = inject("$mitt");
 const openVideoConferencingBus = useEventBus("openVideoConferencing");
@@ -57,7 +69,7 @@ let resources_list_all = ref([
   [
     { name: "应急单兵", num: 5, type: "yjdb", icon: "yjdb" },
     { name: "无人机", num: 3, type: "wrj", icon: "wrj" },
-    { name: "卫星电话", num: 6, type: "wxdh", icon: "wxdh" },
+    { name: "卫星电话", num: 2, type: "wxdh", icon: "wxdh" },
     { name: "窄带通信", num: 10, type: "zdtx", icon: "zdtx" },
     { name: "通讯录", num: 10, type: "txl", icon: "txl" },
     { name: "视频会商", num: 16, type: "sphs", icon: "sphs" },
@@ -120,13 +132,16 @@ const getYjjyList = function () {
 const getRhtxList = function () {
   getRhtx().then((res) => {
     console.log("融合通信：", res);
-    // for (let key in res.data) {
-    //   markerDatas[key] = res.data[key];
+    // markerDatas.wxdh = {
+    //   type: "list",
+    //   sl: res.data[0].sz,
+    //   jh: res.data[0].jh.map(item=>{
+    //     return {
+    //       ...item,
+    //       name: item.wxdh
+    //     }
+    //   })
     // }
-    // resources_list_all.value[1].forEach((item) => {
-    //   item.num = 1;
-    // });
-    // changeResources(currentResources.value, 1);
   });
 };
 const getSpjkList = function () {
@@ -144,6 +159,8 @@ const getSpjkList = function () {
 };
 // 切换应急资源
 const changeResources = (type, index) => {
+  closeDialog()
+  emit("closeAllDialog")
   currentResources.value = type;
   resources_list.value = resources_list_all.value[index];
   resources_list.value.map((item) => {

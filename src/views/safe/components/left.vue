@@ -152,6 +152,7 @@ const firDialogFlags = ref({
   qyxx: false,
 });
 const closeDialog = function (type) {
+  $mitt.emit("hideAllMarker")
   firDialogFlags.value[type] = false;
 };
 
@@ -164,55 +165,55 @@ const qyxxCheckboxData = {
   treeData: [
     {
       label: "榆林市",
-      num: "415",
+      num: "27",
       children: [
         {
           label: "榆阳区",
-          num: "41",
+          num: "3",
         },
         {
           label: "横山区",
-          num: "34",
+          num: "2",
         },
         {
           label: "神木县",
-          num: "34",
+          num: "4",
         },
         {
           label: "府谷县",
-          num: "34",
+          num: "1",
         },
         {
           label: "靖边县",
-          num: "34",
+          num: "3",
         },
         {
           label: "定边县",
-          num: "34",
+          num: "4",
         },
         {
           label: "绥德县",
-          num: "34",
+          num: "4",
         },
         {
           label: "米脂县",
-          num: "34",
+          num: "4",
         },
         {
           label: "佳县",
-          num: "34",
+          num: "2",
         },
         {
           label: "吴堡县",
-          num: "34",
+          num: "4",
         },
         {
           label: "清涧县",
-          num: "34",
+          num: "4",
         },
         {
           label: "子洲县",
-          num: "34",
+          num: "4",
         },
       ],
     },
@@ -239,7 +240,7 @@ const $mitt = inject("$mitt");
 const secureList = ref([]);
 const getdatasj = async function () {
   let res = await getWhqyjcyj();
-  console.log(res,"=================>看看数据")
+  console.log(res, "=================>看看数据");
   if (res.code == 200) {
     secureList.value = res.data.map((item) => {
       return {
@@ -288,9 +289,22 @@ const openDialog = function (type, info) {
   }
   // emit("openDialog", type, info);
 };
+const rendomLngLat = function (num) {
+  let calc = Math.random()*0.75;
+  if (new Date().getSeconds() % 2 === 0) {
+    return num - 0 + calc;
+  } else {
+    return num - calc;
+  }
+};
 const changeBoxSelectChange = function (arr) {
   let point = qyxxData[selectedQyxx].pointInfo;
   if (arr.length > 0) {
+    console.log("pointInfo+++++++++++++++++++++==", point);
+    point = JSON.parse(JSON.stringify(point))
+    point.lat = rendomLngLat(point.lat);
+    point.lng = rendomLngLat(point.lng);
+    point.id = new Date().getTime()
     $mitt.emit("addMarker", point);
   } else {
     $mitt.emit("changeMarkerState", {
@@ -405,12 +419,12 @@ let myChart = null;
 // let totalData = 0;
 const getco = async function () {
   let res = await getXqqytjfx();
-  console.log(res,"看看具体到底的是写什么鬼子数据的呢")
+  console.log(res, "看看具体到底的是写什么鬼子数据的呢");
   if (res.code == 200) {
     coxdata.value = [];
     cxydata.value = [];
     coxdata.value = res.data.tj.map((item) => item.mc);
-    cxydata.value =res.data.tj.map((item) => item.sz);
+    cxydata.value = res.data.tj.map((item) => item.sz);
     console.log(coxdata.value, cxydata.value);
   }
   // 下面就是柱状图的一些配置的了

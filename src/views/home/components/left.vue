@@ -2,7 +2,10 @@
   <div class="left">
     <duty></duty>
     <information></information>
-    <resource @openDialog="openDialog" @closeAllDialog="closeAllDialog"></resource>
+    <resource
+      @openDialog="openDialog"
+      @closeAllDialog="closeAllDialog"
+    ></resource>
     <enterpriseEcharts @clickEcharts="clickEcharts"></enterpriseEcharts>
     <!-- 图例 -->
     <treeCheck></treeCheck>
@@ -22,7 +25,7 @@
 
 <script setup>
 import treeCheck from "./treeCheck.vue";
-import { ref, inject, } from "vue";
+import { ref, inject } from "vue";
 import { icon_config } from "@/config/common.js";
 const $mitt = inject("$mitt");
 const emit = defineEmits(["openDialog"]);
@@ -40,11 +43,11 @@ import selectDialogVue from "./selectDialog.vue";
 const dialogFlags = ref({
   select: false,
 });
-const closeAllDialog = function(){
-  for(let key in dialogFlags.value){
-    dialogFlags.value[key] = false
+const closeAllDialog = function () {
+  for (let key in dialogFlags.value) {
+    dialogFlags.value[key] = false;
   }
-}
+};
 // 弹框 列表多选
 let checkBoxPopupData = ref({
   name: "应急队伍",
@@ -76,14 +79,11 @@ const closeDialog = function (type) {
   dialogFlags.value[type] = false;
 };
 const openDialog = (item, index) => {
-  console.log(item,"看看是啥")
   // console.log('item========>', item);
   if (item.type == "sphs") {
-    console.log(item,"看看是啥")
     emit("openDialog", "video_conference");
     return;
   } else if (item.type == "spjk") {
-    console.log(item,"看看是啥")
     emit("openDialog", "video");
     return;
   }
@@ -139,7 +139,7 @@ const openDialog = (item, index) => {
     ];
   } else if (needCirculate.includes(item.type)) {
     let arr = [];
-    for (let index = 1; index < 4; index++) {
+    for (let index = 1; index < item.num - 0 + 1; index++) {
       arr.push({
         label: item.name + index,
         typeName: item.name + index,
@@ -215,6 +215,7 @@ const openDialog = (item, index) => {
       },
     ];
   }
+  console.log("zzzzzzzzzzzzzzz,", dataArr);
   checkBoxPopupData.value.listData = dataArr;
 };
 const removeMarker = (data) => {
@@ -268,19 +269,19 @@ const setMarker = (data) => {
 };
 
 const clickEcharts = function (params) {
-  let titleData=params.shift()
-  console.log(titleData,"删除的")
-  params=JSON.stringify(params)
-  params = params.replaceAll('title', 'label');
-  params = params.replaceAll('count', 'num');
-  params=JSON.parse(params)
-  params.forEach(v=>{
-    if(v.num==0){
-      v.num=null
+  let titleData = params.shift();
+  console.log(titleData, "删除的");
+  params = JSON.stringify(params);
+  params = params.replaceAll("title", "label");
+  params = params.replaceAll("count", "num");
+  params = JSON.parse(params);
+  params.forEach((v) => {
+    if (v.num == 0) {
+      v.num = null;
     }
     // v.datatype
-  })
-  console.log(params,"看看是些什么")
+  });
+  console.log(params, "看看是些什么");
   checkBoxPopupData.value.name = "企业分布";
   dialogFlags.value.select = true;
 
@@ -290,7 +291,7 @@ const clickEcharts = function (params) {
     name: "企业",
   };
   currentMarkerTypeData.value.index = params.dataIndex;
-  console.log(currentMarkerTypeData.value.index,"这个是下标吗")
+  console.log(currentMarkerTypeData.value.index, "这个是下标吗");
 
   checkBoxPopupData.value.listData = [
     {
@@ -303,7 +304,7 @@ const clickEcharts = function (params) {
       //   { label: "BBB化工厂", typeName: "BBB化工厂", num: "1", id: "2" },
       //   { label: "XXX化工厂", typeName: "XXX化工厂", num: "3", id: "3",datatype:2 },
       // ],
-      children:params
+      children: params,
     },
   ];
 };

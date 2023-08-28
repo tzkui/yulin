@@ -6,7 +6,7 @@
         <template #default="{ node, data }">
           <span class="custom-tree-node">
             <span>{{ node.label }}</span>
-            <span class="yellow">
+            <span class="yellow" v-if="!noNumList.includes(name)">
               {{ data.num }}
             </span>
           </span>
@@ -41,6 +41,7 @@ const props = defineProps({
     }
   }
 });
+const noNumList = ref(['应急单兵','无人机','卫星电话','窄带通信'])
 let isCheckedAll = ref(false)
 const emits = defineEmits(['closeDialog', 'setMarker', 'removeMarker'])
 // setCheckedKeys

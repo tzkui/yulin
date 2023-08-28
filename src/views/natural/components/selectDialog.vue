@@ -54,7 +54,7 @@ const initData = function () {
       idInfoDict[item.id] = item;
       return {
         ...item,
-        label: item.name || item.jswz || item.monitorName,
+        label: item.name || item.jswz || item.monitorName || item.personalName,
       };
     });
   }

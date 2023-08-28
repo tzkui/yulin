@@ -143,7 +143,7 @@ const handleScreenAuto = () => {
   height: 100%;
   width: 100%;
   color: #ffffff;
-
+  background-color: #04143f;
   .screenBox {
     display: inline-block;
     width: 1920px; //设计稿的宽度

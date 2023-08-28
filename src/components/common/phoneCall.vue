@@ -33,6 +33,7 @@ const close = function () {
 };
 defineExpose({
   phoneCall,
+  close,
 });
 </script>
 <template>

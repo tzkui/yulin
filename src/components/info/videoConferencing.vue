@@ -105,9 +105,6 @@ const openDialog = function (e) {
   console.log("视频会商参数：", e);
 };
 
-defineExpose({
-  openDialog,
-});
 const meetingList = ref([]);
 const loadOrgNode = async function (node, resolve) {
   console.log("node: ", node);
@@ -305,6 +302,10 @@ const onNodeClick = function (info) {
     console.log(meetingList.value);
   }
 };
+defineExpose({
+  openDialog,
+  closeDialog
+});
 </script>
 
 <style scoped lang="less">

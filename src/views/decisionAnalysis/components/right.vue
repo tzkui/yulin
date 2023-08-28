@@ -95,31 +95,371 @@ const props = defineProps({
  * 灾情资源分析 数据
  */
 
-//  定义打点的数据
-const ddlist = ref({
-    markerType: "bncs",
-    id: "104",
-    icon: "/images/marker/icon_shelter.png",
-    name: "避难场所",
+// 重点物资的打点事件
+const zdwzdd = ref({
+    markerType: "zdwz",
+    id: "1",
+    icon: "/images/marker/mapdot-materia.png",
+    name: "重点物资",
+    maekerList: [
+        // {
+        //     markerType: "zdwz",
+        //     id: "1_1",
+        //     icon: "/images/marker/mapdot-materia.png",
+        //     lng: '109.70081', lat: "38.28285",
+        //     name: "重点物资",
+        //     label: { text: "重点物资1", font_size: 16 },
+        //     dialogType: "yydxtj",
+        //     details: {
+        //         name: "重点物资1",
+        //         num: '115人',
+        //         distance: "距2500km",
+        //     }
+        // },
+    ]
+},)
+// 物资仓库的打点事件
+const wzckdd = ref(
+    {
+        markerType: "wzck",
+        id: "2",
+        icon: "/images/marker/icon_warehouse.png",
+        name: "物资仓库",
+        maekerList: [
+            // {
+            //     markerType: "wzck",
+            //     id: "2_1",
+            //     icon: "/images/marker/icon_warehouse.png",
+            //     lng: '109.75813', lat: "38.30719",
+            //     name: "物资仓库",
+            //     label: { text: "物资仓库1", font_size: 16 },
+            //     dialogType: "yydxtj",
+            //     details: {
+            //         name: "物资仓库1",
+            //         num: '115人',
+            //         distance: "距2500km",
+            //     }
+            // },
+        ]
+    },
+)
+// 救援物资的打点的数据
+const jydwdd = ref(
+    {
+        markerType: "jydw",
+        id: "3",
+        icon: "/images/marker/icon_team.png",
+        name: "救援队伍",
+        maekerList: [
+            // {
+            //     markerType: "jydw",
+            //     id: "3_1",
+            //     icon: "/images/marker/icon_team.png",
+            //     lng: '109.75096', lat: "38.26007",
+            //     name: "救援队伍",
+            //     label: { text: "救援队伍1", font_size: 16 },
+            //     dialogType: "yydxtj",
+            //     details: {
+            //         name: "救援队伍1",
+            //         num: '115人',
+            //         distance: "距2500km",
+            //     }
+            // },
+        ]
+    },
+)
+// 避难场所
+const bncsdd = ref(
+    {
+        markerType: "bncs",
+        id: "4",
+        icon: "/images/marker/icon-bncs.png",
+        name: "避难场所",
+        maekerList: [
+            // {
+            //     markerType: "bncs",
+            //     id: "4_1",
+            //     icon: "/images/marker/icon-bncs.png",
+            //     lng: '109.68167', lat: "38.25636",
+            //     name: "避难场所",
+            //     label: { text: "避难场所1", font_size: 16 },
+            //     dialogType: "yydxtj",
+            //     details: {
+            //         name: "避难场所1",
+            //         num: '115人',
+            //         distance: "距2500km",
+            //     }
+            // },
+        ]
+    },
+)
+// 大型机械
+const dxjxdd = ref(
+    {
+        markerType: "dxjx",
+        id: "5",
+        icon: "/images/marker/mapdot-construction-machinery.png",
+        name: "大型机械",
+        maekerList: [
+            //   {
+            //     markerType: "dxjx",
+            //     id: "5_1",
+            //     icon: "/images/marker/mapdot-construction-machinery.png",
+            //     lng: '109.71230', lat: "38.23824",
+            //     name: "大型机械",
+            //     label: { text: "大型机械1", font_size: 16 },
+            //     dialogType: "yydxtj",
+            //     details: {
+            //       name: "大型机械1",
+            //       num: '115人',
+            //       distance: "距2500km",
+            //     }
+            //   },
+        ]
+    },
+)
+// 应急广播
+const yjgbdd = ref(
+    {
+        markerType: "yjgb",
+        id: "6",
+        icon: "/images/marker/mapdot-volume-up-f.png",
+        name: "应急广播",
+        maekerList: [
+            //   {
+            //     markerType: "yjgb",
+            //     id: "6_1",
+            //     icon: "/images/marker/mapdot-volume-up-f.png",
+            //     lng: '109.64733', lat: "38.24603",
+            //     name: "应急广播",
+            //     label: { text: "应急广播1", font_size: 16 },
+            //     dialogType: "yydxtj",
+            //     details: {
+            //       name: "应急广播1",
+            //       num: '115人',
+            //       distance: "距2500km",
+            //     }
+            //   },
+        ]
+    }
+)
+// 视频监控
+const spjkdd = ref(
+    {
+        markerType: "spjk",
+        id: "7",
+        icon: "/images/marker/mapdot-scientific.png",
+        name: "视频监控",
+        maekerList: [
+            // {
+            //     markerType: "spjk",
+            //     id: "7_1",
+            //     icon: "/images/marker/mapdot-scientific.png",
+            //     lng: '109.70637', lat: "38.23220",
+            //     name: "视频监控",
+            //     label: { text: "视频监控1", font_size: 16 },
+            //     dialogType: "yydxtj",
+            //     details: {
+            //         name: "视频监控1",
+            //         num: 1 + '115人',
+            //         distance: "距2500km",
+            //     }
+            // },
+        ]
+    }
+)
+
+// 灾情分析相关的撒点信息的了
+// 露天矿场的了
+const ltkcdd = ref(
+    {
+        markerType: "ltkc",
+        id: "1",
+        icon: "/images/marker/mapdot-materia.png",
+        name: "露天矿场",
+        maekerList: [
+            // {
+            //     markerType: "ltkc",
+            //     id: "1_1",
+            //     icon: "/images/marker/mapdot-materia.png",
+            //     lng: '109.70081', lat: "38.28285",
+            //     name: "露天矿场",
+            //     label: { text: "露天矿场1", font_size: 16 },
+            //     dialogType: "zqfx",
+            //     details: {
+            //         name: "露天矿场1",
+            //         num: '115人',
+            //         distance: "距2500km",
+            //     }
+            // },
+        ]
+    },
+)
+// 学校的
+const xxdd = ref(
+    {
+        markerType: "xx",
+        id: "2",
+        icon: "/images/marker/icon_warehouse.png",
+        name: "学校",
+        maekerList: [
+            {
+                markerType: "xx",
+                id: "2_1",
+                icon: "/images/marker/icon_warehouse.png",
+                lng: '109.75813', lat: "38.30719",
+                name: "学校",
+                label: { text: "学校1", font_size: 16 },
+                dialogType: "zqfx",
+                details: {
+                    name: "学校1",
+                    num: '115人',
+                    distance: "距2500km",
+                }
+            },
+        ]
+    },
+)
+// 超市的
+const csdd = ref({
+    markerType: "cs",
+    id: "3",
+    icon: "/images/marker/icon_team.png",
+    name: "超市",
     maekerList: [
         {
-            markerType: "bncs",
-            id: "104_1",
-            icon: "/images/marker/icon_shelter.png",
-            lng: '109.74485',
-            lat: "38.97187",
-            name: "避难场所",
-            label: { text: "避难场所", font_size: 16 },
-            dialogType: "bncs",
+            markerType: "cs",
+            id: "3_1",
+            icon: "/images/marker/icon_team.png",
+            lng: '109.75096', lat: "38.26007",
+            name: "超市",
+            label: { text: "超市1", font_size: 16 },
+            dialogType: "zqfx",
             details: {
-                title: "榆阳区避灾场所",
-                area: "2000㎡",
-                person: "1332",
-                address: "长兴路榆林人民大厦",
+                name: "超市1",
+                num: '115人',
+                distance: "距2500km",
             }
         },
     ]
 })
+// 企业的
+const qydd = ref({
+    markerType: "qy",
+    id: "4",
+    icon: "/images/marker/icon-bncs.png",
+    name: "企业",
+    maekerList: [
+        {
+            markerType: "qy",
+            id: "4_1",
+            icon: "/images/marker/icon-bncs.png",
+            lng: '109.68167', lat: "38.25636",
+            name: "企业",
+            label: { text: "企业", font_size: 16 },
+            dialogType: "zqfx",
+            details: {
+                name: "企业1",
+                num: '115人',
+                distance: "距2500km",
+            }
+        },
+    ]
+})
+// 旅游景区的
+const lyjqdd = ref({
+    markerType: "lyjq",
+    id: "5",
+    icon: "/images/marker/mapdot-construction-machinery.png",
+    name: "lyjq",
+    maekerList: [
+        {
+            markerType: "lyjq",
+            id: "5_1",
+            icon: "/images/marker/mapdot-construction-machinery.png",
+            lng: '109.71230', lat: "38.23824",
+            name: "lyjq",
+            label: { text: "旅游景区", font_size: 16 },
+            dialogType: "zqfx",
+            details: {
+                name: "lyjq",
+                num: '115人',
+                distance: "距2500km",
+            }
+        },
+    ]
+})
+// 体育馆的
+const tygdd = ref({
+    markerType: "tyg",
+    id: "6",
+    icon: "/images/marker/mapdot-volume-up-f.png",
+    name: "体育馆",
+    maekerList: [
+        {
+            markerType: "tyg",
+            id: "6_1",
+            icon: "/images/marker/mapdot-volume-up-f.png",
+            lng: '109.64733', lat: "38.24603",
+            name: "体育馆",
+            label: { text: "体育馆1", font_size: 16 },
+            dialogType: "zqfx",
+            details: {
+                name: "育馆1",
+                num: '115人',
+                distance: "距2500km",
+            }
+        },
+    ]
+})
+
+// 公告文化场所的
+const ggwhcsdd = ref({
+    markerType: "ggwhcs",
+    id: "7",
+    icon: "/images/marker/mapdot-scientific.png",
+    name: "公告文化场所",
+    maekerList: [
+        {
+            markerType: "ggwhcs",
+            id: "7_1",
+            icon: "/images/marker/mapdot-scientific.png",
+            lng: '109.70637', lat: "38.23220",
+            name: "公告文化场所",
+            label: { text: "公告文化场所1", font_size: 16 },
+            dialogType: "zqfx",
+            details: {
+                name: "公告文化场所1",
+                num: 1 + '115人',
+                distance: "距2500km",
+            }
+        },
+    ]
+})
+// 医院打点的
+const yydd = ref({
+    markerType: "yy",
+    id: "8",
+    icon: "/images/marker/mapdot-scientific.png",
+    name: "医院",
+    maekerList: [
+        {
+            markerType: "yy",
+            id: "8_1",
+            icon: "/images/marker/mapdot-scientific.png",
+            lng: '109.70637', lat: "38.23220",
+            name: "医院",
+            label: { text: "医院", font_size: 16 },
+            dialogType: "zqfx",
+            details: {
+                name: "医院",
+                num: 1 + '115人',
+                distance: "距2500km",
+            }
+        },
+    ]
+})
+
 
 // 灾情影响 统计内容
 const effect_cont = ref([
@@ -194,7 +534,7 @@ const changeRaduis = (type, val) => {
 }
 // 撒点func
 const addMarker = (type, item) => {
-    // console.log(type,item);
+    console.log(type, item,);
     // 先清除 再撒点
     // $mitt.emit('clearAll', { ignore: ['geo绘制图层'] })
 
@@ -252,10 +592,17 @@ let objConfig = {
     '应急广播': 'yjgb',
     '视频监控': 'spjk',
 };
+let topDict = Object.create(null)
 const initType = async () => {
     let effect = await getZdfhmbType()
-    console.log(effect, "看看这个里面是什么的数据")
+    // 这个地方就是上面的一个相关的参数的了
+    console.log(effect, "看看这个里面是什么的数据====================>")
     disaster_check_data.value = Array.isArray(effect.data) ? effect.data : [effect.data]
+    // effect.data.forEach(item=>{
+    //     console.log(item)
+    //     topDict[item.value] = objConfig[item.name]
+    // })
+    // console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxx,topDict",topDict)
     let analysis = await getYybzfxType()
     analysis_check_data.value = Array.isArray(analysis.data) ? analysis.data : [analysis.data]
 }
@@ -264,13 +611,13 @@ const initType = async () => {
 */
 const onCheck = async (type, item) => {
     let currentData, currentList, radius, funcName;
-
     if (type == 'effect') {
         console.log(11)
         currentData = disaster_checked_data.value
         currentList = disaster_resources_list.value
         radius = props.radius.effect_radius
         funcName = getZdfhmb
+        // 清楚打点的
     } else if (type == 'analysis') {
         console.log(22)
         currentData = analysis_checked_data.value
@@ -302,27 +649,503 @@ const onCheck = async (type, item) => {
     }
 
     let res = await funcName(params)
-    console.log('获取列表=====》', res);
+    // console.log('获取列表=====》', res);
     // 点击上面的
     if (type == 'effect') {
-        effect_cont.value[0].num = res.data.totalArea || 0
-        effect_cont.value[1].num = res.data.total || 0
+        // 没有经过这个页数为0的了
+        $mitt.emit('hideAllMarker')
+        if (res.data) {
+            effect_cont.value[0].num = res.data.totalArea || 0
+            effect_cont.value[1].num = res.data.total || 0
+            res.data.data.forEach((v2, i2) => {
+                console.log(ids, "大家的ids这里")
+                console.log(ids.indexOf("5dfd1e89da99722490da9839145ab498"), "id有没有")
+                // 没有露天矿场的
+                if (ids.indexOf("4dc072310d1310c95dd3d1d5349cdf9c") == -1) {
+                    ltkcdd.value.maekerList = []
+                    // console.log(ltkcdd.value.maekerList, "====>看这个数据的嘞")
+                }
+                // 没有学校
+                if (ids.indexOf("5dfd1e89da99722490da9839145ab498") == -1) {
+                    xxdd.value.maekerList = []
+                    // console.log(xxdd.value.maekerList, "====>看这个数据的嘞")
+                }
+                // 没有超市
+                if (ids.indexOf("60f10175641c56360bf2c24d81a6f31c") == -1) {
+                    csdd.value.maekerList = []
+                }
+                // 没有企业的
+                if (ids.indexOf("6a95025bf122e6150de7e0e142525b53") == -1) {
+                    qydd.value.maekerList = []
+                }
+                // 没有旅游景区的
+                if (ids.indexOf("87aff28c9ab509c703c70f99919a422b") == -1) {
+                    lyjqdd.value.maekerList = []
+                }
+                // 没有体育馆的
+                if (ids.indexOf("8a7e9d3ff3e1c8bd4368f534f1fb4ac1") == -1) {
+                    tygdd.value.maekerList = []
+                }
+                // 公共文化场所的
+                if (ids.indexOf("d9dbb206574b2bba3e61854c9619db75") == -1) {
+                    ggwhcsdd.value.maekerList = []
+                }
+                // 医院的
+                if (ids.indexOf("efdedec4f3450981d8d0fae0dc95b15a") == -1) {
+                    yydd.value.maekerList = []
+                }
+
+
+
+
+                if (res.data.data[i2].typeId == '4dc072310d1310c95dd3d1d5349cdf9c') {
+                    // 露天矿场的就是
+                    console.log(v2.defenceAims, "进入露天矿场的")
+                    if (v2.defenceAims.length > 0) {
+                        v2.defenceAims.forEach((v, i) => {
+                            ltkcdd.value.maekerList.push({
+                                markerType: "ltkc",
+                                id: v.id,
+                                icon: "/images/marker/mapdot-materia.png",
+                                lng: v.mapX || '',
+                                lat: v.mapY || '',
+                                name: "露天矿场",
+                                label: { text: "露天矿场1", font_size: 16 },
+                                dialogType: "zqfx",
+                                details: {
+                                    name: v.name,
+                                    linkName: v.linkName,
+                                    linkPhone: v.linkPhone,
+                                    storageCapacity: v.storageCapacity
+                                }
+                            },)
+                        })
+                    } else {
+                        ltkcdd.value.maekerList = []
+                    }
+                    // 学校的这个打点的了
+                } else if (res.data.data[i2].typeId == '5dfd1e89da99722490da9839145ab498') {
+                    if (v2.defenceAims.length > 0) {
+                        v2.defenceAims.forEach((v, i) => {
+                            xxdd.value.maekerList.push({
+                                markerType: "xx",
+                                id: v.id,
+                                icon: "/images/marker/icon_warehouse.png",
+                                lng: v.mapX || '',
+                                lat: v.mapY || '',
+                                name: "学校",
+                                label: { text: "学校1", font_size: 16 },
+                                dialogType: "zqfx",
+                                details: {
+                                    name: "学校1",
+                                    num: '115人',
+                                    distance: "距2500km",
+                                }
+                            },)
+                        })
+                    } else {
+                        xxdd.value.maekerList = []
+                    }
+                    // 下面这个就是超市的打点的了
+                } else if (res.data.data[i2].typeId == '60f10175641c56360bf2c24d81a6f31c') {
+                    if (v2.defenceAims.length > 0) {
+                        v2.defenceAims.forEach((v, i) => {
+                            csdd.value.maekerList.push({
+                                markerType: "cs",
+                                id: v.id,
+                                icon: "/images/marker/icon_team.png",
+                                lng: v.mapX || '',
+                                lat: v.mapY || '',
+                                name: "超市",
+                                label: { text: "超市1", font_size: 16 },
+                                dialogType: "zqfx",
+                                details: {
+                                    name: v.name,
+                                    linkName: v.linkName,
+                                    linkPhone: v.linkPhone,
+                                    storageCapacity: v.storageCapacity
+                                }
+                            },)
+                        })
+                    } else {
+                        csdd.value.maekerList = []
+                    }
+                }
+                // 企业的
+                else if (res.data.data[i2].typeId == '6a95025bf122e6150de7e0e142525b53') {
+                    if (v2.defenceAims.length > 0) {
+                        v2.defenceAims.forEach((v, i) => {
+                            qydd.value.maekerList.push({
+                                markerType: "qy",
+                                id: v.id,
+                                icon: "/images/marker/icon-bncs.png",
+                                lng: v.mapX || '',
+                                lat: v.mapY || '',
+                                name: "企业",
+                                label: { text: "企业", font_size: 16 },
+                                dialogType: "zqfx",
+                                details: {
+                                    name: v.name,
+                                    linkName: v.linkName,
+                                    linkPhone: v.linkPhone,
+                                    storageCapacity: v.storageCapacity
+                                }
+                            },)
+                        })
+                    } else {
+                        qydd.value.maekerList = []
+                    }
+                }
+                // 旅游景区
+                else if (res.data.data[i2].typeId == '87aff28c9ab509c703c70f99919a422b') {
+                    if (v2.defenceAims.length > 0) {
+                        v2.defenceAims.forEach((v, i) => {
+                            lyjqdd.value.maekerList.push({
+                                markerType: "lyjq",
+                                id: v.id,
+                                icon: "/images/marker/mapdot-construction-machinery.png",
+                                lng: v.mapX || '',
+                                lat: v.mapY || '',
+                                name: "lyjq",
+                                label: { text: "旅游景区", font_size: 16 },
+                                dialogType: "zqfx",
+                                details: {
+                                    name: v.name,
+                                    linkName: v.linkName,
+                                    linkPhone: v.linkPhone,
+                                    storageCapacity: v.storageCapacity
+                                }
+                            },)
+                        })
+                    } else {
+                        lyjqdd.value.maekerList = []
+                    }
+                }
+                // 体育馆
+                else if (res.data.data[i2].typeId == '8a7e9d3ff3e1c8bd4368f534f1fb4ac1') {
+                    if (v2.defenceAims.length > 0) {
+                        v2.defenceAims.forEach((v, i) => {
+                            tygdd.value.maekerList.push({
+                                markerType: "tyg",
+                                id: v.id,
+                                icon: "/images/marker/mapdot-volume-up-f.png",
+                                lng: v.mapX || '',
+                                lat: v.mapY || '',
+                                name: "体育馆",
+                                label: { text: "体育馆1", font_size: 16 },
+                                dialogType: "zqfx",
+                                details: {
+                                    name: v.name,
+                                    linkName: v.linkName,
+                                    linkPhone: v.linkPhone,
+                                    storageCapacity: v.storageCapacity
+                                }
+                            },)
+                        })
+                    } else {
+                        lyjqdd.value.maekerList = []
+                    }
+                }
+                // 公共文化场所的
+                else if (res.data.data[i2].typeId == 'd9dbb206574b2bba3e61854c9619db75') {
+                    if (v2.defenceAims.length > 0) {
+                        v2.defenceAims.forEach((v, i) => {
+                            ggwhcsdd.value.maekerList.push({
+                                markerType: "ggwhcs",
+                                id: v.id,
+                                icon: "/images/marker/mapdot-scientific.png",
+                                lng: v.mapX || '',
+                                lat: v.mapY || '',
+                                name: "公告文化场所",
+                                label: { text: "公告文化场所1", font_size: 16 },
+                                dialogType: "zqfx",
+                                details: {
+                                    name: v.name,
+                                    linkName: v.linkName,
+                                    linkPhone: v.linkPhone,
+                                    storageCapacity: v.storageCapacity
+                                }
+                            },)
+                        })
+                    } else {
+                        ggwhcsdd.value.maekerList = []
+                    }
+                }
+                // 医院的
+                else if (res.data.data[i2].typeId == 'd9dbb206574b2bba3e61854c9619db75') {
+                    if (v2.defenceAims.length > 0) {
+                        v2.defenceAims.forEach((v, i) => {
+                            yydd.value.maekerList.push({
+                                markerType: "yy",
+                                id: v.id,
+                                icon: "/images/marker/mapdot-scientific.png",
+                                lng: v.mapX || '',
+                                lat: v.mapY || '',
+                                name: "医院",
+                                label: { text: "医院", font_size: 16 },
+                                dialogType: "zqfx",
+                                details: {
+                                    name: v.name,
+                                    linkName: v.linkName,
+                                    linkPhone: v.linkPhone,
+                                    storageCapacity: v.storageCapacity
+                                }
+                            },)
+                        })
+                    } else {
+                        yydd.value.maekerList = []
+                    }
+                }
+                // $mitt.emit('clearAll', { ignore: ['geo绘制图层'] })
+                $mitt.emit('hideAllMarker')
+                if (ltkcdd.value.maekerList.length > 0) {
+                    $mitt.emit("addMarker", ltkcdd.value)
+                }
+                if (xxdd.value.maekerList.length > 0) {
+                    $mitt.emit("addMarker", xxdd.value)
+                }
+                if (csdd.value.maekerList.length > 0) {
+                    $mitt.emit("addMarker", csdd.value)
+                }
+                if (qydd.value.maekerList.length > 0) {
+                    $mitt.emit("addMarker", qydd.value)
+                }
+                if (lyjqdd.value.maekerList.length > 0) {
+                    $mitt.emit("addMarker", lyjqdd.value)
+                }
+                if (tygdd.value.maekerList.length > 0) {
+                    $mitt.emit("addMarker", tygdd.value)
+                }
+                if (ggwhcsdd.value.maekerList.length > 0) {
+                    $mitt.emit("addMarker", ggwhcsdd.value)
+                }
+                if (yydd.value.maekerList.length > 0) {
+                    $mitt.emit("addMarker", yydd.value)
+                }
+            })
+        }
+
+        // console.log(ids, "===================")
+        // console.log(res.data, "===========>现在拿到的数据的了")
+        // ids.forEach((v, i) => {
+        //     res.data.data.forEach((v2, i2) => {
+        //         if (ids[i2] == res.data.data[i2].typeId) {
+        //             console.log(v2, "这个就是相同的")
+        //         }
+        //     })
+        // })
+
         // 下面就是点击下面的
     } else if (type == 'analysis') {
-        console.log("下面的")
-        $mitt.emit("addMarker", ddlist.value)
-        $mitt.emit("flyTo", ddlist.value.maekerList[0])
-        $mitt.emit("openPopup", ddlist.value.maekerList[0])
-        setTimeout(() => {
-        $mitt.emit("hideAllMarker")
-        }, 2000);
+        // $mitt.emit("addMarker", ddlist.value)
+        // $mitt.emit("flyTo", ddlist.value.maekerList[0])
+        // $mitt.emit("openPopup", ddlist.value.maekerList[0])
+        console.log(res, data, "我是下面点击的东西")
+        // 重点物资
+        if (res.data.zdwz) {
+            res.data.zdwz.forEach((v, i) => {
+                zdwzdd.value.maekerList.push({
+                    markerType: "zdwz",
+                    id: v.id,
+                    icon: "/images/marker/mapdot-materia.png",
+                    lng: v.mapX || '',
+                    lat: v.mapY || '',
+                    name: "重点物资",
+                    label: { text: v.materialName || '', font_size: 16 },
+                    dialogType: "newyydxtj",
+                    details: {
+                        name: v.name,
+                        linkName: v.linkName,
+                        linkPhone: v.linkPhone,
+                        storageCapacity: v.storageCapacity
+                    }
+                },)
+            })
+        } else {
+            zdwzdd.value.maekerList = []
+        }
+
+        // 物资仓库的
+        if (res.data.wzck) {
+            res.data.wzck.forEach((v, i) => {
+                wzckdd.value.maekerList.push({
+                    markerType: "wzck",
+                    id: v.id,
+                    icon: "/images/marker/icon_warehouse.png",
+                    lng: v.mapX || '',
+                    lat: v.mapY || '',
+                    name: "物资仓库",
+                    label: { text: v.name || '', font_size: 16 },
+                    dialogType: "newyydxtj",
+                    details: {
+                        name: v.name,
+                        linkName: v.linkName,
+                        linkPhone: v.linkPhone,
+                        storageCapacity: v.storageCapacity
+                    }
+                },)
+            })
+        } else {
+            wzckdd.value.maekerList = []
+        }
+
+        // 救援队伍的
+        if (res.data.jydw) {
+            res.data.jydw.forEach((v, i) => {
+                jydwdd.value.maekerList.push({
+                    markerType: "jydw",
+                    id: v.id,
+                    icon: "/images/marker/icon_team.png",
+                    lng: v.mapX || '',
+                    lat: v.mapY || '',
+                    name: "救援队伍",
+                    label: { text: v.name || '', font_size: 16 },
+                    dialogType: "newyydxtj",
+                    details: {
+                        name: v.name,
+                        linkName: v.linkName,
+                        linkPhone: v.linkPhone,
+                        storageCapacity: v.storageCapacity
+                    }
+                },)
+            })
+        } else {
+            jydwdd.value.maekerList = []
+        }
+        // 避难场所的
+        if (res.data.bncs) {
+            res.data.bncs.forEach((v, i) => {
+                bncsdd.value.maekerList.push({
+                    markerType: "bncs",
+                    id: v.id,
+                    icon: "/images/marker/icon_team.png",
+                    lng: v.mapX || '',
+                    lat: v.mapY || '',
+                    name: "避难场所",
+                    label: { text: v.name || '', font_size: 16 },
+                    dialogType: "newyydxtj",
+                    details: {
+                        name: v.name,
+                        linkName: v.linkName,
+                        linkPhone: v.linkPhone,
+                        storageCapacity: v.storageCapacity
+                    }
+                },)
+            })
+        } else {
+            bncsdd.value.maekerList = []
+        }
+        // 大型机械的
+        if (res.data.dxjx) {
+            res.data.dxjx.forEach((v, i) => {
+                dxjxdd.value.maekerList.push({
+                    markerType: "dxjx",
+                    id: v.id,
+                    icon: "/images/marker/mapdot-construction-machinery.png",
+                    lng: v.mapX || '',
+                    lat: v.mapY || '',
+                    name: "大型机械",
+                    label: { text: v.name || '', font_size: 16 },
+                    dialogType: "yydxtj",
+                    details: {
+                        name: v.name,
+                        linkName: v.linkName,
+                        linkPhone: v.linkPhone,
+                        storageCapacity: v.storageCapacity
+                    }
+                },)
+            })
+        } else {
+            dxjxdd.value.maekerList = []
+        }
+        // 应急广播的
+        if (res.data.yjgb) {
+            res.data.yjgb.forEach((v, i) => {
+                yjgbdd.value.maekerList.push({
+                    markerType: "yjgb",
+                    id: v.id,
+                    icon: "/images/marker/mapdot-volume-up-f.png",
+                    lng: v.mapX || '',
+                    lat: v.mapY || '',
+                    name: "应急广播",
+                    label: { text: "应急广播1", font_size: 16 },
+                    dialogType: "yydxtj",
+                    details: {
+                        name: v.name,
+                        linkName: v.linkName,
+                        linkPhone: v.linkPhone,
+                        storageCapacity: v.storageCapacity
+                    }
+                },)
+            })
+        } else {
+            yjgbdd.value.maekerList = []
+        }
+        // 视频监控的
+        if (res.data.spjk) {
+            res.data.spjk.forEach((v, i) => {
+                spjkdd.value.maekerList.push({
+                    markerType: "spjk",
+                    id: v.id,
+                    icon: "/images/marker/mapdot-scientific.png",
+                    lng: v.mapX || '',
+                    lat: v.mapY || '',
+                    name: "视频监控",
+                    label: { text: "视频监控1", font_size: 16 },
+                    dialogType: "yydxtj",
+                    details: {
+                        name: v.name,
+                        linkName: v.linkName,
+                        linkPhone: v.linkPhone,
+                        storageCapacity: v.storageCapacity
+                    }
+                },)
+            })
+        } else {
+            spjkdd.value.maekerList = []
+        }
+        $mitt.emit('hideAllMarker')
+        // $mitt.emit("addMarker", jydwdd.value)
+        // $mitt.emit("addMarker", wzckdd.value)
+        // $mitt.emit("addMarker", zdwzdd.value)
+        if (wzckdd.value.maekerList.length > 0) {
+            $mitt.emit("addMarker", wzckdd.value)
+        }
+        if (jydwdd.value.maekerList.length > 0) {
+            $mitt.emit("addMarker", jydwdd.value)
+        }
+        if (zdwzdd.value.maekerList.length > 0) {
+            $mitt.emit("addMarker", zdwzdd.value)
+        }
+        if (bncsdd.value.maekerList.length > 0) {
+            $mitt.emit("addMarker", bncsdd.value)
+        }
+        if (dxjxdd.value.maekerList.length > 0) {
+            $mitt.emit("addMarker", dxjxdd.value)
+        }
+        if (yjgbdd.value.maekerList.length > 0) {
+            $mitt.emit("addMarker", yjgbdd.value)
+        }
+        if (spjkdd.value.maekerList.length > 0) {
+            $mitt.emit("addMarker", spjkdd.value)
+        }
+
+
+
+        // setTimeout(() => {
+        //     $mitt.emit("hideAllMarker")
+        // }, 10);
+        // setTimeout(() => {
+        //     $mitt.emit("addMarker", zdwzdd.value)
+        //     $mitt.emit("addMarker", wzckdd.value)
+        //     $mitt.emit("addMarker", jydwdd.value)
+        // }, 1000);
+        // $mitt.emit("flyTo", ddlist.value.maekerList[0])
+        // $mitt.emit("openPopup", ddlist.value.maekerList[0])
+        // setTimeout(() => {
+        // $mitt.emit("hideAllMarker")
+        // }, 1000);
     }
-
-
-    // for (const key in res.data) {
-
-    // }
-
     // currentList
 
     // let arr = []
