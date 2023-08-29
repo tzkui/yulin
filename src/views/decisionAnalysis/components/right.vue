@@ -38,7 +38,7 @@
                 </div>
             </div>
         </ViewBox>
-        <ViewBox title="应用保障分析">
+        <ViewBox title="应急保障分析">
             <div class="application_object">
                 <div class="analysis_radius">
                     分析半径<span class="blue">{{ radius.analysis_radius }}米</span>

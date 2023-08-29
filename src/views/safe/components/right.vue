@@ -678,7 +678,8 @@ const qylxcl = (item) => {
         <ul class="monitorList">
           <li v-for="item in monitorList" :key="item.id" @click="openVideoConferencing">
             <div class="imgBox">
-              <img :src="item.imgUrl" alt="" />
+              <video src="@/../public/test.mp4" alt="" controls autoplay></video>
+              <!-- <img :src="item.imgUrl" alt="" /> -->
             </div>
             <div class="infoBox">
               <div class="word">{{ item.monitorName }}</div>
@@ -932,7 +933,8 @@ const qylxcl = (item) => {
           width: 100%;
           height: 100%;
 
-          img {
+          video {
+            background-color: #000;
             width: 100%;
             height: 100%;
           }

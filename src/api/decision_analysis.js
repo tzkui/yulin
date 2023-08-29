@@ -783,8 +783,8 @@ export const getZdfhmb = data => request.post(`/jcfx/zdfhmb?map_x=${data.map_x}&
 // 重点防护目标类型
 export const getZdfhmbType = data => request.post("/jcfx/zdfhmb/typeid", data)
 
-// 应用保障分析列表
+// 应急保障分析列表
 export const getYybzfx = data => request.post(`/jcfx/yybzfx?map_x=${data.map_x}&map_y=${data.map_y}&radius=${data.radius}`, data.typeIds)
 // export const getYybzfx = data => request.post("/jcfx/yybzfx", data)
-// 应用保障分析类型
+// 应急保障分析类型
 export const getYybzfxType = data => request.post("/jcfx/yybzfxtypeid", data)

@@ -46,13 +46,13 @@ export const syqxxLists = {
   ylzd: {
     markerType: "ylzd",
     id: "11",
-    icon: "/images/marker/icon-worn.png",
+    icon: "/images/marker/icon_ylzd.png",
     name: "雨量监测站",
     maekerList: [
       {
         markerType: "ylzd",
         id: "11_1",
-        icon: "/images/marker/icon-worn.png",
+        icon: "/images/marker/icon_ylzd.png",
         lng: '109.684485',
         lat: "38.297187",
         name: "雨量监测站",
@@ -73,13 +73,13 @@ export const syqxxLists = {
   swzd: {
     markerType: "swzd",
     id: "12",
-    icon: "/images/marker/icon-worn.png",
+    icon: "/images/marker/icon_swzd.png",
     name: "水位站点",
     maekerList: [
       {
         markerType: "swzd",
         id: "12_1",
-        icon: "/images/marker/icon-worn.png",
+        icon: "/images/marker/icon_swzd.png",
         lng: '109.784485',
         lat: "38.997187",
         name: "水位站点",
@@ -97,13 +97,13 @@ export const syqxxLists = {
   sk: {
     markerType: "sk",
     id: "13",
-    icon: "/images/marker/icon-worn.png",
+    icon: "/images/marker/icon_sk.png",
     name: "水库",
     maekerList: [
       {
         markerType: "sk",
         id: "13_1",
-        icon: "/images/marker/icon-worn.png",
+        icon: "/images/marker/icon_sk.png",
         lng: '109.774485',
         lat: "38.267187",
         name: "水库",
@@ -122,13 +122,13 @@ export const syqxxLists = {
   jsd: {
     markerType: "jsd",
     id: "14",
-    icon: "/images/marker/icon-worn.png",
+    icon: "/images/marker/icon_jsd.png",
     name: "积水点信息",
     maekerList: [
       {
         markerType: "jsd",
         id: "14_1",
-        icon: "/images/marker/icon-worn.png",
+        icon: "/images/marker/icon_jsd.png",
         lng: '109.184485',
         lat: "38.397187",
         name: "积水点信息",
@@ -146,13 +146,13 @@ export const syqxxLists = {
   hdzd: {
     markerType: "hdzd",
     id: "11",
-    icon: "/images/marker/icon-worn.png",
+    icon: "/images/marker/icon_hdzd.png",
     name: "河道站点",
     maekerList: [
       {
         markerType: "hdzd",
         id: "15_1",
-        icon: "/images/marker/icon-worn.png",
+        icon: "/images/marker/icon_hdzd.png",
         lng: '109.784485',
         lat: "38.597187",
         name: "河道站点",
@@ -415,7 +415,7 @@ export const fxyhLists = {
     {
       markerType: "dzyhd",
       id: "1000",
-      icon: "/images/marker/mapdot-scientific.png",
+      icon: "/images/marker/icon_dzycd.png",
       name: "地灾隐患点",
       maekerList: [
         {
@@ -425,7 +425,7 @@ export const fxyhLists = {
           lat: "38.9180",
           name: "地灾隐患点",
           phone: "13511117659",
-          icon: "/images/marker/mapdot-scientific.png",
+          icon: "/images/marker/icon_dzycd.png",
           label: { text: "地灾隐患点", font_size: 16 },
           dialogType: "dzyhd",
           details: {
@@ -445,7 +445,7 @@ export const fxyhLists = {
     {
       markerType: "lswjf",
       id: "1001",
-      icon: "/images/marker/mapdot-scientific.png",
+      icon: "/images/marker/icon_lswjf.png",
       name: "历史危旧房",
       maekerList: [
         {
@@ -455,7 +455,7 @@ export const fxyhLists = {
           lat: "38.307652",
           name: "历史危旧房",
           phone: "13511117659",
-          icon: "/images/marker/mapdot-scientific.png",
+          icon: "/images/marker/icon_lswjf.png",
           label: { text: "历史危旧房", font_size: 16 },
           dialogType: "lswjf",
           details: {
@@ -475,7 +475,7 @@ export const fxyhLists = {
     {
       markerType: "dzyfq",
       id: "1002",
-      icon: "/images/marker/mapdot-scientific.png",
+      icon: "/images/marker/icon_dzyfq.png",
       name: "地灾易发区",
       maekerList: [
         {
@@ -485,7 +485,7 @@ export const fxyhLists = {
           lat: "38.304554",
           name: "地灾易发区",
           phone: "13511117659",
-          icon: "/images/marker/mapdot-scientific.png",
+          icon: "/images/marker/icon_dzyfq.png",
           label: { text: "地灾易发区", font_size: 16 },
           dialogType: "dzyfq",
           details: {
@@ -502,8 +502,8 @@ export const fxyhLists = {
     {
       markerType: "shyhd",
       id: "1000",
-      icon: "/images/marker/mapdot-scientific.png",
-      name: "物资标记",
+      icon: "/images/marker/icon_shyhd.png",
+      name: "森火隐患点",
       maekerList: [
         {
           markerType: "shyhd",
@@ -512,7 +512,7 @@ export const fxyhLists = {
           lat: "38.389572",
           name: "森火隐患点",
           phone: "13511117659",
-          icon: "/images/marker/mapdot-scientific.png",
+          icon: "/images/marker/icon_shyhd.png",
           label: { text: "森火隐患点", font_size: 16 },
           dialogType: "shyhd",
           details: {
@@ -528,7 +528,7 @@ export const fxyhLists = {
     {
       markerType: "shzh",
       id: "1004",
-      icon: "/images/marker/mapdot-scientific.png",
+      icon: "/images/marker/icon_shzh.png",
       name: "山洪灾害",
       maekerList: [
         {
@@ -538,7 +538,7 @@ export const fxyhLists = {
           lat: "38.30186",
           name: "山洪灾害",
           phone: "13511117659",
-          icon: "/images/marker/mapdot-scientific.png",
+          icon: "/images/marker/icon_shzh.png",
           label: { text: "山洪灾害", font_size: 16 },
           dialogType: "shzh",
           details: {
@@ -558,18 +558,18 @@ export const fxyhLists = {
     {
       markerType: "csyld",
       id: "1005",
-      icon: "/images/marker/mapdot-scientific.png",
-      name: "森火隐患点",
+      icon: "/images/marker/icon_csyl.png",
+      name: "城市易涝点",
       maekerList: [
         {
           markerType: "csyld",
           id: "1005_2",
           lng: '109.793327',
           lat: "38.286501",
-          name: "森火隐患点",
+          name: "城市易涝点",
           phone: "13511117659",
-          icon: "/images/marker/mapdot-scientific.png",
-          label: { text: "森火隐患点", font_size: 16 },
+          icon: "/images/marker/icon_csyl.png",
+          label: { text: "城市易涝点", font_size: 16 },
           dialogType: "csyld",
           details: {
             jswz: "",

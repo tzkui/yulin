@@ -52,7 +52,7 @@ export default {
     ],
   },
   newyydxtj: {
-    title: "应用保障分析",
+    title: "应急保障分析",
     rows: [
       { name: "名称", key: "name" },
       { name: "联系人员", key: "linkName" },
