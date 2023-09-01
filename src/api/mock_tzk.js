@@ -229,13 +229,13 @@ export const yjzyLists = {
     {
       markerType: "jydw",
       id: "102",
-      icon: "/images/marker/icon_duiwu.png",
+      icon: "/images/marker/icon_team.png",
       name: "物资标记",
       maekerList: [
         {
           markerType: "jydw",
           id: "102_1",
-          icon: "/images/marker/icon_duiwu.png",
+          icon: "/images/marker/icon_team.png",
           lng: '109.7485',
           lat: "37.2718",
           name: "救援队伍",
@@ -256,7 +256,7 @@ export const yjzyLists = {
           lat: "38.2910",
           name: "队伍三",
           phone: "13511117659",
-          icon: "/images/marker/icon_duiwu.png",
+          icon: "/images/marker/icon_team.png",
           label: { text: "队伍三", font_size: 16 },
           dialogType: "jydw",
           details: {
@@ -370,17 +370,17 @@ export const yjzyLists = {
       markerType: "yjzb",
       id: "105",
       icon: "/images/marker/icon-material.png",
-      name: "应急装备",
+      name: "救援装备",
       maekerList: [
         {
           markerType: "yjzb",
           id: "105_2",
           lng: '109.7840',
           lat: "38.9180",
-          name: "应急装备",
+          name: "救援装备",
           phone: "13511117659",
           icon: "/images/marker/icon-material.png",
-          label: { text: "应急装备", font_size: 16 },
+          label: { text: "救援装备", font_size: 16 },
           dialogType: "yjzb",
           details: {
             title: "",

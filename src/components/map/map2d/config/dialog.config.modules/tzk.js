@@ -772,7 +772,7 @@ export default {
     leftBtns: []
   },
   yjzb: {
-    title: "应急装备",
+    title: "救援装备",
     // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
     rows: [
       { name: '名称', key: 'title' },

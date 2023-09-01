@@ -171,7 +171,7 @@ export default {
 
 
   duiwu: {
-    title: "应急队伍",
+    title: "救援队伍",
     // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 color: "xxx"
     rows: [
       { name: '监测点名称', key: 'name' },

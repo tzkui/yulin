@@ -4,8 +4,8 @@ export const icon_config = {
         icon: '/images/marker/1.gif'
     },
     'jydw': {
-        name: '应急队伍',
-        icon: '/images/marker/icon_duiwu.png'
+        name: '救援队伍',
+        icon: '/images/marker/icon_team.png'
     },
     'yjry': {
         name: '应急人员',
@@ -16,7 +16,7 @@ export const icon_config = {
         icon: '/images/marker/icon-expert.png'
     },
     'yjck': {
-        name: '应急仓库',
+        name: '物资仓库',
         icon: '/images/marker/icon_warehouse.png'
     },
     'wzck': {
@@ -28,7 +28,7 @@ export const icon_config = {
         icon: '/images/marker/icon-bncs.png'
     },
     'yjzb': {
-        name: '应急装备',
+        name: '救援装备',
         icon: '/images/marker/icon-material.png'
     },
 

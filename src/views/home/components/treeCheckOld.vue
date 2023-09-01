@@ -64,7 +64,7 @@ let resource_data = ref([
   {
     id: 2,
     type: "yjdw",
-    name: "应急队伍",
+    name: "救援队伍",
     icon: "../../../assets/home/icon_marker2.png",
   },
   // {
@@ -88,7 +88,7 @@ let resource_data = ref([
   {
     id: 6,
     type: "yjzb",
-    name: "应急装备",
+    name: "救援装备",
     icon: "../../../assets/home/icon_marker6.png",
   },
   {
@@ -134,6 +134,7 @@ let resource_data = ref([
     icon: "../../../assets/home/icon_marker13.png",
   },
 ]);
+
 let checkedData = ref();
 onMounted(() => {
   data.value = resource_data.value.map((item, index) => {

@@ -50,7 +50,7 @@ const closeAllDialog = function () {
 };
 // 弹框 列表多选
 let checkBoxPopupData = ref({
-  name: "应急队伍",
+  name: "救援队伍",
   listData: [
     {
       label: "榆林市",
@@ -169,7 +169,7 @@ const openDialog = (item, index) => {
           { label: "张三", typeName: "张三", id: "6", pid: "1" },
         ],
       },
-      { label: "应急队伍", typeName: "应急队伍", num: "34", id: "2" },
+      { label: "救援队伍", typeName: "救援队伍", num: "34", id: "2" },
       { label: "应急人员", typeName: "应急人员", num: "34", id: "3" },
       { label: "应急专家", typeName: "应急专家", num: "34", id: "4" },
     ];

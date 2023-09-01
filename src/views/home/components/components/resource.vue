@@ -59,12 +59,12 @@ const emit = defineEmits(["openDialog","closeAllDialog"]);
 let currentResources = ref("yjzy");
 let resources_list_all = ref([
   [
-    { name: "应急队伍", num: 453, type: "jydw", icon: "yjdw" },
+    { name: "救援队伍", num: 453, type: "jydw", icon: "yjdw" },
     // { name: "应急人员", num: 453, type: "yjry", icon: "yjry" },
     { name: "应急专家", num: 453, type: "yjzj", icon: "yjzj" },
-    { name: "应急仓库", num: 453, type: "yjwzk", icon: "yjck" },
+    { name: "物资仓库", num: 453, type: "yjwzk", icon: "yjck" },
     { name: "避难场所", num: 453, type: "bncs", icon: "bncs" },
-    { name: "应急装备", num: 453, type: "yjzb", icon: "yjzb" },
+    { name: "救援装备", num: 453, type: "yjzb", icon: "yjzb" },
   ],
   [
     { name: "应急单兵", num: 5, type: "yjdb", icon: "yjdb" },

@@ -236,7 +236,7 @@ onMounted(() => {
     <div class="warning_monitoring">
       <div class="warning_info">
         <img
-          src="@/assets/home/mai.png"
+          src="@/assets/images/temperature/yellow_warning.png"
           style="height: 100%; cursor: pointer"
           @click="setMap"
         />

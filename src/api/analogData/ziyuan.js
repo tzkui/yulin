@@ -236,7 +236,7 @@ export default {
   //指挥调度
   zhihuiList: [
     {
-      name: "应急队伍",
+      name: "救援队伍",
       num: 12,
       value: 0,
       type: "duiwu",
@@ -257,7 +257,7 @@ export default {
       icon: zhihuiicon3
     },
     {
-      name: "应急装备",
+      name: "救援装备",
       num: 0,
       value: 3,
       type: "zhuangbei",

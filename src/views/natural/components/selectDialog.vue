@@ -48,8 +48,13 @@ const initData = function () {
     }
     let arr = initTree(props.listData);
     treeData.value = arr.filter((item) => item.children?.length > 0);
+    treeData.value.map(item => {
+      item.children= item.children.filter((val) => val.num > 0 || val.dataType !=1);
+    })
+
   } else {
     treeData.value = props.listData.map((item) => {
+
       idInfoDict[item.id] = item;
       return {
         ...item,
@@ -61,7 +66,7 @@ const initData = function () {
 console.log(props.dialogType);
 const selectedMarkers = ref([]);
 const selectedListMarkers = ref([])
-const onCheckedChange = function (data,flag) {
+const onCheckedChange = function (data, flag) {
   let checkedList = treeRef.value.getCheckedKeys();
   // 树的情况
   if (props.listType === "tree") {
@@ -82,7 +87,7 @@ const getMarkerInfoByType = function (info) {
     base.lat = info.mapY;
     // base.details.name = info.title;
     console.log(info)
-    for(let key in base.details){
+    for (let key in base.details) {
       base.details[key] = info[key] || '-'
     }
     return base;
@@ -106,7 +111,7 @@ watch(selectedMarkers, (val, old) => {
     }
   }
   if (val.length > old.length) {
-    if(markerList.length===0) return ;
+    if (markerList.length === 0) return;
     $mitt.emit("addMarker", {
       markerType: props.dialogType,
       id: "1000",
@@ -127,14 +132,8 @@ watch(selectedMarkers, (val, old) => {
 <template>
   <firDialog :name="name" @closeDialog="closeDialog">
     <div class="checkbox_popup">
-      <el-tree
-        :data="treeData"
-        :props="treeConfig"
-        show-checkbox
-        ref="treeRef"
-        @check-change="onCheckedChange"
-        node-key="treeId"
-      >
+      <el-tree :data="treeData" :props="treeConfig" show-checkbox ref="treeRef" @check-change="onCheckedChange"
+        node-key="treeId">
         <template #default="{ node, data }">
           <span class="custom-tree-node">
             <span>{{ node.label }}</span>
@@ -171,8 +170,7 @@ watch(selectedMarkers, (val, old) => {
 
     .el-checkbox__input.is-checked .el-checkbox__inner {
       border: none;
-      background: url("@/assets/natural/check_Property.png") center/99% 99%
-        no-repeat;
+      background: url("@/assets/natural/check_Property.png") center/99% 99% no-repeat;
 
       &::after {
         display: none;
@@ -196,7 +194,7 @@ watch(selectedMarkers, (val, old) => {
       margin: 4px 0;
     }
 
-    .el-tree-node:focus > .el-tree-node__content,
+    .el-tree-node:focus>.el-tree-node__content,
     .el-tree-node__content:hover {
       background-color: RGBA(10, 91, 131, 0.3);
     }
