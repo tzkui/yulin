@@ -224,10 +224,13 @@ const getValue = (value) => {
 
 // 这里还要再定义一个这个弹窗的标题名字
 const qyfxdjtitle = ref()
+let i = ref(null);
 // 下面接收子组件传递过来的值
-const getValue10 = (value, isshow) => {
-  console.log(value, "我就是儿子传递过来的数据的======>")
+const getValue10 = (value,index, isshow) => {
+  console.log(value, index,"我就是儿子传递过来的数据的======>")
+  i.value = index
   qylxdata.value = value.qydatas
+
   qylxfxshow.value = isshow
   qyfxdjtitle.value = value.lx
   console.log(qylxdata.value, "我看看这个现在到底变成了什么")
@@ -246,8 +249,9 @@ let iscun = ref(true);
 let monedata = ref("");
 // 来判断我点击的是不是原来的这个
 let mmid = ref("");
+
 const qylxdd = function (item) {
-  getdatasj()
+  getdatasj(i.value)
   console.log(item, "准备打点的了看看有些什么东西")
   if (iscun.value) {
     mmid.value = item.marker.id;
@@ -288,9 +292,11 @@ const qylxdd = function (item) {
 }
 
 // 把打点的数据放进行添加进去
-const getdatasj = function () {
+const getdatasj = function (index) {
+
   qylxdata.value.forEach((v, i) => {
-    qylxdata.value[i].marker = qylxlist[0].maekerList[i];
+    
+    qylxdata.value[i].marker = qylxlist[0].maekerList[index];
   })
 };
 

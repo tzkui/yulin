@@ -29,8 +29,8 @@ onMounted(() => {
 })
 
 const radius = ref({
-    effect_radius: 200,
-    analysis_radius: 400,
+    effect_radius: 3000,
+    analysis_radius: 2000,
 })
 // 右侧撒点中心点
 const centerPoint = ref([])
@@ -41,8 +41,8 @@ const changeEvent = (item) => {
     centerPoint.value = [item.mapX, item.mapY]
 
     // 圈选半径
-    radius.value.effect_radius = item.effectArea || 400
-    radius.value.analysis_radius = item.effectArea || 600
+    radius.value.effect_radius = item.effectArea || 3000
+    radius.value.analysis_radius = item.effectArea || 2000
 
     $mitt.emit('drawTypeGraph', {
         type: 'Circle',

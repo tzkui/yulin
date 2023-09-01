@@ -65,6 +65,7 @@ let resources_list_all = ref([
     { name: "物资仓库", num: 453, type: "yjwzk", icon: "yjck" },
     { name: "避难场所", num: 453, type: "bncs", icon: "bncs" },
     { name: "救援装备", num: 453, type: "yjzb", icon: "yjzb" },
+    { name: "防护目标", num: 453, type: "fhmb", icon: "fhmb" },
   ],
   [
     { name: "应急单兵", num: 5, type: "yjdb", icon: "yjdb" },

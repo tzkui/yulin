@@ -149,7 +149,7 @@ const getDataList = function (item) {
         markerInfo: {
           markerType: "aqscjc",
           id: item.id,
-          icon: "/images/marker/icon-worn.png",
+          icon: "/images/marker/icon_fanghu.png",
           lng: item.mapX,
           lat: item.mapY,
           name: "安全生产监测",
@@ -174,7 +174,7 @@ const getDataList = function (item) {
         markerInfo: {
           markerType: "lhjc",
           id: item.id,
-          icon: "/images/marker/icon-worn.png",
+          icon: "/images/marker/icon_shyhd.png",
           lng: item.mapX,
           lat: item.mapY,
           name: "林火监测",
