@@ -1,8 +1,6 @@
 import { assetsUrl } from "@/components/map/map2d/hook/index";
 import {
   viewDetail,
-  viewDetail1,
-  viewDetail2,
   viewDetailqilx,
 } from "@/utils/funcNames/home";
 export default {
@@ -26,11 +24,11 @@ export default {
       },
       {
         name: "指挥调度",
-        funcName: viewDetail2,
+        funcName: "goDispatchPage",
       },
       {
         name: "补录",
-        funcName: viewDetail1,
+        funcName: "eventSupplementaryRecording",
       },
       {
         name: "查看",
@@ -47,7 +45,7 @@ export default {
     ],
   },
   yjdw: {
-    title: "救援队伍",
+    title: "应急队伍",
     // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
     rows: [
       { name: "队伍名称:", key: "name" },
@@ -65,7 +63,7 @@ export default {
     btns: [
       {
         name: "调度",
-        funcName: "dispatch",
+        funcName: "goDispatchPage",
       },
       {
         name: "查看",

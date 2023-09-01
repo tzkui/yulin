@@ -30,7 +30,6 @@ import { icon_config } from "@/config/common.js";
 const $mitt = inject("$mitt");
 const emit = defineEmits(["openDialog"]);
 import { useEventBus } from "@vueuse/core";
-import { viewDetail2 } from "../../../utils/funcNames/home";
 // 获取企业分布的相关的数据
 import { getQyfbTree } from "@/api/modules/home.js";
 
@@ -309,14 +308,6 @@ const clickEcharts = function (params) {
   ];
 };
 
-// 指挥调度
-const toZhdd = useEventBus(viewDetail2);
-const eventDetailListener = (e) => {
-  // console.log('e========>', e);
-  window.location.href =
-    "http://222.212.82.225:20128/map/index_dispatch?id=77e7e6ff4c1d4da8a4b6c0cdcd4f350f";
-};
-toZhdd.on(eventDetailListener);
 // 查看
 const checkDetailBus = useEventBus("checkDetail");
 const detailListener = (e) => {

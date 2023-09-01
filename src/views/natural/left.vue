@@ -95,13 +95,6 @@ const wzdbEventListener = function (e) {
 };
 wzdbBus.on(wzdbEventListener);
 
-const dispatchBus = useEventBus("dispatch");
-const dispatchEventListener = function () {
-  window.location.href =
-    "http://222.212.82.225:20128/map/index_dispatch?id=77e7e6ff4c1d4da8a4b6c0cdcd4f350f";
-};
-dispatchBus.on(dispatchEventListener);
-
 onUnmounted(() => {
   bus.off(eventListener);
   wzdbBus.off(wzdbEventListener);

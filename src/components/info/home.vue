@@ -3,13 +3,22 @@
 import pageHeader from "@/components/common/nav.vue";
 // 地图交互菜单组
 import mapGeomtryGroup from "@/components/common/mapGeomtryGroup.vue";
-import { ref, onMounted, reactive, inject, watch } from "vue";
+import { ref, onMounted, reactive, inject, watch, onUnmounted } from "vue";
 import videoConferencing from './videoConferencing.vue';
 import videoMonitoring from "./videoMonitoring.vue";
 import phoneCall from "./phoneCall.vue";
 import eventVerification from "../common/eventVerification.vue";
+import eventSupplementaryRecording from '../common/eventSupplementaryRecording.vue'
+
 import map2d from "@/components/map/map2d/map.vue";
+
 import { assetsUrl } from "@/components/map/map2d/hook/index";
+import { useEventBus } from "@vueuse/core";
+const bus = useEventBus("goDispatchPage")
+const listener = function(e){
+  window.location.href="http://222.212.82.225:20128/map/index_dispatch?id=77e7e6ff4c1d4da8a4b6c0cdcd4f350f"
+}
+bus.on(listener)
 // import Mixin from "@/utils/drawMixin";
 
 import { useRoute } from "vue-router";
@@ -38,6 +47,10 @@ onMounted(() => {
   // 绑定自适应函数-防止浏览器栏变化后不再适配(这里可做节流优化)
   window.onresize = () => handleScreenAuto();
 });
+
+onUnmounted(()=>{
+  bus.off(listener)
+})
 
 watch(route, (val) => {
   console.log("=====", val.path);
@@ -119,6 +132,7 @@ const handleScreenAuto = () => {
       <videoMonitoring></videoMonitoring>
       <phoneCall></phoneCall>
       <eventVerification></eventVerification>
+      <eventSupplementaryRecording></eventSupplementaryRecording>
       <router-view></router-view>
     </div>
   </div>

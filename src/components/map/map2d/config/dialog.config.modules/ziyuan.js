@@ -20,7 +20,7 @@ export default {
       },
       // {
       //   name: "调度",
-      //   funcName: "viewDetail"
+      //   funcName: "goDispatchPage"
       // }
     ],
     // 左下角的列表
@@ -102,10 +102,6 @@ export default {
         name: "查看",
         funcName: "viewDetail"
       },
-      // {
-      //   name: "调度",
-      //   funcName: "viewDetail"
-      // }
     ],
     // 左下角的列表
     leftBtns: [

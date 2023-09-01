@@ -77,8 +77,6 @@ import { inject, ref, onMounted, reactive, onUnmounted } from "vue";
 import { securemarList } from "../../../api/affair_ys";
 import {
   viewDetail,
-  viewDetail1,
-  viewDetail2,
 } from "@/utils/funcNames/ys";
 import { viewDetail as viewDetailx } from "@/utils/funcNames/tzk.js";
 import { useEventBus } from "@vueuse/core";
@@ -316,26 +314,11 @@ const changeBoxSelectChange = function (arr) {
 transValue();
 getdatasj();
 const bus = useEventBus(viewDetail);
-const bus1 = useEventBus(viewDetail1);
-const bus2 = useEventBus(viewDetail2);
 // 查看
 bus.on(function (e) {
   // 这里判断我点击的是谁
   console.log("查看", e);
   cks.value.ck = true;
-});
-// 补录
-bus1.on(function (e) {
-  // 这里判断我点击的是谁
-  console.log("补录", e);
-  cks.value.bl = true;
-});
-// 指挥调度
-bus2.on(function (e) {
-  // 这里判断我点击的是谁
-  console.log("指挥调度");
-  window.location.href =
-    "http://222.212.82.225:20128/map/index_dispatch?id=77e7e6ff4c1d4da8a4b6c0cdcd4f350f";
 });
 
 const busx = useEventBus(viewDetailx);

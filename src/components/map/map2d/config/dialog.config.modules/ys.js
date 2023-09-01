@@ -1,5 +1,5 @@
 import { assetsUrl } from '@/components/map/map2d/hook/index';
-import { viewDetail, viewDetail1, viewDetail2,viewDetailqilx } from '@/utils/funcNames/ys';
+import { viewDetail,viewDetailqilx } from '@/utils/funcNames/ys';
 export default {
   yjjsj: {
     title: "自然灾害事件",
@@ -23,11 +23,11 @@ export default {
       },
       {
         name: "补录",
-        funcName: viewDetail1
+        funcName: "eventSupplementaryRecording"
       },
       {
         name: "指挥调度",
-        funcName: viewDetail2
+        funcName: "goDispatchPage"
       },
       {
         name: "核实",
@@ -75,11 +75,11 @@ export default {
       },
       {
         name: "补录",
-        funcName: viewDetail1
+        funcName: "eventSupplementaryRecording"
       },
       {
         name: "指挥调度",
-        funcName: viewDetail2
+        funcName: "goDispatchPage"
       },
       {
         name: "核实",
@@ -127,11 +127,11 @@ export default {
       },
       // {
       //   name: "补录",
-      //   funcName: viewDetail1
+      //   funcName: "eventSupplementaryRecording"
       // },
       // {
       //   name: "指挥调度",
-      //   funcName: viewDetail2
+      //   funcName: "goDispatchPage"
       // },
       // {
       //   name: "核实",

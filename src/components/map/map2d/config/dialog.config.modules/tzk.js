@@ -21,7 +21,7 @@ export default {
       },
       {
         name: "调度",
-        funcName: "dispatch"
+        funcName: "goDispatchPage"
       }
     ],
     // 左下角的列表
@@ -58,7 +58,7 @@ export default {
     btns: [
       {
         name: "调度",
-        funcName: "dispatch"
+        funcName: "goDispatchPage"
       }
     ],
     // 左下角的列表
@@ -95,7 +95,7 @@ export default {
     btns: [
       // {
       //   name: "调度",
-      //   funcName: "dispatch"
+      //   funcName: "goDispatchPage"
       // },
       {
         name: "查看 ",
