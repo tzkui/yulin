@@ -205,13 +205,13 @@ let resource_data = ref([
     id: 12,
     type: "wrj",
     name: "无人机",
-    icon: "../../../assets/images/marker/mapdot-airport.png",
+    icon: "../../../assets/images/marker/UAV.png",
   },
   {
     id: 13,
     type: "wxdh",
     name: "卫星电话",
-    icon: "../../../assets/images/marker/mapdot-materia.png",
+    icon: "../../../assets/images/marker/mapdot-shuidi.png",
   },
 ]);
 let checkedData = ref();

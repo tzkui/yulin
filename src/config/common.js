@@ -34,19 +34,19 @@ export const icon_config = {
 
     'yjdb': {
         name: '应急单兵',
-        icon: '/images/marker/icon_protectedTarget.png'
+        icon: '/images/marker/mapdot.png'
     },
     'wrj': {
         name: '无人机',
-        icon: '/images/marker/mapdot-airport.png'
+        icon: '/images/marker/UAV.png'
     },
     'wxdh': {
         name: '卫星电话',
-        icon: '/images/marker/mapdot-materia.png'
+        icon: '/images/marker/mapdot-shuidi.png'
     },
     'zdtx': {
         name: '窄带通信',
-        icon: '/images/marker/mapdot-materia.png'
+        icon: '/images/marker/communication.png'
     },
     'txl': {
         name: '通讯录',
