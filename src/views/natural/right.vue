@@ -142,7 +142,6 @@ import eventInfo from "./rightDialogs/eventInfo.vue";
 import { viewDetail } from "@/utils/funcNames/ys";
 import { viewDetail1 } from "@/utils/funcNames/ys";
 import { viewDetail2 } from "@/utils/funcNames/ys";
-import { viewDetail3 } from "@/utils/funcNames/ys";
 import { useEventBus } from "@vueuse/core";
 // 定义数据,决定是查看还是隐藏
 const cks = ref({
@@ -228,7 +227,6 @@ const evislook = ref(true);
 const bus = useEventBus(viewDetail);
 const bus1 = useEventBus(viewDetail1);
 const bus2 = useEventBus(viewDetail2);
-const bus3 = useEventBus(viewDetail3);
 // 查看
 bus.on(function (e) {
   // 这里判断我点击的是谁
@@ -249,12 +247,6 @@ bus2.on(function (e) {
   console.log("指挥调度");
   window.location.href =
     "http://222.212.82.225:20128/map/index_dispatch?id=77e7e6ff4c1d4da8a4b6c0cdcd4f350f";
-});
-// 核实
-bus3.on(function (e) {
-  // 这里判断我点击的是谁
-  console.log("核实");
-  cks.value.hs = true;
 });
 // 定义一个数据,存储之前有的这个打了点的数据了
 let iscun = ref(true);

@@ -79,7 +79,6 @@ import {
   viewDetail,
   viewDetail1,
   viewDetail2,
-  viewDetail3,
 } from "@/utils/funcNames/ys";
 import { viewDetail as viewDetailx } from "@/utils/funcNames/tzk.js";
 import { useEventBus } from "@vueuse/core";
@@ -319,7 +318,6 @@ getdatasj();
 const bus = useEventBus(viewDetail);
 const bus1 = useEventBus(viewDetail1);
 const bus2 = useEventBus(viewDetail2);
-const bus3 = useEventBus(viewDetail3);
 // 查看
 bus.on(function (e) {
   // 这里判断我点击的是谁
@@ -338,12 +336,6 @@ bus2.on(function (e) {
   console.log("指挥调度");
   window.location.href =
     "http://222.212.82.225:20128/map/index_dispatch?id=77e7e6ff4c1d4da8a4b6c0cdcd4f350f";
-});
-// 核实
-bus3.on(function (e) {
-  // 这里判断我点击的是谁
-  console.log("核实");
-  cks.value.hs = true;
 });
 
 const busx = useEventBus(viewDetailx);

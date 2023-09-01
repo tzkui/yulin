@@ -450,14 +450,13 @@ const closeqyxxshow = function () {
       </div>
     </dialogVue>
     <!-- 下面这个就是事件核实的弹出框的了 -->
-    <dialogVue :dialogValue="showDialog2.hs" :title="'事件核实'" width="866px" height="578px" top="500px"
+    <!-- <dialogVue :dialogValue="showDialog2.hs" :title="'事件核实'" width="866px" height="578px" top="500px"
       @closeHandle="closeDialog2()">
-      <!-- 下面这个就是里面的内容部分的了 -->
+      下面这个就是里面的内容部分的了
       <div class="sjhsmain">
         <div class="title">
           <span>事件信息</span>
         </div>
-        <!-- 下面是这个主体内容 -->
         <div class="forms">
           <el-form ref="ruleFormRef" class="smalform" :model="hsform" :rules="rules">
             <el-form-item label="事件名称" prop="name">
@@ -469,13 +468,11 @@ const closeqyxxshow = function () {
           </el-form>
           <el-form class="smalform" :model="hsform" :rules="rules">
             <el-form-item label="事件等级" prop="grade">
-              <!-- <el-input v-model="hsform.name" placeholder="'" clearable /> -->
               <el-select v-model="hsform.grade" placeholder="" size="large">
                 <el-option v-for="item in xldata" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
             <el-form-item label="事发区域" prop="region">
-              <!-- <el-input v-model="hsform.name" placeholder="'" clearable /> -->
               <el-select v-model="hsform.region" placeholder="Select" size="large">
                 <el-option v-for="item in xldata" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
@@ -504,7 +501,6 @@ const closeqyxxshow = function () {
             </el-radio-group>
           </el-form-item>
           <el-form-item label="事件类型">
-            <!-- <el-input v-model="hsform.name" placeholder="'" clearable /> -->
             <el-select v-model="hsform.type" placeholder="Select" size="large">
               <el-option v-for="item in xldata" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
@@ -515,13 +511,12 @@ const closeqyxxshow = function () {
             <el-input v-model="hsform.mo" placeholder="'" clearable />
           </el-form-item>
         </el-form>
-        <!-- 下面就是按钮的了 -->
         <div class="buttons">
           <button>取消</button>
           <button>确定</button>
         </div>
       </div>
-    </dialogVue>
+    </dialogVue> -->
 
     <!-- 最后一个就是补录这个页面的了 -->
     <dialogVue :dialogValue="showDialog2.bl" :title="'事件补录'" width="850px" height="692px" top="500px"

@@ -7,7 +7,7 @@ import { ref, onMounted, reactive, inject, watch } from "vue";
 import videoConferencing from './videoConferencing.vue';
 import videoMonitoring from "./videoMonitoring.vue";
 import phoneCall from "./phoneCall.vue";
-
+import eventVerification from "../common/eventVerification.vue";
 import map2d from "@/components/map/map2d/map.vue";
 import { assetsUrl } from "@/components/map/map2d/hook/index";
 // import Mixin from "@/utils/drawMixin";
@@ -118,6 +118,7 @@ const handleScreenAuto = () => {
       <videoConferencing></videoConferencing>
       <videoMonitoring></videoMonitoring>
       <phoneCall></phoneCall>
+      <eventVerification></eventVerification>
       <router-view></router-view>
     </div>
   </div>

@@ -200,7 +200,7 @@ const openDialog = (item, index) => {
         }
         return {
           ...item,
-          label: item.title || item.monitorName,
+          label: item.title || item.monitorName || item.expertName,
           num: item.count,
           treeId: treeId,
         };
