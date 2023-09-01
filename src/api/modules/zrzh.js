@@ -19,4 +19,8 @@ export const getYjxx = (data) => request.post("/zrzh/yjxx", data);
 export const getYjzy = (data) => request.post("/zrzh/yjzy", data);
 
 // 根据id获取事件信息
-export const getEventInfoById = (id) => request.post("/zrzh/sjxq", { id });
+export const getEventInfoById = (id) => request.post("/zrzh/sjxq?id=" + id, {});
+
+
+// 获取事件类型列表
+export const getEventTypeList = () => request.post("/zrzh/type_tree?tag=1");

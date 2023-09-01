@@ -676,9 +676,9 @@ const qylxcl = (item) => {
     <ViewBox title="重点地点视频监控" :height="198">
       <div class="box2">
         <ul class="monitorList">
-          <li v-for="item in monitorList" :key="item.id" @click="openVideoConferencing">
+          <li v-for="(item,index) in monitorList" :key="item.id" @click="openVideoConferencing">
             <div class="imgBox">
-              <video src="@/../public/test.mp4" alt="" controls autoplay></video>
+              <video :src="'@/../public/test'+(index+1)+'.mp4'" muted alt="" loop autoplay></video>
               <!-- <img :src="item.imgUrl" alt="" /> -->
             </div>
             <div class="infoBox">
