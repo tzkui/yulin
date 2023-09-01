@@ -118,9 +118,16 @@ const showSelect = ref(false);
 const selectDatas = ref({});
 const getYjjyList = function () {
   getYjjy().then((res) => {
-    console.log("应急资源：", res);
     for (let key in res.data) {
       markerDatas[key] = res.data[key];
+      // 向右下侧选择框传值
+      let info = res.data[key];
+      if(info.lx==='list'){
+        sessionStorage.setItem(key+"ListData",JSON.stringify(info.jh))
+      }else{
+        let arr = info.jh.filter(item=>item.dataType===2);
+        sessionStorage.setItem(key+"ListData",JSON.stringify(arr))
+      }
     }
     resources_list_all.value[0].forEach((item) => {
       item.num = markerDatas[item.type]?.sl;

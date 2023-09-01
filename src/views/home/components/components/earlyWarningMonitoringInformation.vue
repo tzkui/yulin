@@ -9,6 +9,7 @@ import skFirDialog from "@/views/natural/components/syqxxFirDialogs/sk.vue";
 import dzjc from "./dialogs/dzjc.vue";
 import aqscjc from "./dialogs/aqscjc.vue";
 import lhjc from "./dialogs/lhjc.vue";
+import { assetsUrl } from "@/components/map/map2d/hook/index";
 const $mitt = inject("$mitt");
 const currentWarningType = ref("");
 // 监测预警
@@ -24,7 +25,6 @@ const dataList = ref([]);
 const titleInfo = ref("");
 const getDatas = function () {
   getYjjcxx().then((res) => {
-    console.log("预警监测信息：", res);
     titleInfo.value = res.data.zxyj[0]?.contentText;
     const list = res.data.jcxx;
     for (const info of warning_type.value) {
@@ -207,6 +207,26 @@ const closeDialog = function () {
   currentWarningType.value = "";
   $mitt.emit("hideAllMarker");
 };
+let areaFlag = false;
+const setMap = function () {
+  // //导入包含行政区划的geo数据 进行绘制
+  if (!areaFlag) {
+    areaFlag = true;
+    let mittLineData = {
+      url: assetsUrl("/geoJson/jx.json"),
+      geoType: "jxArea",
+      mask: false,
+      type: "mask",
+      style: {
+        fillColor: "#CD8F55",
+      },
+    };
+    $mitt.emit("drawGeoGraph", mittLineData);
+  }else{
+    areaFlag = false;
+    $mitt.emit("clearGeoGraph","jxArea")
+  }
+};
 onMounted(() => {
   getDatas();
 });
@@ -215,9 +235,14 @@ onMounted(() => {
   <ViewBox title="预警监测信息">
     <div class="warning_monitoring">
       <div class="warning_info">
-        <p class="info_box">
+        <img
+          src="@/assets/home/mai.png"
+          style="height: 100%; cursor: pointer"
+          @click="setMap"
+        />
+        <!-- <p class="info_box">
           {{ titleInfo }}
-        </p>
+        </p> -->
       </div>
       <div class="monitor_box">
         <div

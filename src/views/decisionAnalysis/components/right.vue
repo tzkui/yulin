@@ -646,10 +646,11 @@ const onCheck = async (type, item) => {
         map_y: props.centerPoint[1],
         radius: radius,
         typeIds: ids,
+        
     }
 
     let res = await funcName(params)
-    // console.log('获取列表=====》', res);
+    console.log('获取列表=====》', params,"传递的是什么");
     // 点击上面的
     if (type == 'effect') {
         // 没有经过这个页数为0的了

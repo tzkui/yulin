@@ -3,9 +3,9 @@ export const icon_config = {
         name: '事件',
         icon: '/images/marker/1.gif'
     },
-    'yjdw': {
+    'jydw': {
         name: '应急队伍',
-        icon: '/images/marker/icon_team.png'
+        icon: '/images/marker/icon_duiwu.png'
     },
     'yjry': {
         name: '应急人员',

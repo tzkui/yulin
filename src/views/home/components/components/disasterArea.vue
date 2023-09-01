@@ -23,9 +23,9 @@ const disaster_type = ref([
   { name: "地震灾害", value: "" },
 ]);
 // 定义一个是这个关于获取图表时间和类型的数据
-let echatssj = ref("1")
+let echatssj = ref("3")
 let echatslx = ref('')
-const currentCheckTime = ref(1);
+const currentCheckTime = ref(3);
 const currentDisasterType = ref("");
 let timer = ref(null);
 const changeTime = async (num) => {

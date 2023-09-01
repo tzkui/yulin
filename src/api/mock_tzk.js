@@ -221,24 +221,6 @@ export const yjzyLists = {
             dir: "山体滑坡",
             phone: "17323215510",
           }
-        },
-        {
-          markerType: "yjzj",
-          id: "101_2",
-          lng: '109.84580',
-          lat: "38.997980",
-          name: "专家二",
-          phone: "13511117659",
-          icon: "/images/marker/icon-expert.png",
-          label: { text: "专家二", font_size: 16 },
-          dialogType: "yjzj",
-          details: {
-            name: "赵",
-            job: "大学教授fff",
-            compony: "陕西XX大学XX系",
-            dir: "山体滑坡",
-            phone: "17323215510",
-          }
         }
       ]
     }
@@ -369,10 +351,10 @@ export const yjzyLists = {
           id: "105_2",
           lng: '109.7840',
           lat: "38.9180",
-          name: "监控2",
+          name: "监控",
           phone: "13511117659",
           icon: "/images/marker/mapdot-scientific.png",
-          label: { text: "监控2", font_size: 16 },
+          label: { text: "监控", font_size: 16 },
           dialogType: "spjk",
           details: {
             monitorName: "榆阳区",
@@ -387,7 +369,7 @@ export const yjzyLists = {
     {
       markerType: "yjzb",
       id: "105",
-      icon: "/images/marker/mapdot-scientific.png",
+      icon: "/images/marker/icon-material.png",
       name: "应急装备",
       maekerList: [
         {
@@ -397,7 +379,7 @@ export const yjzyLists = {
           lat: "38.9180",
           name: "应急装备",
           phone: "13511117659",
-          icon: "/images/marker/mapdot-scientific.png",
+          icon: "/images/marker/icon-material.png",
           label: { text: "应急装备", font_size: 16 },
           dialogType: "yjzb",
           details: {
@@ -1423,7 +1405,7 @@ export const spjkLists = {
     label: { text: "视频监控", font_size: 16 },
     dialogType: "spjk",
     details: {
-      name: "监控1",
+      title: "监控1",
       address: "xxx",
     }
   }

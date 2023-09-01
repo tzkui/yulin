@@ -2,6 +2,25 @@
   <div class="home">
     <!-- 地图 -->
     <div class="map"></div>
+    <!-- 无缝滚动 -->
+    <div class="scollBox">
+      <img src="../../assets/natural/tongzhi.png" class="tz" />
+      <!-- <span class="tz-num">2</span> -->
+      <vue3-seamless-scroll
+        :list="newsList"
+        direction="left"
+        limitScrollNum="1"
+        class="seamless-warp2"
+      >
+        <ul class="item">
+          <li
+            v-for="(item, index) in newsList"
+            v-text="item.title"
+            :key="index"
+          ></li>
+        </ul>
+      </vue3-seamless-scroll>
+    </div>
     <!-- 左侧内容 -->
     <pageLeftContent>
       <left @openDialog="openDialog"></left>
@@ -127,13 +146,12 @@
         </div>
       </div>
     </dialogVue>
-    
 
     <twoTableThreeePopup
-        :type="twoTableThreeePopupType"
-        v-if="showTwoTableThreePopup"
-        @close-handle="showTwoTableThreePopup = false"
-      ></twoTableThreeePopup>
+      :type="twoTableThreeePopupType"
+      v-if="showTwoTableThreePopup"
+      @close-handle="showTwoTableThreePopup = false"
+    ></twoTableThreeePopup>
   </div>
 </template>
 
@@ -150,6 +168,8 @@ import { viewDetail } from "../../utils/funcNames/tzk";
 import { useEventBus } from "@vueuse/core";
 import twoTableThreeePopup from "@/views/natural/components/twoTableThreeePopup.vue";
 // import videoConferencing from "@/components/common/videoConferencing.vue";
+import { Vue3SeamlessScroll } from "vue3-seamless-scroll";
+import { getYjjcxx } from "@/api/modules/home.js";
 
 const $mitt = inject("$mitt");
 const showDialog = ref({
@@ -158,9 +178,9 @@ const showDialog = ref({
   video: false,
   video_conference: false,
 });
-
+const newsList = ref([]);
 const twoTableThreeePopupType = ref(1);
-const showTwoTableThreePopup = ref(false)
+const showTwoTableThreePopup = ref(false);
 const bus = useEventBus(viewDetail);
 const eventListener = function (e) {
   if (e.dialogType === "jydw") {
@@ -407,6 +427,22 @@ const setMarker = (type, item) => {
     $mitt.emit("flyTo", markerData);
   }
 };
+const getDatas = function () {
+  getYjjcxx().then((res) => {
+    console.log("预警监测信息：", res);
+    let text = res.data.zxyj[0]?.contentText;
+    const n = text.length;
+    let arr = []
+    for(let i=0;i<n/20;i++){
+      arr.push(text.slice(i,i+20))
+    }
+    newsList.value = arr
+    newsList.value = [{ title: text }, { title: text }];
+  });
+};
+onMounted(() => {
+  getDatas();
+});
 </script>
 
 <style scoped lang="less">
@@ -449,7 +485,7 @@ const setMarker = (type, item) => {
       border-bottom: 2px solid rgba(10, 54, 72, 1);
 
       .itemtitle {
-        width: 64px;
+        width: auto;
         height: 24px;
         background-color: #367ebc;
         display: flex;
@@ -687,6 +723,52 @@ const setMarker = (type, item) => {
             }
           }
         }
+      }
+    }
+  }
+}
+.scollBox {
+  width: 527px;
+  height: 39px;
+  padding: 0 20px;
+  background: rgba(6, 152, 215, 0.2);
+  position: absolute;
+  left: 50%;
+  margin-left: -263px;
+  top: 98px;
+  cursor: pointer;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+
+  .tz {
+    width: 24px;
+    height: 19px;
+    padding-right: 10px;
+  }
+
+  .tz-num {
+    padding-left: 5px;
+    font-size: 14px;
+    color: #20e6a4;
+    padding-right: 10px;
+  }
+
+  .seamless-warp2 {
+    overflow: hidden;
+    height: 39px;
+    width: 517px;
+    line-height: 39px;
+    padding-left: 20px;
+
+    ul.item {
+      li {
+        float: left;
+        margin-right: 10px;
+        font-size: 16px;
+        font-weight: 500;
+        color: #20e6a4;
+        padding-left: 10px;
       }
     }
   }

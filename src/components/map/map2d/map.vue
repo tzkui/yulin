@@ -409,6 +409,13 @@ const drawGeoJson = (geoJsonLayerParms) => {
   map.addLayer(geoGroup[geoJsonLayerParms.geoType]);
   map.setZoom(8);
 };
+const clearDrawGeoJson = function(type=""){
+  console.log(geoGroup,type)
+  if(geoGroup[type]){
+    // delete geoGroup[type]
+    map.removeLayer(geoGroup[type])
+  }
+}
 // drawArc
 const drawArc = (drawArcParms) => {
   if (!drawArcParms.type) {
@@ -877,6 +884,9 @@ onMounted(() => {
     console.log("drawGeoGraph--->", data);
     drawGeoJson(data);
   });
+  $mitt.on("clearGeoGraph",type=>{
+    clearDrawGeoJson(type)
+  })
   $mitt.on("drawGraph", (data) => {
     //自主绘制图层 类似圈选等
     console.log("drawArc--->", data);

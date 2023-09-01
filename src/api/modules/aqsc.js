@@ -18,3 +18,7 @@ export const getYjxxtjfx = data => request.post("/aqsc/yjxxtjfx", data)
 
 // 获取重点地点视频监控
 export const getZdddspjk = data => request.post("/aqsc/zdddspjk", data)
+
+// 获取错测选择框的数据
+export const getDtsd = data => request.post("/aqsc/dtsd", data)
+

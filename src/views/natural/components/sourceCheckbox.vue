@@ -8,12 +8,6 @@ import icon4 from "@/assets/images/marker/icon_material.png";
 import icon5 from "@/assets/images/marker/icon_shelter.png";
 import icon6 from "@/assets/images/marker/mapdot-scientific.png";
 
-const props = defineProps({
-  infos: {
-    type: Object,
-    default: {},
-  },
-});
 const $mitt = inject("$mitt");
 const types = ref([
   {
@@ -81,7 +75,8 @@ const selectedList = computed(() => {
 });
 const setTypes = function () {
   types.value.forEach((item) => {
-    let info = props.infos[item.id];
+    let info = yjzyData.value[item.id];
+    console.log("zzzzz", yjzyData, item.id, info);
     const base = JSON.parse(JSON.stringify(yjzyLists[item.id]));
     const list = info.jh.slice(info.jh.length - info.sl).map((v) => {
       let baseChild = JSON.parse(JSON.stringify(base[0].maekerList[0]));
@@ -98,6 +93,21 @@ const setTypes = function () {
     markerListDict[item.id] = base;
   });
 };
+const yjzyData = ref({});
+let getInfos = function () {
+  let yjzyInfos = sessionStorage.getItem("yjzyInfos");
+  if (yjzyInfos) {
+    yjzyData.value = JSON.parse(yjzyInfos);
+    setTypes();
+  } else {
+    setTimeout(() => {
+      getInfos();
+    }, 500);
+  }
+};
+onMounted(() => {
+  getInfos();
+});
 const calcDiff = function (arr1, arr2) {
   const dict = Object.create(null);
   for (const val of arr1) {
@@ -138,21 +148,17 @@ watch(selectedList, (val, old) => {
       }
     }
   } else {
-    list.forEach((item) => {
-      for (const point of item.maekerList) {
-        if (point.lat && point.lng) {
-          $mitt.emit("changeMarkerState", point);
+    try {
+      list.forEach((item) => {
+        for (const point of item.maekerList) {
+          if (point.lat && point.lng) {
+            $mitt.emit("changeMarkerState", point);
+          }
         }
-      }
-    });
+      });
+    } catch (error) {}
   }
 });
-watch(
-  () => props.infos,
-  (val) => {
-    setTypes();
-  }
-);
 const clearAll = function () {
   types.value.forEach((item) => {
     item.checked = false;

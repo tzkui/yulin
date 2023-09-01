@@ -1,8 +1,8 @@
 <script setup>
-import { ref, computed, watch, inject, openBlock } from "vue";
+import { ref, computed, watch, inject, openBlock, onMounted } from "vue";
 import { safeCheckboxPoints } from "@/api/mock_tzk.js";
 import { assetsUrl } from "@/components/map/map2d/hook/index";
-
+import { getDtsd } from "@/api/modules/aqsc.js";
 const $mitt = inject("$mitt");
 const getMarkerUrl = function (name) {
   return assetsUrl("/images/marker/" + name + ".png");
@@ -13,16 +13,16 @@ const treeData = ref([
     id: "whqy",
     children: [
       {
+        name: "煤矿",
+        id: "mk",
+        checked: false,
+        iconUrl: getMarkerUrl("icon_meikuang"),
+      },
+      {
         name: "非煤矿山",
         id: "fmks",
         checked: false,
         iconUrl: getMarkerUrl("icon_kuangshan"),
-      },
-      {
-        name: "工贸企业",
-        id: "gmqy",
-        checked: false,
-        iconUrl: getMarkerUrl("icon_gongmao"),
       },
       {
         name: "烟花爆竹企业",
@@ -31,10 +31,16 @@ const treeData = ref([
         iconUrl: getMarkerUrl("icon_yanhua"),
       },
       {
-        name: "煤矿",
-        id: "mk",
+        name: "化工企业",
+        id: "yhbzqy",
         checked: false,
-        iconUrl: getMarkerUrl("icon_meikuang"),
+        iconUrl: getMarkerUrl("icon_yanhua"),
+      },
+      {
+        name: "工贸企业",
+        id: "gmqy",
+        checked: false,
+        iconUrl: getMarkerUrl("icon_gongmao"),
       },
       {
         name: "尾矿库",
@@ -161,6 +167,13 @@ const checkAll = function (id) {
 const selectedItem = function (info) {
   info.checked = !info.checked;
 };
+const getListData = function () {
+  getDtsd().then((res) => {
+    console.log("xxxxx", res);
+    let listData = [res.whqy, res.qyzdwxy, res.spjk];
+
+  });
+};
 const allSelecteds = computed(() => {
   const res = {};
   for (const types of treeData.value) {
@@ -191,6 +204,7 @@ const selectedList = computed(() => {
   });
   return res;
 });
+const isHide = ref(false);
 // 计算数组的差别项,这两个数组应该是包含关系
 const calcArrayDiff = function (arr1, arr2) {
   const nums = {};
@@ -206,6 +220,9 @@ const calcArrayDiff = function (arr1, arr2) {
   }
   return Object.keys(nums);
 };
+onMounted(() => {
+  getListData();
+});
 watch(selectedList, (val, old) => {
   let diff = calcArrayDiff(val, old);
   for (const id of diff) {
@@ -221,22 +238,45 @@ watch(selectedList, (val, old) => {
 </script>
 <template>
   <div class="checkboxs">
-    <ul class="checkbox_list">
+    <div
+      :class="isHide ? 'hideIcon hideIconActive' : 'hideIcon'"
+      @click="isHide = !isHide"
+    ></div>
+    <ul class="checkbox_list" :style="{ maxHeight: isHide ? '0' : '750px' }">
       <li v-for="types in treeData">
-        <div class="parent" :class="allSelecteds[types.id] ? 'checked_item' : ''" @click="showLists[types.id] = !showLists[types.id]">
+        <div
+          class="parent"
+          :class="allSelecteds[types.id] ? 'checked_item' : ''"
+          @click="showLists[types.id] = !showLists[types.id]"
+        >
           <div class="checkbox_box" @click.stop="checkAll(types.id)"></div>
           <div class="word">{{ types.name }}</div>
           <div class="icon">
-            <el-icon :style="{ transform: showLists[types.id] ? '' : 'rotate(180deg)' }">
+            <el-icon
+              :style="{
+                transform: showLists[types.id] ? '' : 'rotate(180deg)',
+              }"
+            >
               <ArrowDownBold></ArrowDownBold>
             </el-icon>
           </div>
         </div>
-        <ul class="childList" :style="{ height: showLists[types.id] ? types.children.length * 32 + 'px' : 0 }">
-          <li v-for="item in types.children" :key="item.id" :class="item.checked ? 'checked_item' : ''" @click="selectedItem(item)" :id="item.id + '_select'">
+        <ul
+          class="childList"
+          :style="{
+            height: showLists[types.id] ? types.children.length * 32 + 'px' : 0,
+          }"
+        >
+          <li
+            v-for="item in types.children"
+            :key="item.id"
+            :class="item.checked ? 'checked_item' : ''"
+            @click="selectedItem(item)"
+            :id="item.id + '_select'"
+          >
             <div class="checkbox_box"></div>
             <div class="icon">
-              <img :src="item.iconUrl" alt="">
+              <img :src="item.iconUrl" alt="" />
             </div>
             <div class="word">{{ item.name }}</div>
           </li>
@@ -249,26 +289,36 @@ watch(selectedList, (val, old) => {
 .checkboxs {
   position: absolute;
   left: 460px;
-  top: 180px;
+  top: 190px;
   min-width: 180px;
   background: rgba(1, 23, 65, 0.8);
   box-shadow: inset 0px 0px 12px 1px rgba(87, 229, 255, 0.5);
   border-radius: 4px 4px 4px 4px;
   opacity: 1;
-  // border: 1px solid;
-  // border-image: linear-gradient(
-  //     135deg,
-  //     rgba(255, 255, 255, 1),
-  //     rgba(19, 93, 148, 0.32),
-  //     rgba(255, 255, 255, 1)
-  //   )
-  //   1 1;
-
+  .hideIcon {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    left: 0;
+    top: -30px;
+    cursor: pointer;
+    transition: 0.3s linear;
+    background: url(@/assets/safe/hide_icon.png) no-repeat;
+    background-size: 30px 30px;
+    background-color: rgba(4, 14, 21, 0.7);
+  }
+  .hideIconActive {
+    background-image: url(@/assets/safe/hide_icon_active.png);
+  }
   .checkbox_list {
-    padding-top: 12px;
+    // padding-top: 12px;
     padding-left: 7px;
     padding-right: 7px;
-
+    overflow: hidden;
+    transition: 0.4s linear;
+    > li:first-child {
+      margin-top: 12px;
+    }
     > li {
       margin-bottom: 12px;
       font-size: 14px;

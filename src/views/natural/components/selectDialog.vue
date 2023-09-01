@@ -50,11 +50,10 @@ const initData = function () {
     treeData.value = arr.filter((item) => item.children?.length > 0);
   } else {
     treeData.value = props.listData.map((item) => {
-      console.log("sssssssssss",item)
       idInfoDict[item.id] = item;
       return {
         ...item,
-        label: item.name || item.jswz || item.monitorName || item.personalName,
+        label: item.label || item.name || item.jswz || item.monitorName || item.personalName,
       };
     });
   }
