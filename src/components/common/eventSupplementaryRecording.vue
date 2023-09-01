@@ -14,6 +14,9 @@ const listener = function (e) {
 
 getEventInfoById("13b0daa026ad4f6ab0a6185d3fac964e").then((res) => {
   console.log("xxxxxxxxx", res);
+  for(let key of formData.value){
+    formData.value[key] = res.data[key]
+  }
 });
 getEventTypeList().then((res) => {
   console.log("xxxxx,", res);
@@ -428,16 +431,6 @@ const totalCount = computed(() => {
     }
   }
 
-  .title2 {
-    height: 56px;
-    display: flex;
-    align-items: center;
-    font-size: 16px;
-    margin-top: -20px;
-    border-bottom: 1px solid rgba(0, 154, 195, 1);
-    margin-bottom: 8px;
-  }
-
   // 下面是附件信息哪里的相关的样式的了
   .fj {
     width: 100%;
@@ -506,11 +499,6 @@ const totalCount = computed(() => {
     border: 1px solid var(--el-border-color-light) !important;
     background: rgba(0, 163, 206, 0.2) !important;
     right: 0;
-  }
-
-  ::v-deep .el-form-item {
-    display: flex;
-    align-items: center !important;
   }
 }
 </style>
