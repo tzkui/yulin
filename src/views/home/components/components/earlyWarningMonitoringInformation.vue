@@ -236,10 +236,15 @@ onMounted(() => {
     <div class="warning_monitoring">
       <div class="warning_info">
         <img
-          src="@/assets/images/temperature/yellow_warning.png"
+          src="@/assets/images/temperature/orange_warning.png"
           style="height: 100%; cursor: pointer"
           @click="setMap"
         />
+        <div style="margin-left: 50px;">
+          <p>高温橙色预警信号图标</p>
+          <p>2023.08.16</p>
+          <p>影响区域：xxxx</p>
+        </div>
         <!-- <p class="info_box">
           {{ titleInfo }}
         </p> -->
@@ -309,6 +314,7 @@ onMounted(() => {
   padding: 8px 10px 0 20px;
 
   .warning_info {
+    display: flex;
     height: 90px;
     padding: 8px 10px;
     background: rgba(9, 65, 93, 0.61);
