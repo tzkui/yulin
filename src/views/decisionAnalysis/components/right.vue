@@ -43,7 +43,7 @@
                 <div class="analysis_radius">
                     分析半径<span class="blue">{{ radius.analysis_radius }}米</span>
                     <el-slider @input="$event => { changeRaduis('analysis_radius', $event) }"
-                        v-model="radius.analysis_radius" :max="1000" :show-tooltip="false"></el-slider>
+                        v-model="radius.analysis_radius" :max="150000" :show-tooltip="false"></el-slider>
                     <!-- 可多选box -->
                     <div class="checkboxs">
                         <div v-for="(item, index) in analysis_check_data" :key="index"
@@ -99,7 +99,7 @@ const props = defineProps({
 const zdwzdd = ref({
     markerType: "zdwz",
     id: "1",
-    icon: "/images/marker/mapdot-materia.png",
+    icon: "/images/marker/icon-space.png",
     name: "重点物资",
     maekerList: [
         // {
@@ -275,7 +275,7 @@ const ltkcdd = ref(
     {
         markerType: "ltkc",
         id: "1",
-        icon: "/images/marker/mapdot-materia.png",
+        icon: "/images/marker/icon_fei_meikuang.png",
         name: "露天矿场",
         maekerList: [
             // {
@@ -300,13 +300,13 @@ const xxdd = ref(
     {
         markerType: "xx",
         id: "2",
-        icon: "/images/marker/icon_warehouse.png",
+        icon: "/images/marker/mapdot-school.png",
         name: "学校",
         maekerList: [
             {
                 markerType: "xx",
                 id: "2_1",
-                icon: "/images/marker/icon_warehouse.png",
+                icon: "/images/marker/mapdot-school.png",
                 lng: '109.75813', lat: "38.30719",
                 name: "学校",
                 label: { text: "学校1", font_size: 16 },
@@ -324,13 +324,13 @@ const xxdd = ref(
 const csdd = ref({
     markerType: "cs",
     id: "3",
-    icon: "/images/marker/icon_team.png",
+    icon: "/images/marker/m2.png",
     name: "超市",
     maekerList: [
         {
             markerType: "cs",
             id: "3_1",
-            icon: "/images/marker/icon_team.png",
+            icon: "/images/marker/m2.png",
             lng: '109.75096', lat: "38.26007",
             name: "超市",
             label: { text: "超市1", font_size: 16 },
@@ -347,13 +347,13 @@ const csdd = ref({
 const qydd = ref({
     markerType: "qy",
     id: "4",
-    icon: "/images/marker/icon-bncs.png",
+    icon: "/images/marker/mapdot-building-6.png",
     name: "企业",
     maekerList: [
         {
             markerType: "qy",
             id: "4_1",
-            icon: "/images/marker/icon-bncs.png",
+            icon: "/images/marker/mapdot-building-6.png",
             lng: '109.68167', lat: "38.25636",
             name: "企业",
             label: { text: "企业", font_size: 16 },
@@ -393,13 +393,13 @@ const lyjqdd = ref({
 const tygdd = ref({
     markerType: "tyg",
     id: "6",
-    icon: "/images/marker/mapdot-volume-up-f.png",
+    icon: "/images/marker/icon_warehouse.png",
     name: "体育馆",
     maekerList: [
         {
             markerType: "tyg",
             id: "6_1",
-            icon: "/images/marker/mapdot-volume-up-f.png",
+            icon: "/images/marker/icon_warehouse.png",
             lng: '109.64733', lat: "38.24603",
             name: "体育馆",
             label: { text: "体育馆1", font_size: 16 },
@@ -583,7 +583,7 @@ let objConfig = {
     '企业': 'qy',
     '体育馆': 'tyg',
     '超市': 'cs',
-    '露天矿山': 'ltks',
+    '露天矿场': 'ltks',
     '重点物资': 'zdwz',
     '物资仓库': 'wzck',
     '救援队伍': 'jydw',
@@ -707,7 +707,7 @@ const onCheck = async (type, item) => {
                             ltkcdd.value.maekerList.push({
                                 markerType: "ltkc",
                                 id: v.id,
-                                icon: "/images/marker/mapdot-materia.png",
+                                icon: "/images/marker/icon_fei_meikuang.png",
                                 lng: v.mapX || '',
                                 lat: v.mapY || '',
                                 name: "露天矿场",
@@ -731,7 +731,7 @@ const onCheck = async (type, item) => {
                             xxdd.value.maekerList.push({
                                 markerType: "xx",
                                 id: v.id,
-                                icon: "/images/marker/icon_warehouse.png",
+                                icon: "/images/marker//mapdot-school.png",
                                 lng: v.mapX || '',
                                 lat: v.mapY || '',
                                 name: "学校",
@@ -754,7 +754,7 @@ const onCheck = async (type, item) => {
                             csdd.value.maekerList.push({
                                 markerType: "cs",
                                 id: v.id,
-                                icon: "/images/marker/icon_team.png",
+                                icon: "/images/marker/m2.png",
                                 lng: v.mapX || '',
                                 lat: v.mapY || '',
                                 name: "超市",
@@ -779,7 +779,7 @@ const onCheck = async (type, item) => {
                             qydd.value.maekerList.push({
                                 markerType: "qy",
                                 id: v.id,
-                                icon: "/images/marker/icon-bncs.png",
+                                icon: "/images/marker/mapdot-building-6.png",
                                 lng: v.mapX || '',
                                 lat: v.mapY || '',
                                 name: "企业",
@@ -829,7 +829,7 @@ const onCheck = async (type, item) => {
                             tygdd.value.maekerList.push({
                                 markerType: "tyg",
                                 id: v.id,
-                                icon: "/images/marker/mapdot-volume-up-f.png",
+                                icon: "/images/marker/icon_warehouse.png",
                                 lng: v.mapX || '',
                                 lat: v.mapY || '',
                                 name: "体育馆",
@@ -948,7 +948,7 @@ const onCheck = async (type, item) => {
                 zdwzdd.value.maekerList.push({
                     markerType: "zdwz",
                     id: v.id,
-                    icon: "/images/marker/mapdot-materia.png",
+                    icon: "/images/marker/icon-space.png",
                     lng: v.mapX || '',
                     lat: v.mapY || '',
                     name: "重点物资",
@@ -1019,7 +1019,7 @@ const onCheck = async (type, item) => {
                 bncsdd.value.maekerList.push({
                     markerType: "bncs",
                     id: v.id,
-                    icon: "/images/marker/icon_team.png",
+                    icon: "/images/marker/icon-bncs.png",
                     lng: v.mapX || '',
                     lat: v.mapY || '',
                     name: "避难场所",

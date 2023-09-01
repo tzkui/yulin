@@ -31,6 +31,10 @@ export const icon_config = {
         name: '救援装备',
         icon: '/images/marker/icon-material.png'
     },
+    'fhmb': {
+        name: '防护目标',
+        icon: '/images/marker/icon-material.png'
+    },
 
     'yjdb': {
         name: '应急单兵',

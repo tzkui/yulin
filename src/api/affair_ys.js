@@ -241,13 +241,13 @@ export const qylxlist = [
   {
     markerType: "qylx",
     id: "12",
-    icon: "/images/marker/icon_jigou.png",
+    icon: "/images/marker/icon_weixianyuan1.png",
     name: "企业类型标记",
     maekerList: [
       {
         markerType: "wxx",
         id: "12-1",
-        icon: "/images/marker/icon_jigou.png",
+        icon: "/images/marker/icon_weixianyuan1.png",
         lng: '109.984485',
         lat: "38.297187",
         name: "事件1",
@@ -269,7 +269,7 @@ export const qylxlist = [
         lat: "38.297180",
         name: "事件2",
         phone: "13511117659",
-        icon: "/images/marker/icon_jigou.png",
+        icon: "/images/marker/icon_weixianyuan2.png",
         label: { text: "企业二", font_size: 16 },
         dialogType: "qylxxx",
         details: {
@@ -284,7 +284,7 @@ export const qylxlist = [
       {
         markerType: "wxx",
         id: "12-3",
-        icon: "/images/marker/icon_jigou.png",
+        icon: "/images/marker/icon_weixianyuan3.png",
         lng: '109.184485',
         lat: "38.097187",
         name: "事件1",
@@ -302,7 +302,7 @@ export const qylxlist = [
       {
         markerType: "wxx",
         id: "12-4",
-        icon: "/images/marker/icon_jigou.png",
+        icon: "/images/marker/icon_zhongda_weixian.png",
         lng: '109.284485',
         lat: "38.297187",
         name: "事件1",

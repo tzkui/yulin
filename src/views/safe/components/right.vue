@@ -594,9 +594,9 @@ const openDialog = function (type, info) {
   emit("openDialog", type, info);
 };
 const qylxisshow = ref(true);
-const qylxcl = (item) => {
+const qylxcl = (item,index) => {
   console.log(item, "看看我是个什么东东");
-  emit("getValue10", item, qylxisshow.value);
+  emit("getValue10", item,index, qylxisshow.value);
 };
 
 // 下面这个就是企业类型的的相关的打点的事件的了
@@ -659,7 +659,7 @@ const qylxcl = (item) => {
             <div class="line3">事故占比</div>
           </div>
           <ul class="type_list">
-            <li class="type_list_item" v-for="(item, index) in newenterpriseTypeList" :key="index" @click="qylxcl(item)">
+            <li class="type_list_item" v-for="(item, index) in newenterpriseTypeList" :key="index" @click="qylxcl(item,index)">
               <div class="line1">
                 <img :src="item.img" alt="" />
                 <div class="word" :style="{ color: item.color }">
