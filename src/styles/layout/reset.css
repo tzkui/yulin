@@ -16,7 +16,8 @@ body {
   width: 100%;
 }
 
-ul,li{
+ul,
+li {
   list-style: none;
 }
 
@@ -40,11 +41,11 @@ body::-webkit-scrollbar {
 }
 
 .news-title:hover div {
-  color: #08DCF4 !important;
+  color: #08dcf4 !important;
 }
 
 .news-title:hover span {
-  color: #08DCF4 !important;
+  color: #08dcf4 !important;
 }
 
 .map-title:hover {
@@ -87,6 +88,7 @@ body::-webkit-scrollbar {
   color: #75cdff;
   font-size: 12px;
 }
+
 
 .el-select-dropdown {
   min-width: 70px !important;
