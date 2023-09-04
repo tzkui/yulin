@@ -2,8 +2,10 @@
 import ViewBox from "@/components/common/view-box.vue";
 import { onMounted, ref, inject } from "vue";
 import Common from "@/utils/common.js";
+import selectDialogVue from "@/views/natural/components/selectDialog.vue";
 let commonFunc = Common();
 
+const $mitt = inject("$mitt");
 const emits = defineEmits(["clickEcharts"]);
 import { getQyfb, getQyfbTree } from "@/api/modules/home.js";
 // echarts实例
@@ -56,10 +58,7 @@ const initChart = (option) => {
   };
 
   Mychart.on("click", async (params) => {
-    let res = await getQyfbTree()
-    // console.log(res,"看看数据是什么")
-    // console.log('params', params);
-    emits("clickEcharts", res.data);
+    showSelect.value = true;
   });
 };
 // 图表内容
@@ -108,9 +107,7 @@ const option = ref({
     itemWidth: 8,
     padding: [0, 20],
     textStyle: {},
-    data: [
-      // { name: '非煤矿山', itemStyle: { color: '#2276FC', } }
-    ],
+    data: [],
     formatter: (name) => {
       let str = name.length >= 5 ? name : `{a|${name}}`;
       return echarts.format.truncateText(str, 68, "14px", "…");
@@ -136,20 +133,7 @@ const option = ref({
           color: "#aaa",
         },
       },
-      data: [
-        "榆阳区",
-        "横山区",
-        "神木县",
-        "府谷县",
-        "靖边县",
-        "定边县",
-        "绥德县",
-        "米脂县",
-        "佳县",
-        "吴堡县",
-        "清涧县",
-        "子洲县",
-      ],
+      data: [],
     },
   ],
 
@@ -181,6 +165,8 @@ const company_chart_data = ref([
   { name: "轻工业", data: [0, 0, 0, 0, 0, 100, 10, 0, 0, 30, 0, 0] },
   { name: "纺织业", data: [0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 20, 0] },
 ]);
+const listData = ref([])
+const showSelect = ref(false)
 const getInfos = function () {
   getQyfb().then((res) => {
     console.log("企业分布：", res);
@@ -201,26 +187,30 @@ const getInfos = function () {
     })
     company_chart_data.value = arr;
     option.value.xAxis[0].data = res.data.map(item => item.mc)
-    // company_chart_data.value = res.data.map((item) => {
-    //   return {
-    //     name: item.mc,
-    //     data: [
-    //       item.fmks,
-    //       item.wxhxp,
-    //       item.yj,
-    //       item.ysjs,
-    //       item.jc,
-    //       item.jx,
-    //       item.qgy,
-    //       item.fzy,
-    //     ],
-    //   };
-    // });
-    // company_chart_data.value = company_chart_data.value.map((item) => item + 2);
-    // console.log(company_chart_data.value);
     initChart(option.value);
   });
+  getQyfbTree().then(res=>{
+    console.log("xxxxx",res)
+    listData.value = res.data.filter(item=>item.dataType===2).map(item=>{
+      let info = JSON.parse(item.spare1)
+      return {
+        ...item,
+        label: item.title,
+        treeId: item.id,
+        mapX: info.longitude,
+        mapY: info.latitude
+      }
+    })
+    sessionStorage.setItem("qyxxListData",JSON.stringify(listData.value))
+  })
 };
+const closeDialog = function(){
+  $mitt.emit("hideAllMarker");
+  showSelect.value = false;
+}
+defineExpose({
+  closeDialog
+})
 onMounted(() => {
   // initChart(option.value);
   getInfos();
@@ -230,6 +220,15 @@ onMounted(() => {
   <ViewBox title="企业分布">
     <div class="enterprise_distribution" id="enterprise-distribution"></div>
   </ViewBox>
+  <selectDialogVue
+    name="企业分布"
+    :listData="listData"
+    listType="list"
+    @closeDialog="closeDialog"
+    dialogType="qyxx"
+    v-if="showSelect"
+  >
+  </selectDialogVue>
 </template>
 <style lang="scss" scoped>
 .enterprise_distribution {

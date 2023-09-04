@@ -207,7 +207,7 @@ const openDialog = function (type, info) {
 };
 transValue();
 getdatasj();
-const bus = useEventBus(viewDetail);
+const bus = useEventBus("eventView");
 // 查看
 bus.on(function (e) {
   // 这里判断我点击的是谁

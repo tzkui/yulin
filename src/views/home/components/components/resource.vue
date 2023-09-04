@@ -163,6 +163,11 @@ const getSpjkList = function () {
         }
       }
     }
+    let arr = [];
+    res.data.forEach(item=>{
+      arr = [...arr,...item.jh]
+    })
+    sessionStorage.setItem("spjkListData",JSON.stringify(arr))
   });
 };
 // 切换应急资源

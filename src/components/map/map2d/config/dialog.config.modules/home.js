@@ -1,8 +1,5 @@
 import { assetsUrl } from "@/components/map/map2d/hook/index";
-import {
-  viewDetail,
-  viewDetailqilx,
-} from "@/utils/funcNames/home";
+import { viewDetail, viewDetailqilx } from "@/utils/funcNames/home";
 export default {
   sj: {
     title: "自然灾害事件",
@@ -21,18 +18,21 @@ export default {
       {
         name: "核实",
         funcName: "eventVerification",
+        hideKey: "hideEventVerification",
       },
       {
         name: "指挥调度",
         funcName: "goDispatchPage",
+        hideKey: "hideDispatch",
       },
       {
         name: "补录",
         funcName: "eventSupplementaryRecording",
+        hideKey: "hideEventSupplementaryRecording",
       },
       {
-        name: "查看",
-        funcName: "checkEventDetail",
+        name: "查看 ",
+        funcName: "eventView",
       },
     ],
     // 左下角的列表

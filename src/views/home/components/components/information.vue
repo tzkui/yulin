@@ -33,6 +33,7 @@ onMounted(() => {
 let currentMarkerTypeData = ref({});
 const setMarker = (data) => {
   // console.log(data);
+  $mitt.emit("hideAllMarker")
   let position = [110.00449, 37.95844];
 
   let item = currentMarkerTypeData.value.item || {}; //撒点信息
@@ -41,12 +42,19 @@ const setMarker = (data) => {
   } else {
     item = { ...data };
   }
+  console.log("xxxxx", item);
   let obj = item; //展示字段
   // 处理空格 避免撒点弹框转换json字符串报错
   for (const key in obj) {
     obj[key] = (obj[key] + "").replace(" ", "&nbsp;");
   }
-
+  const l1 = ['待处理','属实'];
+  obj = {
+    ...obj,
+    hideEventSupplementaryRecording:!l1.includes(item.state),
+    hideDispatch: item.state !== "属实",
+    hideEventVerification: item.state !== "待处理",
+  };
   // 差不多在此范围内随机生成点位
   let lng = (position[0] + "").replace(
     /^(.{4})(.{1})(.*)$/,

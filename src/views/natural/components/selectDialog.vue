@@ -5,6 +5,7 @@ import commonFun from "@/utils/common.js";
 const { initTree, calcDiff } = commonFun();
 import { fxyhLists, yjzyLists, spjkLists } from "@/api/mock_tzk.js";
 import entityDict from "@/utils/entityDict.js";
+
 const $mitt = inject("$mitt");
 
 const props = defineProps({
@@ -41,7 +42,7 @@ const closeDialog = function () {
 };
 const treeData = ref([]);
 const initData = function () {
-  console.log("xxxxxx",props.listData)
+  console.log("xxxxxx", props.listData);
   if (props.listType === "tree") {
     for (const info of props.listData) {
       if (info.dataType === 2) {
@@ -49,7 +50,7 @@ const initData = function () {
       }
     }
     let arr = initTree(props.listData);
-    console.log("xxxxxx",arr)
+    console.log("xxxxxx", arr);
     treeData.value = arr.filter((item) => item.children?.length > 0);
     treeData.value.map((item) => {
       item.children = item.children.filter(
@@ -89,7 +90,7 @@ const onCheckedChange = function (data, flag) {
 const getMarkerInfoByType = function (info) {
   console.log("xxxxx", info);
   const model = fxyhLists[props.dialogType] || yjzyLists[props.dialogType];
-  console.log("zzzz",model)
+  console.log("zzzz", model,props.dialogType,yjzyLists);
   if (model) {
     let base = JSON.parse(JSON.stringify(model[0].maekerList[0]));
     base.id = info.id;
@@ -99,7 +100,6 @@ const getMarkerInfoByType = function (info) {
     if (info.spare1) {
       try {
         let details = JSON.parse(info.spare1);
-        console.log("xxxxxx,", entityDict[props.dialogType]);
         let dict = entityDict[props.dialogType];
         base.details = {};
         for (let key in dict) {

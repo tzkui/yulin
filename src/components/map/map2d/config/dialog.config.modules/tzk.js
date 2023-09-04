@@ -32,17 +32,17 @@ export default {
       {
         imgUrl: assetsUrl("/icons/leftBtn1.png"),
         hoverTitle: "",
-        funcName: viewDetail,
+        funcName: "",
       },
       {
         imgUrl: assetsUrl("/icons/leftBtn2.png"),
         hoverTitle: "",
-        funcName: viewDetail,
+        funcName: "",
       },
       {
         imgUrl: assetsUrl("/icons/leftBtn3.png"),
         hoverTitle: "",
-        funcName: viewDetail,
+        funcName: "",
       },
     ],
   },

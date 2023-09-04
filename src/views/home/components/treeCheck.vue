@@ -42,8 +42,8 @@
 <script setup>
 import { ref, onMounted, reactive, inject, nextTick, watch } from "vue";
 import { icon_config } from "@/config/common.js";
-import { yjzyLists } from "@/api/mock_tzk.js";
-
+import entityDict from "@/utils/entityDict.js";
+import { fxyhLists, yjzyLists, spjkLists } from "@/api/mock_tzk.js";
 
 const $mitt = inject("$mitt");
 const checked_all = ref(false);
@@ -54,86 +54,6 @@ const defaultProps = {
   label: "name",
 };
 let data = ref([]);
-// let resource_data = ref([
-//   {
-//     id: 1,
-//     type: "yjjg",
-//     name: "应急机构",
-//     icon: "../../../assets/home/icon_marker1.png",
-//   },
-//   {
-//     id: 2,
-//     type: "jydw",
-//     name: "救援队伍",
-//     icon: "../../../assets/home/icon_marker2.png",
-//   },
-//   // {
-//   //   id: 3,
-//   //   type: "yjry",
-//   //   name: "应急人员",
-//   //   icon: "../../../assets/home/icon_marker3.png",
-//   // },
-//   {
-//     id: 4,
-//     type: "yjzj",
-//     name: "应急专家",
-//     icon: "../../../assets/home/icon_marker4.png",
-//   },
-//   {
-//     id: 5,
-//     type: "wzck",
-//     name: "物资仓库",
-//     icon: "../../../assets/home/icon_marker5.png",
-//   },
-//   {
-//     id: 6,
-//     type: "yjzb",
-//     name: "救援装备",
-//     icon: "../../../assets/home/icon_marker6.png",
-//   },
-//   {
-//     id: 7,
-//     type: "yhdd",
-//     name: "隐患地点",
-//     icon: "../../../assets/home/icon_marker7.png",
-//   },
-//   {
-//     id: 8,
-//     type: "fxmb",
-//     name: "风险目标",
-//     icon: "../../../assets/home/icon_marker8.png",
-//   },
-//   {
-//     id: 9,
-//     type: "bncs",
-//     name: "避难场所",
-//     icon: "../../../assets/home/icon_marker9.png",
-//   },
-//   {
-//     id: 10,
-//     type: "qy",
-//     name: "企业",
-//     icon: "../../../assets/home/icon_marker10.png",
-//   },
-//   {
-//     id: 11,
-//     type: "spjk",
-//     name: "视频监控",
-//     icon: "../../../assets/home/icon_marker11.png",
-//   },
-//   {
-//     id: 12,
-//     type: "wrj",
-//     name: "无人机",
-//     icon: "../../../assets/home/icon_marker12.png",
-//   },
-//   {
-//     id: 13,
-//     type: "wxdh",
-//     name: "卫星电话",
-//     icon: "../../../assets/home/icon_marker13.png",
-//   },
-// ]);
 let resource_data = ref([
   {
     id: 1,
@@ -161,7 +81,7 @@ let resource_data = ref([
   },
   {
     id: 5,
-    type: "wzck",
+    type: "yjwzk",
     name: "物资仓库",
     icon: "../../../assets/images/marker/icon_warehouse.png",
   },
@@ -191,7 +111,7 @@ let resource_data = ref([
   },
   {
     id: 10,
-    type: "qy",
+    type: "qyxx",
     name: "企业",
     icon: "../../../assets/images/marker/mapdot-building-6.png",
   },
@@ -239,43 +159,49 @@ const nodeClick = (obj) => {
       );
 
       iconDom.style.left = parseInt(val) + 20 + "px";
-      // iconDom.style.left = parseInt(val) + parseInt(getComputedStyle(iconDom).left) + 'px'
     }
   });
 };
 const checkItem = (obj, checked) => {
   // console.log(obj, checked.checkedNodes);
   checkedData.value = checked.checkedNodes;
+  console.log("xxxxxx", checkedData.value);
   if (checked.checkedNodes.includes(obj)) {
-    let position = [109.92832, 38.27419];
-    // 差不多在此范围内随机生成点位
-    let lng = (position[0] + "").replace(
-      /^(.{4})(.{3})(.*)$/,
-      "$1" + Math.round(Math.random() * (999 - 100) + 100) + "$3"
-    );
-    let lat = (position[1] + "").replace(
-      /^(.{4})(.{3})(.*)$/,
-      "$1" + Math.round(Math.random() * (999 - 100) + 100) + "$3"
-    );
-
-    let markerData = {
-      markerType: "id" + obj.name,
-      id: obj.id,
-      lng: lng,
-      lat: lat,
-      name: obj.name,
-      // icon: "/images/marker/1.gif",
-      icon: icon_config[obj.type].icon,
-      label: { text: obj.name, font_size: 16 },
-      dialogType: obj.type,
-      details: {},
-    };
-    $mitt.emit("addMarker", markerData);
-    $mitt.emit("openPopup", markerData);
-    $mitt.emit("flyTo", markerData);
+    let listData = sessionStorage.getItem(obj.type + "ListData");
+    if (listData) {
+      let list = JSON.parse(listData);
+      for (let i = 0; i < list.length; i++) {
+        let info = list[i];
+        const model = fxyhLists[obj.type] || yjzyLists[obj.type];
+        if (model) {
+          let markerData = JSON.parse(JSON.stringify(model[0].maekerList[0]));
+          markerData.id = info.id;
+          markerData.lng = info.mapX;
+          markerData.lat = info.mapY;
+          if (info.spare1) {
+            try {
+              let details = JSON.parse(info.spare1);
+              let dict = entityDict[obj.type];
+              for (let key in dict) {
+                markerData.details[key] = details[dict[key]];
+              }
+            } catch (error) {
+              console.log("解析JSON出错了--->", info);
+            }
+          } else {
+            for (let key in markerData.details) {
+              markerData.details[key] = info[key] || "-";
+            }
+          }
+          $mitt.emit("addMarker", markerData);
+          $mitt.emit("openPopup", markerData);
+          $mitt.emit("flyTo", markerData);
+        }
+      }
+    }
   } else {
     $mitt.emit("changeMarkerState", {
-      markerType: "id" + obj.name,
+      markerType: obj.type,
       show: false,
     });
   }

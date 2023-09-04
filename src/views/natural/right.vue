@@ -129,7 +129,6 @@
     <eject title="应急事件" :data="data" :buttondata="buttondata" :imgs="imgs" :islook="islook" @FatherMethod="FatherMethod"
       @closeDialog="closeDialog" :top="top" :left="left"></eject>
   </div>
-  <eventInfo ref="eventInfoRef" :info="nowEventInfo"></eventInfo>
 </template>
 
 <script setup>
@@ -138,17 +137,12 @@ import eject from "../../components/common/emergencybomb.vue";
 import { ref, reactive, inject, onMounted } from "vue";
 const $mitt = inject("$mitt");
 import { getSjxx, getYjxx } from "@/api/modules/zrzh.js";
-import eventInfo from "./rightDialogs/eventInfo.vue";
-import { viewDetail } from "@/utils/funcNames/ys";
-import { useEventBus } from "@vueuse/core";
 // 定义数据,决定是查看还是隐藏
 const cks = ref({
   ck: false,
   hs: false,
   bl: false,
 });
-const eventInfoRef = ref()
-const nowEventInfo = ref({})
 // 使用defineEmits注册一个自定义事件
 const emit = defineEmits(["getValue"]);
 const transValue = () => {
@@ -203,6 +197,7 @@ const getEvents = function () {
             time: item.reportDate,
             address: item.eventAddress,
             des: item.eventContent,
+            id: item.id
           },
         },
         detailInfo: { ...item }
@@ -222,15 +217,7 @@ const evislook = ref(true);
 // const openDialog = function (a) {
 //   console.log("看看我点击了没有")
 // }
-const bus = useEventBus(viewDetail);
-// 查看
-bus.on(function (e) {
-  // 这里判断我点击的是谁
-  console.log("查看");
-  console.log(nowEventInfo)
-  eventInfoRef.value.openDialog()
-  // cks.value.ck = true;
-});
+
 // 定义一个数据,存储之前有的这个打了点的数据了
 let iscun = ref(true);
 let monedata = ref("");
@@ -286,7 +273,6 @@ const setMarker = function (type, item, index) {
   }
   // 上面这个是打点的事件,然后下面就是顺便把这个弹框也要弹出来的一个事件的了
   evislook.value = true;
-  nowEventInfo.value = item.detailInfo
 };
 
 // 加入传递的值是是一个数据的形式,到时候直接把数据传递过去循环这个就直接可以的了

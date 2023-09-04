@@ -7,6 +7,7 @@ import icon3 from "@/assets/images/marker/icon_duiwu.png";
 import icon4 from "@/assets/images/marker/icon_material.png";
 import icon5 from "@/assets/images/marker/icon_shelter.png";
 import icon6 from "@/assets/images/marker/mapdot-scientific.png";
+import entityDict from "@/utils/entityDict.js";
 
 const $mitt = inject("$mitt");
 const types = ref([
@@ -83,12 +84,24 @@ const setTypes = function () {
       baseChild.lng = v.mapX;
       baseChild.lat = v.mapY;
       baseChild.id = v.id;
-      for (let key in baseChild.details) {
-        baseChild.details[key] = v[key] || "--";
+      if (v.spare1) {
+        try {
+          let details = JSON.parse(v.spare1);
+          let dict = entityDict[props.dialogType];
+          baseChild.details = {};
+          for (let key in dict) {
+            baseChild.details[key] = details[dict[key]];
+          }
+        } catch (error) {
+          console.log("解析JSON出错了--->", v);
+        }
+      } else {
+        for (let key in baseChild.details) {
+          baseChild.details[key] = v[key] || "--";
+        }
       }
       return baseChild;
     });
-    console.log(base);
     base[0].maekerList = list;
     markerListDict[item.id] = base;
   });
@@ -125,6 +138,7 @@ const calcDiff = function (arr1, arr2) {
 watch(selectedList, (val, old) => {
   const diff = calcDiff(val, old);
   let list = [];
+  console.log(diff, markerListDict);
   for (const id of diff) {
     if (markerListDict[id]) {
       if (markerListDict[id][0].maekerList.length > 0) {
@@ -132,6 +146,7 @@ watch(selectedList, (val, old) => {
       }
     }
   }
+  console.log("xxxxx", list);
   if (val.length > old.length) {
     list.forEach((item) => {
       item.maekerList.forEach((info) => {
@@ -149,14 +164,18 @@ watch(selectedList, (val, old) => {
     }
   } else {
     try {
+      console.log(list)
       list.forEach((item) => {
         for (const point of item.maekerList) {
+          console.log(point)
           if (point.lat && point.lng) {
             $mitt.emit("changeMarkerState", point);
           }
         }
       });
-    } catch (error) {}
+    } catch (error) {
+      console.log("删除marker报错了",error)
+    }
   }
 });
 const clearAll = function () {

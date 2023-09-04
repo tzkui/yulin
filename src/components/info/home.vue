@@ -9,7 +9,7 @@ import videoMonitoring from "./videoMonitoring.vue";
 import phoneCall from "./phoneCall.vue";
 import eventVerification from "../common/eventVerification.vue";
 import eventSupplementaryRecording from '../common/eventSupplementaryRecording.vue'
-
+import eventView from '../common/eventView.vue'
 import map2d from "@/components/map/map2d/map.vue";
 
 import { assetsUrl } from "@/components/map/map2d/hook/index";
@@ -133,6 +133,7 @@ const handleScreenAuto = () => {
       <phoneCall></phoneCall>
       <eventVerification></eventVerification>
       <eventSupplementaryRecording></eventSupplementaryRecording>
+      <eventView></eventView>
       <router-view></router-view>
     </div>
   </div>

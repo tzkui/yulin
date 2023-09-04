@@ -6,9 +6,9 @@
       @openDialog="openDialog"
       @closeAllDialog="closeAllDialog"
     ></resource>
-    <enterpriseEcharts @clickEcharts="clickEcharts"></enterpriseEcharts>
+    <enterpriseEcharts></enterpriseEcharts>
     <!-- 图例 -->
-    <treeCheck></treeCheck>
+    <treeCheck ref="treeCheckRef"></treeCheck>
 
     <!-- 列表弹框 树形多选   应急资源 企业分布 -->
     <selectDialogVue
@@ -265,47 +265,6 @@ const setMarker = (data) => {
   $mitt.emit("addMarker", markerData);
   $mitt.emit("openPopup", markerData);
   $mitt.emit("flyTo", markerData);
-};
-
-const clickEcharts = function (params) {
-  let titleData = params.shift();
-  console.log(titleData, "删除的");
-  params = JSON.stringify(params);
-  params = params.replaceAll("title", "label");
-  params = params.replaceAll("count", "num");
-  params = JSON.parse(params);
-  params.forEach((v) => {
-    if (v.num == 0) {
-      v.num = null;
-    }
-    // v.datatype
-  });
-  console.log(params, "看看是些什么");
-  checkBoxPopupData.value.name = "企业分布";
-  dialogFlags.value.select = true;
-
-  currentMarkerTypeData.value.item = {
-    type: "qyxx",
-    icon: "qy",
-    name: "企业",
-  };
-  currentMarkerTypeData.value.index = params.dataIndex;
-  console.log(currentMarkerTypeData.value.index, "这个是下标吗");
-
-  checkBoxPopupData.value.listData = [
-    {
-      label: titleData.title,
-      typeName: titleData.title,
-      num: titleData.count,
-      id: titleData.id,
-      // children: [
-      //   { label: "AAA化工厂", typeName: "AAA化工厂", num: "41", id: "1" },
-      //   { label: "BBB化工厂", typeName: "BBB化工厂", num: "1", id: "2" },
-      //   { label: "XXX化工厂", typeName: "XXX化工厂", num: "3", id: "3",datatype:2 },
-      // ],
-      children: params,
-    },
-  ];
 };
 
 // 查看

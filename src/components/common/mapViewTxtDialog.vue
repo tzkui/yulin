@@ -49,7 +49,9 @@ if (dialogConfigs[props.dialogType]) {
   title.value = info.title;
   btns.value = info.btns || [];
   leftBtns.value = info.leftBtns || [];
+  console.log(btns.value)
 }
+console.log("xxxxx",props.details)
 </script>
 
 <template>
@@ -112,7 +114,7 @@ if (dialogConfigs[props.dialogType]) {
           <div
             class="btn"
             v-for="item in btns"
-            v-show="item.name !== '查看'"
+            v-show="item.name !== '查看'&&!details[item.hideKey]"
             :key="item.name"
             @click="doSomething(item)"
           >

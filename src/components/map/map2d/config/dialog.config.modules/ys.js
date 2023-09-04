@@ -18,20 +18,23 @@ export default {
     // 右下角的按钮
     btns: [
       {
-        name: "查看",
-        funcName: viewDetail
+        name: "查看 ",
+        funcName: "eventView",
       },
       {
         name: "补录",
-        funcName: "eventSupplementaryRecording"
+        funcName: "eventSupplementaryRecording",
+        hideKey: "hideEventSupplementaryRecording"
       },
       {
         name: "指挥调度",
-        funcName: "goDispatchPage"
+        funcName: "goDispatchPage",
+        hideKey: "hideDispatch"
       },
       {
         name: "核实",
-        funcName: "eventVerification"
+        funcName: "eventVerification",
+        hideKey: "hideEventVerification"
       }
     ],
     // 左下角的列表
@@ -71,7 +74,7 @@ export default {
     btns: [
       {
         name: "查看",
-        funcName: viewDetail
+        funcName: "eventView"
       },
       {
         name: "补录",
