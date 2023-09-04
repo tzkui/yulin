@@ -12,24 +12,25 @@ const listener = function (e) {
   showDialog.value = true;
 };
 
-getEventInfoById("13b0daa026ad4f6ab0a6185d3fac964e").then((res) => {
-  console.log("xxxxxxxxx", res);
-  for(let key of formData.value){
-    formData.value[key] = res.data[key]
-  }
-});
-getEventTypeList().then((res) => {
-  console.log("xxxxx,", res);
-  const { initTree } = Common();
-  eventTypeList.value = initTree(res.data, { pid: "parentId" });
-  console.log("xxxx", eventTypeList);
-});
+// getEventInfoById("13b0daa026ad4f6ab0a6185d3fac964e").then((res) => {
+//   console.log("xxxxxxxxx", res);
+//   for(let key of formData.value){
+//     formData.value[key] = res.data[key]
+//   }
+// });
+// getEventTypeList().then((res) => {
+//   console.log("xxxxx,", res);
+//   const { initTree } = Common();
+//   eventTypeList.value = initTree(res.data, { pid: "parentId" });
+//   console.log("xxxx", eventTypeList);
+// });
 const eventTypeList = ref([]);
 bus.on(listener);
 const showDialog = ref(false);
 const closeDialog = function () {
   showDialog.value = false;
 };
+// 事件等级下拉框选项
 const eventLevelList = ref([
   { label: "一般", value: 1 },
   { label: "较大", value: 2 },

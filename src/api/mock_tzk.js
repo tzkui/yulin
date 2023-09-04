@@ -183,16 +183,15 @@ export const yjzyLists = {
           icon: "/images/marker/icon_renyuan.png",
           lng: '109.85485',
           lat: "38.27187",
-          name: "防汛责任人1",
-          label: { text: "防汛责任人1", font_size: 16 },
+          name: "应急人员",
+          label: { text: "应急人员", font_size: 16 },
           dialogType: "yjry",
           details: {
-            name: "赵翠梅",
+            personalName: "赵翠梅",
             job: "应急人员",
-            compony: "青山路街道办事处",
-            aphone: "36563",
-            phone: "17323215510",
-            duty: "日常巡逻发现隐患"
+            orgName: "青山路街道办事处",
+            linkPhone: "17323215510",
+            duties: "日常巡逻发现隐患"
           }
         },
       ]
@@ -211,15 +210,15 @@ export const yjzyLists = {
           icon: "/images/marker/icon-expert.png",
           lng: '109.94785',
           lat: "38.07187",
-          name: "专家一",
-          label: { text: "专家一", font_size: 16 },
+          name: "专家",
+          label: { text: "专家", font_size: 16 },
           dialogType: "yjzj",
           details: {
-            name: "赵翠梅",
-            job: "大学教授",
-            compony: "陕西XX大学XX系",
-            dir: "山体滑坡",
-            phone: "17323215510",
+            expertName: "",
+            zc: "",
+            domain: "",
+            linkPhone: "",
+            workUnit: "",
           }
         }
       ]
@@ -382,6 +381,31 @@ export const yjzyLists = {
           icon: "/images/marker/icon-material.png",
           label: { text: "救援装备", font_size: 16 },
           dialogType: "yjzb",
+          details: {
+            title: "",
+            address: "",
+          }
+        }
+      ]
+    }
+  ],
+  qyxx: [
+    {
+      markerType: "qyxx",
+      id: "105",
+      icon: "/images/marker/mapdot-building-6.png",
+      name: "企业信息",
+      maekerList: [
+        {
+          markerType: "qyxx",
+          id: "105_2",
+          lng: '109.7840',
+          lat: "38.9180",
+          name: "企业信息",
+          phone: "13511117659",
+          icon: "/images/marker/mapdot-building-6.png",
+          label: { text: "企业信息", font_size: 16 },
+          dialogType: "qyxx",
           details: {
             title: "",
             address: "",

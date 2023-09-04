@@ -4,6 +4,7 @@ import firDialog from "./firDialog.vue";
 import commonFun from "@/utils/common.js";
 const { initTree, calcDiff } = commonFun();
 import { fxyhLists, yjzyLists, spjkLists } from "@/api/mock_tzk.js";
+import entityDict from "@/utils/entityDict.js";
 const $mitt = inject("$mitt");
 
 const props = defineProps({
@@ -40,6 +41,7 @@ const closeDialog = function () {
 };
 const treeData = ref([]);
 const initData = function () {
+  console.log("xxxxxx",props.listData)
   if (props.listType === "tree") {
     for (const info of props.listData) {
       if (info.dataType === 2) {
@@ -47,25 +49,31 @@ const initData = function () {
       }
     }
     let arr = initTree(props.listData);
+    console.log("xxxxxx",arr)
     treeData.value = arr.filter((item) => item.children?.length > 0);
-    treeData.value.map(item => {
-      item.children= item.children.filter((val) => val.num > 0 || val.dataType !=1);
-    })
-
+    treeData.value.map((item) => {
+      item.children = item.children.filter(
+        (val) => val.num > 0 || val.dataType != 1
+      );
+    });
   } else {
     treeData.value = props.listData.map((item) => {
-
       idInfoDict[item.id] = item;
       return {
         ...item,
-        label: item.label || item.name || item.jswz || item.monitorName || item.personalName,
+        label:
+          item.label ||
+          item.name ||
+          item.jswz ||
+          item.monitorName ||
+          item.personalName,
       };
     });
   }
 };
 console.log(props.dialogType);
 const selectedMarkers = ref([]);
-const selectedListMarkers = ref([])
+const selectedListMarkers = ref([]);
 const onCheckedChange = function (data, flag) {
   let checkedList = treeRef.value.getCheckedKeys();
   // 树的情况
@@ -74,21 +82,36 @@ const onCheckedChange = function (data, flag) {
       item.startsWith("2--")
     );
   } else {
-    console.log(selectedListMarkers, idInfoDict)
-    selectedMarkers.value = treeRef.value.getCheckedKeys()
+    console.log(selectedListMarkers, idInfoDict);
+    selectedMarkers.value = treeRef.value.getCheckedKeys();
   }
 };
 const getMarkerInfoByType = function (info) {
+  console.log("xxxxx", info);
   const model = fxyhLists[props.dialogType] || yjzyLists[props.dialogType];
+  console.log("zzzz",model)
   if (model) {
     let base = JSON.parse(JSON.stringify(model[0].maekerList[0]));
     base.id = info.id;
     base.lng = info.mapX;
     base.lat = info.mapY;
     // base.details.name = info.title;
-    console.log(info)
-    for (let key in base.details) {
-      base.details[key] = info[key] || '-'
+    if (info.spare1) {
+      try {
+        let details = JSON.parse(info.spare1);
+        console.log("xxxxxx,", entityDict[props.dialogType]);
+        let dict = entityDict[props.dialogType];
+        base.details = {};
+        for (let key in dict) {
+          base.details[key] = details[dict[key]];
+        }
+      } catch (error) {
+        console.log("解析JSON出错了--->", info);
+      }
+    } else {
+      for (let key in base.details) {
+        base.details[key] = info[key] || "-";
+      }
     }
     return base;
   }
@@ -99,10 +122,11 @@ onMounted(() => {
 watch(selectedMarkers, (val, old) => {
   if (val.length === old.length) return;
   const list = calcDiff(val, old);
-  console.log(list)
+  console.log("xxxxx", list);
   let markerList = [];
   for (const treeId of list) {
     const info = idInfoDict[treeId];
+    console.log("xxxxx", info);
     if (info.mapX && info.mapY) {
       let marker = getMarkerInfoByType(info);
       if (marker) {
@@ -123,7 +147,7 @@ watch(selectedMarkers, (val, old) => {
     $mitt.emit("openPopup", markerList[0]);
   } else {
     markerList.forEach((item) => {
-      console.log(item)
+      console.log(item);
       $mitt.emit("changeMarkerState", item);
     });
   }
@@ -132,8 +156,14 @@ watch(selectedMarkers, (val, old) => {
 <template>
   <firDialog :name="name" @closeDialog="closeDialog">
     <div class="checkbox_popup">
-      <el-tree :data="treeData" :props="treeConfig" show-checkbox ref="treeRef" @check-change="onCheckedChange"
-        node-key="treeId">
+      <el-tree
+        :data="treeData"
+        :props="treeConfig"
+        show-checkbox
+        ref="treeRef"
+        @check-change="onCheckedChange"
+        node-key="treeId"
+      >
         <template #default="{ node, data }">
           <span class="custom-tree-node">
             <span>{{ node.label }}</span>
@@ -170,7 +200,8 @@ watch(selectedMarkers, (val, old) => {
 
     .el-checkbox__input.is-checked .el-checkbox__inner {
       border: none;
-      background: url("@/assets/natural/check_Property.png") center/99% 99% no-repeat;
+      background: url("@/assets/natural/check_Property.png") center/99% 99%
+        no-repeat;
 
       &::after {
         display: none;
@@ -194,7 +225,7 @@ watch(selectedMarkers, (val, old) => {
       margin: 4px 0;
     }
 
-    .el-tree-node:focus>.el-tree-node__content,
+    .el-tree-node:focus > .el-tree-node__content,
     .el-tree-node__content:hover {
       background-color: RGBA(10, 91, 131, 0.3);
     }

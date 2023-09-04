@@ -222,9 +222,9 @@ const setMap = function () {
       },
     };
     $mitt.emit("drawGeoGraph", mittLineData);
-  }else{
+  } else {
     areaFlag = false;
-    $mitt.emit("clearGeoGraph","jxArea")
+    $mitt.emit("clearGeoGraph", "jxArea");
   }
 };
 onMounted(() => {
@@ -240,10 +240,15 @@ onMounted(() => {
           style="height: 100%; cursor: pointer"
           @click="setMap"
         />
-        <div style="margin-left: 50px;">
-          <p>高温橙色预警信号图标</p>
-          <p>2023.08.16</p>
-          <p>影响区域：xxxx</p>
+        <div style="margin-left: 40px">
+          <div class="row">
+            <div class="warning_type orange">高温橙色预警信号</div>
+            <div>2023.09.04</div>
+          </div>
+          <div class="row">
+            <div class="area">影响区域：佳县</div>
+            <div>15:32</div>
+          </div>
         </div>
         <!-- <p class="info_box">
           {{ titleInfo }}
@@ -344,6 +349,20 @@ onMounted(() => {
       // line-clamp: 3;
       // -webkit-line-clamp: 3;
       // -webkit-box-orient: vertical;
+    }
+    .row {
+      display: flex;
+      .warning_type {
+        width: 180px;
+        font-size: 18px;
+        margin-bottom: 18px;
+      }
+      .orange {
+        color: #fa7d2d;
+      }
+      .area{
+        width: 180px;
+      }
     }
   }
 

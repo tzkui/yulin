@@ -55,10 +55,13 @@
     @close-dialog="showQyxxThreePopup = false"
   ></qyxxThreePopup>
   <qyxxCheckbox
-    @selectChange="changeBoxSelectChange"
-    @closeDialog="closeDialog('qyxx')"
-    :checkbox-data="qyxxCheckboxData"
+    name="辖区企业列表"
+    :listData="qyListData"
+    :treeConfig="{ label: 'title' }"
+    listType="tree"
+    dialogType="qyxx"
     v-if="firDialogFlags.qyxx"
+    @closeDialog="closeDialog"
   ></qyxxCheckbox>
 </template>
 
@@ -66,7 +69,7 @@
 <script setup>
 import { qyxxData } from "@/api/mock_tzk.js";
 import qyxxThreePopup from "./qyxxThreePopup.vue";
-const eis = ref(false);
+
 // 导入这个事件的容器
 import selectDate from "./selectDate.vue";
 // 引入自动滚动轮播的
@@ -75,12 +78,10 @@ import "../components/lunbo";
 import { inject, ref, onMounted, reactive, onUnmounted } from "vue";
 // 导入需要打点的这些数据
 import { securemarList } from "../../../api/affair_ys";
-import {
-  viewDetail,
-} from "@/utils/funcNames/ys";
+import { viewDetail } from "@/utils/funcNames/ys";
 import { viewDetail as viewDetailx } from "@/utils/funcNames/tzk.js";
 import { useEventBus } from "@vueuse/core";
-import qyxxCheckbox from "./qyxxCheckbox.vue";
+import qyxxCheckbox from "@/views/natural/components/selectDialog.vue";
 import checkboxList from "./checkboxList.vue";
 import { getWhqyjcyj, getXqqytjfx, getYjxxtjfx } from "@/api/modules/aqsc.js";
 // 定义一个数据来代表环形图是否显示和隐藏的
@@ -148,89 +149,7 @@ const toogleDate = function (key, val) {
 const firDialogFlags = ref({
   qyxx: false,
 });
-const closeDialog = function (type) {
-  $mitt.emit("hideAllMarker")
-  firDialogFlags.value[type] = false;
-};
-
-const qyxxCheckboxData = {
-  name: "辖区企业列表",
-  type: "checkbox_popup",
-  hasSerachBar: true,
-  inputData: { label: "搜索企业名称", value: "" },
-  buttonData: { name: "地图清除" },
-  treeData: [
-    {
-      label: "榆林市",
-      num: "27",
-      children: [
-        {
-          label: "榆阳区",
-          num: "3",
-        },
-        {
-          label: "横山区",
-          num: "2",
-        },
-        {
-          label: "神木县",
-          num: "4",
-        },
-        {
-          label: "府谷县",
-          num: "1",
-        },
-        {
-          label: "靖边县",
-          num: "3",
-        },
-        {
-          label: "定边县",
-          num: "4",
-        },
-        {
-          label: "绥德县",
-          num: "4",
-        },
-        {
-          label: "米脂县",
-          num: "4",
-        },
-        {
-          label: "佳县",
-          num: "2",
-        },
-        {
-          label: "吴堡县",
-          num: "4",
-        },
-        {
-          label: "清涧县",
-          num: "4",
-        },
-        {
-          label: "子洲县",
-          num: "4",
-        },
-      ],
-    },
-  ],
-};
-const accidentData = ref([]);
-// 这个就是动态获取图表数据的方法
-const getAccidentLevelList = function (type) {
-  console.log(111);
-  setTimeout(() => {
-    accidentData.value = [
-      { name: "一般", value: 100 },
-      { name: "重大", value: 200 },
-      { name: "较大", value: 300 },
-      { name: "特大", value: 400 },
-      { name: "特大", value: 400 },
-      { name: "特大", value: 400 },
-    ];
-  }, 50);
-};
+const qyListData = ref([]);
 const $mitt = inject("$mitt");
 // 下面就是打点的方法这些了
 // 把这个打点的放在这个循环里面的数据的了
@@ -286,31 +205,6 @@ const openDialog = function (type, info) {
   }
   // emit("openDialog", type, info);
 };
-const rendomLngLat = function (num) {
-  let calc = Math.random()*0.75;
-  if (new Date().getSeconds() % 2 === 0) {
-    return num - 0 + calc;
-  } else {
-    return num - calc;
-  }
-};
-const changeBoxSelectChange = function (arr) {
-  let point = qyxxData[selectedQyxx].pointInfo;
-  if (arr.length > 0) {
-    console.log("pointInfo+++++++++++++++++++++==", point);
-    point = JSON.parse(JSON.stringify(point))
-    point.lat = rendomLngLat(point.lat);
-    point.lng = rendomLngLat(point.lng);
-    point.id = new Date().getTime()
-    $mitt.emit("addMarker", point);
-  } else {
-    $mitt.emit("changeMarkerState", {
-      markerType: point.markerType,
-      id: point.id,
-      show: false,
-    });
-  }
-};
 transValue();
 getdatasj();
 const bus = useEventBus(viewDetail);
@@ -320,7 +214,10 @@ bus.on(function (e) {
   console.log("查看", e);
   cks.value.ck = true;
 });
-
+const closeDialog = function(){
+  $mitt.emit("hideAllMarker")
+  firDialogFlags.value.qyxx = false;
+}
 const busx = useEventBus(viewDetailx);
 const viewDetailFunc = function (info) {
   console.log(info);
@@ -389,9 +286,6 @@ const sum = function (arr) {
 // 实例
 const echarts = inject("echarts");
 let myChart = null;
-// let cxydata = [];
-// let coxdata = [];
-// let totalData = 0;
 const getco = async function () {
   let res = await getXqqytjfx();
   console.log(res, "看看具体到底的是写什么鬼子数据的呢");
@@ -401,6 +295,24 @@ const getco = async function () {
     coxdata.value = res.data.tj.map((item) => item.mc);
     cxydata.value = res.data.tj.map((item) => item.sz);
     console.log(coxdata.value, cxydata.value);
+    qyListData.value = res.data.tree.map((item) => {
+      if (item.spare1) {
+        let json = JSON.parse(item.spare1);
+        return {
+          ...item,
+          num:item.count,
+          treeId: item.dataType + "--" + item.id,
+          mapX: json.longitude,
+          mapY: json.latitude
+        }
+      } else {
+        return {
+          ...item,
+          num: item.count,
+          treeId: item.dataType + "--" + item.id,
+        };
+      }
+    });
   }
   // 下面就是柱状图的一些配置的了
   var chartDom = document.getElementById("columnar");
@@ -468,7 +380,7 @@ const getco = async function () {
     ],
     series: [
       {
-        name: "企业总数:" + sum(cxydata.value) + "家",
+        name: "企业总数:" + cxydata.value[0] + "家",
         type: "bar",
         barWidth: "12px",
         data: cxydata.value,
@@ -564,6 +476,7 @@ const getco = async function () {
     }, 10);
   };
   myChart.on("click", function (params) {
+    console.log("xxxxxx,", params);
     openDialog("qyxx", params);
   });
 };

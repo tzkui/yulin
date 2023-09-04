@@ -635,7 +635,7 @@ const qylxcl = (item,index) => {
                 <div class="imgBox">
                   <img :src="item.imgSrc" alt="" />
                 </div>
-                <div class="infos">
+                <div class="infos_box">
                   <div class="numBox">
                     <span class="num">{{ item.num }}</span>
                     <span class="chu">处</span>
@@ -792,7 +792,7 @@ const qylxcl = (item,index) => {
             }
           }
 
-          .infos {
+          .infos_box {
             .numBox {
               margin-bottom: 6px;
 
