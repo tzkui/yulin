@@ -193,6 +193,7 @@ const events = ref([]);
 const getEvents = function () {
   getSjxx().then((res) => {
     let l1 = ["待处理", "属实"];
+    const l2 = ["属实", "已启动响应"];
     events.value = res.data.map((item) => {
       return {
         type: item.eventLevel,
@@ -222,7 +223,7 @@ const getEvents = function () {
             des: item.eventContent,
             id: item.id,
             hideEventSupplementaryRecording: !l1.includes(item.stateName),
-            hideDispatch: item.stateName !== "属实",
+            hideDispatch: !l2.includes(item.state),
             hideEventVerification: item.stateName !== "待处理",
           },
         },

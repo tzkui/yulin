@@ -2,7 +2,7 @@ import { assetsUrl } from "@/components/map/map2d/hook/index";
 import { viewDetail, viewDetailqilx } from "@/utils/funcNames/home";
 export default {
   sj: {
-    title: "自然灾害事件",
+    title: "应急事件",
     // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 color: "xxx"
     rows: [
       { name: "事件名称", key: "name" },

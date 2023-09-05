@@ -242,7 +242,7 @@ watch(selectedList, (val, old) => {
       :class="isHide ? 'hideIcon hideIconActive' : 'hideIcon'"
       @click="isHide = !isHide"
     ></div>
-    <ul class="checkbox_list" :style="{ maxHeight: isHide ? '0' : '750px' }">
+    <ul class="checkbox_list" :style="{ maxHeight: isHide ? '0' : '800px' }">
       <li v-for="types in treeData">
         <div
           class="parent"

@@ -28,20 +28,20 @@ const ROUTE_INFO = useRoute(),
   ROUTER_INFO = useRouter();
 const data = reactive({
   navList: [
-    // {
-    //   name: "指挥调度",
-    //   path: "",
-    //   value: 3,
-    //   taburl: zhdd,
-    //   activeurl: zhddActive,
-    // },
     {
       name: "首页",
       path: "/home",
       value: 3,
-      taburl: sy,
-      activeurl: syActive,
+      taburl: zhdd,
+      activeurl: zhddActive,
     },
+    // {
+    //   name: "首页",
+    //   path: "/home",
+    //   value: 3,
+    //   taburl: sy,
+    //   activeurl: syActive,
+    // },
     {
       name: "自然灾害",
       path: "/natural",

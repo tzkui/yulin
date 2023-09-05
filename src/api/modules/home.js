@@ -30,3 +30,7 @@ export const getpersonalList = (page,limit,personalName) => request.post(`/home/
 
 // 获取应急机构
 export const getYjjg = () => request.get("/home/yjjg",{})
+
+
+// 获取事件信息
+export const getSjxx = (data) => request.post("/home/sjxx", data);

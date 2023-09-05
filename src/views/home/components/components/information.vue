@@ -3,7 +3,7 @@ import ViewBox from "@/components/common/view-box.vue";
 import { Vue3SeamlessScroll } from "vue3-seamless-scroll";
 import { icon_config } from "@/config/common.js";
 import { ref, inject, onMounted } from "vue";
-import { getSjxx } from "@/api/modules/zrzh.js";
+import { getSjxx } from "@/api/modules/home.js";
 
 const $mitt = inject("$mitt");
 
@@ -49,10 +49,11 @@ const setMarker = (data) => {
     obj[key] = (obj[key] + "").replace(" ", "&nbsp;");
   }
   const l1 = ['待处理','属实'];
+  const l2 = ["属实","已启动响应"]
   obj = {
     ...obj,
     hideEventSupplementaryRecording:!l1.includes(item.state),
-    hideDispatch: item.state !== "属实",
+    hideDispatch: !l2.includes(item.state),
     hideEventVerification: item.state !== "待处理",
   };
   // 差不多在此范围内随机生成点位

@@ -8,17 +8,18 @@ import { useEventBus } from "@vueuse/core";
 
 const bus = useEventBus("eventSupplementaryRecording");
 const listener = function (e) {
-  console.log(e);
+  getEventInfo(e.id);
   showDialog.value = true;
 };
-
-getEventInfoById("13b0daa026ad4f6ab0a6185d3fac964e").then((res) => {
-  console.log("xxxxxxxxx", res);
-  for (let key in formData.value) {
-    formData.value[key] = res.data[key];
-  }
-  console.log("xxxxx", formData.value);
-});
+const getEventInfo = function (id) {
+  getEventInfoById(id).then((res) => {
+    console.log("xxxxxxxxx", res);
+    for (let key in formData.value) {
+      formData.value[key] = res.data[key];
+    }
+    console.log("xxxxx", formData.value);
+  });
+};
 getEventTypeList().then((res) => {
   console.log("xxxxx,", res);
   const { initTree } = Common();
@@ -79,12 +80,12 @@ const totalCount = computed(() => {
     bemissingNum,
   } = formData.value;
   return (
-    (deathNum || 0) +
-    (poisoningNum || 0) +
-    (injuryNum || 0) +
-    (seriousInjuryNum || 0) +
-    (relocationNum || 0) +
-    (bemissingNum || 0)
+    (deathNum - 0 || 0) +
+    (poisoningNum - 0 || 0) +
+    (injuryNum - 0 || 0) +
+    (seriousInjuryNum - 0 || 0) +
+    (relocationNum - 0 || 0) +
+    (bemissingNum - 0 || 0)
   );
 });
 </script>
@@ -170,7 +171,7 @@ const totalCount = computed(() => {
               <el-form-item label="紧急程度" prop="region">
                 <el-select
                   v-model="formData.emergency"
-                  placeholder="Select"
+                  placeholder="请选择"
                   style="width: 100%"
                   size="large"
                 >
