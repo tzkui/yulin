@@ -74,13 +74,22 @@
       <div class="affairmain">
         <!-- 还是判断循环渲染添加进行 -->
         <template v-for="(item, index) in events" :key="index">
-          <div class="item" :class="{ active: currentIndex === index }" v-if="item.type == 1"
-            @click="setMarker('affair', item, index)" :key="index">
+          <div
+            class="item"
+            :class="{ active: currentIndex === index }"
+            v-if="item.type == 1"
+            @click="setMarker('affair', item, index)"
+            :key="index"
+          >
             <p class="itemtitle">{{ item.name }}</p>
             <p class="centers">
-              <span class="ellipsis" :title="item.info">详情: {{ item.info }}</span>
+              <span class="ellipsis" :title="item.info"
+                >详情: {{ item.info }}</span
+              >
               <span>时间: {{ item.time }}</span>
-              <span class="ellipsis" :title="item.location">地点: {{ item.location }}</span>
+              <span class="ellipsis" :title="item.location"
+                >地点: {{ item.location }}</span
+              >
             </p>
             <div class="labels">
               <p class="labels-top">
@@ -98,8 +107,12 @@
             </div>
           </div>
           <!-- 下面这个就是较大事件的 -->
-          <div class="itempro" :class="{ active: currentIndex === index }" v-else
-            @click="setMarker('affair', item, index)">
+          <div
+            class="itempro"
+            :class="{ active: currentIndex === index }"
+            v-else
+            @click="setMarker('affair', item, index)"
+          >
             <p class="itemtitle">{{ item.name }}</p>
             <p class="centers">
               <span class="ellipsis">详情: {{ item.info }}</span>
@@ -126,8 +139,17 @@
     </div>
   </div>
   <div class="isss">
-    <eject title="应急事件" :data="data" :buttondata="buttondata" :imgs="imgs" :islook="islook" @FatherMethod="FatherMethod"
-      @closeDialog="closeDialog" :top="top" :left="left"></eject>
+    <eject
+      title="应急事件"
+      :data="data"
+      :buttondata="buttondata"
+      :imgs="imgs"
+      :islook="islook"
+      @FatherMethod="FatherMethod"
+      @closeDialog="closeDialog"
+      :top="top"
+      :left="left"
+    ></eject>
   </div>
 </template>
 
@@ -170,7 +192,7 @@ const getWarnings = function () {
 const events = ref([]);
 const getEvents = function () {
   getSjxx().then((res) => {
-    let l1 = ['待处理','属实']
+    let l1 = ["待处理", "属实"];
     events.value = res.data.map((item) => {
       return {
         type: item.eventLevel,
@@ -199,12 +221,12 @@ const getEvents = function () {
             address: item.eventAddress,
             des: item.eventContent,
             id: item.id,
-    hideEventSupplementaryRecording:!l1.includes(item.stateName),
-    hideDispatch: item.stateName !== "属实",
-    hideEventVerification: item.stateName !== "待处理",
+            hideEventSupplementaryRecording: !l1.includes(item.stateName),
+            hideDispatch: item.stateName !== "属实",
+            hideEventVerification: item.stateName !== "待处理",
           },
         },
-        detailInfo: { ...item }
+        detailInfo: { ...item },
       };
     });
   });

@@ -9,6 +9,8 @@ import aqsc from "@/assets/header/head_tab2.png";
 import aqscActive from "@/assets/header/head_tab2_active.png";
 
 import zhdd from "@/assets/header/head_tab3.png";
+import sy from '@/assets/header/sy.png'
+import syActive from '@/assets/header/sy_active.png'
 import zhddActive from "@/assets/header/head_tab3_active.png";
 import jcfx from "@/assets/header/head_tab4.png";
 import jcfxActive from "@/assets/header/head_tab4_active.png";
@@ -26,12 +28,19 @@ const ROUTE_INFO = useRoute(),
   ROUTER_INFO = useRouter();
 const data = reactive({
   navList: [
+    // {
+    //   name: "指挥调度",
+    //   path: "",
+    //   value: 3,
+    //   taburl: zhdd,
+    //   activeurl: zhddActive,
+    // },
     {
-      name: "指挥调度",
-      path: "",
+      name: "首页",
+      path: "/home",
       value: 3,
-      taburl: zhdd,
-      activeurl: zhddActive,
+      taburl: sy,
+      activeurl: syActive,
     },
     {
       name: "自然灾害",
@@ -101,7 +110,7 @@ const gosjfx = () => {
           </li>
         </ul>
       </div>
-      <div class="center_word" @click="navCheckHandle(data.index)">
+      <div class="center_word">
         <img class="logo" src="@/assets/header/logo.png" alt="">
         <span class="center_title">榆林市应急指挥平台</span>
       </div>

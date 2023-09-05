@@ -2,27 +2,22 @@
 import { ref, onUnmounted } from "vue";
 import dialogVue from "@/components/common/dialog.vue";
 import { useEventBus } from "@vueuse/core";
+import {getEventInfoById} from '@/api/modules/zrzh.js'
 
+const eventInfo = ref({})
+const getEventInfo = function(id){
+  getEventInfoById(id).then(res=>{
+    eventInfo.value = res.data
+  })
+}
 const bus = useEventBus("eventView");
 const listener = function (e) {
-  console.log(e);
+  getEventInfo(e.id)
   showDialog.value = true;
 };
 bus.on(listener);
 const showDialog = ref(false);
 
-const props = defineProps({
-  info: {
-    type: Object,
-    default: {},
-  },
-});
-
-defineExpose({
-  openDialog() {
-    showDialog.value = true;
-  },
-});
 onUnmounted(() => {
   bus.off(listener);
 });
@@ -32,7 +27,7 @@ onUnmounted(() => {
   <Teleport to="#app">
     <dialogVue
       :dialogValue="showDialog"
-      :title="'事件信息1111'"
+      :title="'事件信息'"
       width="850px"
       height="556px"
       top="500px"
@@ -42,38 +37,38 @@ onUnmounted(() => {
         <div class="sjform">
           <div>
             <p>
-              事件编号 : <span class="small">{{ info.eventNumber }}</span>
+              事件编号 : <span class="small">{{ eventInfo.eventNumber }}</span>
             </p>
             <p>
-              事件类型 : <span class="small">{{ info.typeName }}</span>
-            </p>
-          </div>
-          <div>
-            <p>
-              事发时间 : <span class="small">{{ info.reportDate }}</span>
-            </p>
-            <p>
-              所在区域 : <span class="small">{{ info.xzqhName }}</span>
+              事件类型 : <span class="small">{{ eventInfo.typeName }}</span>
             </p>
           </div>
           <div>
             <p>
-              事件等级 : <span class="small">{{ info.eventLevelName }}</span>
+              事发时间 : <span class="small">{{ eventInfo.reportDate }}</span>
             </p>
             <p>
-              紧急程度 : <span class="small">{{ info.eventLevelName }}</span>
+              所在区域 : <span class="small">{{ eventInfo.xzqhName }}</span>
+            </p>
+          </div>
+          <div>
+            <p>
+              事件等级 : <span class="small">{{ eventInfo.eventLevelName }}</span>
+            </p>
+            <p>
+              紧急程度 : <span class="small">{{ eventInfo.eventLevelName }}</span>
             </p>
           </div>
           <!-- 详细地质 -->
           <div>
             <p>
-              详细地址 : <span class="big">{{ info.eventAddress }}</span>
+              详细地址 : <span class="big">{{ eventInfo.eventAddress }}</span>
             </p>
           </div>
           <div class="describe">
             <p>
               事件描述 :
-              <span class="big">{{ info.eventContent }}</span>
+              <span class="big">{{ eventInfo.eventContent }}</span>
             </p>
           </div>
           <div class="annex">

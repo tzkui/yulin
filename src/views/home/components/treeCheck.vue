@@ -20,7 +20,7 @@
         ref="elTreeRef"
       >
         <template #default="{ node, data }">
-          <span class="custom-tree-node" :id="data.type+'checkbox'">
+          <span class="custom-tree-node" :id="data.type + 'checkbox'">
             <img
               @click="
                 () => {
@@ -45,7 +45,7 @@ import { icon_config } from "@/config/common.js";
 import entityDict from "@/utils/entityDict.js";
 import { fxyhLists, yjzyLists, spjkLists } from "@/api/mock_tzk.js";
 import { getYjjg } from "@/api/modules/home.js";
-import {getFxgz} from '@/api/modules/zrzh.js'
+import { getFxgz } from "@/api/modules/zrzh.js";
 const $mitt = inject("$mitt");
 const checked_all = ref(false);
 const elTreeRef = ref();
@@ -55,31 +55,33 @@ const defaultProps = {
   label: "name",
 };
 const otherLists = {
-  jsd: [{
-    markerType: "jsd",
-    id: "14",
-    icon: "/images/marker/icon_jsd.png",
-    name: "积水点信息",
-    maekerList: [
-      {
-        markerType: "jsd",
-        id: "14_1",
-        icon: "/images/marker/icon_jsd.png",
-        lng: '109.184485',
-        lat: "38.397187",
-        name: "积水点信息",
-        label: { text: "积水点信息", font_size: 16 },
-        dialogType: "jsd",
-        details: {
-          name: "榆林市神木市尔林兔镇贾家梁村",
-          info: "0.95米深度",
-          person: "王厅夏",
-          phone: "17323215510",
-        }
-      },
-    ]
-  },]
-}
+  jsd: [
+    {
+      markerType: "jsd",
+      id: "14",
+      icon: "/images/marker/icon_jsd.png",
+      name: "积水点信息",
+      maekerList: [
+        {
+          markerType: "jsd",
+          id: "14_1",
+          icon: "/images/marker/icon_jsd.png",
+          lng: "109.184485",
+          lat: "38.397187",
+          name: "积水点信息",
+          label: { text: "积水点信息", font_size: 16 },
+          dialogType: "jsd",
+          details: {
+            name: "榆林市神木市尔林兔镇贾家梁村",
+            info: "0.95米深度",
+            person: "王厅夏",
+            phone: "17323215510",
+          },
+        },
+      ],
+    },
+  ],
+};
 let data = ref([]);
 let resource_data = ref([
   {
@@ -162,32 +164,32 @@ let resource_data = ref([
   },
 ]);
 let checkedData = ref();
-const yjjgList = ref([])
+const yjjgList = ref([]);
 const getyjjgData = function () {
   getYjjg().then((res) => {
     console.log("xxxxx", res);
-    yjjgList.value = res.data
-    sessionStorage.setItem("yjjgListData",JSON.stringify(yjjgList.value))
+    yjjgList.value = res.data;
+    sessionStorage.setItem("yjjgListData", JSON.stringify(yjjgList.value));
   });
 };
-const getYhddData = function(){
-  getFxgz().then(res=>{
-    console.log("xxxxx",res)
-    let arr = res.data.jsd.jh.map(item=>{
+const getYhddData = function () {
+  getFxgz().then((res) => {
+    console.log("xxxxx", res);
+    let arr = res.data.jsd.jh.map((item) => {
       return {
         ...item,
         name: item.jswz,
         info: item.jsyy,
         person: item.zrr,
-        phone: item.lxdh
-      }
+        phone: item.lxdh,
+      };
     });
-    sessionStorage.setItem("jsdListData",JSON.stringify(arr))
-  })
-}
+    sessionStorage.setItem("jsdListData", JSON.stringify(arr));
+  });
+};
 onMounted(() => {
-  getyjjgData()
-  getYhddData()
+  getyjjgData();
+  getYhddData();
   data.value = resource_data.value.map((item, index) => {
     return { ...item, id: index };
   });
@@ -222,12 +224,13 @@ const checkItem = (obj, checked) => {
       let list = JSON.parse(listData);
       for (let i = 0; i < list.length; i++) {
         let info = list[i];
-        if(!info.mapX || !info.mapY){
+        if (!info.mapX || !info.mapY) {
           continue;
         }
-        const model = fxyhLists[obj.type] || yjzyLists[obj.type] || otherLists[obj.type];
+        const model =
+          fxyhLists[obj.type] || yjzyLists[obj.type] || otherLists[obj.type];
         if (model) {
-          console.log("zzzzz",info)
+          console.log("zzzzz", info);
           let markerData = JSON.parse(JSON.stringify(model[0].maekerList[0]));
           markerData.id = info.id;
           markerData.lng = info.mapX;
@@ -247,36 +250,36 @@ const checkItem = (obj, checked) => {
               markerData.details[key] = info[key] || "-";
             }
           }
-          console.log("zzzzzz",markerData)
+          console.log("zzzzzz", markerData);
           $mitt.emit("addMarker", markerData);
           $mitt.emit("openPopup", markerData);
           $mitt.emit("flyTo", markerData);
         }
       }
     }
+    if(elTreeRef.value.getCheckedNodes().length===12){
+      checked_all.value = true;
+    }
   } else {
     $mitt.emit("changeMarkerState", {
       markerType: obj.type,
       show: false,
     });
+    checked_all.value = false;
   }
 };
 const checkAll = (val) => {
-  $mitt.emit("hideAllMarker")
+  $mitt.emit("hideAllMarker");
+  elTreeRef.value.setCheckedNodes([]);
   if (val) {
-    console.log(data.value)
-    elTreeRef.value.setCheckedNodes(data.value);
-    checkedData = elTreeRef.value.getCheckedNodes();
-    console.log(checkedData)
-    checkedData.forEach(item=>{
-      let dom = document.getElementById(item.type+"checkbox");
-      console.log(dom.previousElementSibling)
-      dom?.previousElementSibling?.children[0].click()
-    })
-  } else {
-    
     nextTick(() => {
-      elTreeRef.value.setCheckedNodes([]);
+      elTreeRef.value.setCheckedNodes(data.value);
+      let checkedData = elTreeRef.value.getCheckedNodes();
+      checkedData.forEach((item) => {
+        let dom = document.getElementById(item.type + "checkbox");
+        console.log(dom.previousElementSibling);
+        dom?.previousElementSibling?.children[0].click();
+      });
     });
   }
 };
