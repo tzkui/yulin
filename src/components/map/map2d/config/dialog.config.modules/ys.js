@@ -60,15 +60,10 @@ export default {
     title: "危化企业预警信息",
     // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 color: "xxx"
     rows: [
-      { name: '企业名称', key: 'compony' },
-      { name: '预警等级', key: 'name' },
-      { name: '预警时间', key: 'job' },
-      // { name: '事发地点', key: 'aphone', iconUrl: assetsUrl('/icons/video.png'), funcName: "phone" },
-      // { name: '事件描述', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName: "phone" },
-      { name: '预警描述', key: 'aphone' },
-      // { name: '事件描述', key: 'phone'},
-      // { name: '主要职责', key: 'duty', },
-
+      { name: '名称', key: 'name' },
+      { name: '预警等级', key: 'level' },
+      { name: '预警时间', key: 'time' },
+      { name: '预警描述', key: 'content' },
     ],
     // 右下角的按钮
     btns: [
@@ -76,18 +71,18 @@ export default {
         name: "查看",
         funcName: "eventView"
       },
-      {
-        name: "补录",
-        funcName: "eventSupplementaryRecording"
-      },
-      {
-        name: "指挥调度",
-        funcName: "goDispatchPage"
-      },
-      {
-        name: "核实",
-        funcName: "eventVerification"
-      }
+      // {
+      //   name: "补录",
+      //   funcName: "eventSupplementaryRecording"
+      // },
+      // {
+      //   name: "指挥调度",
+      //   funcName: "goDispatchPage"
+      // },
+      // {
+      //   name: "核实",
+      //   funcName: "eventVerification"
+      // }
     ],
     // 左下角的列表
     leftBtns: [

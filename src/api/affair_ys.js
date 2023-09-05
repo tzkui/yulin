@@ -148,7 +148,7 @@ export const securemarList = [
         lng: '109.984485',
         lat: "38.597187",
         name: "事件1",
-        label: { text: "预警一", font_size: 16 },
+        label: { text: "预警", font_size: 16 },
         dialogType: "whqyxx",
         details: {
           name: "较大",

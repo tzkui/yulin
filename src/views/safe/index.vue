@@ -1,4 +1,3 @@
-
 <script setup>
 // import pageHeader from "@/components/common/pageHeader.vue";
 import pageLeftContent from "@/components/common/pageLeftContent.vue";
@@ -10,7 +9,7 @@ import right from "./components/right.vue";
 import integratedCommunication from "./components/integratedCommunication.vue";
 import { yjsjDetails, enterpriseLists } from "@/api/mock_tzk.js";
 // 导入需要打点的数据
-import { qylxlist } from "../../api/affair_ys"
+import { qylxlist } from "../../api/affair_ys";
 
 import { viewDetailqilx } from "@/utils/funcNames/ys";
 import { useEventBus } from "@vueuse/core";
@@ -27,107 +26,22 @@ const showDialog = ref({
 // 决定这些框线是否需要隐藏的东东
 const showDialog2 = ref({
   ck: false,
-  bl: false,
   zh: false,
-  hs: false,
 });
 // 关闭相对应弹窗的方法
 const closeDialog1 = function () {
-  showDialog2.value.ck = false
-}
-const closeDialog2 = function () {
-  showDialog2.value.hs = false
-}
-const closeDialog3 = function () {
-  showDialog2.value.bl = false
-}
-
+  showDialog2.value.ck = false;
+};
 // 事故等级||事故类型 数据
 const eventLevelPopupData = ref({
-  title: '一般事件',
-  data: [
-    {
-      title: 'XXX化工厂',
-      id: 'hgc_1',
-      rows: [
-        {
-          label: '具体地点:',
-          value: '榆林市 陕西省榆林市榆阳区肤施路',
-        },
-        {
-          label: '详细描述:',
-          value: '化工厂未达到检测标准，排放工业污水',
-        },
-        {
-          label: '事件类型:',
-          value: '污水排放',
-          inline: 'inline_3'
-        },
-        {
-          label: '事发区域:',
-          value: '榆林市',
-          inline: 'inline_3'
-        },
-        {
-          label: '上报时间:',
-          value: '2023-07-11 18:23:39',
-          inline: 'inline_3'
-        },
-      ]
-    },
-  ]
-})
-
-// 定义一个绑定事件核实这里的表单数据
-const hsform = ref({
-  name: "自然灾害山体崩塌事件",
-  time: "2023-07-11 18:23:39",
-  grade: "",
-  region: "横山区",
-  address: "横山区156号只能街道",
-  describe: "做好防护准备",
-  state: '1',
-  type: '1',
-  mo: "短信模板"
-})
-
-// 下面定义一个就是关于这个bl的相关的这个数据
-const blform = ref({
-  bh: '577454545',
-  lx: '1',
-  sj: '2022-10-21',
-  name: '大哥大',
-  dj: '1',
-  cd: '1',
-  swqk: {
-    xzgy: 9999,
-    hjsw: 999,
-    hjsz: 999,
-    hjzs: 99,
-    hjqs: 9,
-    hjbk: 999,
-    hjzd: 999,
-  },
-  quyu: "榆阳区",
-  xxdz: "渝北区",
-  dtdw: {
-    jd: 198.55,
-    wd: 65.656,
-    gc: 557.45
-  },
-  xxdz: "撒娇的和孤岛惊魂",
-  bsry: "测试",
-  bsmc: "收到",
-  bssj: "2022-12-10",
-  lxdh: "17858945569",
-
-})
-
+  title: "一般事件",
+  data: [],
+});
 
 const enterpriseList = ref([]);
 // 开启弹窗
 const openDialog = function (key, info) {
-  // $mitt.emit("hideAllMarker")
+  $mitt.emit("hideAllMarker")
   // 应急事件
   if (key === "yjsj") {
     yjsjDetail.value = yjsjDetails[info.id];
@@ -138,70 +52,73 @@ const openDialog = function (key, info) {
     enterpriseList.value = enterpriseLists.slice(i);
   }
   // 事故等级||事故类型
-  if (key === 'eventLevel') {
+  if (key === "eventLevel") {
     // 没有数据 return
-    if (!info.num) return
-    eventLevelPopupData.value.title = info.name
-
-    // let mardata = qylxlist[0].maekerList[0]
-    let position = [109.92832, 38.27419]
-
-    let arr = []
-    for (let index = 0; index < info.num ; index++) {
-      console.log(info.jh,"[index]")
-      console.log(info.jh[index],"ppp")
-      // 差不多在此范围内随机生成点位
+    if (!info.num) return;
+    eventLevelPopupData.value.title = info.name;
+    console.log(info);
+    let arr = [];
+    for (let index = 0; index < info.num; index++) {
+      let item = info.jh[index];
+    let l1 = ["待处理", "属实"];
+    const l2 = ["属实", "已启动响应"];
       arr.push({
         // title: index + '号化工厂' + info.id,
-        title: info.jh[index].eventName,
-        id: info.jh[index].id,//如此唯一
+        title: item.eventName,
+        id: item.id, //如此唯一
+        stateName: item.stateName,
         mardata: {
-          markerType: "sgxx",
-          id: info.jh[index].id + '_' + index,
-          icon: "/images/marker/icon_jigou.png",
-          lng: info.jh[index].mapX,
-          lat: info.jh[index].mapY,
-          name: '化工厂',
-          label: { text: info.jh[index].eventName, font_size: 16 },
-          dialogType: "sgxx",
+          markerType: "sj",
+          // markerType: "sgxx",
+          id: item.id,
+          icon: "/images/marker/1.gif",
+          lng: item.mapX,
+          lat: item.mapY,
+          name: "化工厂",
+          label: { text: item.eventName, font_size: 16 },
+          dialogType: "sj",
+          // dialogType: "sgxx",
           details: {
-            eventName: info.jh[index].eventName,
-            eventAddress: info.jh[index].eventAddress,
-            typeName: info.jh[index].typeName,
-            eventLevelName: info.jh[index].eventLevelName,
-            xzqhName: info.jh[index].xzqhName,
-          }
+            name: item.eventName,
+            location: item.eventAddress,
+            typeName: item.typeName,
+            time: item.reportDate,
+            cont: item.eventContent,
+            id: item.id,
+            popupTitle: "事故类型",
+            hideEventSupplementaryRecording: !l1.includes(item.stateName),
+            hideDispatch: !l2.includes(item.stateName),
+            hideEventVerification: item.stateName !== "待处理",
+          },
         },
         rows: [
           {
-            label: '具体地点:',
-            value:  info.jh[index].eventAddress,
+            label: "具体地点:",
+            value: item.eventAddress,
           },
           {
-            label: '详细描述:',
-            value:info.jh[index].eventContent,
+            label: "详细描述:",
+            value: item.eventContent,
           },
           {
-            label: '事件类型:',
-            value: info.jh[index].typeName,
-            inline: 'inline_3'
+            label: "事件类型:",
+            value: item.typeName,
+            inline: "inline_3",
           },
           {
-            label: '事发区域:',
-            value: info.jh[index].xzqhName,
-            inline: 'inline_3'
+            label: "事发区域:",
+            value: item.xzqhName,
+            inline: "inline_3",
           },
           {
-            label: '上报时间:',
-            value: info.jh[index].updateTime,
-            inline: 'inline_3'
+            label: "上报时间:",
+            value: item.updateTime,
+            inline: "inline_3",
           },
-        ]
-      })
-      console.log("zzzzzzzzzzzzz",arr)
+        ],
+      });
     }
-    eventLevelPopupData.value.data = arr
-
+    eventLevelPopupData.value.data = arr;
   }
   showDialog.value[key] = true;
 };
@@ -210,38 +127,38 @@ const closeDialog = function (key) {
 };
 
 // 定义一个变量,这个就是关于企业类型弹窗是否展示的一个列表的
-const qylxfxshow = ref(false)
+const qylxfxshow = ref(false);
 // 关闭的方法
 const closeqylxfxshow = function () {
-  qylxfxshow.value = false
-}
+  qylxfxshow.value = false;
+};
 // 定义一个传递过来的值
-const qylxdata = ref([])
+const qylxdata = ref([]);
 // 下面就是接收子组件的数据
 const getValue = (value) => {
-  showDialog2.value = value
-}
+  showDialog2.value = value;
+};
 
 // 这里还要再定义一个这个弹窗的标题名字
-const qyfxdjtitle = ref()
+const qyfxdjtitle = ref();
 let i = ref(null);
 // 下面接收子组件传递过来的值
-const getValue10 = (value,index, isshow) => {
-  console.log(value, index,"我就是儿子传递过来的数据的======>")
-  i.value = index
-  qylxdata.value = value.qydatas
+const getValue10 = (value, index, isshow) => {
+  console.log(value, index, "我就是儿子传递过来的数据的======>");
+  i.value = index;
+  qylxdata.value = value.qydatas;
 
-  qylxfxshow.value = isshow
-  qyfxdjtitle.value = value.lx
-  console.log(qylxdata.value, "我看看这个现在到底变成了什么")
-}
+  qylxfxshow.value = isshow;
+  qyfxdjtitle.value = value.lx;
+  console.log(qylxdata.value, "我看看这个现在到底变成了什么");
+};
 // 下面就是点击这个查看弹窗的事件
 const busqy = useEventBus(viewDetailqilx);
 // 查看
 busqy.on(function (e) {
   // 这里判断我点击的是谁
   console.log(e, "看看有些什么参数");
-  qyxxshow.value = true
+  qyxxshow.value = true;
 });
 // 下面就是点击表格的时候就要进行这个打点的了
 // 定义一个数据,存储之前有的这个打了点的数据了,然后在点击其他的时候需要把这个清楚掉的
@@ -251,8 +168,8 @@ let monedata = ref("");
 let mmid = ref("");
 
 const qylxdd = function (item) {
-  getdatasj(i.value)
-  console.log(item, "准备打点的了看看有些什么东西")
+  getdatasj(i.value);
+  console.log(item, "准备打点的了看看有些什么东西");
   if (iscun.value) {
     mmid.value = item.marker.id;
     let mardata = item.marker;
@@ -262,14 +179,14 @@ const qylxdd = function (item) {
     // 然后还要把我打了点的数据保存下来,待会把她清楚掉
     monedata.value = item.marker;
     iscun.value = false;
-    qylxfxshow.value = false
+    qylxfxshow.value = false;
   } else {
     if (item.marker.id == mmid.value) {
       mmid.value = item.marker.id;
       // 决定要不要清楚就看你的了
       // $mitt.emit("changeMarkerState", monedata.value);
       iscun.value = true;
-      qylxfxshow.value = false
+      qylxfxshow.value = false;
     } else {
       // 下面这个就表示已经打了点的了,需要把之前的点取消掉
       // 明白我点的是哪一个
@@ -286,43 +203,45 @@ const qylxdd = function (item) {
       // 然后还要把我打了点的数据保存下来,待会把她清楚掉
       monedata.value = item.marker;
       iscun.value = false;
-      qylxfxshow.value = false
+      qylxfxshow.value = false;
     }
   }
-}
+};
 
 // 把打点的数据放进行添加进去
 const getdatasj = function (index) {
-
   qylxdata.value.forEach((v, i) => {
-    
     qylxdata.value[i].marker = qylxlist[0].maekerList[index];
-  })
+  });
 };
 
-const currentEventLevelType = ref({ markerType: '', id: '' })
+const currentEventLevelType = ref({ markerType: "", id: "" });
 // 点击事故等级||事故类型弹框列表 撒点
 const clickEventLevel = (item) => {
-  closeDialog('eventLevel')
+  closeDialog("eventLevel");
 
-  // 先清除之前的 再撒点
-  if (currentEventLevelType.value.markerType) {
-    $mitt.emit('changeMarkerState', { markerType: currentEventLevelType.value.markerType, id: currentEventLevelType.value.id, show: false })
-  }
+  // // 先清除之前的 再撒点
+  // if (currentEventLevelType.value.markerType) {
+  //   $mitt.emit("changeMarkerState", {
+  //     markerType: currentEventLevelType.value.markerType,
+  //     id: currentEventLevelType.value.id,
+  //     show: false,
+  //   });
+  // }
   $mitt.emit("addMarker", item.mardata);
   $mitt.emit("openPopup", item.mardata);
   $mitt.emit("openPopup", item.mardata);
 
-  currentEventLevelType.value.markerType = item.mardata.markerType
-  currentEventLevelType.value.id = item.mardata.id
-}
+  currentEventLevelType.value.markerType = item.mardata.markerType;
+  currentEventLevelType.value.id = item.mardata.id;
+};
 
 // 下面就是这个企业信息弹窗的了
-const qyxxshow = ref(false)
+const qyxxshow = ref(false);
 // 关闭方法
 const closeqyxxshow = function () {
-  qyxxshow.value = false
-}
+  qyxxshow.value = false;
+};
 </script>
 
 <template>
@@ -331,24 +250,46 @@ const closeqyxxshow = function () {
     <!-- <pageHeader></pageHeader> -->
     <!-- 左侧内容 -->
     <pageLeftContent class="leftbig">
-      <left @openDialog="(type, info) => { openDialog(type, info) }" @getValue="getValue"></left>
-
+      <left
+        @openDialog="
+          (type, info) => {
+            openDialog(type, info);
+          }
+        "
+        @getValue="getValue"
+      ></left>
     </pageLeftContent>
     <!-- 右侧内容 -->
     <pageRightContent>
-      <right @openDialog="(type, info) => { openDialog(type, info) }" @getValue10="getValue10"></right>
+      <right
+        @openDialog="
+          (type, info) => {
+            openDialog(type, info);
+          }
+        "
+        @getValue10="getValue10"
+      ></right>
       <!-- <ViewBox left="0" top="0" width="430" height="166" title="公共的内容模块">
         我是右边的内容
       </ViewBox> -->
     </pageRightContent>
     <!-- 视频监控 -->
-    <integratedCommunication :show-dialog="showDialog.video" @closeVideoDialog="closeDialog('video')">
+    <integratedCommunication
+      :show-dialog="showDialog.video"
+      @closeVideoDialog="closeDialog('video')"
+    >
     </integratedCommunication>
 
     <!-- 应急事件 -->
-    <dialogVue :dialogValue="showDialog.yjsj" :title="'应急事件'" width="864px" height="476px" :top="500"
-      @closeHandle="closeDialog('yjsj')">
-      <div class="eventList ">
+    <dialogVue
+      :dialogValue="showDialog.yjsj"
+      :title="'应急事件'"
+      width="864px"
+      height="476px"
+      :top="500"
+      @closeHandle="closeDialog('yjsj')"
+    >
+      <div class="eventList">
         <div class="title">灾害信息</div>
         <table class="table-box">
           <tr>
@@ -371,10 +312,15 @@ const closeqyxxshow = function () {
         <div class="title">灾害风险图片或视频</div>
         <div class="img-lie fl-f">
           <div class="lie">
-            <el-image style="width: 100px; height: 100px"
+            <el-image
+              style="width: 100px; height: 100px"
               :src="'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg'"
-              :preview-src-list="['https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg']"
-              :initial-index="4" fit="cover" />
+              :preview-src-list="[
+                'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg',
+              ]"
+              :initial-index="4"
+              fit="cover"
+            />
           </div>
           <div class="lie"></div>
         </div>
@@ -386,8 +332,13 @@ const closeqyxxshow = function () {
     </dialogVue>
 
     <!-- 企业信息 -->
-    <dialogVue :dialogValue="showDialog.qyxx" :title="'企业信息'" width="844px" height="557px"
-      @closeHandle="closeDialog('qyxx')">
+    <dialogVue
+      :dialogValue="showDialog.qyxx"
+      :title="'企业信息'"
+      width="844px"
+      height="557px"
+      @closeHandle="closeDialog('qyxx')"
+    >
       <div class="enterprise">
         <table>
           <tr>
@@ -412,10 +363,15 @@ const closeqyxxshow = function () {
       </div>
     </dialogVue>
 
-
     <!-- 下面再来一个,这个就是事件信息的一个弹窗口的了 -->
-    <dialogVue :dialogValue="showDialog2.ck" :title="'事件信息'" width="850px" height="556px" top="500px"
-      @closeHandle="closeDialog1()">
+    <dialogVue
+      :dialogValue="showDialog2.ck"
+      :title="'事件信息'"
+      width="850px"
+      height="556px"
+      top="500px"
+      @closeHandle="closeDialog1()"
+    >
       <div class="sjmain">
         <!-- 小标题部分 -->
         <!-- <div class="smalltitle" @click="smacl">
@@ -425,28 +381,32 @@ const closeqyxxshow = function () {
         <!-- 表单的信息等部分的内容了 -->
         <div class="sjform">
           <div>
-            <p> 事件编号 : <span class="small">1556488</span></p>
-            <p> 事件类型 : <span class="small">山体滑坡</span></p>
+            <p>事件编号 : <span class="small">1556488</span></p>
+            <p>事件类型 : <span class="small">山体滑坡</span></p>
           </div>
           <div>
-            <p> 事发时间 : <span class="small">2023-07-11 18:23:39</span></p>
-            <p> 所在区域 : <span class="small">等6845454</span></p>
+            <p>事发时间 : <span class="small">2023-07-11 18:23:39</span></p>
+            <p>所在区域 : <span class="small">等6845454</span></p>
           </div>
           <div>
-            <p> 事件等级 : <span class="small">较大</span></p>
-            <p> 紧急程度 : <span class="small">1556488</span></p>
+            <p>事件等级 : <span class="small">较大</span></p>
+            <p>紧急程度 : <span class="small">1556488</span></p>
           </div>
           <!-- 详细地质 -->
           <div>
             <p>详细地质 : <span class="big">陕西省榆林市横山区李家亏</span></p>
           </div>
           <div class="describe">
-            <p>事件描述 : <span
-                class="big ">区李家亏陕西省榆林市横山区李家亏陕西省榆林市横山区李家亏陕西省榆林市横山区李家亏陕西省榆林市横山区李家亏陕西省榆林市横山区李家亏陕西省榆林市横山区李家亏陕西省榆林市横山区李家亏陕西省榆林市横山区李家亏市横山区李家亏</span>
+            <p>
+              事件描述 :
+              <span class="big"
+                >区李家亏陕西省榆林市横山区李家亏陕西省榆林市横山区李家亏陕西省榆林市横山区李家亏陕西省榆林市横山区李家亏陕西省榆林市横山区李家亏陕西省榆林市横山区李家亏陕西省榆林市横山区李家亏陕西省榆林市横山区李家亏市横山区李家亏</span
+              >
             </p>
           </div>
           <div class="annex">
-            <p>附件信息 :<span class="big">
+            <p>
+              附件信息 :<span class="big">
                 <!-- <img src="" alt="">
                 <img src="" alt=""> -->
               </span>
@@ -458,16 +418,31 @@ const closeqyxxshow = function () {
   </div>
 
   <!-- 事故等级与事故类型 弹框 -->
-  <dialogVue :dialogValue="showDialog.eventLevel" :title="eventLevelPopupData.title" width="850px" height="350px"
-    top="350px" @closeHandle="closeDialog('eventLevel')">
-    <div class="level_and_type" :style="{ 'maxHeight': (350 - 70) + 'px' }">
-      <div class="event_list" v-for="(item, index) in eventLevelPopupData.data" :key="index"
-        @click="clickEventLevel(item)">
+  <dialogVue
+    :dialogValue="showDialog.eventLevel"
+    :title="eventLevelPopupData.title"
+    width="850px"
+    height="350px"
+    top="350px"
+    @closeHandle="closeDialog('eventLevel')"
+  >
+    <div class="level_and_type" :style="{ maxHeight: 350 - 70 + 'px' }">
+      <div
+        class="event_list"
+        v-for="(item, index) in eventLevelPopupData.data"
+        :key="index"
+        @click="clickEventLevel(item)"
+      >
         <div class="event_title">
           事故名称：{{ item.title }}
+          <div class="state" :class="item.stateName==='已结案'?'green':'yellow'">{{ item.stateName }}</div>
         </div>
         <div class="event_cont_box">
-          <div :class="{ 'event_cont': true, [child.inline]: true }" v-for="(child, cindex) in item.rows" :key="cindex">
+          <div
+            :class="{ event_cont: true, [child.inline]: true }"
+            v-for="(child, cindex) in item.rows"
+            :key="cindex"
+          >
             <div class="list">
               <span class="label">{{ child.label }}</span>
               <div class="value">{{ child.value }}</div>
@@ -479,8 +454,14 @@ const closeqyxxshow = function () {
   </dialogVue>
 
   <!-- 下面这个就是企业类型分析的这个弹框的了 -->
-  <dialogVue :dialogValue="qylxfxshow" :title="qyfxdjtitle" width="850px" height="446px" top="500px"
-    @closeHandle="closeqylxfxshow()">
+  <dialogVue
+    :dialogValue="qylxfxshow"
+    :title="qyfxdjtitle"
+    width="850px"
+    height="446px"
+    top="500px"
+    @closeHandle="closeqylxfxshow()"
+  >
     <div class="qilx">
       <div class="title">
         <span></span>
@@ -497,7 +478,12 @@ const closeqyxxshow = function () {
           <span>联系电话</span>
         </div>
         <div class="mainitems">
-          <div class="mainitem" v-for="(item, index) in qylxdata" :key="index" @click="qylxdd(item)">
+          <div
+            class="mainitem"
+            v-for="(item, index) in qylxdata"
+            :key="index"
+            @click="qylxdd(item)"
+          >
             <span>{{ item.name }}</span>
             <span>{{ item.fxdj }}</span>
             <span>{{ item.sgcs }}</span>
@@ -511,8 +497,14 @@ const closeqyxxshow = function () {
   </dialogVue>
 
   <!-- 下面这个就是点击查看弹出企业详细信息的弹框的了 -->
-  <dialogVue :dialogValue="qyxxshow" :title="'企业信息'" width="850px" height="486px" top="500px"
-    @closeHandle="closeqyxxshow()">
+  <dialogVue
+    :dialogValue="qyxxshow"
+    :title="'企业信息'"
+    width="850px"
+    height="486px"
+    top="500px"
+    @closeHandle="closeqyxxshow()"
+  >
     <div class="qilx">
       <div class="title">
         <span></span>
@@ -608,13 +600,10 @@ const closeqyxxshow = function () {
             <p>榆阳区123号</p>
           </div>
         </div>
-
       </div>
     </div>
   </dialogVue>
 </template>
-
-
 
 <style scoped lang="less">
 // 下面这个就是企业信息弹窗的样式的了
@@ -875,7 +864,6 @@ const closeqyxxshow = function () {
       color: #dff2ff;
     }
   }
-
 }
 
 // 预警信息
@@ -1045,15 +1033,27 @@ const closeqyxxshow = function () {
     .event_title {
       height: 32px;
       background: rgba(0, 163, 206, 0.15);
-      box-shadow: inset 4px 0px 0px 0px #00A3CE;
+      box-shadow: inset 4px 0px 0px 0px #00a3ce;
 
       font-size: 16px;
       font-family: Source Han Sans SC-Regular, Source Han Sans SC;
       font-weight: 400;
-      color: #FFFFFF;
+      color: #ffffff;
       line-height: 32px;
       text-indent: 10px;
       margin-bottom: 10px;
+      position: relative;
+      .state {
+        position: absolute;
+        right: 30px;
+        top: 0;
+      }
+      .green{
+        color: #20e6a4
+      }
+      .yellow{
+        color: #efad2c;
+      }
     }
 
     .event_cont_box {
@@ -1077,7 +1077,7 @@ const closeqyxxshow = function () {
           font-size: 16px;
           font-family: Source Han Sans SC-Regular, Source Han Sans SC;
           font-weight: 400;
-          color: #FFFFFF;
+          color: #ffffff;
           line-height: 24px;
           margin-bottom: 8px;
 
@@ -1085,13 +1085,12 @@ const closeqyxxshow = function () {
             width: 70px;
             margin-right: 20px;
           }
-          .value{
+          .value {
             flex: 1;
           }
         }
       }
     }
-
   }
 }
 </style>

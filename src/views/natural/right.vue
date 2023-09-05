@@ -223,7 +223,7 @@ const getEvents = function () {
             des: item.eventContent,
             id: item.id,
             hideEventSupplementaryRecording: !l1.includes(item.stateName),
-            hideDispatch: !l2.includes(item.state),
+            hideDispatch: !l2.includes(item.stateName),
             hideEventVerification: item.stateName !== "待处理",
           },
         },

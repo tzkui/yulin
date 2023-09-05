@@ -46,7 +46,7 @@ if (dialogConfigs[props.dialogType]) {
     throw new Error("请配置title，弹窗标题");
   }
   main_list.value = info.rows;
-  title.value = info.title;
+  title.value = props.details.popupTitle ||  info.title;
   btns.value = info.btns || [];
   leftBtns.value = info.leftBtns || [];
 }

@@ -16,7 +16,7 @@
             <span class="icontwo" v-if="item.name !== '较大'">{{
               item.name
             }}</span>
-            <span class="title">{{ item.content }}</span>
+            <span class="title">{{ item.title }}</span>
             <span class="time">{{ item.rqStr }}</span>
           </div>
           <!-- 下面是内容部分的 -->
@@ -169,7 +169,22 @@ const getdatasj = async function () {
     });
   }
   secureList.value.forEach((v, i) => {
-    secureList.value[i].marker = securemarList[0].maekerList[i];
+    v.marker = {
+      markerType: "wxx",
+        id: v.id,
+        icon: "/images/marker/1.gif",
+        lng: '109.984485',
+        lat: "38.597187",
+        name: "预警",
+        label: { text: "预警", font_size: 16 },
+        dialogType: "whqyxx",
+        details: {
+          name: v.title,
+          level: v.eventLvl===0?'一般':'重大',
+          time: v.rqStr,
+          content: v.content,
+        }
+    }
   });
 };
 // 定义数据,决定是查看还是隐藏
@@ -238,6 +253,7 @@ let mmid = ref("");
 const currentIndex = ref();
 const setMarker = function (type, item, index) {
   if (iscun.value) {
+    console.log("xxxx",item)
     mmid.value = item.marker.id;
     let mardata = item.marker;
     $mitt.emit("addMarker", mardata);

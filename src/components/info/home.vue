@@ -11,6 +11,7 @@ import eventVerification from "../common/eventVerification.vue";
 import eventSupplementaryRecording from '../common/eventSupplementaryRecording.vue'
 import eventView from '../common/eventView.vue'
 import map2d from "@/components/map/map2d/map.vue";
+import selectLocation from "../common/selectLocation.vue";
 
 import { assetsUrl } from "@/components/map/map2d/hook/index";
 import { useEventBus } from "@vueuse/core";
@@ -136,6 +137,7 @@ const handleScreenAuto = () => {
       <eventVerification></eventVerification>
       <eventSupplementaryRecording></eventSupplementaryRecording>
       <eventView></eventView>
+      <selectLocation></selectLocation>
       <router-view></router-view>
     </div>
   </div>
