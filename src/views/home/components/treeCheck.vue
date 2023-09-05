@@ -20,7 +20,7 @@
         ref="elTreeRef"
       >
         <template #default="{ node, data }">
-          <span class="custom-tree-node">
+          <span class="custom-tree-node" :id="data.type+'checkbox'">
             <img
               @click="
                 () => {
@@ -44,7 +44,8 @@ import { ref, onMounted, reactive, inject, nextTick, watch } from "vue";
 import { icon_config } from "@/config/common.js";
 import entityDict from "@/utils/entityDict.js";
 import { fxyhLists, yjzyLists, spjkLists } from "@/api/mock_tzk.js";
-
+import { getYjjg } from "@/api/modules/home.js";
+import {getFxgz} from '@/api/modules/zrzh.js'
 const $mitt = inject("$mitt");
 const checked_all = ref(false);
 const elTreeRef = ref();
@@ -53,6 +54,32 @@ const defaultProps = {
   children: "children",
   label: "name",
 };
+const otherLists = {
+  jsd: [{
+    markerType: "jsd",
+    id: "14",
+    icon: "/images/marker/icon_jsd.png",
+    name: "积水点信息",
+    maekerList: [
+      {
+        markerType: "jsd",
+        id: "14_1",
+        icon: "/images/marker/icon_jsd.png",
+        lng: '109.184485',
+        lat: "38.397187",
+        name: "积水点信息",
+        label: { text: "积水点信息", font_size: 16 },
+        dialogType: "jsd",
+        details: {
+          name: "榆林市神木市尔林兔镇贾家梁村",
+          info: "0.95米深度",
+          person: "王厅夏",
+          phone: "17323215510",
+        }
+      },
+    ]
+  },]
+}
 let data = ref([]);
 let resource_data = ref([
   {
@@ -93,15 +120,15 @@ let resource_data = ref([
   },
   {
     id: 7,
-    type: "yhdd",
+    type: "jsd",
     name: "隐患地点",
     icon: "../../../assets/images/marker/mapdot-worm.png",
   },
   {
     id: 8,
-    type: "fxmb",
-    name: "风险目标",
-    icon: "../../../assets/images/marker/icon_protectedTarget.png",
+    type: "fhmb",
+    name: "防护目标",
+    icon: "../../../assets/images/marker/icon_fhmb.png",
   },
   {
     id: 9,
@@ -125,17 +152,42 @@ let resource_data = ref([
     id: 12,
     type: "wrj",
     name: "无人机",
-    icon: "../../../assets/images/marker/UAV.png",
+    icon: "../../../assets/images/marker/icon_wrj.png",
   },
   {
     id: 13,
     type: "wxdh",
     name: "卫星电话",
-    icon: "../../../assets/images/marker/mapdot-shuidi.png",
+    icon: "../../../assets/images/marker/icon_wxdh.png",
   },
 ]);
 let checkedData = ref();
+const yjjgList = ref([])
+const getyjjgData = function () {
+  getYjjg().then((res) => {
+    console.log("xxxxx", res);
+    yjjgList.value = res.data
+    sessionStorage.setItem("yjjgListData",JSON.stringify(yjjgList.value))
+  });
+};
+const getYhddData = function(){
+  getFxgz().then(res=>{
+    console.log("xxxxx",res)
+    let arr = res.data.jsd.jh.map(item=>{
+      return {
+        ...item,
+        name: item.jswz,
+        info: item.jsyy,
+        person: item.zrr,
+        phone: item.lxdh
+      }
+    });
+    sessionStorage.setItem("jsdListData",JSON.stringify(arr))
+  })
+}
 onMounted(() => {
+  getyjjgData()
+  getYhddData()
   data.value = resource_data.value.map((item, index) => {
     return { ...item, id: index };
   });
@@ -163,17 +215,19 @@ const nodeClick = (obj) => {
   });
 };
 const checkItem = (obj, checked) => {
-  // console.log(obj, checked.checkedNodes);
   checkedData.value = checked.checkedNodes;
-  console.log("xxxxxx", checkedData.value);
   if (checked.checkedNodes.includes(obj)) {
     let listData = sessionStorage.getItem(obj.type + "ListData");
     if (listData) {
       let list = JSON.parse(listData);
       for (let i = 0; i < list.length; i++) {
         let info = list[i];
-        const model = fxyhLists[obj.type] || yjzyLists[obj.type];
+        if(!info.mapX || !info.mapY){
+          continue;
+        }
+        const model = fxyhLists[obj.type] || yjzyLists[obj.type] || otherLists[obj.type];
         if (model) {
+          console.log("zzzzz",info)
           let markerData = JSON.parse(JSON.stringify(model[0].maekerList[0]));
           markerData.id = info.id;
           markerData.lng = info.mapX;
@@ -193,6 +247,7 @@ const checkItem = (obj, checked) => {
               markerData.details[key] = info[key] || "-";
             }
           }
+          console.log("zzzzzz",markerData)
           $mitt.emit("addMarker", markerData);
           $mitt.emit("openPopup", markerData);
           $mitt.emit("flyTo", markerData);
@@ -207,52 +262,19 @@ const checkItem = (obj, checked) => {
   }
 };
 const checkAll = (val) => {
-  let checkedData;
+  $mitt.emit("hideAllMarker")
   if (val) {
+    console.log(data.value)
     elTreeRef.value.setCheckedNodes(data.value);
     checkedData = elTreeRef.value.getCheckedNodes();
-    nextTick(() => {
-      let position = [109.92832, 38.27419];
-      for (let index = 0; index < checkedData.length; index++) {
-        const obj = checkedData[index];
-        // 差不多在此范围内随机生成点位
-        let lng = (position[0] + "").replace(
-          /^(.{4})(.{3})(.*)$/,
-          "$1" + Math.round(Math.random() * (999 - 100) + 100) + "$3"
-        );
-        let lat = (position[1] + "").replace(
-          /^(.{4})(.{3})(.*)$/,
-          "$1" + Math.round(Math.random() * (999 - 100) + 100) + "$3"
-        );
-        let markerData = {
-          markerType: "id" + obj.name,
-          id: obj.id,
-          lng: lng,
-          lat: lat,
-          name: obj.name,
-          // icon: "/images/marker/1.gif",
-          icon: icon_config[obj.type].icon,
-          label: { text: obj.name, font_size: 16 },
-          dialogType: obj.type,
-          details: {},
-        };
-        $mitt.emit("addMarker", markerData);
-        $mitt.emit("openPopup", markerData);
-        if (index == 0) {
-          $mitt.emit("flyTo", markerData);
-        }
-      }
-    });
+    console.log(checkedData)
+    checkedData.forEach(item=>{
+      let dom = document.getElementById(item.type+"checkbox");
+      console.log(dom.previousElementSibling)
+      dom?.previousElementSibling?.children[0].click()
+    })
   } else {
-    checkedData = elTreeRef.value.getCheckedNodes();
-    console.log(checkedData);
-    for (let index = 0; index < checkedData.length; index++) {
-      const obj = checkedData[index];
-      $mitt.emit("changeMarkerState", {
-        markerType: "id" + obj.name,
-        show: false,
-      });
-    }
+    
     nextTick(() => {
       elTreeRef.value.setCheckedNodes([]);
     });

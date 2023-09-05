@@ -66,7 +66,7 @@ const setMarker = (data) => {
   );
   let markerData = {
     markerType: item.type,
-    id: item.type + "_" + (item.label || item.id),
+    id:  item.id,
     lng: item.lng || lng,
     lat: item.lat || lat,
     name: item.typeName + item.id,

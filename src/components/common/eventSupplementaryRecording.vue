@@ -12,18 +12,19 @@ const listener = function (e) {
   showDialog.value = true;
 };
 
-// getEventInfoById("13b0daa026ad4f6ab0a6185d3fac964e").then((res) => {
-//   console.log("xxxxxxxxx", res);
-//   for(let key of formData.value){
-//     formData.value[key] = res.data[key]
-//   }
-// });
-// getEventTypeList().then((res) => {
-//   console.log("xxxxx,", res);
-//   const { initTree } = Common();
-//   eventTypeList.value = initTree(res.data, { pid: "parentId" });
-//   console.log("xxxx", eventTypeList);
-// });
+getEventInfoById("13b0daa026ad4f6ab0a6185d3fac964e").then((res) => {
+  console.log("xxxxxxxxx", res);
+  for (let key in formData.value) {
+    formData.value[key] = res.data[key];
+  }
+  console.log("xxxxx", formData.value);
+});
+getEventTypeList().then((res) => {
+  console.log("xxxxx,", res);
+  const { initTree } = Common();
+  eventTypeList.value = initTree(res.data, { pid: "parentId" });
+  console.log("xxxx", eventTypeList);
+});
 const eventTypeList = ref([]);
 bus.on(listener);
 const showDialog = ref(false);
@@ -48,6 +49,7 @@ const formData = ref({
   eventType: "",
   eventDate: "",
   eventName: "",
+  eventAddress: "",
   mapX: 109.82103,
   mapY: 38.331165,
   mapZ: "",
@@ -67,7 +69,6 @@ const submitForm = function () {
 onUnmounted(() => {
   bus.off(listener);
 });
-const xlData = ref([]);
 const totalCount = computed(() => {
   let {
     deathNum,
@@ -78,19 +79,25 @@ const totalCount = computed(() => {
     bemissingNum,
   } = formData.value;
   return (
-    deathNum +
-    poisoningNum +
-    injuryNum +
-    seriousInjuryNum +
-    relocationNum +
-    bemissingNum
+    (deathNum || 0) +
+    (poisoningNum || 0) +
+    (injuryNum || 0) +
+    (seriousInjuryNum || 0) +
+    (relocationNum || 0) +
+    (bemissingNum || 0)
   );
 });
 </script>
 
 <template>
-  <dialogVue :dialogValue="showDialog" :title="'事件补录'" width="850px" height="692px" top="500px"
-    @closeHandle="closeDialog">
+  <dialogVue
+    :dialogValue="showDialog"
+    :title="'事件补录'"
+    width="850px"
+    height="692px"
+    top="500px"
+    @closeHandle="closeDialog"
+  >
     <!-- 下面这个就是里面的内容部分的了 -->
     <div class="sjblmain">
       <div class="title">
@@ -102,35 +109,80 @@ const totalCount = computed(() => {
           <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item label="事件编号" prop="eventNumber">
-                <el-input v-model="formData.eventNumber" placeholder="请输入" clearable /> </el-form-item></el-col>
+                <el-input
+                  v-model="formData.eventNumber"
+                  placeholder="请输入"
+                  clearable
+                /> </el-form-item
+            ></el-col>
             <el-col :span="12">
               <el-form-item label="事件类型" prop="eventType">
-                <el-cascader :options="eventTypeList" :props="{
-                  checkStrictly: true,
-                  label: 'typeName',
-                  value: 'id',
-                }" clearable /> </el-form-item></el-col>
+                <el-cascader
+                  :options="eventTypeList"
+                  :props="{
+                    checkStrictly: true,
+                    label: 'typeName',
+                    value: 'id',
+                  }"
+                  clearable
+                /> </el-form-item
+            ></el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item label="事发时间" prop="eventDate">
-                <el-date-picker v-model="formData.eventDate" type="datetime" placeholder="选择时间"
-                  value-format="YYYY-MM-DD HH:mm:ss" style="width: 100%" /> </el-form-item></el-col>
+                <el-date-picker
+                  v-model="formData.eventDate"
+                  type="datetime"
+                  placeholder="选择时间"
+                  value-format="YYYY-MM-DD HH:mm:ss"
+                  style="width: 100%"
+                /> </el-form-item
+            ></el-col>
             <el-col :span="12">
               <el-form-item label="事件名称" prop="eventName">
-                <el-input v-model="formData.eventName" placeholder="请输入" clearable /> </el-form-item></el-col>
+                <el-input
+                  v-model="formData.eventName"
+                  placeholder="请输入"
+                  clearable
+                /> </el-form-item
+            ></el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item label="事件等级" prop="eventLevel">
-                <el-select v-model="formData.eventLevel" placeholder="" style="width: 100%" size="large">
-                  <el-option style="min-width: 198px;" v-for="item in eventLevelList" :key="item.value" :label="item.label" :value="item.value" />
-                </el-select> </el-form-item></el-col>
+                <el-select
+                  v-model="formData.eventLevel"
+                  placeholder=""
+                  style="width: 100%"
+                  size="large"
+                >
+                  <el-option
+                    style="min-width: 198px"
+                    v-for="item in eventLevelList"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select> </el-form-item
+            ></el-col>
             <el-col :span="12">
               <el-form-item label="紧急程度" prop="region">
-                <el-select v-model="formData.emergency" placeholder="Select" style="width: 100%" size="large">
-                  <el-option v-for="item in emergencyList" style="min-width: 198px;" :key="item.value" :label="item.label" :value="item.value" />
-                </el-select> </el-form-item></el-col>
+                <el-select
+                  v-model="formData.emergency"
+                  placeholder="Select"
+                  style="width: 100%"
+                  size="large"
+                >
+                  <el-option
+                    v-for="item in emergencyList"
+                    style="min-width: 198px"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select> </el-form-item
+            ></el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="24">
@@ -139,34 +191,70 @@ const totalCount = computed(() => {
                   <el-row :gutter="20">
                     <el-col :span="6">
                       <el-form-item label="现场共有" prop="grade">
-                        <el-input class="sbl" v-model="totalCount" placeholder="请输入" clearable /> </el-form-item></el-col>
+                        <el-input
+                          class="sbl"
+                          v-model="totalCount"
+                          placeholder="请输入"
+                          clearable
+                        /> </el-form-item
+                    ></el-col>
                     <el-col :span="6">
                       <el-form-item label="合计死亡" prop="deathNum">
-                        <el-input class="sbl" v-model="formData.deathNum" placeholder="请输入" clearable />
-                      </el-form-item></el-col>
+                        <el-input
+                          class="sbl"
+                          v-model="formData.deathNum"
+                          placeholder="请输入"
+                          clearable
+                        /> </el-form-item
+                    ></el-col>
                     <el-col :span="6">
                       <el-form-item label="合计失踪" prop="poisoningNum">
-                        <el-input class="sbl" v-model="formData.poisoningNum" placeholder="请输入" clearable />
-                      </el-form-item></el-col>
+                        <el-input
+                          class="sbl"
+                          v-model="formData.poisoningNum"
+                          placeholder="请输入"
+                          clearable
+                        /> </el-form-item
+                    ></el-col>
                     <el-col :span="6">
                       <el-form-item label="合计重伤" prop="seriousInjuryNum">
-                        <el-input class="sbl" v-model="formData.seriousInjuryNum" placeholder="请输入" clearable />
-                      </el-form-item></el-col>
+                        <el-input
+                          class="sbl"
+                          v-model="formData.seriousInjuryNum"
+                          placeholder="请输入"
+                          clearable
+                        /> </el-form-item
+                    ></el-col>
                   </el-row>
                   <div style="height: 10px"></div>
                   <el-row :gutter="20">
                     <el-col :span="6">
                       <el-form-item label="合计轻伤" prop="injuryNum">
-                        <el-input class="sbl" v-model="formData.injuryNum" placeholder="请输入" clearable />
-                      </el-form-item></el-col>
+                        <el-input
+                          class="sbl"
+                          v-model="formData.injuryNum"
+                          placeholder="请输入"
+                          clearable
+                        /> </el-form-item
+                    ></el-col>
                     <el-col :span="6">
                       <el-form-item label="合计被困" prop="relocationNum">
-                        <el-input class="sbl" v-model="formData.relocationNum" placeholder="请输入" clearable />
-                      </el-form-item></el-col>
+                        <el-input
+                          class="sbl"
+                          v-model="formData.relocationNum"
+                          placeholder="请输入"
+                          clearable
+                        /> </el-form-item
+                    ></el-col>
                     <el-col :span="6">
                       <el-form-item label="合计中毒" prop="poisoningNum">
-                        <el-input class="sbl" v-model="formData.poisoningNum" placeholder="请输入" clearable />
-                      </el-form-item></el-col>
+                        <el-input
+                          class="sbl"
+                          v-model="formData.poisoningNum"
+                          placeholder="请输入"
+                          clearable
+                        /> </el-form-item
+                    ></el-col>
                   </el-row>
                 </el-form-item>
               </div>
@@ -175,29 +263,56 @@ const totalCount = computed(() => {
           <el-row :gutter="20">
             <el-col>
               <el-form-item label="详细地址" prop="eventAddress">
-                <el-input v-model="formData.eventAddress" placeholder="请输入地址" clearable /> </el-form-item></el-col>
+                <el-input
+                  v-model="formData.eventAddress"
+                  placeholder="请输入地址"
+                  clearable
+                /> </el-form-item
+            ></el-col>
           </el-row>
           <el-row :gutter="3">
             <el-form-item label="地图定位">
               <el-col :span="6">
                 <el-form-item prop="grade">
-                  <el-input v-model="formData.mapX" placeholder="请输入" disabled /> </el-form-item></el-col>
+                  <el-input
+                    v-model="formData.mapX"
+                    placeholder="请输入"
+                    disabled
+                  /> </el-form-item
+              ></el-col>
               <el-col :span="6">
                 <el-form-item prop="region">
-                  <el-input v-model="formData.mapY" placeholder="请输入" disabled /> </el-form-item></el-col>
+                  <el-input
+                    v-model="formData.mapY"
+                    placeholder="请输入"
+                    disabled
+                  /> </el-form-item
+              ></el-col>
               <el-col :span="6">
                 <el-form-item prop="region">
-                  <el-input v-model="formData.mapZ" placeholder="请输入高程" clearable /> </el-form-item></el-col>
+                  <el-input
+                    v-model="formData.mapZ"
+                    placeholder="请输入高程"
+                    clearable
+                  /> </el-form-item
+              ></el-col>
               <el-col :span="6">
                 <el-form-item prop="region">
                   <el-button>地图选择位置</el-button>
-                </el-form-item></el-col>
+                </el-form-item></el-col
+              >
             </el-form-item>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="24">
               <el-form-item label="事件描述" class="describeinput">
-                <el-input v-model="formData.eventContent" type="textarea" placeholder="" clearable rows="3" />
+                <el-input
+                  v-model="formData.eventContent"
+                  type="textarea"
+                  placeholder=""
+                  clearable
+                  rows="3"
+                />
               </el-form-item>
             </el-col>
           </el-row>
@@ -242,8 +357,13 @@ const totalCount = computed(() => {
       <!-- 附件上传部分的 -->
       <div class="fj">
         <div class="fjimg">
-          <el-upload class="avatar-uploader" action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-            :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+          <el-upload
+            class="avatar-uploader"
+            action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload"
+          >
             <img v-if="imageUrl" :src="imageUrl" class="avatar" />
             <el-icon v-else class="avatar-uploader-icon">
               <Plus />
@@ -284,7 +404,8 @@ const totalCount = computed(() => {
   ::v-deep .el-input__wrapper {
     background-color: rgba(1, 40, 59, 1) !important;
     border: 1px solid rgba(0, 163, 206, 1) !important;
-    box-shadow: 0 0 0 0px var(--el-input-border-color, var(--el-border-color)) inset;
+    box-shadow: 0 0 0 0px var(--el-input-border-color, var(--el-border-color))
+      inset;
     width: 320px;
     flex: 1;
     height: 40px;
@@ -299,7 +420,8 @@ const totalCount = computed(() => {
   ::v-deep .el-textarea__inner {
     background-color: rgba(1, 40, 59, 1) !important;
     border: 1px solid rgba(0, 163, 206, 1) !important;
-    box-shadow: 0 0 0 0px var(--el-input-border-color, var(--el-border-color)) inset;
+    box-shadow: 0 0 0 0px var(--el-input-border-color, var(--el-border-color))
+      inset;
     color: #aacbf6;
   }
 

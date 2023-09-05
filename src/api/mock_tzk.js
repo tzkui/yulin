@@ -414,6 +414,104 @@ export const yjzyLists = {
       ]
     }
   ],
+  fhmb:[
+    {
+      markerType: "fhmb",
+      id: "1051",
+      icon: "/images/marker/icon_fhmb.png",
+      name: "防护目标",
+      maekerList: [
+        {
+          markerType: "fhmb",
+          id: "10500",
+          lng: '109.7840',
+          lat: "38.9180",
+          name: "防护目标",
+          phone: "13511117659",
+          icon: "/images/marker/icon_fhmb.png",
+          label: { text: "防护目标", font_size: 16 },
+          dialogType: "fhmb",
+          details: {
+          }
+        }
+      ]
+    }
+  ],
+  yjjg: [
+    {
+      markerType: "yjjg",
+      id: "10025",
+      icon: "/images/marker/icon_jigou.png",
+      name: "应急机构",
+      maekerList: [
+        {
+          markerType: "yjjg",
+          id: "10025_2",
+          lng: '109.793327',
+          lat: "38.286501",
+          name: "应急机构",
+          phone: "13511117659",
+          icon: "/images/marker/icon_jigou.png",
+          label: { text: "应急机构", font_size: 16 },
+          dialogType: "yjjg",
+          details: {
+            orgName: "",
+            typeName: '',
+          }
+        }
+      ]
+    }
+  ],
+  wrj: [
+    {
+      markerType: "wrj",
+      id: "10025q",
+      icon: "/images/marker/icon_wrj.png",
+      name: "无人机",
+      maekerList: [
+        {
+          markerType: "wrj",
+          id: "10025q_2",
+          lng: '109.793327',
+          lat: "38.286501",
+          name: "无人机",
+          phone: "13511117659",
+          icon: "/images/marker/icon_wrj.png",
+          label: { text: "无人机", font_size: 16 },
+          dialogType: "wrj",
+          details: {
+            name: "无人机1",
+          }
+        }
+      ]
+    }
+  ],
+  wxdh: [
+    {
+      markerType: "wxdh",
+      id: "100125q",
+      icon: "/images/marker/icon_wxdh.png",
+      name: "卫星电话",
+      maekerList: [
+        {
+          markerType: "wxdh",
+          id: "100215q_2",
+          lng: '109.793327',
+          lat: "38.286501",
+          name: "卫星电话",
+          phone: "13511117659",
+          icon: "/images/marker/icon_wxdh.png",
+          label: { text: "卫星电话", font_size: 16 },
+          dialogType: "wxdh",
+          details: {
+            sydw: "卫星电话1",
+            lxr: "",
+            bgrlxdh: ""
+          }
+        }
+      ]
+    }
+  ],
 }
 
 export const fxyhLists = {

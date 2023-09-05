@@ -170,6 +170,7 @@ const getWarnings = function () {
 const events = ref([]);
 const getEvents = function () {
   getSjxx().then((res) => {
+    let l1 = ['待处理','属实']
     events.value = res.data.map((item) => {
       return {
         type: item.eventLevel,
@@ -197,7 +198,10 @@ const getEvents = function () {
             time: item.reportDate,
             address: item.eventAddress,
             des: item.eventContent,
-            id: item.id
+            id: item.id,
+    hideEventSupplementaryRecording:!l1.includes(item.stateName),
+    hideDispatch: item.stateName !== "属实",
+    hideEventVerification: item.stateName !== "待处理",
           },
         },
         detailInfo: { ...item }

@@ -21,7 +21,7 @@ const mockData = function () {
         typeName: "住建监控",
         location: "榆林市横山区郭家沟西南约40米",
         mapX: 109.93561,
-        mapY: 37.57452
+        mapY: 37.57452,
       },
     ],
   };
@@ -35,7 +35,7 @@ const mockData = function () {
         typeName: "综合执法监控",
         location: "榆林市郭家沟西南约4000米",
         mapX: 109.43561,
-        mapY: 37.57452
+        mapY: 37.57452,
       },
     ],
   };
@@ -55,7 +55,7 @@ const mockData = function () {
 };
 const $mitt = inject("$mitt");
 const openVideoConferencingBus = useEventBus("openVideoConferencing");
-const emit = defineEmits(["openDialog","closeAllDialog"]);
+const emit = defineEmits(["openDialog", "closeAllDialog"]);
 let currentResources = ref("yjzy");
 let resources_list_all = ref([
   [
@@ -123,11 +123,11 @@ const getYjjyList = function () {
       markerDatas[key] = res.data[key];
       // 向右下侧选择框传值
       let info = res.data[key];
-      if(info.lx==='list'){
-        sessionStorage.setItem(key+"ListData",JSON.stringify(info.jh))
-      }else{
-        let arr = info.jh.filter(item=>item.dataType===2);
-        sessionStorage.setItem(key+"ListData",JSON.stringify(arr))
+      if (info.lx === "list") {
+        sessionStorage.setItem(key + "ListData", JSON.stringify(info.jh));
+      } else {
+        let arr = info.jh.filter((item) => item.dataType === 2);
+        sessionStorage.setItem(key + "ListData", JSON.stringify(arr));
       }
     }
     resources_list_all.value[0].forEach((item) => {
@@ -140,16 +140,30 @@ const getYjjyList = function () {
 const getRhtxList = function () {
   getRhtx().then((res) => {
     console.log("融合通信：", res);
-    // markerDatas.wxdh = {
-    //   type: "list",
-    //   sl: res.data[0].sz,
-    //   jh: res.data[0].jh.map(item=>{
-    //     return {
-    //       ...item,
-    //       name: item.wxdh
-    //     }
-    //   })
-    // }
+    let wxdhList = res.data[0].jh.map((item) => {
+      return {
+        ...item,
+        name: item.bgrlxdh,
+      };
+    });
+    markerDatas.wxdh = {
+      type: "list",
+      sl: res.data[0].sz,
+      jh: wxdhList,
+    };
+    sessionStorage.setItem("wxdhListData", JSON.stringify(wxdhList));
+
+    let wrjList = [
+      { name: "无人机1", mapX: 109.488, mapY: 38.013, id: "112345" },
+      { name: "无人机2", mapX: 108.888, mapY: 37.413, id: "1212112" },
+      { name: "无人机3", mapX: 110.188, mapY: 38.713, id: "9988" },
+    ];
+    markerDatas.wrj = {
+      type: "list",
+      sl: 3,
+      jh: wrjList,
+    };
+    sessionStorage.setItem("wrjListData", JSON.stringify(wrjList));
   });
 };
 const getSpjkList = function () {
@@ -164,16 +178,16 @@ const getSpjkList = function () {
       }
     }
     let arr = [];
-    res.data.forEach(item=>{
-      arr = [...arr,...item.jh]
-    })
-    sessionStorage.setItem("spjkListData",JSON.stringify(arr))
+    res.data.forEach((item) => {
+      arr = [...arr, ...item.jh];
+    });
+    sessionStorage.setItem("spjkListData", JSON.stringify(arr));
   });
 };
 // 切换应急资源
 const changeResources = (type, index) => {
-  closeDialog()
-  emit("closeAllDialog")
+  closeDialog();
+  emit("closeAllDialog");
   currentResources.value = type;
   resources_list.value = resources_list_all.value[index];
   resources_list.value.map((item) => {
@@ -181,10 +195,10 @@ const changeResources = (type, index) => {
     return;
   });
 };
-const showTxl = ref(false)
+const showTxl = ref(false);
 const openDialog = (item, index) => {
   $mitt.emit("hideAllMarker");
-  if(item.type==='txl'){
+  if (item.type === "txl") {
     showSelect.value = false;
     emit("closeAllDialog");
     showTxl.value = true;
@@ -282,7 +296,7 @@ onMounted(() => {
     v-if="showSelect"
   >
   </selectDialogVue>
-  <addressBoox v-if="showTxl" @close-dialog="showTxl=false"></addressBoox>
+  <addressBoox v-if="showTxl" @close-dialog="showTxl = false"></addressBoox>
 </template>
 <style lang="scss" scoped>
 .emergency_resources {

@@ -909,4 +909,61 @@ export default {
     // 左下角的列表
     leftBtns: [],
   },
+  fhmb: {
+    title: "防护目标",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: "名称", key: "name" },
+      { name: "类型", key: "typeName" },
+      { name: "位置", key: "location" },
+      { name: "联系人", key: "linkName" },
+      {
+        name: "联系方式",
+        key: "linkPhone",
+        iconUrl: assetsUrl("/icons/phone.png"),
+        funcName: "phone",
+      },
+    ],
+    // 右下角的按钮
+    btns: [],
+    // 左下角的列表
+    leftBtns: [],
+  },
+  yjjg: {
+    title: "应急机构",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: "机构名称", key: "orgName" },
+      { name: "机构类型", key: "typeName" },
+    ],
+    // 右下角的按钮
+    btns: [],
+    // 左下角的列表
+    leftBtns: [],
+  },
+  wrj: {
+    title: "无人机",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: "名称", key: "name" },
+    ],
+    // 右下角的按钮
+    btns: [],
+    // 左下角的列表
+    leftBtns: [],
+  },
+  wxdh: {
+    title: "卫星电话",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: "单位", key: "sydw" },
+      { name: "联系人", key: "lxr" },
+      { name: "号码", key: "bgrlxdh" },
+
+    ],
+    // 右下角的按钮
+    btns: [],
+    // 左下角的列表
+    leftBtns: [],
+  },
 };

@@ -28,9 +28,11 @@ const cssUrl = () => {
 }
 let json = props.data.replaceAll("#####", " ")
 const info = JSON.parse(json);
+console.log('xxxxx',info)
 // details.value = info.details;
 // dialogType.value = info.dialogType
 const details = ref(info.details)
+details.value.id = info.id
 const dialogType = ref(info.dialogType)
 
 const closeDialog = function () {

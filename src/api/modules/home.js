@@ -27,3 +27,6 @@ export const getYjjcxx = () => request.post("/home/yjjcxx", {})
 // 获取这个发布人员列表的数据
 // export const getpersonalList = (data) => request.post("/home/personalList", {data})
 export const getpersonalList = (page,limit,personalName) => request.post(`/home/personalList?page=${page}&limit=${limit}&personalName=${personalName}`)
+
+// 获取应急机构
+export const getYjjg = () => request.get("/home/yjjg",{})

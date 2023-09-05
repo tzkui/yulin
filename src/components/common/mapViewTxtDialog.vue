@@ -49,9 +49,7 @@ if (dialogConfigs[props.dialogType]) {
   title.value = info.title;
   btns.value = info.btns || [];
   leftBtns.value = info.leftBtns || [];
-  console.log(btns.value)
 }
-console.log("xxxxx",props.details)
 </script>
 
 <template>

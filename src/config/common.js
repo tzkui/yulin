@@ -42,11 +42,11 @@ export const icon_config = {
     },
     'wrj': {
         name: '无人机',
-        icon: '/images/marker/UAV.png'
+        icon: '/images/marker/icon_wrj.png'
     },
     'wxdh': {
         name: '卫星电话',
-        icon: '/images/marker/mapdot-shuidi.png'
+        icon: '/images/marker/icon_wxdh.png'
     },
     'zdtx': {
         name: '窄带通信',

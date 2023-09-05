@@ -48,7 +48,7 @@ const getDataList = function (item) {
         markerInfo: {
           markerType: "ylzd",
           id: item.id,
-          icon: "/images/marker/icon-worn.png",
+          icon: "/images/marker/icon_ylzd.png",
           lng: item.lgtd,
           lat: item.lttd,
           name: "雨量监测站",
@@ -75,7 +75,7 @@ const getDataList = function (item) {
         markerInfo: {
           markerType: "hdzd",
           id: item.id,
-          icon: "/images/marker/icon-worn.png",
+          icon: "/images/marker/icon_hdzd.png",
           lng: item.lgtd,
           lat: item.lttd,
           name: "河道站点",
@@ -116,14 +116,14 @@ const getDataList = function (item) {
     list = item.markerList.map((item) => {
       return {
         id: item.id,
-        name: item.stnm,
+        name: item.name,
         num1: "--",
         num2: "--",
         num3: "--",
         markerInfo: {
           markerType: "sk",
           id: item.id,
-          icon: "/images/marker/icon-worn.png",
+          icon: "/images/marker/icon_sk.png",
           lng: item.lgtd,
           lat: item.lttd,
           name: "水库",
@@ -262,8 +262,8 @@ onMounted(() => {
           :key="index"
           :class="currentWarningType == item.type ? 'active' : ''"
         >
-          <b class="num">{{ item.num }}</b>
-          <span class="type">{{ item.name }}</span>
+          <div class="type">{{ item.name==="安全生产监测"?'生产监测':item.name }}</div>
+          <div class="num">{{ item.num }}</div>
         </div>
       </div>
       <div class="monitor_list">
@@ -371,25 +371,32 @@ onMounted(() => {
     flex-wrap: wrap;
 
     .monitor_item {
-      margin: 0 40px 12px 0;
+      width: 130px;
+      box-sizing: border-box;
+      padding-left: 64px;
+      margin-right: 10px;
+      margin-bottom: 20px;
 
       &:nth-child(3n) {
         margin-right: 0;
       }
 
-      width: calc((100% - 80px) / 3);
-      height: 75px;
-      background: url("@/assets/home/monitor_bg.png") center/73px 70px no-repeat;
+      height: 56px;
+      background: left top no-repeat;
       cursor: pointer;
 
-      &.active {
-        background: url("@/assets/home/monitor_bg_active.png") center/73px 70px
-          no-repeat;
-        box-shadow: inset 0px 0px 43px 0px rgba(15, 169, 175, 0.46),
-          0px 0px 92px 0px rgba(0, 44, 92, 0.16),
-          0px 4px 15px 0px rgba(0, 9, 0, 0.45);
-        border-radius: 8px 8px 8px 8px;
-        border: 1px solid rgba(56, 247, 255, 0.7);
+      // &.active {
+      //   box-shadow: inset 0px 0px 43px 0px rgba(15, 169, 175, 0.46),
+      //     0px 0px 92px 0px rgba(0, 44, 92, 0.16),
+      //     0px 4px 15px 0px rgba(0, 9, 0, 0.45);
+      //   border-radius: 8px 8px 8px 8px;
+      //   border: 1px solid rgba(56, 247, 255, 0.7);
+      // }
+
+      @for $i from 1 through 6{
+        &:nth-child(#{$i}){
+          background-image: url(@/assets/home/yj#{$i}.png);
+        }
       }
 
       display: flex;

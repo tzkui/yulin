@@ -16,7 +16,9 @@ import { assetsUrl } from "@/components/map/map2d/hook/index";
 import { useEventBus } from "@vueuse/core";
 const bus = useEventBus("goDispatchPage")
 const listener = function(e){
-  window.location.href="http://222.212.82.225:20128/map/index_dispatch?id=77e7e6ff4c1d4da8a4b6c0cdcd4f350f"
+  console.log(e)
+  let id = e.id
+  window.location.href="http://222.212.82.225:20128/map/index_dispatch?id="+id
 }
 bus.on(listener)
 // import Mixin from "@/utils/drawMixin";

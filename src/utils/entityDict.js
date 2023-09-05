@@ -59,5 +59,12 @@ export default {
     address: "address",
     type: "enterpriseType",
     area: "xzqhName"
+  },
+  fhmb: {
+    name: "name",
+    typeName: "typeName",
+    location: "location",
+    linkName: "linkName",
+    linkPhone: "linkPhone"
   }
 }
