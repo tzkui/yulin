@@ -9,8 +9,8 @@ import aqsc from "@/assets/header/head_tab2.png";
 import aqscActive from "@/assets/header/head_tab2_active.png";
 
 import zhdd from "@/assets/header/head_tab3.png";
-import sy from '@/assets/header/sy.png'
-import syActive from '@/assets/header/sy_active.png'
+import sy from "@/assets/header/sy.png";
+import syActive from "@/assets/header/sy_active.png";
 import zhddActive from "@/assets/header/head_tab3_active.png";
 import jcfx from "@/assets/header/head_tab4.png";
 import jcfxActive from "@/assets/header/head_tab4_active.png";
@@ -92,11 +92,11 @@ const navCheckHandle = (row) => {
 };
 
 const gohome = () => {
-  window.location.href = "http://222.212.82.225:20128/home";
+  window.location.href = window.baseDeploymentAddress + "/#/home";
 };
 const gosjfx = () => {
   window.location.href =
-    "http://222.212.82.225:20128/map/analysis/page/danger/sjfx";
+    window.baseDeploymentAddress + "/map/analysis/page/danger/sjfx";
 };
 </script>
 
@@ -105,19 +105,32 @@ const gosjfx = () => {
     <header ref="pageHeader">
       <div class="left_content">
         <ul class="tabs">
-          <li @click="navCheckHandle(it)" v-for="(it, ix) in data.navList.slice(0, 2)" :key="ix">
-            <img :src="[it.value === data.checkValue ? it.activeurl : it.taburl]">
+          <li
+            @click="navCheckHandle(it)"
+            v-for="(it, ix) in data.navList.slice(0, 2)"
+            :key="ix"
+          >
+            <img
+              :src="[it.value === data.checkValue ? it.activeurl : it.taburl]"
+            />
           </li>
         </ul>
       </div>
       <div class="center_word">
-        <img class="logo" src="@/assets/header/logo.png" alt="">
+        <img class="logo" src="@/assets/header/logo.png" alt="" />
         <span class="center_title">榆林市应急指挥平台</span>
       </div>
       <div class="right_content">
         <ul class="tabs">
-          <li @click="navCheckHandle(it)" v-for="(it, ix) in data.navList.slice(-2)" :key="ix">
-            <img :src="[it.value === data.checkValue ? it.activeurl : it.taburl]" alt="">
+          <li
+            @click="navCheckHandle(it)"
+            v-for="(it, ix) in data.navList.slice(-2)"
+            :key="ix"
+          >
+            <img
+              :src="[it.value === data.checkValue ? it.activeurl : it.taburl]"
+              alt=""
+            />
           </li>
         </ul>
       </div>

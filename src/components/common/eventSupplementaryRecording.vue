@@ -67,6 +67,9 @@ const formData = ref({
 const submitForm = function () {
   console.log(formData.value);
 };
+const openMap = function(){
+  useEventBus("selectLocation").emit("xxx")
+}
 onUnmounted(() => {
   bus.off(listener);
 });
@@ -298,8 +301,8 @@ const totalCount = computed(() => {
                   /> </el-form-item
               ></el-col>
               <el-col :span="6">
-                <el-form-item prop="region">
-                  <el-button>地图选择位置</el-button>
+                <el-form-item prop="region" style="display: flex;align-items: center;">
+                  <el-button @click="openMap" type="primary" style="height: 36px;">地图选择位置</el-button>
                 </el-form-item></el-col
               >
             </el-form-item>
