@@ -42,7 +42,6 @@ const closeDialog = function () {
 };
 const treeData = ref([]);
 const initData = function () {
-  console.log("xxxxxx", props.listData);
   if (props.listType === "tree") {
     for (const info of props.listData) {
       if (info.dataType === 2) {
@@ -50,7 +49,6 @@ const initData = function () {
       }
     }
     let arr = initTree(props.listData);
-    console.log("xxxxxx", arr);
     treeData.value = arr.filter((item) => item.children?.length > 0);
     treeData.value.map((item) => {
       item.children = item.children.filter(
@@ -88,9 +86,7 @@ const onCheckedChange = function (data, flag) {
   }
 };
 const getMarkerInfoByType = function (info) {
-  console.log("xxxxx", info);
   const model = fxyhLists[props.dialogType] || yjzyLists[props.dialogType];
-  console.log("zzzz", model,props.dialogType,yjzyLists);
   if (model) {
     let base = JSON.parse(JSON.stringify(model[0].maekerList[0]));
     base.id = info.id;
@@ -122,11 +118,9 @@ onMounted(() => {
 watch(selectedMarkers, (val, old) => {
   if (val.length === old.length) return;
   const list = calcDiff(val, old);
-  console.log("xxxxx", list);
   let markerList = [];
   for (const treeId of list) {
     const info = idInfoDict[treeId];
-    console.log("xxxxx", info);
     if (info.mapX && info.mapY) {
       let marker = getMarkerInfoByType(info);
       if (marker) {

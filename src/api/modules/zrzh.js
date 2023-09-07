@@ -28,3 +28,6 @@ export const getEventTypeList = () => request.post("/zrzh/type_tree?tag=1");
 
 // 获取事件类型列表
 export const eventVerify = (data) => request.postForm("/zrzh/event_verify",data);
+
+// 补录
+export const eventUpdata = (data) => request.postForm("/zrzh/event_update",data)

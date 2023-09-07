@@ -1,6 +1,5 @@
 <script setup>
 import { onMounted, onUnmounted, ref, inject, nextTick } from "vue";
-import { useEventBus } from "@vueuse/core";
 import {
   mapDeafultOps,
   drawGeoJsonStyle,
@@ -9,14 +8,7 @@ import {
 import { assetsUrl } from "@/components/map/map2d/hook/index";
 
 const deepmerge = inject("$deepmerge");
-const bus = useEventBus("selectLocation");
-const listener = function (e) {
-  showDialog.value = true;
-  nextTick(() => {
-    initMap();
-  });
-};
-bus.on(listener);
+
 const showDialog = ref(false);
 
 const drawGeoJson = (geoJsonLayerParms) => {
@@ -58,10 +50,21 @@ const addCenterTxt = (data) => {
   });
 };
 const addressName = ref("");
+const addressInfo = ref({});
 // 初始化地图
 let map = null,
   geoGroup = {},
-  labelLayer = null;
+  labelLayer = null,
+  graphicLayer = null;
+const emits = defineEmits(["choiceLocation"]);
+const props = defineProps({
+  center: {
+    type: Object,
+    default() {
+      return {};
+    },
+  },
+});
 const initMap = function () {
   let myBase = deepmerge(mapDeafultOps, {});
   map = new mars2d.Map("select_location_map_box", myBase);
@@ -69,6 +72,8 @@ const initMap = function () {
     name: "文字渲染图层",
     id: "labelLayer",
   });
+  graphicLayer = new mars2d.layer.GraphicLayer();
+  map.addLayer(graphicLayer);
   // //导入区域边界的geo数据 进行绘制
   let mittData = {
     url: assetsUrl("/geoJson/yl.json"),
@@ -106,7 +111,9 @@ const initMap = function () {
   }, 500);
   map.on("click", function (e) {
     let position = e.latlng;
+    addressInfo.value = position;
     getAddressName(position.lng, position.lat);
+    addMarker(position.lng, position.lat);
   });
 };
 const getAddressName = function (lng, lat) {
@@ -116,27 +123,59 @@ const getAddressName = function (lng, lat) {
       return res.json();
     })
     .then((res) => {
-      console.log(res);
       addressName.value = res.result.formatted_address;
     });
 };
-// onMounted(()=>{
-//   initMap()
-// })
-onUnmounted(() => {
-  bus.off(listener);
+const addMarker = function (lng, lat) {
+  let a = graphicLayer.getGraphicById("point");
+  if (a) {
+    graphicLayer.removeGraphic(a);
+  }
+  let graphic = new mars2d.graphic.Marker({
+    latlng: [lat, lng],
+    id: "point",
+    type: "point",
+    name: "point",
+    style: {
+      image: assetsUrl("/images/marker/1.gif"),
+      width: 32,
+      height: 32,
+      horizontalOrigin: mars2d.HorizontalOrigin.CENTER,
+      verticalOrigin: mars2d.VerticalOrigin.BOTTOM,
+    },
+  });
+  graphicLayer.addGraphic(graphic);
+};
+const save = function () {
+  emits("choiceLocation", addressInfo.value);
+  showDialog.value = false;
+};
+const initInfo = function () {
+  addressInfo.value = { ...props.center };
+  let { lng, lat } = addressInfo.value;
+  getAddressName(lng, lat);
+  addMarker(lng, lat);
+};
+defineExpose({
+  openDialog() {
+    showDialog.value = true;
+    nextTick(() => {
+      initMap();
+      initInfo()
+    });
+  },
 });
 </script>
 <template>
   <Teleport to="#app">
-    <div class="model" v-show="showDialog">
+    <div class="model" v-if="showDialog">
       <div class="select_location">
         <div class="title">地图定位</div>
         <div class="address_name">选中位置：{{ addressName }}</div>
         <div class="select_location_map_box" id="select_location_map_box"></div>
         <div class="footer">
           <button class="cancel" @click="showDialog = false">取消</button>
-          <button class="save">保存</button>
+          <button class="save" @click="save">保存</button>
         </div>
         <div class="close" @click="showDialog = false"></div>
       </div>

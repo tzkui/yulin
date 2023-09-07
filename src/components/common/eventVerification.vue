@@ -18,13 +18,11 @@ const listener = function (e) {
 bus.on(listener);
 const getEventInfo = function (id) {
   getEventInfoById(id).then((res) => {
-    console.log("xxxxxxxxx", res);
     for (let key in formData.value) {
       formData.value[key] = res.data[key];
     }
     formData.value.state = 2;
     formData.value.manageType = 2;
-    console.log("xxxxx", formData.value);
   });
 };
 const showDialog = ref(false);

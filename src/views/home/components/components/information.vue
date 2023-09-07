@@ -42,7 +42,6 @@ const setMarker = (data) => {
   } else {
     item = { ...data };
   }
-  console.log("xxxxx", item);
   let obj = item; //展示字段
   // 处理空格 避免撒点弹框转换json字符串报错
   for (const key in obj) {

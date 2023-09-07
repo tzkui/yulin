@@ -151,7 +151,6 @@ export default function Common() {
     var children = config.children || "children"
     var idMap = {}
     var jsonTree = []
-    console.log("xxxxxxxx",data)
     data.forEach(function (v) {
         idMap[v[id]] = v
     })

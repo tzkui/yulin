@@ -17,7 +17,6 @@ const closeDialog = function () {
   emits("closeDialog", "ylzd");
 };
 const setMarker = function (info) {
-  console.log("xxxxxx",info);
   $mitt.emit("addMarker", info);
   $mitt.emit("openPopup", info);
   $mitt.emit("flyTo", info)

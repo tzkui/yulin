@@ -167,14 +167,12 @@ let checkedData = ref();
 const yjjgList = ref([]);
 const getyjjgData = function () {
   getYjjg().then((res) => {
-    console.log("xxxxx", res);
     yjjgList.value = res.data;
     sessionStorage.setItem("yjjgListData", JSON.stringify(yjjgList.value));
   });
 };
 const getYhddData = function () {
   getFxgz().then((res) => {
-    console.log("xxxxx", res);
     let arr = res.data.jsd.jh.map((item) => {
       return {
         ...item,
@@ -230,7 +228,6 @@ const checkItem = (obj, checked) => {
         const model =
           fxyhLists[obj.type] || yjzyLists[obj.type] || otherLists[obj.type];
         if (model) {
-          console.log("zzzzz", info);
           let markerData = JSON.parse(JSON.stringify(model[0].maekerList[0]));
           markerData.id = info.id;
           markerData.lng = info.mapX;
@@ -250,7 +247,6 @@ const checkItem = (obj, checked) => {
               markerData.details[key] = info[key] || "-";
             }
           }
-          console.log("zzzzzz", markerData);
           $mitt.emit("addMarker", markerData);
           $mitt.emit("openPopup", markerData);
           $mitt.emit("flyTo", markerData);

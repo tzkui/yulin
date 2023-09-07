@@ -77,7 +77,6 @@ const selectedList = computed(() => {
 const setTypes = function () {
   types.value.forEach((item) => {
     let info = yjzyData.value[item.id];
-    console.log("zzzzz", yjzyData, item.id, info);
     const base = JSON.parse(JSON.stringify(yjzyLists[item.id]));
     const list = info.jh.slice(info.jh.length - info.sl).map((v) => {
       let baseChild = JSON.parse(JSON.stringify(base[0].maekerList[0]));
@@ -146,7 +145,6 @@ watch(selectedList, (val, old) => {
       }
     }
   }
-  console.log("xxxxx", list);
   if (val.length > old.length) {
     list.forEach((item) => {
       item.maekerList.forEach((info) => {

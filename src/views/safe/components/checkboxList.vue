@@ -169,7 +169,6 @@ const selectedItem = function (info) {
 };
 const getListData = function () {
   getDtsd().then((res) => {
-    console.log("xxxxx", res);
     let listData = [res.whqy, res.qyzdwxy, res.spjk];
 
   });

@@ -190,7 +190,6 @@ const getInfos = function () {
     initChart(option.value);
   });
   getQyfbTree().then(res=>{
-    console.log("xxxxx",res)
     listData.value = res.data.filter(item=>item.dataType===2).map(item=>{
       let info = JSON.parse(item.spare1)
       return {

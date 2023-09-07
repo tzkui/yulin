@@ -296,12 +296,12 @@ const hideMarker = (data) => {
 };
 
 const hideAllMarker = () => {
-  for(let key in markerLayer){
-    markerLayer[key].eachGraphic((info)=>{
-      markerLayer[key].removeGraphic(info)
-    })
+  for (let key in markerLayer) {
+    markerLayer[key].eachGraphic((info) => {
+      markerLayer[key].removeGraphic(info);
+    });
   }
-}
+};
 
 //绘制路线
 const drawLine = (drawLineParms) => {
@@ -409,13 +409,13 @@ const drawGeoJson = (geoJsonLayerParms) => {
   map.addLayer(geoGroup[geoJsonLayerParms.geoType]);
   map.setZoom(8);
 };
-const clearDrawGeoJson = function(type=""){
-  console.log(geoGroup,type)
-  if(geoGroup[type]){
+const clearDrawGeoJson = function (type = "") {
+  console.log(geoGroup, type);
+  if (geoGroup[type]) {
     // delete geoGroup[type]
-    map.removeLayer(geoGroup[type])
+    map.removeLayer(geoGroup[type]);
   }
-}
+};
 // drawArc
 const drawArc = (drawArcParms) => {
   if (!drawArcParms.type) {
@@ -829,7 +829,6 @@ const hidePopup = (data) => {
   //直接关闭信息框
   let type = data.markerType;
   let id = data.id;
-  console.log("xxxx", markerLayer, type);
   markerLayer[type].eachGraphic((graphic) => {
     if (graphic.id == id) {
       graphic.closePopup();
@@ -860,6 +859,21 @@ const clearCenterTxt = () => {
   //清除中心点文字
   labelLayer.removeGraphic();
 };
+const addMapGlLayer = (data={}) => {
+  // mapbox api 申请的token
+  mapboxgl.accessToken =
+    data.accessToken ||
+    "pk.eyJ1Ijoib25lZ2lzZXIiLCJhIjoiY2plZHptcnVuMW5tazMzcWVteHM2aGFsZiJ9.ERWP7zZ-N6fmNl3cRocJ1g";
+  // 初始化地图对象
+  const mapboxG = L.mapboxGL({
+    style: data.style,
+    center: data.center, //{ lng: 109, lat: 35.655 },
+    zoom: data.zoom || 6,
+    pitch: 5,
+    minZoom: 5,
+    maxZoom: 17,
+  }).addTo(map);
+};
 onMounted(() => {
   initMap();
   $mitt.on("addMarker", (data) => {
@@ -871,9 +885,9 @@ onMounted(() => {
     //修改标记状态
     hideMarker(data);
   });
-  $mitt.on('hideAllMarker',()=>{
-    hideAllMarker()
-  })
+  $mitt.on("hideAllMarker", () => {
+    hideAllMarker();
+  });
   $mitt.on("drawPolyline", (data) => {
     //绘制路线
     console.log("drawPolyline--->", data);
@@ -884,9 +898,9 @@ onMounted(() => {
     console.log("drawGeoGraph--->", data);
     drawGeoJson(data);
   });
-  $mitt.on("clearGeoGraph",type=>{
-    clearDrawGeoJson(type)
-  })
+  $mitt.on("clearGeoGraph", (type) => {
+    clearDrawGeoJson(type);
+  });
   $mitt.on("drawGraph", (data) => {
     //自主绘制图层 类似圈选等
     console.log("drawArc--->", data);
@@ -1015,6 +1029,13 @@ onMounted(() => {
       return;
     }
     upDataRadius(data);
+  });
+  $mitt.on("addMapGlLayer", (data) => {
+    if (!data.style || !data.center) {
+      console.log("缺少主要参数请查看-addMapGlLayer-->", data);
+      return;
+    }
+    addMapGlLayer(data);
   });
 });
 onUnmounted(() => {

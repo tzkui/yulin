@@ -214,7 +214,6 @@ const openDialog = (item, index) => {
       },
     ];
   }
-  console.log("zzzzzzzzzzzzzzz,", dataArr);
   checkBoxPopupData.value.listData = dataArr;
 };
 const removeMarker = (data) => {

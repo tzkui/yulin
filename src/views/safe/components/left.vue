@@ -201,7 +201,6 @@ const transValue = () => {
 };
 let selectedQyxx = -1;
 const openDialog = function (type, info) {
-  console.log("xxxxx: ", type, info);
   if (type === "qyxx") {
     let index = info.dataIndex;
     let point = qyxxData[index].pointInfo;
@@ -253,7 +252,6 @@ let mmid = ref("");
 const currentIndex = ref();
 const setMarker = function (type, item, index) {
   if (iscun.value) {
-    console.log("xxxx",item)
     mmid.value = item.marker.id;
     let mardata = item.marker;
     $mitt.emit("addMarker", mardata);
@@ -492,7 +490,6 @@ const getco = async function () {
     }, 10);
   };
   myChart.on("click", function (params) {
-    console.log("xxxxxx,", params);
     openDialog("qyxx", params);
   });
 };

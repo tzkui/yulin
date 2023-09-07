@@ -79,7 +79,6 @@ const closeDialog = function (type) {
 
 const bus = useEventBus(viewDetail);
 const eventListener = function (e) {
-  console.log("xxxxx", e);
   if (e.dialogType === "ylzd") {
     infoDialogData.value.name = e.name;
     dialogFlags.value.showInfoDialog = true;

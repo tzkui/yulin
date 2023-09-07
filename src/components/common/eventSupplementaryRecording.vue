@@ -2,10 +2,14 @@
 import { ref, onUnmounted, computed } from "vue";
 import dialogVue from "./dialog.vue";
 
-import { getEventInfoById, getEventTypeList } from "@/api/modules/zrzh.js";
+import {
+  getEventInfoById,
+  getEventTypeList,
+  eventUpdata,
+} from "@/api/modules/zrzh.js";
 import Common from "@/utils/common.js";
+import selectLocation from "@/components/common/selectLocation.vue";
 import { useEventBus } from "@vueuse/core";
-
 const bus = useEventBus("eventSupplementaryRecording");
 const listener = function (e) {
   getEventInfo(e.id);
@@ -13,18 +17,14 @@ const listener = function (e) {
 };
 const getEventInfo = function (id) {
   getEventInfoById(id).then((res) => {
-    console.log("xxxxxxxxx", res);
     for (let key in formData.value) {
       formData.value[key] = res.data[key];
     }
-    console.log("xxxxx", formData.value);
   });
 };
 getEventTypeList().then((res) => {
-  console.log("xxxxx,", res);
   const { initTree } = Common();
   eventTypeList.value = initTree(res.data, { pid: "parentId" });
-  console.log("xxxx", eventTypeList);
 });
 const eventTypeList = ref([]);
 bus.on(listener);
@@ -63,13 +63,19 @@ const formData = ref({
   seriousInjuryNum: 0,
   relocationNum: 0,
   bemissingNum: 0,
+  typeId: "",
+  id: ""
 });
 const submitForm = function () {
   console.log(formData.value);
+  eventUpdata(formData.value).then(res=>{
+    console.log(res)
+  })
 };
-const openMap = function(){
-  useEventBus("selectLocation").emit("xxx")
-}
+const selectLocationRef = ref();
+const openMap = function () {
+  selectLocationRef.value.openDialog();
+};
 onUnmounted(() => {
   bus.off(listener);
 });
@@ -90,6 +96,16 @@ const totalCount = computed(() => {
     (relocationNum - 0 || 0) +
     (bemissingNum - 0 || 0)
   );
+});
+const choiceLocation = function (data) {
+  formData.value.mapX = data.lng;
+  formData.value.mapY = data.lat;
+};
+const center = computed(() => {
+  return {
+    lng: formData.value.mapX,
+    lat: formData.value.mapY,
+  };
 });
 </script>
 
@@ -121,16 +137,16 @@ const totalCount = computed(() => {
             ></el-col>
             <el-col :span="12">
               <el-form-item label="事件类型" prop="eventType">
-                <el-cascader
-                  :options="eventTypeList"
-                  :props="{
-                    checkStrictly: true,
-                    label: 'typeName',
-                    value: 'id',
-                  }"
-                  clearable
-                /> </el-form-item
-            ></el-col>
+                <el-tree-select
+                v-model="formData.typeId"
+                  :data="eventTypeList"
+                  check-strictly
+                  :render-after-expand="false"
+                  :props="{label:'typeName',value: 'id'}"
+                  style="width: 100%"
+                />
+              </el-form-item>
+            </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
@@ -198,7 +214,9 @@ const totalCount = computed(() => {
                         <el-input
                           class="sbl"
                           v-model="totalCount"
+                          type="number"
                           placeholder="请输入"
+                          disabled
                           clearable
                         /> </el-form-item
                     ></el-col>
@@ -208,15 +226,17 @@ const totalCount = computed(() => {
                           class="sbl"
                           v-model="formData.deathNum"
                           placeholder="请输入"
+                          type="number"
                           clearable
                         /> </el-form-item
                     ></el-col>
                     <el-col :span="6">
-                      <el-form-item label="合计失踪" prop="poisoningNum">
+                      <el-form-item label="合计失踪" prop="bemissingNum">
                         <el-input
                           class="sbl"
-                          v-model="formData.poisoningNum"
+                          v-model="formData.bemissingNum"
                           placeholder="请输入"
+                          type="number"
                           clearable
                         /> </el-form-item
                     ></el-col>
@@ -226,6 +246,7 @@ const totalCount = computed(() => {
                           class="sbl"
                           v-model="formData.seriousInjuryNum"
                           placeholder="请输入"
+                          type="number"
                           clearable
                         /> </el-form-item
                     ></el-col>
@@ -238,6 +259,7 @@ const totalCount = computed(() => {
                           class="sbl"
                           v-model="formData.injuryNum"
                           placeholder="请输入"
+                          type="number"
                           clearable
                         /> </el-form-item
                     ></el-col>
@@ -247,6 +269,7 @@ const totalCount = computed(() => {
                           class="sbl"
                           v-model="formData.relocationNum"
                           placeholder="请输入"
+                          type="number"
                           clearable
                         /> </el-form-item
                     ></el-col>
@@ -256,6 +279,7 @@ const totalCount = computed(() => {
                           class="sbl"
                           v-model="formData.poisoningNum"
                           placeholder="请输入"
+                          type="number"
                           clearable
                         /> </el-form-item
                     ></el-col>
@@ -281,7 +305,6 @@ const totalCount = computed(() => {
                   <el-input
                     v-model="formData.mapX"
                     placeholder="请输入"
-                    disabled
                   /> </el-form-item
               ></el-col>
               <el-col :span="6">
@@ -289,7 +312,6 @@ const totalCount = computed(() => {
                   <el-input
                     v-model="formData.mapY"
                     placeholder="请输入"
-                    disabled
                   /> </el-form-item
               ></el-col>
               <el-col :span="6">
@@ -301,8 +323,16 @@ const totalCount = computed(() => {
                   /> </el-form-item
               ></el-col>
               <el-col :span="6">
-                <el-form-item prop="region" style="display: flex;align-items: center;">
-                  <el-button @click="openMap" type="primary" style="height: 36px;">地图选择位置</el-button>
+                <el-form-item
+                  prop="region"
+                  style="display: flex; align-items: center"
+                >
+                  <el-button
+                    @click="openMap"
+                    type="primary"
+                    style="height: 36px"
+                    >地图选择位置</el-button
+                  >
                 </el-form-item></el-col
               >
             </el-form-item>
@@ -383,6 +413,11 @@ const totalCount = computed(() => {
       </div>
     </div>
   </dialogVue>
+  <selectLocation
+    @choiceLocation="choiceLocation"
+    ref="selectLocationRef"
+    :center="center"
+  ></selectLocation>
 </template>
 
 <style lang="scss" scoped>

@@ -11,7 +11,6 @@ import eventVerification from "../common/eventVerification.vue";
 import eventSupplementaryRecording from '../common/eventSupplementaryRecording.vue'
 import eventView from '../common/eventView.vue'
 import map2d from "@/components/map/map2d/map.vue";
-import selectLocation from "../common/selectLocation.vue";
 
 import { assetsUrl } from "@/components/map/map2d/hook/index";
 import { useEventBus } from "@vueuse/core";
@@ -77,6 +76,10 @@ const initMap = function () {
   };
   $mitt.emit("drawGeoGraph", mittData);
 
+  $mitt.emit("addMapGlLayer",{
+    center: { lng: 109.784585, lat: 38.297187 },
+    style: "http://1.85.55.225:8085/YouMapServer/rest/service/sxwwCGCS2000/VectorTileServer/styles/YXSL-225.json"
+  })
   // //导入包含行政区划的geo数据 进行绘制
   let mittLineData = {
     url: assetsUrl("/geoJson/yjqx.json"),
@@ -137,7 +140,6 @@ const handleScreenAuto = () => {
       <eventVerification></eventVerification>
       <eventSupplementaryRecording></eventSupplementaryRecording>
       <eventView></eventView>
-      <selectLocation></selectLocation>
       <router-view></router-view>
     </div>
   </div>

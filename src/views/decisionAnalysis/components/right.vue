@@ -1,7 +1,7 @@
 <template>
     <div class="right">
         <!-- 灾情分析 / 重点防护目标 -->
-        <ViewBox title="灾情分析">
+        <ViewBox title="重点对象分析">
             <div class="resources">
                 <div class="effect_radius">
                     影响半径<span class="blue">{{ radius.effect_radius }}米</span>
@@ -598,11 +598,6 @@ const initType = async () => {
     // 这个地方就是上面的一个相关的参数的了
     console.log(effect, "看看这个里面是什么的数据====================>")
     disaster_check_data.value = Array.isArray(effect.data) ? effect.data : [effect.data]
-    // effect.data.forEach(item=>{
-    //     console.log(item)
-    //     topDict[item.value] = objConfig[item.name]
-    // })
-    // console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxx,topDict",topDict)
     let analysis = await getYybzfxType()
     analysis_check_data.value = Array.isArray(analysis.data) ? analysis.data : [analysis.data]
 }
