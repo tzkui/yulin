@@ -859,7 +859,7 @@ const clearCenterTxt = () => {
   //清除中心点文字
   labelLayer.removeGraphic();
 };
-const addMapGlLayer = (data={}) => {
+const addMapGlLayer = (data = {}) => {
   // mapbox api 申请的token
   mapboxgl.accessToken =
     data.accessToken ||
@@ -872,7 +872,16 @@ const addMapGlLayer = (data={}) => {
     pitch: 5,
     minZoom: 5,
     maxZoom: 17,
+    touchRotate: false,
+    dragRotate: false,
   }).addTo(map);
+  let mapboxMap = mapboxG.getMapboxMap();
+  mapboxMap.dragPan.disable();
+  mapboxMap.scrollZoom.disable();
+  map.on(mars2d.EventType.movestart, function () {
+    mapboxMap.dragPan.disable();
+    mapboxMap.scrollZoom.disable();
+  });
 };
 onMounted(() => {
   initMap();

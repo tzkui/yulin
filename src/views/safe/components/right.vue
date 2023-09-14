@@ -3,6 +3,7 @@ import selectDate from "./selectDate.vue";
 import { inject, onMounted, reactive, ref, onUnmounted } from "vue";
 import { getSgdjfx, getSglxfx, getZdddspjk } from "../../../api/modules/aqsc";
 import { useEventBus } from "@vueuse/core";
+import rtspPlayer from "../../../components/common/rtspPlayer.vue";
 const dataSelectors = reactive({
   sgdj: "day",
   sglx: "day",
@@ -11,7 +12,7 @@ const dataSelectors = reactive({
 
 const videoConferencingBus = useEventBus("openVideoMonitoring")
 const openVideoConferencing = function () {
-  videoConferencingBus.emit({ type: "onlyConferencing" })
+  videoConferencingBus.emit()
 
 }
 const toogleDate = function (key, val) {
@@ -394,39 +395,8 @@ const getEnterpriseTypeList = async function (type = "1") {
 const getmonitorList = async function (type = "1") {
   let res = await getZdddspjk({ type });
   if (res.code == 200) {
-    setTimeout(() => {
-      monitorList.value = res.data.map((item) => {
-        return {
-          imgUrl:
-            "https://img1.baidu.com/it/u=422078137,1307526884&fm=253&fmt=auto&app=120&f=JPEG?w=1280&h=800",
-          ...item,
-        };
-      });
-    }, 50);
-  } else {
-    setTimeout(() => {
-      monitorList.value = [
-        {
-          id: 1,
-          name: "xxx化工厂",
-          imgUrl:
-            "https://img1.baidu.com/it/u=422078137,1307526884&fm=253&fmt=auto&app=120&f=JPEG?w=1280&h=800",
-        },
-        {
-          id: 2,
-          name: "xxx化工厂",
-          imgUrl:
-            "https://img1.baidu.com/it/u=422078137,1307526884&fm=253&fmt=auto&app=120&f=JPEG?w=1280&h=800",
-        },
-        {
-          id: 3,
-          name: "xxx化工厂",
-          imgUrl:
-            "https://img1.baidu.com/it/u=422078137,1307526884&fm=253&fmt=auto&app=120&f=JPEG?w=1280&h=800",
-        },
-      ];
-    }, 50);
-  }
+    monitorList.value = res.data.slice(0,2)
+  } 
 };
 
 // 编写echarts图
@@ -677,17 +647,19 @@ const qylxcl = (item,index) => {
       <div class="box2">
         <ul class="monitorList">
           <li v-for="(item,index) in monitorList" :key="item.id" @click="openVideoConferencing">
-            <div class="imgBox">
+            <!-- <rtspPlayer videoSrc="rtsp://admin:wex12345@192.168.1.65:554/"></rtspPlayer> -->
+            <rtspPlayer :videoSrc="item.playerUrl"></rtspPlayer>
+            <!-- <div class="imgBox">
               <video :src="'@/../public/test'+(index+1)+'.mp4'" muted alt="" loop autoplay></video>
-              <!-- <img :src="item.imgUrl" alt="" /> -->
             </div>
             <div class="infoBox">
               <div class="word">{{ item.monitorName }}</div>
-            </div>
+            </div> -->
           </li>
         </ul>
       </div>
     </ViewBox>
+
   </div>
 </template>
 

@@ -267,9 +267,9 @@ onMounted(() => {
         </div>
       </div>
       <div class="monitor_list">
-        <span class="station">XXXX站点</span>
+        <span class="station">八里河水位监测站</span>
         <span class="date">07-31 10:00:25</span>
-        <span class="info">监测信息：XXXXXXXXXXXXXX</span>
+        <span class="info" title="监测信息：八里河监测站水位接近最大流速">监测信息：八里河监测站水位接近最大流速</span>
       </div>
     </div>
   </ViewBox>

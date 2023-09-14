@@ -12,20 +12,28 @@
     <div class="dialog_body">
       <div class="cont_left">
         <!-- 搜索框 -->
-        <!-- <div class="video_searchbar">
-          <input class="video_inout" placeholder="请输入号码" type="">
-          <button class="video_search_btn">
-            <img class="icon_phone" src="@/assets/integratedCommunication/icon_phone.png" alt="">
+        <div class="video_searchbar">
+          <input
+            class="video_inout"
+            v-model="searchName"
+            placeholder="请输入名称"
+          />
+          <button class="video_search_btn" @click="search">
+            <img
+              class="icon_phone"
+              src="@/assets/decisionAnalysis/icon_search.png"
+              alt=""
+            />
           </button>
-        </div> -->
+        </div>
         <!-- 树结构列表 -->
         <div class="tree_list">
           <el-tree
             :data="treeData"
             :props="treeProps"
             show-checkbox
+            :check-strictly="true"
             @check-change="handleCheckChange"
-            @node-click="onNodeClick"
             ref="treeRef"
             node-key="id"
           >
@@ -34,14 +42,18 @@
       </div>
       <div class="cont_right" id="cont-right">
         <!-- 视频列表 -->
-        <div :class="videoStyleClass" v-show="!showMeeting">
+        <div :class="videoStyleClass">
           <div
             v-for="(item, index) in currentFence"
             :key="item"
             class="monitorVideoFence"
           >
-            <!-- 假装是视屏 -->
-            <div class="video"></div>
+            <div class="video">
+              <rtspPlayer
+                :video-src="meetingList[index].playerUrl"
+                v-if="meetingList[index]"
+              ></rtspPlayer>
+            </div>
             <!-- 视频移入  顶部遮罩 -->
             <div class="video_top_model">
               <div class="video_title">
@@ -52,20 +64,20 @@
                   class="video_box_icon"
                   src="@/assets/integratedCommunication/icon_fullscreen.png"
                   alt=""
-                />
+                /> -->
                 <img
                   class="video_box_icon"
                   src="@/assets/integratedCommunication/icon_close.png"
                   alt=""
-                /> -->
+                  @click="removeVideo(index)"
+                />
               </div>
             </div>
           </div>
         </div>
-        <div id="meeting_box" v-show="showMeeting"></div>
         <!-- 分屏切换 -->
         <div class="fences_box">
-          <!-- <div class="fences">
+          <div class="fences">
             <div
               v-for="(item, index) in fencesData"
               :key="index"
@@ -78,21 +90,84 @@
               "
               @click="changeFullscreen"
             ></div>
-          </div> -->
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script setup>
-import { onMounted, onUnmounted, ref } from "vue";
+import { computed, nextTick, onMounted, onUnmounted, ref } from "vue";
 import { useEventBus } from "@vueuse/core";
+import { getSpjk } from "@/api/modules/home.js";
+import rtspPlayer from "../common/rtspPlayer.vue";
+import { ElMessageBox } from "element-plus";
+
 const showDialog = ref(false);
 const openDialog = function (e) {
+  console.log(e)
   showDialog.value = true;
-  console.log("视频会商参数：", e);
+  if(e&&e.playerUrl){
+    nextTick(()=>{
+      treeRef.value.setChecked(e.id,true)
+      for(const item of treeData.value){
+        for(const info of item.children){
+          if(info.id===e.id){
+            handleCheckChange(info,true)
+          }
+        }
+      }
+    })
+  }
 };
+const searchName = ref("");
+const search = function () {
+  let val = searchName.value.trim();
+  if (val) {
+    let arr = [];
+    originTreeData.value.forEach((item) => {
+      let list = item.children.filter((item) => {
+        return item.label.indexOf(val) !== -1;
+      });
+      if (list.length > 0) {
+        arr.push({
+          ...item,
+          children: list,
+        });
+      }
+    });
+    treeData.value = arr;
+  }else{
+    treeData.value = JSON.parse(JSON.stringify(originTreeData.value))
+  }
+};
+const treeRef = ref();
+// 树结构数据
+const treeData = ref([]);
+let originTreeData = ref([]);
+getSpjk().then((res) => {
+  console.log("spjk,", res);
+  let arr = [];
+  res.data.forEach((item) => {
+    arr.push({
+      id: item.typeId,
+      label: item.mc,
+      children: item.jh.map((info) => {
+        return {
+          id: info.id,
+          type: info.typeName,
+          playerUrl: info.playerUrl,
+          label: info.monitorName,
+        };
+      }),
+    });
+  });
+  treeData.value = arr;
+  originTreeData.value = JSON.parse(JSON.stringify(arr));
+  console.log(treeData.value);
+});
 const meetingList = ref([]);
+
 const openVideoConferencingBus = useEventBus("openVideoMonitoring");
 openVideoConferencingBus.on(openDialog);
 onMounted(() => {
@@ -102,31 +177,6 @@ onUnmounted(() => {
   openVideoConferencingBus.off(openDialog);
 });
 
-const treeRef = ref();
-// 树结构数据
-const treeData = ref([
-  {
-    id: 3,
-    label: "视频监控",
-    children: [
-      {
-        id: "1000000000137",
-        type: "TEMP_MT",
-        label: "地址一视频监控",
-      },
-      {
-        id: "10000000001371",
-        type: "TEMP_MT",
-        label: "地址二视频监控",
-      },
-      {
-        id: "10000000001374",
-        type: "TEMP_MT",
-        label: "地址三视频监控",
-      },
-    ],
-  },
-]);
 // 树结构显示prop
 const treeProps = ref({
   label: "label",
@@ -140,24 +190,44 @@ const fencesData = ref([
   { normal: "fence fence_9", active: "fence fence_9 active", num: 9 },
 ]);
 // 当前分屏数
-const currentFence = ref(4);
+const currentFence = ref(1);
 // 全屏flag
 const fullscreenFlag = ref(true);
 // 视屏列表不同分屏布局样式
-const videoStyleClass = ref("videos videos_4");
+const videoStyleClass = ref("videos videos_1");
 const handleCheckChange = (data, checked, indeterminate) => {
-  meetingList.value = treeRef.value
-    .getCheckedNodes()
-    .filter((item) => !item.children);
-  console.log("menuList: ", meetingList.value);
-  if (meetingList.value.length > 0) {
-    beginConferencing();
+  console.log(data, checked);
+  if (checked) {
+    meetingList.value.push(data);
+  } else {
+    meetingList.value.splice(meetingList.value.indexOf(data), 1);
+  }
+  const len = meetingList.value.length;
+  if (len <= 1) {
+    changeFence(1);
+  } else if (len === 2) {
+    changeFence(2);
+  } else if (len <= 4) {
+    changeFence(4);
+  } else if (len <= 9) {
+    changeFence(9);
+  } else {
+    ElMessageBox.confirm("最多只能同时展示9个", "提示", {
+      confirmButtonText: "确定",
+      type: "warning",
+    }).finally((res) => {
+      treeRef.value.setChecked(data);
+    });
   }
 };
+const removeVideo = function(i){
+  let id = meetingList.value[i].id;
+  treeRef.value.setChecked(id,false)
+}
 // 关闭弹框
 const closeDialog = () => {
-  closeMeeting()
   showDialog.value = false;
+  meetingList.value = []
 };
 // 切换分屏
 const changeFence = (num) => {
@@ -172,58 +242,6 @@ const changeFullscreen = () => {
     document.exitFullscreen();
   }
   fullscreenFlag.value = !fullscreenFlag.value;
-};
-
-const showMeeting = ref(false);
-let meetingIns = null;
-const beginConferencing = function () {
-  closeMeeting();
-  if (meetingList.value.length === 0) return;
-  showMeeting.value = true;
-  let options = {
-    access_type: 2,
-    devices: meetingList.value.map((item, index) => {
-      return {
-        id: item.id,
-        type: item.type,
-        index,
-      };
-    }),
-    key: "88b6bb347f2c4890bec4c76522cb4e4a",
-  };
-  meetingIns = kdDispatchConference.createMeeting(
-    "#meeting_box",
-    options,
-    (data, name) => {
-      // data 回调数据  name 回调事件名称
-      console.log("回调数据", data, name);
-      // data.groupId 用于还原调度组组件或者调用http高级接口
-      console.log("组件Id", data.groupId);
-      if (data.status === 13) {
-        closeMeeting();
-      }
-    }
-  );
-};
-const closeMeeting = function () {
-  if (meetingIns) {
-    showMeeting.value = false;
-    meetingIns.closeMeeting();
-    meetingIns = null;
-  }
-};
-const onNodeClick = function (info) {
-  // console.log(info);
-  // if (!info.children) {
-  //   let id = info.id;
-  //   let index = meetingList.value.findIndex((item) => item.id === id);
-  //   if (index === -1) {
-  //     meetingList.value.push(info);
-  //   } else {
-  //     meetingList.value.splice(index, 1);
-  //   }
-  //   console.log(meetingList.value);
-  // }
 };
 </script>
 
@@ -319,6 +337,7 @@ const onNodeClick = function (info) {
 
       .tree_list {
         overflow: auto;
+        margin-top: 10px;
         height: 550px;
         &::-webkit-scrollbar {
           display: none;
@@ -419,7 +438,13 @@ const onNodeClick = function (info) {
           position: relative;
           float: left;
           margin: 1px;
-
+          .video {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: calc(100% - 24px);
+          }
           .video_top_model {
             position: absolute;
             width: 100%;
@@ -583,8 +608,13 @@ const onNodeClick = function (info) {
       }
     }
   }
-  #meeting_box {
-    height: 540px;
+  ::v-deep .el-tree-node {
+    .is-leaf + .el-checkbox .el-checkbox__inner {
+      display: inline-block;
+    }
+    .el-checkbox .el-checkbox__inner {
+      display: none;
+    }
   }
 }
 </style>

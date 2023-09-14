@@ -17,7 +17,7 @@ import drag from "v-drag";
 import { Vue3SeamlessScroll } from "vue3-seamless-scroll";
 import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 // import 'default-passive-events';
-
+import 'video.js/dist/video-js.css'
 import mitter from "@/utils/mitt.js";
 import deepmerge from "deepmerge"; //深度合并
 

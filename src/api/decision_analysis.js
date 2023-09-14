@@ -772,7 +772,7 @@ import request from './index'
 export const getZqfxDropdowndata = data => request.post("/jcfx/zqfx/dropdowndata", data)
 
 // 灾情分析等级与区域
-export const getZqfxLeveldata = data => request.post("/jcfx/zqfx", data)
+export const getZqfxLeveldata = data => request.post("/jcfx/zqfx?typeId="+data.typeId,{})
 
 // 灾情综合查询
 export const getZqzhcx = data => request.post("/jcfx/zqzhcx", data)

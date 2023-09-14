@@ -178,8 +178,8 @@ export default {
     // 右下角的按钮
     btns: [
       {
-        name: "查看",
-        funcName: viewDetail,
+        name: "查看 ",
+        funcName: "openVideoMonitoring",
       },
     ],
   },

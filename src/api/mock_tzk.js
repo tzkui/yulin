@@ -359,6 +359,7 @@ export const yjzyLists = {
             monitorName: "榆阳区",
             typeName: "自然灾害",
             location: "长兴路榆林人民大厦",
+            playerUrl: ""
           }
         }
       ]

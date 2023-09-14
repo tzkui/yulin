@@ -78,7 +78,7 @@ const setTypes = function () {
   types.value.forEach((item) => {
     let info = yjzyData.value[item.id];
     const base = JSON.parse(JSON.stringify(yjzyLists[item.id]));
-    const list = info.jh.slice(info.jh.length - info.sl).map((v) => {
+    const list = info.jh.filter(item=>item.dataType==2).map((v) => {
       let baseChild = JSON.parse(JSON.stringify(base[0].maekerList[0]));
       baseChild.lng = v.mapX;
       baseChild.lat = v.mapY;
@@ -86,6 +86,7 @@ const setTypes = function () {
       if (v.spare1) {
         try {
           let details = JSON.parse(v.spare1);
+          console.log("xxxx",item.id,details)
           let dict = entityDict[props.dialogType];
           baseChild.details = {};
           for (let key in dict) {

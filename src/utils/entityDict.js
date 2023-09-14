@@ -47,6 +47,7 @@ export default {
     monitorName: "monitorName",
     typeName: "typeName",
     location: "location",
+    playerUrl: "playerUrl"
   },
   yjzb: {
     name: "name",
