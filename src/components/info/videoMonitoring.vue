@@ -50,7 +50,7 @@
           >
             <div class="video">
               <rtspPlayer
-                :video-src="meetingList[index].playerUrl"
+                :playerUrl="meetingList[index].playerUrl"
                 v-if="meetingList[index]"
               ></rtspPlayer>
             </div>
@@ -60,11 +60,6 @@
                 {{ meetingList[index]?.label }}
               </div>
               <div class="icon_box" v-show="meetingList[index]">
-                <!-- <img
-                  class="video_box_icon"
-                  src="@/assets/integratedCommunication/icon_fullscreen.png"
-                  alt=""
-                /> -->
                 <img
                   class="video_box_icon"
                   src="@/assets/integratedCommunication/icon_close.png"
@@ -100,24 +95,24 @@
 import { computed, nextTick, onMounted, onUnmounted, ref } from "vue";
 import { useEventBus } from "@vueuse/core";
 import { getSpjk } from "@/api/modules/home.js";
-import rtspPlayer from "../common/rtspPlayer.vue";
+import rtspPlayer from "../common/h265Play.vue";
 import { ElMessageBox } from "element-plus";
 
 const showDialog = ref(false);
 const openDialog = function (e) {
-  console.log(e)
+  console.log(e);
   showDialog.value = true;
-  if(e&&e.playerUrl){
-    nextTick(()=>{
-      treeRef.value.setChecked(e.id,true)
-      for(const item of treeData.value){
-        for(const info of item.children){
-          if(info.id===e.id){
-            handleCheckChange(info,true)
+  if (e && e.playerUrl) {
+    nextTick(() => {
+      for (const item of treeData.value) {
+        for (const info of item.children) {
+          if (info.id === e.id) {
+            handleCheckChange(info, true);
+            treeRef.value.setChecked(info, true);
           }
         }
       }
-    })
+    });
   }
 };
 const searchName = ref("");
@@ -137,8 +132,8 @@ const search = function () {
       }
     });
     treeData.value = arr;
-  }else{
-    treeData.value = JSON.parse(JSON.stringify(originTreeData.value))
+  } else {
+    treeData.value = JSON.parse(JSON.stringify(originTreeData.value));
   }
 };
 const treeRef = ref();
@@ -220,14 +215,15 @@ const handleCheckChange = (data, checked, indeterminate) => {
     });
   }
 };
-const removeVideo = function(i){
-  let id = meetingList.value[i].id;
-  treeRef.value.setChecked(id,false)
-}
+const removeVideo = function (i) {
+  console.log(i);
+  let data = meetingList.value[i].id;
+  treeRef.value.setChecked(data, false, true);
+};
 // 关闭弹框
 const closeDialog = () => {
   showDialog.value = false;
-  meetingList.value = []
+  meetingList.value = [];
 };
 // 切换分屏
 const changeFence = (num) => {

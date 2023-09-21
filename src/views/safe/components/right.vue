@@ -1,9 +1,13 @@
 <script setup>
 import selectDate from "./selectDate.vue";
-import { inject, onMounted, reactive, ref, onUnmounted } from "vue";
+import { inject, onMounted, reactive, ref, onUnmounted, nextTick } from "vue";
 import { getSgdjfx, getSglxfx, getZdddspjk } from "../../../api/modules/aqsc";
 import { useEventBus } from "@vueuse/core";
 import rtspPlayer from "../../../components/common/rtspPlayer.vue";
+import h265 from "@/components/common/h265Play.vue";
+
+const $mitt = inject("$mitt")
+
 const dataSelectors = reactive({
   sgdj: "day",
   sglx: "day",
@@ -11,8 +15,8 @@ const dataSelectors = reactive({
 });
 
 const videoConferencingBus = useEventBus("openVideoMonitoring")
-const openVideoConferencing = function () {
-  videoConferencingBus.emit()
+const openVideoConferencing = function (info) {
+  videoConferencingBus.emit(info)
 
 }
 const toogleDate = function (key, val) {
@@ -293,6 +297,7 @@ const getAccidentLevelList = async function (type = "1") {
   }
 
 };
+const nowType = ref(-1)
 // 获取事故类型分析数据
 import img1 from "../../../assets/safe/type1.png";
 import img2 from "../../../assets/safe/type2.png";
@@ -300,57 +305,26 @@ import img3 from "../../../assets/safe/type3.png";
 import img4 from "../../../assets/safe/type4.png";
 // '/src/assets/safe/num' + (index + 1) + '.png'
 // import imm1 from "../../../assets/safe/num1.png"
-const getAccidentTypeList = async function (type = "4") {
+const getAccidentTypeList = async function (type = "4",id) {
   let res = await getSglxfx(type);
   const IMGLIST = [img1, img2, img3, img4];
   if (res.code == 200) {
-    setTimeout(() => {
-      accidentTypeList.value = res.data.map((item, index) => {
-        return {
-          imgSrc: IMGLIST[index],
-          id: index,
-          num: item.sz,
-          name: item.mc,
-          ...item,
-        };
-      });
-    }, 50);
-  } else {
-    setTimeout(() => {
-      accidentTypeList.value = [
-        {
-          name: "事故类型一",
-          num: getRandom(20),
-          imgSrc: img1,
-          id: "lx1",
-        },
-        {
-          name: "事故类型二",
-          num: getRandom(20),
-          imgSrc: img2,
-          id: "lx2",
-        },
-        {
-          name: "事故类型三",
-          num: getRandom(20),
-          imgSrc: img3,
-          id: "lx3",
-        },
-        {
-          name: "事故类型四",
-          num: getRandom(20),
-          imgSrc: img4,
-          id: "lx4",
-        },
-        {
-          name: "事故类型五",
-          num: getRandom(20),
-          imgSrc: "/src/assets/safe/type4.png",
-          id: "lx5",
-        },
-      ];
-    }, 50);
-  }
+    accidentTypeList.value = res.data.map((item, index) => {
+      return {
+        imgSrc: IMGLIST[index],
+        id: index,
+        num: item.sz,
+        name: item.mc,
+        ...item,
+      };
+    });
+    if(id){
+      nextTick(()=>{
+        $mitt.emit("hideAllMarker")
+        emit("updatePopupData",accidentTypeList.value[nowType.value].jh,id)
+      })
+    }
+  } 
 };
 // 获取企业类型分析数据
 import imms1 from "../../../assets/safe/num1.png";
@@ -553,14 +527,20 @@ onMounted(() => {
   getEnterpriseTypeList();
   getmonitorList();
   getAccidentLevelList();
+  $mitt.on("changeEventState",function(info){
+    let id = info.id;
+    getAccidentTypeList("4",id)
+  })
   // chartAutoPlay();
 });
 onUnmounted(() => {
   clearInterval(timer);
+  $mitt.all.delete("changeEventState");
 });
 // 使用defineEmits注册一个自定义事件
-const emit = defineEmits(["getValue10", "openDialog"]);
-const openDialog = function (type, info) {
+const emit = defineEmits(["getValue10", "openDialog","updatePopupData"]);
+const openDialog = function (type, info,index) {
+  nowType.value = index
   emit("openDialog", type, info);
 };
 const qylxisshow = ref(true);
@@ -600,7 +580,7 @@ const qylxcl = (item,index) => {
           </div>
           <div class="main">
             <div class="typeList">
-              <div class="typeItem" @click="openDialog('eventLevel', item)" v-for="item in accidentTypeList"
+              <div class="typeItem" @click="openDialog('eventLevel', item,index)" v-for="(item,index) in accidentTypeList"
                 :key="item.id">
                 <div class="imgBox">
                   <img :src="item.imgSrc" alt="" />
@@ -646,15 +626,11 @@ const qylxcl = (item,index) => {
     <ViewBox title="重点地点视频监控" :height="198">
       <div class="box2">
         <ul class="monitorList">
-          <li v-for="(item,index) in monitorList" :key="item.id" @click="openVideoConferencing">
-            <!-- <rtspPlayer videoSrc="rtsp://admin:wex12345@192.168.1.65:554/"></rtspPlayer> -->
-            <rtspPlayer :videoSrc="item.playerUrl"></rtspPlayer>
-            <!-- <div class="imgBox">
-              <video :src="'@/../public/test'+(index+1)+'.mp4'" muted alt="" loop autoplay></video>
-            </div>
+          <li v-for="(item,index) in monitorList" :key="item.id" @click="openVideoConferencing(item)">
+            <h265 :playerUrl="item.playerUrl"></h265>
             <div class="infoBox">
               <div class="word">{{ item.monitorName }}</div>
-            </div> -->
+            </div>
           </li>
         </ul>
       </div>

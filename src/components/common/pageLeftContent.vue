@@ -6,6 +6,8 @@ import dialogVue from "@/components/common/dialog.vue";
 // 导入获取这个人员的接口
 import { getpersonalList } from "../../api/modules/home"
 
+import resourceAnalysis from '@/components/info/resourceAnalysis.vue'
+
 const isHide = ref(false);
 const tooglePosition = function () {
   isHide.value = !isHide.value;
@@ -155,6 +157,7 @@ getper()
         <ArrowLeft />
       </el-icon>
     </div>
+  <resourceAnalysis></resourceAnalysis>
   </div>
 
   <!-- 然后这个信息发布的弹框就写在这里了 -->
@@ -207,6 +210,7 @@ getper()
       <button @click="okC">确定</button>
     </div>
   </dialogVue>
+
 </template>
 
 <style lang="less" scoped>

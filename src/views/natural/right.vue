@@ -79,6 +79,7 @@
             :class="{ active: currentIndex === index }"
             v-if="item.type == 1"
             @click="setMarker('affair', item, index)"
+            :id="'event_'+item.id"
             :key="index"
           >
             <p class="itemtitle">{{ item.name }}</p>
@@ -110,6 +111,7 @@
           <div
             class="itempro"
             :class="{ active: currentIndex === index }"
+            :id="'event_'+item.id"
             v-else
             @click="setMarker('affair', item, index)"
           >
@@ -138,25 +140,10 @@
       </div>
     </div>
   </div>
-  <div class="isss">
-    <eject
-      title="应急事件"
-      :data="data"
-      :buttondata="buttondata"
-      :imgs="imgs"
-      :islook="islook"
-      @FatherMethod="FatherMethod"
-      @closeDialog="closeDialog"
-      :top="top"
-      :left="left"
-    ></eject>
-  </div>
 </template>
 
 <script setup>
-// 导入弹出组件
-import eject from "../../components/common/emergencybomb.vue";
-import { ref, reactive, inject, onMounted } from "vue";
+import { ref, reactive, inject, onMounted, onUnmounted } from "vue";
 const $mitt = inject("$mitt");
 import { getSjxx, getYjxx } from "@/api/modules/zrzh.js";
 // 定义数据,决定是查看还是隐藏
@@ -190,7 +177,7 @@ const getWarnings = function () {
 };
 // 下面就是事件信息这个的数据的了哟
 const events = ref([]);
-const getEvents = function () {
+const getEvents = function (id) {
   getSjxx().then((res) => {
     let l1 = ["待处理", "属实"];
     const l2 = ["属实", "已启动响应"];
@@ -201,6 +188,7 @@ const getEvents = function () {
         name: item.eventLevelName,
         time: item.reportDate,
         location: item.eventAddress,
+        id: item.id,
         icons: {
           name: item.typeName,
           state: item.stateName,
@@ -230,21 +218,26 @@ const getEvents = function () {
         detailInfo: { ...item },
       };
     });
+    if(id){
+      nextTick(()=>{
+        document.getElementById("event_"+id).click()
+      })
+    }
   });
 };
 onMounted(() => {
   getWarnings();
   getEvents();
+  $mitt.on("changeEventState",function(info){
+    let id = info.id;
+    $mitt.emit("hideAllMarker")
+    getEvents(id)
+  })
 });
-// 定义一个数据来控制这个事件信息的弹出框的显示和隐藏的啦
-const evislook = ref(true);
-
-// 然后这里是把决定是否显示或者隐藏的传递过去
-// const emits = defineEmits(['openDialog'])
-// const openDialog = function (a) {
-//   console.log("看看我点击了没有")
-// }
-
+onUnmounted(()=>{
+  
+  $mitt.all.delete("changeEventState");
+})
 // 定义一个数据,存储之前有的这个打了点的数据了
 let iscun = ref(true);
 let monedata = ref("");
@@ -298,52 +291,7 @@ const setMarker = function (type, item, index) {
       iscun.value = false;
     }
   }
-  // 上面这个是打点的事件,然后下面就是顺便把这个弹框也要弹出来的一个事件的了
-  evislook.value = true;
 };
-
-// 加入传递的值是是一个数据的形式,到时候直接把数据传递过去循环这个就直接可以的了
-// 下面这些数据都是模拟假的数据,方便展示出来看的
-// 下面这个是控制弹窗显示还是隐藏的
-const islook = ref(false);
-const data = reactive([
-  {
-    content: "xx街道xx村发生一起山体滑坡事件",
-    name: "事件名称",
-  },
-  {
-    content: "17323215510",
-    name: "事件名称",
-    img: "https://img1.baidu.com/it/u=3302184040,3713353210&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1689958800&t=c5544548483d80e372afb5e9f2ecfefc",
-  },
-  {
-    content: "正常",
-    name: "状态",
-  },
-  {
-    content:
-      "各位领导,  各位领导,  各位领导,  各位领导, 各位领导,  各位领导,  各位领导,  各位领导,各位领导,  各位领导,  各位领导, ",
-    name: "事件描述",
-  },
-]);
-// 下面再来一个传递这个按钮的值
-const buttondata = reactive(["核实", "指挥调度"]);
-// 下面这个就是按钮旁边的一直图片
-const imgs = reactive([
-  "https://img1.baidu.com/it/u=3302184040,3713353210&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1689958800&t=c5544548483d80e372afb5e9f2ecfefc",
-  "https://img1.baidu.com/it/u=3302184040,3713353210&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1689958800&t=c5544548483d80e372afb5e9f2ecfefc",
-  "https://img1.baidu.com/it/u=3302184040,3713353210&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1689958800&t=c5544548483d80e372afb5e9f2ecfefc",
-]);
-// 传的方法
-function FatherMethod() {
-  console.log("这是FatherMethod");
-}
-function closeDialog() {
-  islook.value = false;
-}
-
-const top = ref("100px");
-const left = ref("-500px");
 
 // 下面定义一个关于这个每天的天气的一个数据
 const weathers = ref([

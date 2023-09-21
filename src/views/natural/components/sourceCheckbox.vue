@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, watch, inject, onMounted } from "vue";
+import { useStore } from "vuex";
 import { yjzyLists } from "@/api/mock_tzk.js";
 import icon1 from "@/assets/images/marker/icon_renyuan.png";
 import icon2 from "@/assets/images/marker/icon-expert.png";
@@ -9,6 +10,7 @@ import icon5 from "@/assets/images/marker/icon_shelter.png";
 import icon6 from "@/assets/images/marker/mapdot-scientific.png";
 import entityDict from "@/utils/entityDict.js";
 
+const store = useStore()
 const $mitt = inject("$mitt");
 const types = ref([
   {
@@ -79,21 +81,20 @@ const setTypes = function () {
     let info = yjzyData.value[item.id];
     const base = JSON.parse(JSON.stringify(yjzyLists[item.id]));
     const list = info.jh.filter(item=>item.dataType==2).map((v) => {
-      let baseChild = JSON.parse(JSON.stringify(base[0].maekerList[0]));
+      let baseChild = {...base[0].maekerList[0]};
       baseChild.lng = v.mapX;
       baseChild.lat = v.mapY;
       baseChild.id = v.id;
       if (v.spare1) {
         try {
           let details = JSON.parse(v.spare1);
-          console.log("xxxx",item.id,details)
-          let dict = entityDict[props.dialogType];
+          let dict = entityDict[item.id];
           baseChild.details = {};
           for (let key in dict) {
             baseChild.details[key] = details[dict[key]];
           }
         } catch (error) {
-          console.log("解析JSON出错了--->", v);
+          console.log("出错了--->", error,v);
         }
       } else {
         for (let key in baseChild.details) {
@@ -108,9 +109,9 @@ const setTypes = function () {
 };
 const yjzyData = ref({});
 let getInfos = function () {
-  let yjzyInfos = sessionStorage.getItem("yjzyInfos");
-  if (yjzyInfos) {
-    yjzyData.value = JSON.parse(yjzyInfos);
+  let yjzyInfos = store.state.pointLists.yjzyInfos;
+  if (Object.keys(yjzyInfos).length>0) {
+    yjzyData.value = yjzyInfos;
     setTypes();
   } else {
     setTimeout(() => {

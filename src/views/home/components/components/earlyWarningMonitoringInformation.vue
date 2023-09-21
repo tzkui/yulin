@@ -22,6 +22,26 @@ const warning_type = ref([
   { name: "林火监测", type: "lhjc", num: "0" },
 ]);
 const dataList = ref([]);
+const bottomList = ref([
+  {
+    id: 1,
+    name: "八里河水位监测站",
+    time: "07-31 10:00:25",
+    info: "八里河监测站水位接近最大流速",
+  },
+  {
+    id: 2,
+    name: "八里河水位监测站",
+    time: "07-31 10:00:25",
+    info: "八里河监测站水位接近最大流速",
+  },
+  {
+    id: 3,
+    name: "八里河水位监测站",
+    time: "07-31 10:00:25",
+    info: "八里河监测站水位接近最大流速",
+  },
+]);
 const titleInfo = ref("");
 const getDatas = function () {
   getYjjcxx().then((res) => {
@@ -262,14 +282,27 @@ onMounted(() => {
           :key="index"
           :class="currentWarningType == item.type ? 'active' : ''"
         >
-          <div class="type">{{ item.name==="安全生产监测"?'生产监测':item.name }}</div>
+          <div class="type">
+            {{ item.name === "安全生产监测" ? "生产监测" : item.name }}
+          </div>
           <div class="num">{{ item.num }}</div>
         </div>
       </div>
-      <div class="monitor_list">
-        <span class="station">八里河水位监测站</span>
-        <span class="date">07-31 10:00:25</span>
-        <span class="info" title="监测信息：八里河监测站水位接近最大流速">监测信息：八里河监测站水位接近最大流速</span>
+      <div style="height: 38px; overflow-y: hidden">
+        <vue3-seamless-scroll
+          class="scroll_box"
+          :list="bottomList"
+          hover
+          :step="0.5"
+        >
+          <li class="monitor_list" v-for="item in bottomList" :key="item.id">
+            <span class="station">{{ item.name }}</span>
+            <span class="date">{{ item.time }}</span>
+            <span class="info" :title="item.info"
+              >监测信息：{{ item.info }}</span
+            >
+          </li>
+        </vue3-seamless-scroll>
       </div>
     </div>
   </ViewBox>
@@ -360,7 +393,7 @@ onMounted(() => {
       .orange {
         color: #fa7d2d;
       }
-      .area{
+      .area {
         width: 180px;
       }
     }
@@ -393,8 +426,8 @@ onMounted(() => {
       //   border: 1px solid rgba(56, 247, 255, 0.7);
       // }
 
-      @for $i from 1 through 6{
-        &:nth-child(#{$i}){
+      @for $i from 1 through 6 {
+        &:nth-child(#{$i}) {
           background-image: url(@/assets/home/yj#{$i}.png);
         }
       }

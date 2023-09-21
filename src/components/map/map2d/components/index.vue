@@ -14,7 +14,6 @@ import mapTxtVue from './map-txt.vue';
 import mapVideoVue from './map-video.vue';
 import  mitter  from "@/utils/mitt.js";
 import mapViewTxtDialog from '@/components/common/mapViewTxtDialog.vue';
-import { } from '../config/dialog.config'
 
 const props = defineProps({
     data: {

@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const rtcUrl = "http://192.168.1.172:8078"
-// const rtcUrl = window.baseWebrtcUrl
+// const rtcUrl = "http://192.168.1.172:8078"
+const rtcUrl = window.baseWebrtcUrl
 const wsUrl = "http://10.112.143.192:1000"
 
 const getFormData = function(data){
@@ -33,3 +33,15 @@ export const wbrtcCodec=(data,apiUrl)=>axios({//获取设备编码信息
   method:"get",
   urltype:"webrtc",
 });
+
+export const wbrtc256pull =(data,apiUrl)=>axios({//获取设备编码信息
+  url:(apiUrl?apiUrl:rtcUrl)+`/api/rtsp/pull?target=${data.rtsp}&streamPath=stream/t${data.videoId}`,
+  // data:data,
+  method:"get",
+  urltype:"webrtc",
+});
+
+export const getH256WsUrl = ()=>{//获取拼接后的ws
+  let apiUrl= rtcUrl.replace("http://","");
+  return `ws://${apiUrl}/wexplayer/stream/t`
+}

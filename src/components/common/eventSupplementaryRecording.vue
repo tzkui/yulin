@@ -10,6 +10,7 @@ import {
 import Common from "@/utils/common.js";
 import selectLocation from "@/components/common/selectLocation.vue";
 import { useEventBus } from "@vueuse/core";
+import { ElMessage } from "element-plus";
 const bus = useEventBus("eventSupplementaryRecording");
 const listener = function (e) {
   getEventInfo(e.id);
@@ -53,7 +54,7 @@ const formData = ref({
   eventAddress: "",
   mapX: 109.82103,
   mapY: 38.331165,
-  mapZ: "",
+  // mapZ: null,
   eventContent: "",
   eventLevel: 1,
   emergency: 1,
@@ -68,8 +69,10 @@ const formData = ref({
 });
 const submitForm = function () {
   console.log(formData.value);
-  eventUpdata(formData.value).then(res=>{
+  eventUpdata({...formData.value,select: formData.value.typeId,file: ""}).then(res=>{
     console.log(res)
+    ElMessage.success("补录成功");
+    closeDialog()
   })
 };
 const selectLocationRef = ref();
@@ -314,14 +317,14 @@ const center = computed(() => {
                     placeholder="请输入"
                   /> </el-form-item
               ></el-col>
-              <el-col :span="6">
+              <!-- <el-col :span="6">
                 <el-form-item prop="region">
                   <el-input
                     v-model="formData.mapZ"
                     placeholder="请输入高程"
                     clearable
                   /> </el-form-item
-              ></el-col>
+              ></el-col> -->
               <el-col :span="6">
                 <el-form-item
                   prop="region"

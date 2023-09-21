@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onUnmounted } from "vue";
+import { ref, onUnmounted, inject } from "vue";
 import dialogVue from "./dialog.vue";
 import {
   getEventInfoById,
@@ -9,6 +9,7 @@ import {
 import { useEventBus } from "@vueuse/core";
 import { ElMessage } from "element-plus";
 
+const $mitt = inject("$mitt")
 const bus = useEventBus("eventVerification");
 const listener = function (e) {
   console.log(e);
@@ -51,10 +52,10 @@ const submitForm = function () {
   const params = {
     ...formData.value,
   };
-  console.log("params: ", params);
   eventVerify(params).then((res) => {
     console.log(res);
     ElMessage.success("核实成功");
+    $mitt.emit("changeEventState",params) 
     showDialog.value = false;
   });
 };
@@ -218,7 +219,7 @@ onUnmounted(() => {
             </el-col>
           </el-row>
           <div class="buttons">
-            <div class="btn">取消</div>
+            <div class="btn" @click="closeDialog">取消</div>
             <div class="btn" @click="submitForm">确定</div>
           </div>
         </el-form>

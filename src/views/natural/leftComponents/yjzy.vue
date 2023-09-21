@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted, ref, inject, nextTick } from "vue";
+import {useStore} from 'vuex'
 import { getYjzy } from "@/api/modules/zrzh.js";
 import selectDialogVue from "../components/selectDialog.vue";
 const $mitt = inject("$mitt");
@@ -15,6 +16,8 @@ const selectDialogInfo = ref({
   dialogType: "",
 });
 
+const store = useStore()
+
 const yjzyList = ref([]); // 应急资源列表
 const yjzyInfo = ref({});
 // 获取应急资源列表
@@ -23,6 +26,7 @@ const getYjzyList = function () {
     let data = res.data;
     yjzyInfo.value = data;
     sessionStorage.setItem("yjzyInfos",JSON.stringify(data))
+    store.commit("pointLists/SET_YJZYINFOS",data);
     yjzyList.value = [
       { id: "yjry", name: "应急人员", num: data.yjry.sl },
       { id: "yjzj", name: "应急专家", num: data.yjzj.sl },

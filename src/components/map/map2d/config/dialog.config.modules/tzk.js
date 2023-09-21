@@ -18,10 +18,10 @@ export default {
     ],
     // 右下角的按钮
     btns: [
-      {
-        name: "轨迹",
-        funcName: viewDetail,
-      },
+      // {
+      //   name: "轨迹",
+      //   funcName: viewDetail,
+      // },
       {
         name: "调度",
         funcName: "goDispatchPage",
@@ -29,21 +29,21 @@ export default {
     ],
     // 左下角的列表
     leftBtns: [
-      {
-        imgUrl: assetsUrl("/icons/leftBtn1.png"),
-        hoverTitle: "",
-        funcName: "",
-      },
-      {
-        imgUrl: assetsUrl("/icons/leftBtn2.png"),
-        hoverTitle: "",
-        funcName: "",
-      },
-      {
-        imgUrl: assetsUrl("/icons/leftBtn3.png"),
-        hoverTitle: "",
-        funcName: "",
-      },
+      // {
+      //   imgUrl: assetsUrl("/icons/leftBtn1.png"),
+      //   hoverTitle: "",
+      //   funcName: "",
+      // },
+      // {
+      //   imgUrl: assetsUrl("/icons/leftBtn2.png"),
+      //   hoverTitle: "",
+      //   funcName: "",
+      // },
+      // {
+      //   imgUrl: assetsUrl("/icons/leftBtn3.png"),
+      //   hoverTitle: "",
+      //   funcName: "",
+      // },
     ],
   },
   yjzj: {
@@ -959,6 +959,23 @@ export default {
       { name: "单位", key: "sydw" },
       { name: "联系人", key: "lxr" },
       { name: "号码", key: "bgrlxdh" },
+
+    ],
+    // 右下角的按钮
+    btns: [],
+    // 左下角的列表
+    leftBtns: [],
+  },
+  
+  dxjx: {
+    title: "大型机械",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: "所属组织", key: "ssqy" },
+      { name: "车牌号", key: "cph" },
+      { name: "车辆类型", key: "cllx" },
+      { name: "车主姓名", key: "czxm" },
+      { name: "联系电话", key: "lxdh" },
 
     ],
     // 右下角的按钮

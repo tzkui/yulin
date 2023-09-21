@@ -430,6 +430,10 @@ const drawArc = (drawArcParms) => {
     drawArcStyle[drawArcParms.type],
     drawArcParms.style || {}
   );
+  console.log({
+    type: drawArcParms.type,
+    style: style,
+  })
   drawLayer.startDraw({
     type: drawArcParms.type,
     style: style,
@@ -869,7 +873,7 @@ const addMapGlLayer = (data = {}) => {
     style: data.style,
     center: data.center, //{ lng: 109, lat: 35.655 },
     zoom: data.zoom || 6,
-    pitch: 5,
+    pitch: -50,
     minZoom: 5,
     maxZoom: 17,
     touchRotate: false,

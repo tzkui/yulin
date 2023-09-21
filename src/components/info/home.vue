@@ -1,26 +1,24 @@
-
 <script setup>
 import pageHeader from "@/components/common/nav.vue";
 // 地图交互菜单组
 import mapGeomtryGroup from "@/components/common/mapGeomtryGroup.vue";
 import { ref, onMounted, reactive, inject, watch, onUnmounted } from "vue";
-import videoConferencing from './videoConferencing.vue';
+import videoConferencing from "./videoConferencing.vue";
 import videoMonitoring from "./videoMonitoring.vue";
 import phoneCall from "./phoneCall.vue";
 import eventVerification from "../common/eventVerification.vue";
-import eventSupplementaryRecording from '../common/eventSupplementaryRecording.vue'
-import eventView from '../common/eventView.vue'
+import eventSupplementaryRecording from "../common/eventSupplementaryRecording.vue";
+import eventView from "../common/eventView.vue";
 import map2d from "@/components/map/map2d/map.vue";
-
 import { assetsUrl } from "@/components/map/map2d/hook/index";
 import { useEventBus } from "@vueuse/core";
-const bus = useEventBus("goDispatchPage")
-const listener = function(e){
-  console.log(e)
-  let id = e.id
-  window.location.href="http://222.212.82.225:20128/map/index_dispatch?id="+id
-}
-bus.on(listener)
+const bus = useEventBus("goDispatchPage");
+const listener = function (e) {
+  console.log(e);
+  let id = e.id;
+  window.location.href = window.zhddUrl + "?id=" + id;
+};
+bus.on(listener);
 // import Mixin from "@/utils/drawMixin";
 
 import { useRoute } from "vue-router";
@@ -50,9 +48,9 @@ onMounted(() => {
   window.onresize = () => handleScreenAuto();
 });
 
-onUnmounted(()=>{
-  bus.off(listener)
-})
+onUnmounted(() => {
+  bus.off(listener);
+});
 
 watch(route, (val) => {
   console.log("=====", val.path);
@@ -74,12 +72,13 @@ const initMap = function () {
       outlineWidth: 5, //宽度
     },
   };
-  $mitt.emit("drawGeoGraph", mittData);
+  // $mitt.emit("drawGeoGraph", mittData);
 
-  $mitt.emit("addMapGlLayer",{
+  $mitt.emit("addMapGlLayer", {
     center: { lng: 109.784585, lat: 38.297187 },
-    style: "http://1.85.55.225:8085/YouMapServer/rest/service/sxwwCGCS2000/VectorTileServer/styles/YXSL-225.json"
-  })
+    style:
+      "http://1.85.55.225:8085/YouMapServer/rest/service/sxwwCGCS2000/VectorTileServer/styles/YXSL-225.json",
+  });
   // //导入包含行政区划的geo数据 进行绘制
   let mittLineData = {
     url: assetsUrl("/geoJson/yjqx.json"),
@@ -112,7 +111,7 @@ const handleScreenAuto = () => {
   const scale =
     document.documentElement.clientWidth /
       document.documentElement.clientHeight <
-      designDraftWidth / designDraftHeight
+    designDraftWidth / designDraftHeight
       ? document.documentElement.clientWidth / designDraftWidth
       : document.documentElement.clientHeight / designDraftHeight;
 
@@ -144,8 +143,6 @@ const handleScreenAuto = () => {
     </div>
   </div>
 </template>
-
-
 
 <style scoped lang="less">
 .mapBox {

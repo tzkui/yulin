@@ -2,13 +2,13 @@
 import ViewBox from "@/components/common/view-box.vue";
 import { Vue3SeamlessScroll } from "vue3-seamless-scroll";
 import { icon_config } from "@/config/common.js";
-import { ref, inject, onMounted } from "vue";
+import { ref, inject, onMounted, nextTick, onUnmounted } from "vue";
 import { getSjxx } from "@/api/modules/home.js";
 
 const $mitt = inject("$mitt");
 
 const event_list = ref([]);
-const getEventList = function () {
+const getEventList = function (id) {
   getSjxx().then((res) => {
     event_list.value = res.data.map((item) => {
       return {
@@ -25,10 +25,20 @@ const getEventList = function () {
         lat: item.mapY,
       };
     });
+    if(id){
+      nextTick(()=>{
+        $mitt.emit("hideAllMarker")
+        document.getElementById("event_"+id).click()
+      })
+    }
   });
 };
 onMounted(() => {
   getEventList();
+  $mitt.on("changeEventState",function(info){
+    let id = info.id;
+    getEventList(id)
+  })
 });
 let currentMarkerTypeData = ref({});
 const setMarker = (data) => {
@@ -55,20 +65,11 @@ const setMarker = (data) => {
     hideDispatch: !l2.includes(item.state),
     hideEventVerification: item.state !== "待处理",
   };
-  // 差不多在此范围内随机生成点位
-  let lng = (position[0] + "").replace(
-    /^(.{4})(.{1})(.*)$/,
-    "$1" + Math.floor(Math.random() * 10) + "$3"
-  );
-  let lat = (position[1] + "").replace(
-    /^(.{3})(.{1})(.*)$/,
-    "$1" + Math.floor(Math.random() * 10) + "$3"
-  );
   let markerData = {
     markerType: item.type,
     id:  item.id,
-    lng: item.lng || lng,
-    lat: item.lat || lat,
+    lng: item.lng,
+    lat: item.lat,
     name: item.typeName + item.id,
     icon: item.icon && icon_config[item.icon].icon,
     label: { text: item.typeName + (item.name || item.id), font_size: 16 },
@@ -79,6 +80,10 @@ const setMarker = (data) => {
   $mitt.emit("openPopup", markerData);
   $mitt.emit("flyTo", markerData);
 };
+onUnmounted(()=>{
+  $mitt.all.delete("changeEventState");
+})
+const a = ref(false)
 </script>
 
 <template>
@@ -102,6 +107,7 @@ const setMarker = (data) => {
               class="list_item list"
               v-for="(item, index) in event_list"
               :key="index"
+              :id="'event_'+item.id"
               @click="setMarker(item)"
             >
               <span class="item_type">{{ item.typeName }}</span>

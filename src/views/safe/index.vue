@@ -23,6 +23,7 @@ const showDialog = ref({
   qyxx: false,
   eventLevel: false,
 });
+
 // 决定这些框线是否需要隐藏的东东
 const showDialog2 = ref({
   ck: false,
@@ -41,7 +42,7 @@ const eventLevelPopupData = ref({
 const enterpriseList = ref([]);
 // 开启弹窗
 const openDialog = function (key, info) {
-  $mitt.emit("hideAllMarker")
+  $mitt.emit("hideAllMarker");
   // 应急事件
   if (key === "yjsj") {
     yjsjDetail.value = yjsjDetails[info.id];
@@ -60,10 +61,9 @@ const openDialog = function (key, info) {
     let arr = [];
     for (let index = 0; index < info.num; index++) {
       let item = info.jh[index];
-    let l1 = ["待处理", "属实"];
-    const l2 = ["属实", "已启动响应"];
+      let l1 = ["待处理", "属实"];
+      const l2 = ["属实", "已启动响应"];
       arr.push({
-        // title: index + '号化工厂' + info.id,
         title: item.eventName,
         id: item.id, //如此唯一
         stateName: item.stateName,
@@ -207,7 +207,39 @@ const qylxdd = function (item) {
     }
   }
 };
-
+const updatePopupData = function (info, id) {
+  console.log(id);
+  console.log(info);
+  let item = info.find((item) => item.id === id);
+  let l1 = ["待处理", "属实"];
+  const l2 = ["属实", "已启动响应"];
+  let pointInfo = {
+    mardata: {
+      markerType: "sj",
+      id: item.id,
+      icon: "/images/marker/1.gif",
+      lng: item.mapX,
+      lat: item.mapY,
+      name: "化工厂",
+      label: { text: item.eventName, font_size: 16 },
+      dialogType: "sj",
+      // dialogType: "sgxx",
+      details: {
+        name: item.eventName,
+        location: item.eventAddress,
+        typeName: item.typeName,
+        time: item.reportDate,
+        cont: item.eventContent,
+        id: item.id,
+        popupTitle: "事故类型",
+        hideEventSupplementaryRecording: !l1.includes(item.stateName),
+        hideDispatch: !l2.includes(item.stateName),
+        hideEventVerification: item.stateName !== "待处理",
+      },
+    },
+  };
+  clickEventLevel(pointInfo);
+};
 // 把打点的数据放进行添加进去
 const getdatasj = function (index) {
   qylxdata.value.forEach((v, i) => {
@@ -268,6 +300,7 @@ const closeqyxxshow = function () {
           }
         "
         @getValue10="getValue10"
+        @updatePopupData="updatePopupData"
       ></right>
       <!-- <ViewBox left="0" top="0" width="430" height="166" title="公共的内容模块">
         我是右边的内容
@@ -431,11 +464,17 @@ const closeqyxxshow = function () {
         class="event_list"
         v-for="(item, index) in eventLevelPopupData.data"
         :key="index"
+        :id="'event_' + item.id"
         @click="clickEventLevel(item)"
       >
         <div class="event_title">
           事故名称：{{ item.title }}
-          <div class="state" :class="item.stateName==='已结案'?'green':'yellow'">{{ item.stateName }}</div>
+          <div
+            class="state"
+            :class="item.stateName === '已结案' ? 'green' : 'yellow'"
+          >
+            {{ item.stateName }}
+          </div>
         </div>
         <div class="event_cont_box">
           <div
@@ -1048,10 +1087,10 @@ const closeqyxxshow = function () {
         right: 30px;
         top: 0;
       }
-      .green{
-        color: #20e6a4
+      .green {
+        color: #20e6a4;
       }
-      .yellow{
+      .yellow {
         color: #efad2c;
       }
     }

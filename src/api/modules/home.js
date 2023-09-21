@@ -34,3 +34,7 @@ export const getYjjg = () => request.get("/home/yjjg",{})
 
 // 获取事件信息
 export const getSjxx = (data) => request.post("/home/sjxx", data);
+
+
+// 获取资源分析列表
+export const getZyfxList = (data) => request.post("/home/zyfx", data);
