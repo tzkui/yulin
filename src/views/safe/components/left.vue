@@ -221,13 +221,6 @@ const openDialog = function (type, info) {
 };
 transValue();
 getdatasj();
-const bus = useEventBus("eventView");
-// 查看
-bus.on(function (e) {
-  // 这里判断我点击的是谁
-  console.log("查看", e);
-  cks.value.ck = true;
-});
 const closeDialog = function(){
   $mitt.emit("hideAllMarker")
   firDialogFlags.value.qyxx = false;

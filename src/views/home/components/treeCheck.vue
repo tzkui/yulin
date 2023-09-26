@@ -9,9 +9,18 @@
       :style="{ transform: isHide ? 'rotate(180deg)' : '' }"
     ></div>
     <div class="tree_check_box">
+      <div class="search_box">
+        <el-input v-model="search_value" placeholder="请输入关键字" clearable />
+        <img
+          class="img"
+          @click="searchTreeData"
+          src="@/assets/home/icon_search.png"
+          alt=""
+        />
+      </div>
       <el-checkbox v-model="checked_all" @change="checkAll" label="选择全部" />
       <el-tree
-        :data="data"
+        :data="nowTreeList"
         show-checkbox
         node-key="type"
         :props="defaultProps"
@@ -89,12 +98,16 @@ let resource_data = ref([
     type: "yjjg",
     name: "应急机构",
     icon: "../../../assets/images/marker/icon_jigou.png",
+    py: "yjjg",
+    pinyin:"yingjijigou"
   },
   {
     id: 2,
     type: "jydw",
     name: "救援队伍",
     icon: "../../../assets/images/marker/icon_team.png",
+    py: "jydw",
+    pinyin:"jiuyuanduiwu"
   },
   // {
   //   id: 3,
@@ -107,60 +120,80 @@ let resource_data = ref([
     type: "yjzj",
     name: "应急专家",
     icon: "../../../assets/images/marker/icon-expert.png",
+    py: "yjjg",
+    pinyin:"yingjizhuanjia"
   },
   {
     id: 5,
     type: "yjwzk",
     name: "物资仓库",
     icon: "../../../assets/images/marker/icon_warehouse.png",
+    py: "wzck",
+    pinyin:"wuzicangku"
   },
   {
     id: 6,
     type: "yjzb",
     name: "救援装备",
     icon: "../../../assets/images/marker/icon-material.png",
+    py: "jyzb",
+    pinyin:"jiuyuanzhuangbei"
   },
   {
     id: 7,
     type: "jsd",
     name: "隐患地点",
     icon: "../../../assets/images/marker/mapdot-worm.png",
+    py: "yhdd",
+    pinyin:"yinhuandidian"
   },
   {
     id: 8,
     type: "fhmb",
     name: "防护目标",
     icon: "../../../assets/images/marker/icon_fhmb.png",
+    py: "fhmb",
+    pinyin:"fanghumubiao"
   },
   {
     id: 9,
     type: "bncs",
     name: "避难场所",
     icon: "../../../assets/images/marker/icon-bncs.png",
+    py: "bncs",
+    pinyin:"binanchangsuo"
   },
   {
     id: 10,
     type: "qyxx",
     name: "企业",
     icon: "../../../assets/images/marker/mapdot-building-6.png",
+    py: "qy",
+    pinyin:"qiye"
   },
   {
     id: 11,
     type: "spjk",
     name: "视频监控",
     icon: "../../../assets/images/marker/mapdot-scientific.png",
+    py: "spjk",
+    pinyin:"shipinjiankong"
   },
   {
     id: 12,
     type: "wrj",
     name: "无人机",
     icon: "../../../assets/images/marker/icon_wrj.png",
+    py: "wrj",
+    pinyin:"wurenji"
   },
   {
     id: 13,
     type: "wxdh",
     name: "卫星电话",
     icon: "../../../assets/images/marker/icon_wxdh.png",
+    py: "wxdh",
+    pinyin:"weixingdianhua"
   },
 ]);
 let checkedData = ref();
@@ -185,10 +218,23 @@ const getYhddData = function () {
     sessionStorage.setItem("jsdListData", JSON.stringify(arr));
   });
 };
+const nowTreeList = ref([]);
+const search_value = ref("");
+const searchTreeData = function () {
+  let val = search_value.value.trim();
+  nowTreeList.value = data.value.filter((item) => {
+    return item.name.includes(val) || item.py.includes(val) || item.pinyin.includes(val);
+  });
+  console.log("筛查结果", nowTreeList.value);
+};
+
 onMounted(() => {
   getyjjgData();
   getYhddData();
   data.value = resource_data.value.map((item, index) => {
+    return { ...item, id: index };
+  });
+  nowTreeList.value = resource_data.value.map((item, index) => {
     return { ...item, id: index };
   });
 });
@@ -253,7 +299,7 @@ const checkItem = (obj, checked) => {
         }
       }
     }
-    if(elTreeRef.value.getCheckedNodes().length===12){
+    if (elTreeRef.value.getCheckedNodes().length === 12) {
       checked_all.value = true;
     }
   } else {
@@ -269,7 +315,7 @@ const checkAll = (val) => {
   elTreeRef.value.setCheckedNodes([]);
   if (val) {
     nextTick(() => {
-      elTreeRef.value.setCheckedNodes(data.value);
+      elTreeRef.value.setCheckedNodes(nowTreeList.value);
       let checkedData = elTreeRef.value.getCheckedNodes();
       checkedData.forEach((item) => {
         let dom = document.getElementById(item.type + "checkbox");
@@ -409,6 +455,29 @@ const checkAll = (val) => {
         }
       }
     }
+  }
+}
+.search_box {
+  display: flex;
+  align-items: center;
+  width: 161px;
+  height: 32px;
+  background: rgba(9, 39, 67, 0.7);
+  border: 1px solid #1e89fd;
+  padding-right: 12px;
+  margin-bottom: 10px;
+
+  :deep(.el-input__inner) {
+    &::-webkit-input-placeholder {
+      font-size: 16px;
+      color: #aacbf6 !important;
+    }
+  }
+
+  .img {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
   }
 }
 </style>

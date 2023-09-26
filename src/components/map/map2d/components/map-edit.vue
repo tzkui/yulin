@@ -262,7 +262,7 @@ import {
             top: 0px;
             width: 20px;
             height: 20px;
-            background-image: url('../../../assets/images/marker/close.png');
+            // background-image: url('../../../assets/images/marker/close.png');
             background-size: 100% 100%;
         }
         // margin-top: 10px;

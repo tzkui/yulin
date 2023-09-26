@@ -124,6 +124,7 @@ const getSyqList = function () {
             gsw: "123",
             address: "0mm",
             status: "#25E3D8",
+            name: item.name
           },
         },
       };

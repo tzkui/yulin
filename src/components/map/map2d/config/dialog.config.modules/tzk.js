@@ -199,7 +199,7 @@ export default {
     btns: [
       {
         name: "查 看",
-        funcName: viewDetail,
+        funcName: 'rainfallThreePopup',
       },
     ],
   },
@@ -215,8 +215,8 @@ export default {
     // 右下角的按钮
     btns: [
       {
-        name: "查看",
-        funcName: viewDetail,
+        name: "查 看",
+        funcName: "rainfallThreePopup",
       },
     ],
   },
@@ -232,8 +232,8 @@ export default {
     // 右下角的按钮
     btns: [
       {
-        name: "查看",
-        funcName: viewDetail,
+        name: "查 看",
+        funcName: "rainfallThreePopup",
       },
     ],
   },
@@ -254,8 +254,8 @@ export default {
     // 右下角的按钮
     btns: [
       {
-        name: "查看",
-        funcName: viewDetail,
+        name: "查 看",
+        funcName: "rainfallThreePopup",
       },
     ],
   },
@@ -271,8 +271,8 @@ export default {
     // 右下角的按钮
     btns: [
       {
-        name: "查看",
-        funcName: viewDetail,
+        name: "查 看",
+        funcName: "rainfallThreePopup",
       },
     ],
   },

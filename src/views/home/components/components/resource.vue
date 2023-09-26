@@ -253,10 +253,10 @@ onMounted(() => {
   <ViewBox title="应急资源">
     <div class="emergency_resources">
       <!-- 搜索框 -->
-      <div class="search_box">
+      <!-- <div class="search_box">
         <el-input v-model="search_value" placeholder="请输入关键字" />
         <img class="img" src="@/assets/home/icon_search.png" alt="" />
-      </div>
+      </div> -->
       <!-- tab -->
       <div class="resources_tab">
         <div

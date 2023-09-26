@@ -1,17 +1,44 @@
 <script setup>
-import { computed, inject, ref } from "vue";
+import { computed, inject, ref, nextTick, onMounted } from "vue";
 import { getZyfxList } from "@/api/modules/home.js";
 
 const showDialog = ref(false);
 const $mitt = inject("$mitt");
 const drawEnd = function (info) {
   console.log(info);
-  queryParams.value.map_x = info.center.lng + "";
-  queryParams.value.map_y = info.center.lat + "";
-  queryParams.value.radius = info.radius + "";
-  showDialog.value = true;
-  getAllList();
+  if (info.radius) {
+    queryParams.value.map_x = info.center.lng + "";
+    queryParams.value.map_y = info.center.lat + "";
+    queryParams.value.radius = info.radius + "";
+    showDialog.value = true;
+    getAllList();
+  }
 };
+// 将度数转换为弧度
+function degreesToRadians(degrees) {
+  return degrees * (Math.PI / 180);
+}
+
+// 计算两个经纬度点之间的距离（单位：千米）
+function calculateDistance(lat1, lon1, lat2, lon2) {
+  const earthRadiusKm = 6371; // 地球半径（千米）
+
+  const dLat = degreesToRadians(lat2 - lat1);
+  const dLon = degreesToRadians(lon2 - lon1);
+
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(degreesToRadians(lat1)) *
+      Math.cos(degreesToRadians(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  const distance = earthRadiusKm * c * 1000;
+
+  return parseInt(distance);
+}
 $mitt.on("drawEnd", drawEnd);
 
 const queryParams = ref({
@@ -50,10 +77,9 @@ const markAllPoint = function () {
   markBncsPoint();
 };
 
-const markRyPoint = function () {
-  let list = allListData.value.ry;
-  list.forEach((item) => {
-    $mitt.emit("addMarker", {
+const getPointInfos = {
+  ry(item) {
+    return {
       markerType: "yjry",
       id: item.id,
       icon: "/images/marker/icon_renyuan.png",
@@ -69,13 +95,10 @@ const markRyPoint = function () {
         linkPhone: item.linkPhone,
         duties: item.duties,
       },
-    });
-  });
-};
-const markWzkPoint = function () {
-  let list = allListData.value.wzk;
-  list.forEach((item) => {
-    $mitt.emit("addMarker", {
+    };
+  },
+  wzk(item) {
+    return {
       markerType: "yjwzk",
       id: item.id,
       icon: "/images/marker/icon_material.png",
@@ -90,13 +113,10 @@ const markWzkPoint = function () {
         address: item.address,
         phone: item.linkPhone,
       },
-    });
-  });
-};
-const markJydwPoint = function () {
-  let list = allListData.value.jydw;
-  list.forEach((item) => {
-    $mitt.emit("addMarker", {
+    };
+  },
+  jydw(item) {
+    return {
       markerType: "jydw",
       id: item.id,
       icon: "/images/marker/icon_team.png",
@@ -112,13 +132,10 @@ const markJydwPoint = function () {
         person: item.linkName,
         phone: item.linkPhone,
       },
-    });
-  });
-};
-const markSpjkPoint = function () {
-  let list = allListData.value.spjk;
-  list.forEach((item) => {
-    $mitt.emit("addMarker", {
+    };
+  },
+  spjk(item) {
+    return {
       markerType: "spjk",
       id: item.id,
       icon: "/images/marker/mapdot-scientific.png",
@@ -133,16 +150,13 @@ const markSpjkPoint = function () {
         location: item.location,
         playerUrl: item.playerUrl,
       },
-    });
-  });
-};
-const markDxjxPoint = function () {
-  let list = allListData.value.dxjx;
-  list.forEach((item) => {
-    $mitt.emit("addMarker", {
+    };
+  },
+  dxjx(item) {
+    return {
       markerType: "dxjx",
       id: item.id,
-      icon: "/images/marker/icon_shelter.png",
+      icon: "/images/marker/icon_dxjx.png",
       lng: item.mapX,
       lat: item.mapY,
       name: "大型机械",
@@ -151,13 +165,10 @@ const markDxjxPoint = function () {
       details: {
         ...item,
       },
-    });
-  });
-};
-const markBncsPoint = function () {
-  let list = allListData.value.bncs;
-  list.forEach((item) => {
-    $mitt.emit("addMarker", {
+    };
+  },
+  bncs(item) {
+    return {
       markerType: "bncs",
       id: item.id,
       icon: "/images/marker/icon_shelter.png",
@@ -172,10 +183,59 @@ const markBncsPoint = function () {
         person: item.accommodateNum,
         address: item.location,
       },
-    });
-  });
+    };
+  },
 };
 
+const markRyPoint = function () {
+  let list = allListData.value.ry;
+  list.forEach((item) => {
+    $mitt.emit("addMarker", getPointInfos.ry(item));
+  });
+};
+const markWzkPoint = function () {
+  let list = allListData.value.wzk;
+  list.forEach((item) => {
+    $mitt.emit("addMarker", getPointInfos.wzk(item));
+  });
+};
+const markJydwPoint = function () {
+  let list = allListData.value.jydw;
+  list.forEach((item) => {
+    $mitt.emit("addMarker", getPointInfos.jydw(item));
+  });
+};
+const markSpjkPoint = function () {
+  let list = allListData.value.spjk;
+  list.forEach((item) => {
+    $mitt.emit("addMarker", getPointInfos.spjk(item));
+  });
+};
+const markDxjxPoint = function () {
+  let list = allListData.value.dxjx;
+  list.forEach((item) => {
+    $mitt.emit("addMarker", getPointInfos.dxjx(item));
+  });
+};
+const markBncsPoint = function () {
+  let list = allListData.value.bncs;
+  list.forEach((item) => {
+    $mitt.emit("addMarker", getPointInfos.bncs(item));
+  });
+};
+const showPopup = function (info) {
+  $mitt.emit("flyTo", { lng: info.mapX, lat: info.mapY, zoom: 18 });
+  let dict = { ry: "yjry", wzk: "yjwzk" };
+  let type = dict[selectedTab.value] || selectedTab.value;
+  // 判断有dom了再弹popup
+  let timer = setInterval(() => {
+    let dom = document.getElementById(`icon_${type}_${info.id}`);
+    if (dom) {
+      $mitt.emit("openPopup", getPointInfos[selectedTab.value](info));
+      clearInterval(timer);
+    }
+  }, 500);
+};
 const closeDialog = function () {
   showDialog.value = false;
 };
@@ -186,7 +246,7 @@ const nowList = computed(() => {
 
 <template>
   <div class="resource_analysis_dialog" v-if="showDialog">
-    <div class="header">资源分析1</div>
+    <div class="header">资源分析</div>
     <div class="content">
       <div class="area">
         圈选范围：<span style="color: #fb8681"
@@ -205,15 +265,61 @@ const nowList = computed(() => {
         </li>
       </ul>
       <ul class="point_list">
-        <li class="item" v-for="item in nowList" :key="item.id">
+        <li
+          class="item"
+          v-for="item in nowList"
+          :key="item.id"
+          @click="showPopup(item)"
+        >
           <div class="name">
-            {{ item.name || item.monitorName || storageName }}
+            {{
+              item.name ||
+              item.monitorName ||
+              item.storageName ||
+              item.title ||
+              item.personalName
+            }}
           </div>
-          <div class="address">地址：{{ item.location || item.address }}</div>
-          <!-- <div class="distance">
-            约<span>{{ item.distance }}</span
+          <template v-if="selectedTab === 'ry'">
+            <div>职务：{{ item.job }}</div>
+            <div>所属单位：{{ item.orgName }}</div>
+          </template>
+          <template v-else-if="selectedTab === 'wzk'">
+            <div>地址： {{ item.address }}</div>
+          </template>
+          <template v-else-if="selectedTab === 'jydw'">
+            <div>
+              <span style="margin-right: 20px"
+                >总人数：{{ item.amount }}人</span
+              >
+              <span>负责人：{{ item.linkName }}</span>
+            </div>
+          </template>
+          <template v-else-if="selectedTab === 'spjk'">
+            <div>位置：{{ item.location }}</div>
+          </template>
+          <template v-else-if="selectedTab === 'dxjx'">
+            <div>所属组织：{{ item.ssqy }}</div>
+          </template>
+          <template v-else>
+            <div>
+              <span style="margin-right: 20px"
+                >面积：{{ item.areaCovered }}㎡</span
+              >
+              <span>可容纳人数：{{ item.accommodateNum }}人</span>
+            </div>
+          </template>
+          <div class="distance">
+            约<span>{{
+              calculateDistance(
+                queryParams.map_x,
+                queryParams.map_y,
+                item.mapX,
+                item.mapY
+              )
+            }}</span
             >米
-          </div> -->
+          </div>
         </li>
       </ul>
     </div>
@@ -276,10 +382,11 @@ const nowList = computed(() => {
         background-color: #305077;
         padding-left: 20px;
         font-size: 13px;
-        line-height: 16px;
-        height: 48px;
+        line-height: 20px;
+        // height: 48px;
         box-sizing: border-box;
         padding-top: 8px;
+        padding-bottom: 8px;
         border-radius: 4px;
         .name {
           margin-bottom: 3px;

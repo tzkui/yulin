@@ -114,7 +114,8 @@ export const syqxxLists = {
           xxsw: "123",
           gsw: "123",
           address: "0mm",
-          status: "#25E3D8"
+          status: "#25E3D8",
+          name: ""
         }
       },
     ]

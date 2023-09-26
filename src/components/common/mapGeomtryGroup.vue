@@ -42,6 +42,9 @@ const mapDrawPic = () => {
   console.log("标绘");
   $mitt.emit("drawGraph", { type: "polygon" });
 };
+const mapToPic = function(){
+  $mitt.emit("mapToPic")
+}
 const videoConferencingBus = useEventBus("openVideoConferencing")
 const mapLayer = function(){
   videoConferencingBus.emit({id:1})

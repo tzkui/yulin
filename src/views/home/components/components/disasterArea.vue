@@ -16,12 +16,7 @@ const checkTime = ref([
   { name: "近七天", num: 3 },
 ]);
 // 灾情区域
-const disaster_type = ref([
-  { name: "洪涝灾害", value: "" },
-  { name: "森火事件", value: "" },
-  { name: "地质灾害", value: "" },
-  { name: "地震灾害", value: "" },
-]);
+const disaster_type = ref([]);
 // 定义一个是这个关于获取图表时间和类型的数据
 let echatssj = ref("3")
 let echatslx = ref('')
@@ -36,12 +31,7 @@ const changeTime = async (num) => {
   getechartsData()
 };
 let color3D = ref(["#39BFFA", "#71D6E5", "#E9BD4B", "#ACEFF3"])
-let data3D = ref([
-  { name: "洪涝灾害", y: 6, h: 36, percent: "45.23", color: color3D.value[0] },
-  { name: "森火事件", y: 2, h: 12, percent: "12.23", color: color3D.value[1] },
-  { name: "地质灾害", y: 6, h: 60, percent: "45.23", color: color3D.value[2] },
-  { name: "地震灾害", y: 4, h: 24, percent: "40.23", color: color3D.value[3] },
-]);
+let data3D = ref([]);
 // 定义一个代表这个图表的数据
 const checkDisaster = function (value) {
   // console.log(value, "点击")
@@ -199,7 +189,7 @@ onUnmounted(() => {
 });
 </script>
 <template>
-  <ViewBox title="灾情区域分析">
+  <ViewBox title="灾情事件分析">
     <div class="disaster_area">
       <!-- tab -->
       <div class="tab_box title_tab">

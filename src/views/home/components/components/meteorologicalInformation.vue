@@ -1,5 +1,19 @@
 <script setup>
 import ViewBox from "@/components/common/view-box.vue";
+import { ref } from "vue";
+
+const weatherList = ref([
+  { id: 1, time: "10月18日", state: 1, weather: "15℃/21℃" },
+  { id: 2, time: "10月19日", state: 1, weather: "14℃/22℃" },
+  { id: 3, time: "10月20日", state: 1, weather: "16℃/25℃" },
+  { id: 4, time: "10月21日", state: 1, weather: "14℃/22℃" },
+  { id: 5, time: "10月22日", state: 1, weather: "12℃/17℃" },
+  { id: 6, time: "10月23日", state: 1, weather: "14℃/20℃" },
+  { id: 7, time: "10月24日", state: 1, weather: "15℃/22℃" },
+  { id: 8, time: "10月25日", state: 1, weather: "16℃/25℃" },
+  { id: 9, time: "10月26日", state: 1, weather: "18℃/27℃" },
+]);
+const showList = ref(false)
 </script>
 <template>
   <ViewBox title="气象信息">
@@ -36,7 +50,7 @@ import ViewBox from "@/components/common/view-box.vue";
 
       <div class="weather_list">
         <span class="time">10月19日</span>
-        <span class="date">今天</span>
+        <span class="date" @click="showList=!showList" style="cursor: pointer;">今天</span>
         <img
           class="weather"
           src="@/assets/naturalRightimg/taityang.png"
@@ -45,6 +59,20 @@ import ViewBox from "@/components/common/view-box.vue";
         <span class="centigrade">14℃/22℃</span>
       </div>
     </div>
+    <ul class="infoList" v-if="showList">
+      <li v-for="(item, index) in weatherList" :key="item.id" :class="index===1?'spac':''">
+        <div class="time">{{ item.time }}</div>
+        <div class="today" v-if="index === 1">今天</div>
+        <div class="icon">
+          <img
+            class="weather"
+            src="@/assets/naturalRightimg/taityang.png"
+            v-if="item.state === 1"
+          />
+        </div>
+        <div class="weather">{{ item.weather }}</div>
+      </li>
+    </ul>
   </ViewBox>
 </template>
 
@@ -118,5 +146,47 @@ import ViewBox from "@/components/common/view-box.vue";
       height: 23px;
     }
   }
+}
+
+.infoList {
+  position: absolute;
+  right: 460px;
+  top: 40px;
+  width: 80%;
+  background-color: #1D3664;
+  color: #d0deee;
+  border-radius: 5px;
+  >li{
+    display: flex;
+    position: relative;
+    height: 36px;
+    line-height: 36px;
+    padding-left: 20px;
+    background: rgba(13, 50, 90, 1);
+    margin-bottom: 10px;
+    margin-top: 10px;
+    .time{
+      flex: 4;
+    }
+    .today{
+      position: absolute;
+      left: 120px;
+    }
+    .icon{
+      flex: 2;
+      img{
+        width: 23px;
+        height: 23px;
+      }
+    }
+    .weather{
+      flex: 1;
+      margin-right: 20px;;
+    }
+  }
+}
+.spac{
+  font-size: 14px;
+  color: #fff;;
 }
 </style>

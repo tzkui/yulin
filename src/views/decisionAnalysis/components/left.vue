@@ -3,21 +3,35 @@
     <ViewBox title="灾情分析">
       <div class="disaster_situation">
         <div class="type_select_box">
-          <el-select @change="changeDisaster" v-model="current_disater_type" placeholder="请选择类型" :teleported="false">
-            <el-option v-for="item in disaster_types" :key="item.value" :label="item.name" :value="item.value">
+          <el-select
+            @change="changeDisaster"
+            v-model="current_disater_type"
+            placeholder="请选择类型"
+            :teleported="false"
+          >
+            <el-option
+              v-for="item in disaster_types"
+              :key="item.value"
+              :label="item.name"
+              :value="item.value"
+            >
             </el-option>
           </el-select>
         </div>
         <!-- tab 切换chart -->
         <div class="disaster_tabs">
-          <div v-for="(item, index) in disaster_tab" :key="index"
-            :class="{ 'disaster_tab': true, 'active': current_disater_tab == item }" @click="changeChart(item)">
-            {{ item }}</div>
+          <div
+            v-for="(item, index) in disaster_tab"
+            :key="index"
+            :class="{ disaster_tab: true, active: current_disater_tab == item }"
+            @click="changeChart(item)"
+          >
+            {{ item }}
+          </div>
         </div>
         <!-- chart -->
-        <div class="disaster_chart" id="disaster-chart">
-
-        </div>
+        <div class="disaster_chart" id="disaster-chart"></div>
+        <!-- <hotMap></hotMap> -->
       </div>
     </ViewBox>
     <ViewBox title="灾情综合查询">
@@ -29,11 +43,28 @@
         </div> -->
         <!-- 列表 -->
         <div v-show="showDetail" class="disaster_synthesis_details">
-          <button class="back_list" @click="() => { showDetail = false; }">返回</button>
-          <div v-if="disaster_synthesis_details.length" class="synthesis_details">
-            <div class="synthesis_detail" v-for="(item, index) in disaster_synthesis_details" :key="index">
+          <button
+            class="back_list"
+            @click="
+              () => {
+                showDetail = false;
+              }
+            "
+          >
+            返回
+          </button>
+          <div
+            v-if="disaster_synthesis_details.length"
+            class="synthesis_details"
+          >
+            <div
+              class="synthesis_detail"
+              v-for="(item, index) in disaster_synthesis_details"
+              :key="index"
+            >
               <div class="date_time">
-                {{ item.dynamicsDate.substr(0, 10) }} <span class="time">{{ item.dynamicsDate.substr(11) }}</span>
+                {{ item.dynamicsDate.substr(0, 10) }}
+                <span class="time">{{ item.dynamicsDate.substr(11) }}</span>
               </div>
               <div class="cont">
                 <span class="blue">{{ item.dynamicsTag }}</span>
@@ -41,50 +72,80 @@
               </div>
             </div>
           </div>
-          <div class="empty_data">
-            暂无数据
-          </div>
+          <div class="empty_data">暂无数据</div>
         </div>
 
         <div v-show="!showDetail" class="affairmain">
           <!-- 还是判断循环渲染添加进行 -->
-          <template v-for=" (item, index) in disaster_synthesis">
-            <div :class="{ 'item': true, 'active': currentEvent == item.event.id }" v-if="item.event.eventLevel == '1'"
-              @click="setMarker('zqzhcx', item)" :key="index">
-              <p class="itemtitle">{{ item.event.eventLevelName + '事件' }}</p>
+          <template v-for="(item, index) in disaster_synthesis">
+            <div
+              :class="{ item: true, active: currentEvent == item.event.id }"
+              v-if="item.event.eventLevel == '1'"
+              @click="setMarker('zqzhcx', item)"
+              :key="index"
+            >
+              <p class="itemtitle">{{ item.event.eventLevelName + "事件" }}</p>
               <p class="centers">
-                <span class="center_text">详情: {{ item.event.eventContent }}</span>
-                <span class="center_text">时间: {{ item.event.eventDate }}</span>
-                <span class="center_text">地点: {{ item.event.eventAddress }}</span>
+                <span class="center_text"
+                  >详情: {{ item.event.eventContent }}</span
+                >
+                <span class="center_text"
+                  >时间: {{ item.event.eventDate }}</span
+                >
+                <span class="center_text"
+                  >地点: {{ item.event.eventAddress }}</span
+                >
               </p>
               <div class="labels">
                 <p class="labels-top">
                   <span class="one">{{ item.event.typeName }}</span>
-                  <span class="twopro" v-if="item.event.stateName == '处理中'">{{ item.event.stateName }}</span>
+                  <span
+                    class="twopro"
+                    v-if="item.event.stateName == '处理中'"
+                    >{{ item.event.stateName }}</span
+                  >
                   <span class="two" v-else>{{ item.event.stateName }}</span>
                 </p>
                 <p class="labels-bottoms">
-                  <span class="labels-bottom">{{ item.event.reportStateName }}</span>
+                  <span class="labels-bottom">{{
+                    item.event.reportStateName
+                  }}</span>
                 </p>
               </div>
             </div>
             <!-- 下面这个就是较大事件的 -->
-            <div :class="{ 'itempro': true, 'active': currentEvent == item.event.id }" v-if="item.event.eventLevel == '3'"
-              @click="setMarker('zqzhcx', item)" :key="index">
-              <p class="itemtitle">{{ item.event.eventLevelName + '事件' }}</p>
+            <div
+              :class="{ itempro: true, active: currentEvent == item.event.id }"
+              v-if="item.event.eventLevel == '3'"
+              @click="setMarker('zqzhcx', item)"
+              :key="index"
+            >
+              <p class="itemtitle">{{ item.event.eventLevelName + "事件" }}</p>
               <p class="centers">
-                <span class="center_text">详情: {{ item.event.eventContent }}</span>
-                <span class="center_text">时间: {{ item.event.eventDate }}</span>
-                <span class="center_text">地点: {{ item.event.eventAddress }}</span>
+                <span class="center_text"
+                  >详情: {{ item.event.eventContent }}</span
+                >
+                <span class="center_text"
+                  >时间: {{ item.event.eventDate }}</span
+                >
+                <span class="center_text"
+                  >地点: {{ item.event.eventAddress }}</span
+                >
               </p>
               <div class="labels">
                 <p class="labels-top">
                   <span class="one">{{ item.event.typeName }}</span>
-                  <span class="twopro" v-if="item.event.stateName == '处理中'">{{ item.event.stateName }}</span>
+                  <span
+                    class="twopro"
+                    v-if="item.event.stateName == '处理中'"
+                    >{{ item.event.stateName }}</span
+                  >
                   <span class="two" v-else>{{ item.event.stateName }}</span>
                 </p>
                 <p class="labels-bottoms">
-                  <span class="labels-bottom">{{ item.event.reportStateName }}</span>
+                  <span class="labels-bottom">{{
+                    item.event.reportStateName
+                  }}</span>
                 </p>
               </div>
             </div>
@@ -94,9 +155,7 @@
     </ViewBox>
     <ViewBox title="案例库">
       <div class="case_library">
-        <div class="case_library_btn">
-          查看
-        </div>
+        <div class="case_library_btn">查看</div>
       </div>
     </ViewBox>
   </div>
@@ -104,15 +163,20 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, inject, nextTick } from "vue";
+import hotMap from "./hotMap.vue";
 const emit = defineEmits(["eventClick"]);
 const $mitt = inject("$mitt");
 
 // echarts实例
 const echarts = inject("echarts");
 import ViewBox from "@/components/common/view-box.vue";
-import { getZqfxDropdowndata, getZqfxLeveldata, getZqzhcx } from '@/api/decision_analysis.js'
+import {
+  getZqfxDropdowndata,
+  getZqfxLeveldata,
+  getZqzhcx,
+} from "@/api/decision_analysis.js";
 // tab
-const disaster_tab = ref(["分析", "等级", "趋势", "区域"]);
+const disaster_tab = ref(["分析", "等级", "趋势", "区域", "热力图"]);
 const current_disater_tab = ref("分析");
 // 下拉选项
 const disaster_types = ref([]);
@@ -345,7 +409,7 @@ const option = ref({
     },
   ],
 });
-const chartData = ref()
+const chartData = ref();
 let chartInterval = null; //轮播 interval
 // 灾情综合查询列表
 const disaster_serach = ref();
@@ -356,8 +420,8 @@ const disaster_synthesis = ref([]);
 const disaster_synthesis_details = ref([]);
 
 onMounted(() => {
-  initDisasterTypes()
-  initZqzhcx()
+  initDisasterTypes();
+  initZqzhcx();
 });
 onUnmounted(() => {
   clearInterval(chartInterval);
@@ -365,23 +429,23 @@ onUnmounted(() => {
 
 // 灾情分析下拉
 const initDisasterTypes = async () => {
-  let res = await getZqfxDropdowndata()
+  let res = await getZqfxDropdowndata();
   // console.log('initDisasterTypes=========>',res);
-  disaster_types.value = res.data
-  current_disater_type.value = res.data[0].value
-  initZqfxLeveldata(res.data[0].value)
-}
+  disaster_types.value = res.data;
+  current_disater_type.value = res.data[0].value;
+  initZqfxLeveldata(res.data[0].value);
+};
 // 灾情分析等级与区域
 const initZqfxLeveldata = async (id) => {
-  let res = await getZqfxLeveldata({ typeId: id })
-  console.log('getZqfxLeveldata=========>灾情', res);
-  chartData.value = res.data
-  changeChart(current_disater_tab.value)
-}
+  let res = await getZqfxLeveldata({ typeId: id });
+  console.log("getZqfxLeveldata=========>灾情", res);
+  chartData.value = res.data;
+  changeChart(current_disater_tab.value);
+};
 // 切换灾情类型
 const changeDisaster = (val) => {
-  initZqfxLeveldata(val)
-}
+  initZqfxLeveldata(val);
+};
 // 图表
 const initChart = function (option) {
   let chartDom = document.getElementById("disaster-chart");
@@ -485,7 +549,7 @@ const changeChart = (item) => {
         interval: 0,
         formatter: function (value) {
           return value.split("").join("\n");
-        }
+        },
       },
     },
     yAxis: [
@@ -576,91 +640,111 @@ const changeChart = (item) => {
   switch (item) {
     case "分析":
     case "等级":
-      let allNum = 0
-      let level = ['', '一般火灾', '较大火灾', '重大火灾', '特大火灾']
-      option.value.series[0].data = chartData.value.level.map(item => {
-        allNum += item.count
-        return { value: item.count, name: level[item.eventlevel] }
-      })
-      option.value.series[0].label.formatter = () => { return `{total|${allNum}} 个\r\n{text|总数}`; }
+      let allNum = 0;
+      let level = ["", "一般火灾", "较大火灾", "重大火灾", "特大火灾"];
+      option.value.series[0].data = chartData.value.level.map((item) => {
+        allNum += item.count;
+        return { value: item.count, name: level[item.eventlevel] };
+      });
+      option.value.series[0].label.formatter = () => {
+        return `{total|${allNum}} 个\r\n{text|总数}`;
+      };
 
       initChart(option.value);
       break;
     case "趋势":
-      let dataArr = []
-      noption.xAxis.data = chartData.value.date.map(item => {
-        dataArr.push(item.count)
-        return item.month + '月'
-      })
-      noption.series = [{
-        name: "数量",
-        type: "line",
-        showAllSymbol: true, //显示所有图形。
-        symbolSize: 2, //标记的大小
-        itemStyle: {
-          //折线拐点标志的样式
-          color: "#c5cf9b",
+      let dataArr = [];
+      noption.xAxis.data = chartData.value.date.map((item) => {
+        dataArr.push(item.count);
+        return item.month + "月";
+      });
+      noption.series = [
+        {
+          name: "数量",
+          type: "line",
+          showAllSymbol: true, //显示所有图形。
+          symbolSize: 2, //标记的大小
+          itemStyle: {
+            //折线拐点标志的样式
+            color: "#c5cf9b",
+          },
+          lineStyle: {
+            color: "#c5cf9b",
+          },
+          data: dataArr,
         },
-        lineStyle: {
-          color: "#c5cf9b",
-        },
-        data: dataArr,
-      }]
+      ];
 
       initChart(noption);
       break;
     case "区域":
-      let dataArea = []
-      noption.xAxis.data = chartData.value.area.map(item => {
-        dataArea.push(item.value)
-        return item.name
-      })
-      noption.series = [{
-        name: "数量",
-        type: "bar",
-        barWidth: 14,
-        label: {
-          show: true,
-          position: "top",
-          color: "#fff",
-          fontSize: 16,
+      let dataArea = [];
+      noption.xAxis.data = chartData.value.area.map((item) => {
+        dataArea.push(item.value);
+        return item.name;
+      });
+      noption.series = [
+        {
+          name: "数量",
+          type: "bar",
+          barWidth: 14,
+          label: {
+            show: true,
+            position: "top",
+            color: "#fff",
+            fontSize: 16,
+          },
+          itemStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              {
+                offset: 0,
+                color: "rgba(38,218,207,1)",
+              },
+              {
+                offset: 1,
+                color: "rgba(38,218,207,0)",
+              },
+            ]),
+          },
+          data: dataArea,
         },
-        itemStyle: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {
-              offset: 0,
-              color: "rgba(38,218,207,1)",
-            },
-            {
-              offset: 1,
-              color: "rgba(38,218,207,0)",
-            },
-          ]),
-        },
-        data: dataArea,
-      },]
+      ];
       initChart(noption);
       break;
-
-    default:
-      () => { };
+    case "热力图":
+      addHotMap();
       break;
+    default:
+      () => {};
+      break;
+  }
+};
+const addHotMap = function () {
+  console.log(chartData.value);
+  let list = chartData.value.hot.filter((item) => {
+    return item.mapX !== "null" && item.mapY !== "null";
+  });
+  if (list.length > 0) {
+    let points = list.map((item) => {
+      return [item.mapY - 0, item.mapX - 0, item.num];
+    });
+    $mitt.emit("addHostLayer", points);
   }
 };
 // 灾情综合查询
 const initZqzhcx = async () => {
-  let res = await getZqzhcx()
-  console.log('getZqzhcx===========>', res);
-  disaster_synthesis.value = res.data
+  let res = await getZqzhcx();
+  console.log("getZqzhcx===========>", res);
+  disaster_synthesis.value = res.data;
   setMarker("zqzhcx", disaster_synthesis.value[0]);
-}
+};
 // 列表点击撒点...
 const setMarker = (type, data) => {
   // console.log("item===========>", data);
   // return
-  disaster_synthesis_details.value = data.eventDynamics
+  disaster_synthesis_details.value = data.eventDynamics;
 
-  let item = data.event
+  let item = data.event;
   currentEvent.value = item.id;
   // 先清除 再撒点
   $mitt.emit("clearAll", { ignore: ["geo绘制图层"] });
@@ -675,7 +759,7 @@ const setMarker = (type, data) => {
     label: { text: item.typeName, font_size: 16 },
     dialogType: "zqzhcx",
     details: {
-      date: item.eventDate.replace(' ', '&nbsp;'),
+      date: item.eventDate.replace(" ", "&nbsp;"),
       name: item.eventName,
       location: item.eventAddress,
       cont: item.eventContent,
@@ -720,7 +804,7 @@ const setMarker = (type, data) => {
         }
 
         .el-select-dropdown__item.selected {
-          background-color: rgba(0, 0, 0, .1) !important;
+          background-color: rgba(0, 0, 0, 0.1) !important;
           color: #53befc !important;
         }
 
@@ -729,27 +813,28 @@ const setMarker = (type, data) => {
           height: 28px !important;
           padding: 4px 0 !important;
         }
-
       }
     }
 
     .disaster_tabs {
-      width: 100px;
+      width: 96px;
 
       .disaster_tab {
-        height: 45px;
+        height: 40px;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
         width: 100%;
         font-size: 12px;
-        background: url("@/assets/decisionAnalysis/tab.png") center/99% 100% no-repeat;
+        background: url("@/assets/decisionAnalysis/tab.png") center/99% 100%
+          no-repeat;
         margin-bottom: 8px;
 
         &:hover,
         &.active {
-          background: url("@/assets/decisionAnalysis/tab_active.png") center/99% 100% no-repeat;
+          background: url("@/assets/decisionAnalysis/tab_active.png") center/99%
+            100% no-repeat;
         }
       }
     }
@@ -831,7 +916,6 @@ const setMarker = (type, data) => {
           margin-right: 10px;
           font-size: 14px;
           color: rgba(208, 222, 238, 1);
-
         }
 
         // 下面就是最后的标签的部分的了
@@ -1078,7 +1162,8 @@ const setMarker = (type, data) => {
         .cont {
           height: 78px;
           overflow: auto;
-          background: url("@/assets/decisionAnalysis/command-bg.png") center/100% no-repeat;
+          background: url("@/assets/decisionAnalysis/command-bg.png")
+            center/100% no-repeat;
           padding: 15px;
           font-size: 14px;
           color: #ccc;

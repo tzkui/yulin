@@ -40,27 +40,18 @@ const dialogFlags = ref({
   WarningMornitor: false,
   showInfoDialog: false,
 });
-// 监测预警
-const warning_type = ref([
-  { name: "雨情监测", type: "yqjc", num: "0" },
-  { name: "河道监测", type: "hdjc", num: "0" },
-  { name: "地质监测", type: "dzjc", num: "0" },
-  { name: "水库监测", type: "skjc", num: "0" },
-  { name: "安全生产监测", type: "aqscjc", num: "0" },
-  { name: "林火监测", type: "lhjc", num: "0" },
-]);
 const currentWarningType = ref();
 const warning_detail = ref();
 
 const infoDialogData = ref({
   name: "雨量监测站",
   list: [
-    { id: 1, line1: "00：00", line2: "1.9" },
-    { id: 2, line1: "03：00", line2: "0.0" },
-    { id: 3, line1: "06：00", line2: "1.9" },
-    { id: 4, line1: "09：00", line2: "0.0" },
-    { id: 5, line1: "12：00", line2: "1.9" },
-    { id: 6, line1: "15：00", line2: "10.0" },
+    { id: 1, line1: "00：00", line2: "3.9" },
+    { id: 2, line1: "03：00", line2: "2.0" },
+    { id: 3, line1: "06：00", line2: "8.9" },
+    // { id: 4, line1: "09：00", line2: "5.0" },
+    // { id: 5, line1: "12：00", line2: "4.9" },
+    // { id: 6, line1: "15：00", line2: "10.0" },
   ],
   showSelect: false,
   headers: ["时间", "雨量mm"],

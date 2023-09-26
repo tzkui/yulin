@@ -80,6 +80,7 @@ let props = defineProps({
     default: {},
   },
 });
+let layerWork = null;
 const initMap = () => {
   //104.07217,30.663277
   let myBase = deepmerge(mapDeafultOps, props.mapOptions);
@@ -433,7 +434,7 @@ const drawArc = (drawArcParms) => {
   console.log({
     type: drawArcParms.type,
     style: style,
-  })
+  });
   drawLayer.startDraw({
     type: drawArcParms.type,
     style: style,
@@ -887,8 +888,45 @@ const addMapGlLayer = (data = {}) => {
     mapboxMap.scrollZoom.disable();
   });
 };
+
+// 热力图
+const addHostLayer = (data) => {
+  if (layerWork) {
+    map.getLayerById("HeatLayer").remove();
+  }
+  layerWork = new mars2d.layer.HeatLayer(data, {
+    id: "HeatLayer",
+    radius: 30,
+    blur: 10, //模糊度 越大越模糊
+    minOpacity: 0.3, //最开始不透明度
+    gradient: {
+      0.4: "blue",
+      0.6: "cyan",
+      0.7: "lime",
+      0.8: "yellow",
+      1: "red",
+    }, //渐变色
+  });
+  map.addLayer(layerWork);
+  map.fitBounds(data);
+};
+
+// 截图
+const mapToPic = function () {
+  // console.log(domtoimage);
+  // domtoimage.toPng(document.getElementById("map2d")).then((res) => {
+  //   var a = document.createElement("a")
+  //   a.href = res;
+  //   a.click()
+  // });
+  const expImg = new mars2d.thing.ExpImg();
+  map.addThing(expImg);
+  expImg.expAll();
+};
+
 onMounted(() => {
   initMap();
+  $mitt.on("mapToPic", mapToPic);
   $mitt.on("addMarker", (data) => {
     //添加标记
     console.log("addMarker--->", data);
@@ -937,7 +975,9 @@ onMounted(() => {
       console.log("缺少必要参数请查看---flyTo--", data);
       return;
     }
-    map.flyTo([data.lat, data.lng]);
+
+    map.flyTo([data.lat, data.lng], data.zoom || map.getZoom()),
+      { duration: 4 };
   });
   $mitt.on("mapCenter", (data) => {
     //设置中心点
@@ -955,7 +995,8 @@ onMounted(() => {
       console.log("缺少必要参数请查看---setZoom--", data);
       return;
     }
-    map.zoom(Number(data.zoom));
+    // map.zoom(Number(data.zoom));
+    map.setZoom(Number(data.zoom));
   });
   $mitt.on("flyHome", () => {
     //回到初始位置
@@ -966,6 +1007,10 @@ onMounted(() => {
     //获取可视区域坐标
     let bData = getBoundData();
     $mitt.emit("getBounds", bData);
+  });
+  // 热力图
+  $mitt.on("addHostLayer", (data) => {
+    addHostLayer(data);
   });
   $mitt.on("setBaseMap", (data) => {
     //获取可视区域坐标

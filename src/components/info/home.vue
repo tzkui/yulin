@@ -11,7 +11,9 @@ import eventSupplementaryRecording from "../common/eventSupplementaryRecording.v
 import eventView from "../common/eventView.vue";
 import map2d from "@/components/map/map2d/map.vue";
 import { assetsUrl } from "@/components/map/map2d/hook/index";
+import rainfallThreePopup from './rainfallThreePopup.vue'
 import { useEventBus } from "@vueuse/core";
+
 const bus = useEventBus("goDispatchPage");
 const listener = function (e) {
   console.log(e);
@@ -139,6 +141,7 @@ const handleScreenAuto = () => {
       <eventVerification></eventVerification>
       <eventSupplementaryRecording></eventSupplementaryRecording>
       <eventView></eventView>
+      <rainfallThreePopup></rainfallThreePopup>
       <router-view></router-view>
     </div>
   </div>

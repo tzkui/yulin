@@ -1,5 +1,7 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, inject } from 'vue';
+
+const echarts = inject("echarts")
 const props = defineProps({
   data: {
     type: Object,
@@ -7,35 +9,60 @@ const props = defineProps({
       return {}
     }
   },
-  // name: "雨量监测站",
-  // list: {
-  //   type: Array,
-  //   default() {
-  //     return []
-  //   }
-  // },
-  // showSelect: true,
-  // selectItems: {
-  //   type: Array,
-  //   default() {
-  //     return [
-  //       { val: 1, name: "1小时" },
-  //       { val: 2, name: "2小时" },
-  //       { val: 3, name: "3小时" },
-  //       { val: 4, name: "4小时" },
-  //     ]
-  //   }
-  // },
-  // headers: {
-  //   type: Array,
-  //   default: []
-  // }
 })
+const barEchartRef = ref()
 const emits = defineEmits(['closeDialog'])
-const selectVal = ref("1")
 const closeDialog = function () {
   emits("closeDialog")
 }
+console.log(props.data)
+const chart = ref({})
+const barOption = {
+  tooltip: {
+    trigger: "axis",
+    backgroundColor: "rgba(13,20,26,1)",
+    showContent: true,
+    borderColor: "rgba(255,255,255,0)", //设置自定义边框颜色
+    extraCssText:
+      "box-shadow: 0 0 5px rgba(181, 245, 236, 0.5);padding:5px 15px",
+    textStyle: {
+      color: "#FFF", // 文字的颜色
+      fontSize: "14", // 文字字体大小
+    },
+    axisPointer: {
+      type: "shadow",
+      shadowStyle: {
+        color: "rgba(200, 255, 255, 0.2)",
+        width: "1",
+      },
+    },
+  },
+  xAxis: {
+    type: 'category',
+    data: props.data.list.map(item=>item.line1),
+    axisTick: {
+        alignWithLabel: true
+      }
+  },
+  yAxis: {
+    type: 'value'
+  },
+  series: [
+    {
+      data: props.data.list.map(item=>item.line2),
+      type: 'bar',
+      barWidth: '60%',
+      name: "雨量",
+      itemStyle: {
+        color: "#20BC8A"
+      }
+    }
+  ]
+}
+onMounted(()=>{
+  chart.value = echarts.init(barEchartRef.value)
+  chart.value.setOption(barOption)
+})
 </script>
 <template>
   <div class="syqxxThreePopup">
@@ -54,19 +81,7 @@ const closeDialog = function () {
       <div class="icon4"></div>
     </div>
     <div class="main">
-      <select v-if="data.showSelect" @change="selecctRainTime" class="time_select" v-model="selectVal" placeholder="请选择">
-        <option v-for="item in data.selectItems" :key="item.val" :value="item.val">{{ item.name }}</option>
-      </select>
-      <div class="list_header">
-        <div class="col1">{{ data.headers[0] }}</div>
-        <div class="col2">{{ data.headers[1] }}</div>
-      </div>
-      <ul class="list">
-        <li class="list_item" v-for="item in data.list" :key="item.id">
-          <div class="col1">{{ item.line1 }}</div>
-          <div class="col2">{{ item.line2 }}</div>
-        </li>
-      </ul>
+      <div ref="barEchartRef" class="chart_box"></div>
     </div>
   </div>
 </template>
@@ -219,5 +234,9 @@ const closeDialog = function () {
       }
     }
   }
+}
+.chart_box{
+  width:100%;
+  height: 300px;
 }
 </style>
