@@ -1,9 +1,9 @@
 <script setup>
 import ViewBox from "@/components/common/view-box.vue";
 import { ref, onMounted, onUnmounted } from "vue";
-import { getZqqxfx } from "../../../../api/modules/home"
+import { getZqqxfx } from "../../../../api/modules/home";
 //灾情分析的下拉框
-import { getZqfxDropdowndata } from "../../../../api/decision_analysis.js"
+import { getZqfxDropdowndata } from "../../../../api/decision_analysis.js";
 
 // highchart
 import HighCharts from "highcharts";
@@ -18,57 +18,60 @@ const checkTime = ref([
 // 灾情区域
 const disaster_type = ref([]);
 // 定义一个是这个关于获取图表时间和类型的数据
-let echatssj = ref("3")
-let echatslx = ref('')
+let echatssj = ref("3");
+let echatslx = ref("");
 const currentCheckTime = ref(3);
 const currentDisasterType = ref("");
 let timer = ref(null);
 const changeTime = async (num) => {
   currentCheckTime.value = num;
-  echatssj.value = num
-  title.value=0
+  echatssj.value = num;
+  title.value = 0;
   // 点击的时候重新调取获取图表的方法
-  getechartsData()
+  getechartsData();
 };
-let color3D = ref(["#39BFFA", "#71D6E5", "#E9BD4B", "#ACEFF3"])
+let color3D = ref(["#39BFFA", "#71D6E5", "#E9BD4B", "#ACEFF3"]);
 let data3D = ref([]);
 // 定义一个代表这个图表的数据
 const checkDisaster = function (value) {
   // console.log(value, "点击")
   currentDisasterType.value = value;
-  title.value=0
-  echatslx.value = value
+  title.value = 0;
+  echatslx.value = value;
   // 点击的时候重新调取获取图表的方法
-  getechartsData()
+  getechartsData();
 };
 // 获取zqqy的类型选择数据
 const getxlType = async () => {
-  let res = await getZqfxDropdowndata()
-  disaster_type.value = res.data
+  let res = await getZqfxDropdowndata();
+  disaster_type.value = res.data;
   // console.log(res, "数据看")
-}
+};
 // 定义一个头部的数据
-let title=ref(0)
+let title = ref(0);
 // 获取图表数据的接口
 const getechartsData = async () => {
-  let res = await getZqqxfx(echatssj.value, echatslx.value)
-  data3D.value = []
+  let res = await getZqqxfx(echatssj.value, echatslx.value);
+  data3D.value = [];
   // 定义一个求和的数据
-  let sumdata=[]
+  let sumdata = [];
   res.data.forEach((v, i) => {
-    data3D.value.push(
-      { name: v.mc, y: v.sz, h: 60, percent: v.sz, color: color3D.value[i] }
-    )
-    sumdata.push(v.sz)
-  })
-  sumdata.forEach(v=>{
-    title.value+=v
-  })
-  // console.log(title.value,"看看这个到底是什么")
-  highOptions.value.series[0].data = data3D.value
-  highOptions.value.title.text =  title.value
+    data3D.value.push({
+      name: v.mc,
+      y: v.sz,
+      h: 60,
+      percent: v.sz,
+      color: color3D.value[i],
+    });
+    sumdata.push(v.sz);
+  });
+  sumdata.forEach((v) => {
+    title.value += v;
+  });
+  highOptions.value.series[0].data = data3D.value;
+  highOptions.value.title.text = title.value;
   HighCharts.chart("disaster-area-chart", highOptions.value);
-}
+};
 
 const highOptions = ref({
   chart: {
@@ -90,7 +93,7 @@ const highOptions = ref({
         var i = 0;
         timer.value && clearInterval(timer.value);
         timer.value = setInterval(function () {
-          chart.tooltip.refresh(points[i]);
+          chart.tooltip.refresh(points[i] || {});
           i++;
           if (i === len) {
             i = 0;
@@ -159,8 +162,9 @@ const highOptions = ref({
     useHTML: true,
     formatter: function () {
       // console.log(this);
-      let str = `<div class='tooltip3D'><span style=font-size:22px;color:${this.color
-        }>●</span> ${this.key} : ${this.percentage.toFixed(2)}%</div>`;
+      let str = `<div class='tooltip3D'><span style=font-size:22px;color:${
+        this.color
+      }>●</span> ${this.key} : ${this.percentage.toFixed(2)}%</div>`;
       return str;
     },
   },
@@ -180,9 +184,9 @@ const highOptions = ref({
 onMounted(() => {
   // HighCharts.chart("disaster-area-chart", highOptions.value);
   // 图表数据
-  getechartsData()
+  getechartsData();
   // 类型选择数据
-  getxlType()
+  getxlType();
 });
 onUnmounted(() => {
   clearInterval(timer.value);
@@ -193,13 +197,25 @@ onUnmounted(() => {
     <div class="disaster_area">
       <!-- tab -->
       <div class="tab_box title_tab">
-        <span @click="changeTime(item.num)" v-for="(item, index) in checkTime" :key="index" class="tab"
-          :class="currentCheckTime == item.num ? 'active' : ''">{{ item.name }}</span>
+        <span
+          @click="changeTime(item.num)"
+          v-for="(item, index) in checkTime"
+          :key="index"
+          class="tab"
+          :class="currentCheckTime == item.num ? 'active' : ''"
+          >{{ item.name }}</span
+        >
       </div>
       <div class="disaster_area_cont">
         <div class="tab_box">
-          <span @click="checkDisaster(item.value)" class="tab" :class="currentDisasterType == item.value ? 'active' : ''"
-            v-for="(item, index) in disaster_type" :key="index">{{ item.name }}</span>
+          <span
+            @click="checkDisaster(item.value)"
+            class="tab"
+            :class="currentDisasterType == item.value ? 'active' : ''"
+            v-for="(item, index) in disaster_type"
+            :key="index"
+            >{{ item.name }}</span
+          >
         </div>
       </div>
       <div class="disaster_area_chart" id="disaster-area-chart"></div>

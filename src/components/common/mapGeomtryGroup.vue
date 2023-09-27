@@ -21,7 +21,6 @@ const $mitt = inject("$mitt");
 const toggleGeomtryGroup = ref(false);
 
 const toggleGeomtryGroupFn = () => {
-  console.log("ddddds");
   toggleGeomtryGroup.value = !toggleGeomtryGroup.value;
 };
 

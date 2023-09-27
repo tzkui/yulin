@@ -911,17 +911,36 @@ const addHostLayer = (data) => {
   map.fitBounds(data);
 };
 
+let expImg;
 // 截图
 const mapToPic = function () {
-  // console.log(domtoimage);
-  // domtoimage.toPng(document.getElementById("map2d")).then((res) => {
-  //   var a = document.createElement("a")
-  //   a.href = res;
-  //   a.click()
+  // expImg = new mars2d.thing.ExpImg({ eleid: "map2d" });
+  // map.addThing(expImg);
+  // console.log("expImg--->", expImg);
+  // expImg.expAll({
+  //   download: true,
+  //   callback: function (base64) {
+  //     console.log("截图的结果", base64);
+  //   },
   // });
-  const expImg = new mars2d.thing.ExpImg();
-  map.addThing(expImg);
-  expImg.expAll();
+  let mapDom = document.querySelector("#map2d .mapboxgl-canvas");
+  // let mapDom = document.querySelector("#map2d");
+  domtoimage
+    .toPng(mapDom)
+    .then(function (dataUrl) {
+      // 创建一个图像元素并显示在页面上
+      var img = new Image();
+      img.src = dataUrl;
+      const a = document.createElement("a");
+      a.href = dataUrl;
+      a.download = "canvas_image.png";
+
+      // 模拟点击链接以触发下载
+      a.click();
+    })
+    .catch(function (error) {
+      console.error("转换为图像时出错：", error);
+    });
 };
 
 onMounted(() => {

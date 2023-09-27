@@ -16,15 +16,25 @@ const toggleRightBottomList = function () {
 </script>
 
 <template>
-  <div ref="right_content" :class="['right_content animate__animated  animate__fadeInRight', isHide ? 'hide_content' : '']">
+  <div
+    ref="right_content"
+    :class="[
+      'right_content animate__animated  animate__fadeInRight',
+      isHide ? 'hide_content' : '',
+    ]"
+  >
     <div class="rightContent">
       <slot></slot>
+      <div class="wg"></div>
     </div>
 
     <div class="right_top_box">
       <!-- 侧边定位悬浮list框  -->
       <div class="list_box" v-if="false">
-        <ul style="height: 240px" :class="['list', show_right_top_list ? '' : 'height0']">
+        <ul
+          style="height: 240px"
+          :class="['list', show_right_top_list ? '' : 'height0']"
+        >
           <li class="list_item">1</li>
           <li class="list_item">1</li>
           <li class="list_item">1</li>
@@ -35,7 +45,6 @@ const toggleRightBottomList = function () {
             <el-icon size="32" color="#fff">
               <ArrowUp />
             </el-icon>
-
           </div>
         </div>
       </div>
@@ -43,7 +52,10 @@ const toggleRightBottomList = function () {
     <!-- 侧边定位悬浮list框  -->
     <div class="right_bottom_box" v-if="false">
       <div class="list_box">
-        <ul style="height: 120px" :class="['list', show_right_bottom_list ? '' : 'height0']">
+        <ul
+          style="height: 120px"
+          :class="['list', show_right_bottom_list ? '' : 'height0']"
+        >
           <li class="list_item">1</li>
           <li class="list_item">1</li>
         </ul>
@@ -161,5 +173,33 @@ const toggleRightBottomList = function () {
 
 .height0 {
   height: 0 !important;
+}
+.wg {
+  position: absolute;
+  right: 490px;
+  bottom: 10px;
+  width: 40px;
+  height: 40px;
+  background: #04417d;
+  border-radius: 4px;
+  border: 1px solid #1b8ae4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  &::after {
+    content: "网";
+    font-size: 20px;
+    font-family: Source Han Sans-Regular, Source Han Sans;
+    font-weight: 400;
+    color: #15bce6;
+    width: 34px;
+    height: 34px;
+    text-align: center;
+    line-height: 32px;
+    border: 1px solid #15bce6;
+    border-radius: 50%;
+    box-sizing: border-box;
+  }
 }
 </style>
