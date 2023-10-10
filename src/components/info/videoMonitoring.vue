@@ -264,7 +264,6 @@ const changeFullscreen = () => {
     align-items: center;
     background: url("@/assets/integratedCommunication/dialog_head_bg.png")
       center/965px 54px no-repeat;
-
     .dialog_title {
       font-size: 20px;
       font-family: Source Han Sans SC-Medium, Source Han Sans SC;

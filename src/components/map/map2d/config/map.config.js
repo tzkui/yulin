@@ -67,7 +67,7 @@ export let mapDeafultOps = {
       name: "layer_QGYX_2000新天地图",
       type: "arcgis_tile",
       // show: true,
-      show: false,
+      // show: false,
       ChinaCRS: "WGS84",
       url: "http://1.85.55.225:8085/arcgis/rest/services/QGYX_2000/MapServer",
     },

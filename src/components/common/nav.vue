@@ -92,11 +92,18 @@ const navCheckHandle = (row) => {
 };
 
 const gohome = () => {
-  window.location.href = window.baseDeploymentAddress + "/#/home";
+  let href = "";
+  if (window.location.href.includes("/#/home")) {
+    href = window.baseIp1 + ":20128/#/home";
+  } else {
+    href = window.baseDeploymentAddress + "/#/home";
+  }
+  window.location.href = href;
 };
 const gosjfx = () => {
-  window.location.href =
-    window.baseDeploymentAddress + "/map/analysis/page/danger/sjfx";
+  console.log(window.baseIp1)
+  let href = window.baseIp1 + ":20128/map/analysis/page/danger/sjfx";
+  window.location.href = href;
 };
 </script>
 

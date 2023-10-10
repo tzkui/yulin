@@ -76,10 +76,8 @@ const pullRtsp = function () {
   console.log("开始拉流");
   wbrtc256pull({ rtsp: props.playerUrl, videoId: videoId.value }).then(
     (res) => {
-      console.log(res);
       if (res.data && res.data.code === 0) {
         const url = getH256WsUrl() + videoId.value;
-        console.log("url---->", url);
         setTimeout(() => {
           videoPlayer.value
             .play(url)

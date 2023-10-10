@@ -914,17 +914,8 @@ const addHostLayer = (data) => {
 let expImg;
 // 截图
 const mapToPic = function () {
-  // expImg = new mars2d.thing.ExpImg({ eleid: "map2d" });
-  // map.addThing(expImg);
-  // console.log("expImg--->", expImg);
-  // expImg.expAll({
-  //   download: true,
-  //   callback: function (base64) {
-  //     console.log("截图的结果", base64);
-  //   },
-  // });
-  let mapDom = document.querySelector("#map2d .mapboxgl-canvas");
-  // let mapDom = document.querySelector("#map2d");
+  // let mapDom = document.querySelector("#map2d .mapboxgl-canvas");
+  let mapDom = document.querySelector("#map2d");
   domtoimage
     .toPng(mapDom)
     .then(function (dataUrl) {
@@ -933,7 +924,7 @@ const mapToPic = function () {
       img.src = dataUrl;
       const a = document.createElement("a");
       a.href = dataUrl;
-      a.download = "canvas_image.png";
+      a.download = "截图_"+new Date().getTime();
 
       // 模拟点击链接以触发下载
       a.click();
