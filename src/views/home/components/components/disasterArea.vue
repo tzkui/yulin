@@ -9,7 +9,11 @@ import { getZqfxDropdowndata } from "../../../../api/decision_analysis.js";
 import HighCharts from "highcharts";
 import Highcharts3D from "highcharts/highcharts-3d";
 Highcharts3D(HighCharts);
-
+HighCharts.setOptions({
+  lang: {
+    noData: "No data to display", // 自定义没有数据时显示的文本
+  }
+});
 const checkTime = ref([
   { name: "近三天", num: 1 },
   { name: "近五天", num: 2 },
@@ -68,8 +72,18 @@ const getechartsData = async () => {
   sumdata.forEach((v) => {
     title.value += v;
   });
+  if(data3D.value.length===0){
+    data3D.value.push({
+      name: "暂无数据",
+      y: 1,
+      h: 60,
+      percent: 1,
+      color: color3D.value[0],
+    })
+  }
   highOptions.value.series[0].data = data3D.value;
   highOptions.value.title.text = title.value;
+  console.log("xxxxxx", highOptions.value);
   HighCharts.chart("disaster-area-chart", highOptions.value);
 };
 

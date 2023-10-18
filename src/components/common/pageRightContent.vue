@@ -1,5 +1,7 @@
 <script setup>
 import { ref } from "vue";
+import soundRecording from "./soundRecording.vue";
+
 const right_content = ref();
 const isHide = ref(false);
 const show_right_top_list = ref(true);
@@ -25,6 +27,9 @@ const toggleRightBottomList = function () {
   >
     <div class="rightContent">
       <slot></slot>
+      <!-- <div class="openAudio" @click="record">
+        <soundRecording></soundRecording>
+      </div> -->
       <div class="wg"></div>
     </div>
 
@@ -201,5 +206,16 @@ const toggleRightBottomList = function () {
     border-radius: 50%;
     box-sizing: border-box;
   }
+}
+.openAudio {
+  position: absolute;
+  right: 490px;
+  bottom: 70px;
+  width: 40px;
+  height: 40px;
+  background: #04417d;
+  border-radius: 4px;
+  border: 1px solid #1b8ae4;
+  cursor: pointer;
 }
 </style>
