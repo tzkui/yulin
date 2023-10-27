@@ -106,20 +106,20 @@ const initMap = function () {
 
 // 数据大屏自适应函数
 const handleScreenAuto = () => {
-  const designDraftWidth = 1920; // 设计稿的宽度
-  const designDraftHeight = 1080; // 设计稿的高度
+  // const designDraftWidth = 1920; // 设计稿的宽度
+  // const designDraftHeight = 1080; // 设计稿的高度
 
-  // 根据屏幕的变化适配的比例
-  const scale =
-    document.documentElement.clientWidth /
-      document.documentElement.clientHeight <
-    designDraftWidth / designDraftHeight
-      ? document.documentElement.clientWidth / designDraftWidth
-      : document.documentElement.clientHeight / designDraftHeight;
+  // // 根据屏幕的变化适配的比例
+  // const scale =
+  //   document.documentElement.clientWidth /
+  //     document.documentElement.clientHeight <
+  //   designDraftWidth / designDraftHeight
+  //     ? document.documentElement.clientWidth / designDraftWidth
+  //     : document.documentElement.clientHeight / designDraftHeight;
 
-  document.querySelector(
-    "#screen"
-  ).style.transform = `scale(${scale}) translate(-50%)`;
+  // document.querySelector(
+  //   "#screen"
+  // ).style.transform = `scale(${scale}) translate(-50%)`;
 };
 </script>
 
@@ -149,8 +149,10 @@ const handleScreenAuto = () => {
 
 <style scoped lang="less">
 .mapBox {
-  width: 1920px;
-  height: 1080px;
+  // width: 1920px;
+  // height: 1080px;
+  width: 100vw;
+  height: 100vh;
 }
 
 .home-container {
@@ -168,11 +170,13 @@ const handleScreenAuto = () => {
   background-color: #04143f;
   .screenBox {
     display: inline-block;
-    width: 1920px; //设计稿的宽度
-    height: 1080px; //设计稿的高度
+    // width: 1920px; //设计稿的宽度
+    // height: 1080px; //设计稿的高度
+    width: 100vw; //设计稿的宽度
+    height: 100vh; //设计稿的高度
     transform-origin: 0 0;
     position: absolute;
-    left: 50%;
+    left: 0;
     overflow: hidden;
   }
 }

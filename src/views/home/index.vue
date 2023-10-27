@@ -731,7 +731,9 @@ onMounted(() => {
   width: 527px;
   height: 39px;
   padding: 0 20px;
-  background: rgba(6, 152, 215, 0.2);
+  // background: rgba(6, 152, 215, 0.2);
+  background: url(@/assets/common/warn_bg.png) no-repeat;
+  background-size: 100% 100%;
   position: absolute;
   left: 50%;
   margin-left: -263px;
@@ -767,7 +769,7 @@ onMounted(() => {
         margin-right: 10px;
         font-size: 16px;
         font-weight: 500;
-        color: #20e6a4;
+        color: #fff;
         padding-left: 10px;
       }
     }

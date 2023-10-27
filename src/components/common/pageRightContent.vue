@@ -27,9 +27,9 @@ const toggleRightBottomList = function () {
   >
     <div class="rightContent">
       <slot></slot>
-      <!-- <div class="openAudio" @click="record">
+      <div class="openAudio">
         <soundRecording></soundRecording>
-      </div> -->
+      </div>
       <div class="wg"></div>
     </div>
 
@@ -93,12 +93,14 @@ const toggleRightBottomList = function () {
   right: 0;
   top: 0;
   height: 100%;
-  background: linear-gradient(
-    145deg,
-    rgba(1, 23, 65, 0.9) 0%,
-    rgba(17, 48, 106, 0.9) 50%,
-    rgba(1, 23, 65, 0.9) 100%
-  );
+  // background: linear-gradient(
+  //   145deg,
+  //   rgba(1, 23, 65, 0.9) 0%,
+  //   rgba(17, 48, 106, 0.9) 50%,
+  //   rgba(1, 23, 65, 0.9) 100%
+  // );
+  background: url(@/assets/common/right.png) no-repeat;
+  background-size: 100% 100%;
   transition: 0.5s linear;
   z-index: 4;
   // background: rgba(0,6,13,0.1);
@@ -209,8 +211,8 @@ const toggleRightBottomList = function () {
 }
 .openAudio {
   position: absolute;
-  right: 490px;
-  bottom: 70px;
+  right: 540px;
+  bottom: 10px;
   width: 40px;
   height: 40px;
   background: #04417d;

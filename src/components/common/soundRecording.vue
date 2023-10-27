@@ -1,38 +1,39 @@
 <script setup>
 import { ref } from "vue";
 
-// 预先设置一个变量来存MediaRecorder实例
-let mediaRecorder = null;
-const startRecord = function () {};
 const openDialog = function () {
   showDialog.value = true;
-  startRecord();
-};
-const endRecord = function (flag) {
-  // 录音结束事件，在需要结束录音时调用，录音结束后的操作请在 mediaRecorder.onstop 里面写
-  mediaRecorder && mediaRecorder.stop();
-  if (flag) {
-  }
-  // if(text)
 };
 const showDialog = ref(false);
-const closeDialog = function (flag) {
+const closeDialog = function () {
   showDialog.value = false;
-  endRecord(flag);
 };
+const recordList = ref([
+  { id: 1, label: "语音1：", content: "需要打开自然灾害监测专题页面" },
+  { id: 2, label: "语音2：", content: "打开自然灾害监测专题页面" },
+  { id: 3, label: "语音3：", content: "打开自然灾害监测专题页面" },
+  { id: 4, label: "语音4：", content: "打开自然灾害监测专题页面" },
+  { id: 5, label: "语音5：", content: "打开自然灾害监测专题页面" },
+  { id: 6, label: "语音6：", content: "打开自然灾害监测专题页面" },
+]);
 </script>
 <template>
   <div @click="openDialog" class="word">
+    <img class="bg" src="@/assets/common/record.png" alt="" />
     <div class="recordDialog" v-if="showDialog">
-      <img src="@/assets/home/microphone.png" alt="" />
-
-      <div class="icon">
-        <el-icon size="24"><Loading /></el-icon>
-        <div>识别中</div>
-      </div>
-
-      <div class="close" @click="closeDialog(false)">
-        <el-icon size="24"><Close /></el-icon>
+      <img
+        class="close"
+        src="@/assets/common/icon_close.png"
+        @click.stop="closeDialog"
+        alt=""
+      />
+      <div class="record_content">
+        <ul class="record_list">
+          <li v-for="item in recordList" :key="item.id">
+            <div class="label">{{ item.label }}</div>
+            <div class="value">{{ item.content }}</div>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -40,67 +41,61 @@ const closeDialog = function (flag) {
 
 <style lang="scss" scoped>
 .word {
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #000;
-  &::after {
-    content: "录";
-    font-size: 20px;
-    font-family: Source Han Sans-Regular, Source Han Sans;
-    font-weight: 400;
-    color: #15bce6;
+  .bg {
     width: 34px;
     height: 34px;
-    text-align: center;
-    line-height: 32px;
-    border: 1px solid #15bce6;
-    border-radius: 50%;
-    box-sizing: border-box;
   }
 }
 .recordDialog {
   position: absolute;
-  right: 50px;
-  bottom: 0;
-  width: 120px;
-  height: 200px;
+  right: -80px;
+  bottom: 50px;
+  width: 320px;
+  height: 260px;
   background-color: #fff;
   text-align: center;
   border-radius: 5px;
-  img {
-    margin: 40px auto;
-  }
-  @keyframes rotateAn {
-    0% {
-      transform: rotate(0);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-  .icon {
-    display: flex;
-    margin: 0 auto;
-    width: 80%;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    > i {
-      animation: rotateAn 1s infinite linear;
-      margin-right: 10px;
-    }
-  }
+  background: url(@/assets/common/record_box-bg.png) no-repeat;
+  background-size: 100% 100%;
   .close {
     position: absolute;
-    right: 5px;
+    right: 10px;
     top: 5px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  .record_content {
+    .record_list {
+      height: 192px;
+      overflow-y: auto;
+      margin-top: 50px;
+      > li {
+        display: flex;
+        font-size: 16px;
+        font-family: Source Han Sans SC-Regular, Source Han Sans SC;
+        font-weight: 400;
+        color: #ffffff;
+        line-height: 18px;
+        letter-spacing: 1px;
+        padding: 0 16px;
+        .label {
+          flex-shrink: 0;
+        }
+        .value{
+          text-align: left;
+        }
+        &:not(:last-child){
+          margin-bottom: 8px;
+        }
+      }
+    }
   }
 }
 </style>

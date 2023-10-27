@@ -274,13 +274,15 @@ getper()
   left: 0;
   top: 0;
   height: 100%;
-  background: linear-gradient(145deg,
-      rgba(1, 23, 65, 0.9) 0%,
-      rgba(17, 48, 106, 0.9) 50%,
-      rgba(1, 23, 65, 0.9) 100%);
+  // background: linear-gradient(145deg,
+  //     rgba(1, 23, 65, 0.9) 0%,
+  //     rgba(17, 48, 106, 0.9) 50%,
+  //     rgba(1, 23, 65, 0.9) 100%);
   transition: 0.5s linear;
   z-index: 4;
 
+  background: url(@/assets/common/left.png) no-repeat;
+  background-size: 100% 100%;
   .leftContent {
     padding-top: @margin_top;
   }
