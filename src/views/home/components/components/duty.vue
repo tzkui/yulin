@@ -2,10 +2,13 @@
 import ViewBox from "@/components/common/view-box.vue";
 import { ref, onMounted } from "vue";
 import { getZbxx } from "@/api/modules/zrzh.js";
-const phoneCallRef = ref()
-const phone = function(info){
-  phoneCallRef.value.phoneCall(info.phone)
-}
+import moment from "moment";
+import "moment/locale/zh-cn"; // 引入中文语言文件
+
+const phoneCallRef = ref();
+const phone = function (info) {
+  phoneCallRef.value.phoneCall(info.phone);
+};
 const list = ref([]);
 const getList = function () {
   getZbxx().then((res) => {
@@ -15,31 +18,101 @@ const getList = function () {
         name: item.personalName,
         job: item.roleName,
         phone: item.personalPhone,
+        type: item.className,
       };
     });
-    list.value = list.value.slice(0,3)
+    list.value = list.value.slice(0, 3);
   });
 };
+const getCnTime = function () {
+  let time = new Date();
+  let year = time.getFullYear();
+  let month = time.getMonth() + 1;
+  month = month > 9 ? month : "0" + month;
+  let day = time.getDate();
+  day = day > 9 ? day : "0" + day;
+  return `${year}年${month}月${day}日`;
+};
+const getDialogTime = function () {
+  let time1 = new Date();
+  let time2 = new Date(time1.getTime() + 24 * 60 * 60 * 1000);
+  function parseTime(time) {
+    let year = time.getFullYear();
+    let month = time.getMonth() + 1;
+    month = month > 9 ? month : "0" + month;
+    let day = time.getDate();
+    day = day > 9 ? day : "0" + day;
+    return `${year}-${month}-${day} 08:00:00`;
+  }
+  return parseTime(time1) + " ~ " + parseTime(time2);
+};
+const showDutyDialog = ref(false)
+const closeDutyDialog = function(){
+  showDutyDialog.value = false
+}
+const viewTitle = ref(getCnTime() + " 值班安排");
 onMounted(() => {
   getList();
+  getDialogTime();
 });
 </script>
 <template>
-  <ViewBox title="值班信息">
+  <ViewBox :title="viewTitle">
     <div class="onduty_information">
-      <div class="btn"></div>
+      <!-- <div class="btn"></div> -->
       <div class="onduty_box">
-        <div class="onduty_item" v-for="item in list" :key="item.id">
+        <div class="onduty_item" v-for="item in list" :key="item.id" @click="showDutyDialog=true;">
           <div class="duty">{{ item.job }}</div>
           <div>
             <span class="name"> {{ item.name }} </span>
-            <img class="img" src="@/assets/home/icon_phone.png" @click="phone(item)" alt="" />
+            <img
+              class="img"
+              src="@/assets/home/icon_phone.png"
+              @click="phone(item)"
+              alt=""
+            />
           </div>
         </div>
       </div>
     </div>
   </ViewBox>
   <PhoneCall ref="phoneCallRef"></PhoneCall>
+  <Teleport to="body" v-if="showDutyDialog">
+    <div class="duty_detail_dialog">
+      <div class="dialog_title">值班安排</div>
+      <div class="close_box">
+        <el-icon 
+        size="20" 
+        color="#fff" 
+        style="cursor: pointer"
+        >
+          <Close @click="closeDutyDialog" />
+        </el-icon>
+      </div>
+      <el-descriptions :column="1" border>
+        <el-descriptions-item
+          label="值班时间"
+          label-align="right"
+          align="center"
+        >
+          {{ getDialogTime() }}
+        </el-descriptions-item>
+        <el-descriptions-item
+          v-for="item in list"
+          :key="item.id"
+          :label="item.job"
+          label-align="right"
+          align="left"
+        >
+          <div class="duty_content">
+            <div class="name">{{ item.name }}</div>
+            <div class="phone">{{ item.phone }}</div>
+            <div class="type">{{ item.type }}</div>
+          </div>
+        </el-descriptions-item>
+      </el-descriptions>
+    </div>
+  </Teleport>
 </template>
 <style lang="scss" scoped>
 .onduty_information {
@@ -98,6 +171,56 @@ onMounted(() => {
         color: #ffffff;
         line-height: 19px;
       }
+    }
+  }
+}
+.duty_detail_dialog {
+  position: absolute;
+  left: 460px;
+  top: 100px;
+  width: 500px;
+  height: 270px;
+  background-color: #172a52;
+  z-index: 9999;
+  color: #fff;
+  box-sizing: border-box;
+  padding: 0 20px 40px;
+  overflow-y: auto;
+  border-radius: 10px;
+  .dialog_title {
+    height: 56px;
+    line-height: 56px;
+    font-size: 20px;
+  }
+  .close_box{
+    position: absolute;
+    right: 20px;
+    top: 18px;
+  }
+  .duty_content {
+    display: flex;
+    width: 100%;
+    padding: 0 10px;
+    .name {
+      width: 80px;
+    }
+    .phone {
+      flex: 1;
+      text-align: center;
+    }
+    .type {
+      width: 80px;
+      text-align: right;
+    }
+  }
+  :deep(.el-descriptions__body) {
+    background: unset;
+    .el-descriptions__content.el-descriptions__cell.is-bordered-content {
+      color: #fff;
+    }
+    .el-descriptions__label.el-descriptions__cell.is-bordered-label {
+      color: #fff;
+      background: unset;
     }
   }
 }

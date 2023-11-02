@@ -40,10 +40,8 @@ const scale = () => {
 const getTokenSuccess = ref(false);
 // 模拟登录
 const initLogin = function () {
-  console.log(1)
   let token = sessionStorage.getItem("token");
-  console.log(2,token)
-  if(token) return getTokenSuccess.value = true;;
+  if(token) return getTokenSuccess.value = true;
   login().then((res) => {
     sessionStorage.setItem("token", res.data.password);
     getTokenSuccess.value = true;

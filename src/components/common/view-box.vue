@@ -1,7 +1,7 @@
 <template>
   <div class="data-box-1" :style="nodeData">
     <div class="data-box-title fl-al">
-      <span class="box-title-text">{{ title }}</span>
+      <span class="box-title-text" v-html="title"></span>
     </div>
     <div class="box-center">
       <slot></slot>

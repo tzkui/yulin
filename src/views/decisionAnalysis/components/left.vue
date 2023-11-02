@@ -18,6 +18,7 @@
             </el-option>
           </el-select>
         </div>
+        <timeSelect @selectTime="selectTime" :isEarthquake="isEarthquake"></timeSelect>
         <!-- tab 切换chart -->
         <div class="disaster_tabs">
           <div
@@ -162,7 +163,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, inject, nextTick } from "vue";
+import { ref, onMounted, onUnmounted, inject, nextTick, computed } from "vue";
+import timeSelect from "./components/timeSelect.vue";
 import hotMap from "./hotMap.vue";
 const emit = defineEmits(["eventClick"]);
 const $mitt = inject("$mitt");
@@ -427,6 +429,18 @@ onUnmounted(() => {
   clearInterval(chartInterval);
 });
 
+const isEarthquake = computed(() => {
+  let id = current_disater_type.value;
+  console.log(id,disaster_types.value)
+  for(const info of disaster_types.value){
+    if(info.value == id){
+      console.log(info.name, info.name === '地震灾害')
+      return info.name === '地震灾害'
+    }
+  }
+  return false;
+})
+
 // 灾情分析下拉
 const initDisasterTypes = async () => {
   let res = await getZqfxDropdowndata();
@@ -435,9 +449,16 @@ const initDisasterTypes = async () => {
   current_disater_type.value = res.data[0].value;
   initZqfxLeveldata(res.data[0].value);
 };
+const startTime = ref("");
+const endTime = ref("");
 // 灾情分析等级与区域
 const initZqfxLeveldata = async (id) => {
-  let res = await getZqfxLeveldata({ typeId: id });
+  const param = {
+    typeId: id,
+    startTime: startTime.value,
+    endTime: endTime.value,
+  };
+  let res = await getZqfxLeveldata(param);
   console.log("getZqfxLeveldata=========>灾情", res);
   chartData.value = res.data;
   changeChart(current_disater_tab.value);
@@ -771,6 +792,17 @@ const setMarker = (type, data) => {
     $mitt.emit("openPopup", markerData);
     $mitt.emit("flyTo", markerData);
   }
+};
+
+const selectTime = function ([start, end]) {
+  if (start && end) {
+    startTime.value = start;
+    endTime.value = end;
+  } else {
+    startTime.value = "";
+    endTime.value = "";
+  }
+  initZqfxLeveldata(current_disater_type.value);
 };
 </script>
 

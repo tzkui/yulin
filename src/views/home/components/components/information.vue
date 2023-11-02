@@ -10,6 +10,7 @@ const $mitt = inject("$mitt");
 const event_list = ref([]);
 const getEventList = function (id) {
   getSjxx().then((res) => {
+    boxTitle.value = `突发事件<span style='font-size: 28px;color: #EFAD2C;'> ${res.data.length} </span>起`;
     event_list.value = res.data.map((item) => {
       return {
         typeName: item.typeName,
@@ -80,6 +81,7 @@ const setMarker = (data) => {
   $mitt.emit("openPopup", markerData);
   $mitt.emit("flyTo", markerData);
 };
+const boxTitle= ref("")
 onUnmounted(()=>{
   $mitt.all.delete("changeEventState");
 })
@@ -87,7 +89,7 @@ const a = ref(false)
 </script>
 
 <template>
-  <ViewBox title="事件信息">
+  <ViewBox :title="boxTitle">
     <div class="event_information">
       <ul class="event_list">
         <li class="list_head list">
