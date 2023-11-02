@@ -48,7 +48,7 @@ const props = defineProps({
 watch(
   () => props.isEarthquake,
   (val) => {
-    selectedItem.value = ""
+    selectedItem.value = "";
     if (val) {
       tabs.value = [
         { id: 1, name: "本年", startTime: parseTime(4), endTime: parseTime() },
@@ -73,8 +73,21 @@ watch(
     }
   }
 );
+const isClosePicker = ref(false);
+const timePickerClose = function (e) {
+  console.log(1, e);
+  isClosePicker.value = true;
+  selectedItem.value = "";
+  setTimeout(()=>{
+    isClosePicker.value = false;
+  },100)
+};
 const selectTime = function (info) {
-  if (info.id !== selectedItem.value) {
+  if (isClosePicker.value && info.id === 5) {
+    selectedItem.value = "";
+    isClosePicker.value = false;
+    emits("selectTime", []);
+  } else if (info.id !== selectedItem.value) {
     selectedItem.value = info.id;
     if (info.id !== 5) {
       emits("selectTime", [info.startTime, info.endTime]);
@@ -87,7 +100,6 @@ const selectTime = function (info) {
   }
 };
 const parseSelectTime = function (time) {
-  console.log(time);
   if (time && time.length === 2) {
     return (
       moment(time[0]).format("YYYY-MM-DD") +
@@ -124,7 +136,7 @@ const submitCustomTime = function (time) {
       range
       :showTime="false"
       format="yyyy-MM-dd"
-      @closed="selectedItem = ''"
+      @closed="timePickerClose"
     >
       <template #trigger>
         <p class="clickable-text" ref="timeRef"></p>
@@ -174,6 +186,9 @@ const submitCustomTime = function (time) {
   top: -10px;
 }
 :deep(.dp--tp-wrap) {
+  display: none;
+}
+:deep(.dp__arrow_top) {
   display: none;
 }
 .action-row {
