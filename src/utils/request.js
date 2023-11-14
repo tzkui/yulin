@@ -52,7 +52,7 @@ instance.interceptors.response.use(
     ) {
       return res;
     } else {
-      if (res.code === 401) {
+      if (res.code === 401 || res.code === 402) {
         // ElMessageBox.confirm('认证失效请重新登录', {
         //   confirmButtonText: '重新登录',
         //   type: 'warning',

@@ -11,7 +11,7 @@ const phone = function (info) {
 };
 const list = ref([]);
 const getList = function () {
-  getZbxx().then((res) => {
+  getZbxx({sj: moment().format("YYYY-MM-DD")}).then((res) => {
     list.value = res.data.map((item) => {
       return {
         id: item.id,
@@ -47,6 +47,9 @@ const getDialogTime = function () {
   return parseTime(time1) + " ~ " + parseTime(time2);
 };
 const showDutyDialog = ref(false)
+const openDutyDialog = function(){
+  showDutyDialog.value = true;
+}
 const closeDutyDialog = function(){
   showDutyDialog.value = false
 }
@@ -61,14 +64,14 @@ onMounted(() => {
     <div class="onduty_information">
       <!-- <div class="btn"></div> -->
       <div class="onduty_box">
-        <div class="onduty_item" v-for="item in list" :key="item.id" @click="showDutyDialog=true;">
+        <div class="onduty_item" v-for="item in list" :key="item.id" @click="openDutyDialog">
           <div class="duty">{{ item.job }}</div>
           <div>
             <span class="name"> {{ item.name }} </span>
             <img
               class="img"
               src="@/assets/home/icon_phone.png"
-              @click="phone(item)"
+              @click.stop="phone(item)"
               alt=""
             />
           </div>

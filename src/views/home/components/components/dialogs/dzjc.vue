@@ -27,8 +27,8 @@ const setMarker = function (info) {
     <div class="firDialog_main">
       <div class="list_content">
         <div class="list_header">
-          <div class="line1">站点</div>
-          <div class="line2">灾害类型</div>
+          <div class="line1">名称</div>
+          <div class="line2">类型</div>
         </div>
         <ul class="list">
           <li
@@ -37,8 +37,8 @@ const setMarker = function (info) {
             :key="item.id"
             @click="setMarker(item.markerInfo)"
           >
-            <div class="line1">{{ item.disasterSite }}</div>
-            <div class="line2">{{ item.disasterType }}</div>
+            <div class="line1">{{ item.yhdmc }}</div>
+            <div class="line2">{{ item.yhdlx }}</div>
           </li>
         </ul>
       </div>

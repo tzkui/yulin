@@ -9,8 +9,9 @@ const phoneCall = function (phone = "17323215510") {
   nextTick(() => {
     const option = {
       access_type: 1,
-      key: "88b6bb347f2c4890bec4c76522cb4e4a",
-      devices: [{ id: phone, type: "TEMP_MOBILEPHONE" }],
+      key: window.kdApiKey,
+      // devices: [{ id: phone, type: "TEMP_MOBILEPHONE" }],
+      devices: [{ id: "15682381478", type: "TEMP_MOBILEPHONE" }],
       isDemo: true,
     };
     meetingIns = window.kdDispatchConference.createMeeting(

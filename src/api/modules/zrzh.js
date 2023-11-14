@@ -1,7 +1,13 @@
 import request from "../index";
 
 // 获取值班信息
-export const getZbxx = (data) => request.post("/zrzh/zbxx", data);
+export const getZbxx = (data) => {
+  let str = ""
+  if(data.sj){
+    str = "?sj=" + data.sj
+  }
+  return request.post("/zrzh/zbxx"+str, );
+}
 
 // 获取风险隐患信息
 export const getFxyh = (data) => request.post("/zrzh/fxyh", data);

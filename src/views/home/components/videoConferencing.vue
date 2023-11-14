@@ -60,7 +60,7 @@ defineProps({
 const emit = defineEmits(["closeVideoDialog"]);
 // const videoOptions = {
 //       access_type: 2,
-//       key: "88b6bb347f2c4890bec4c76522cb4e4a",
+//       key: window.kdApiKey,
 //       devices: [{ id: phone, type: "TEMP_MOBILEPHONE" }],
 // }
 

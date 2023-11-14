@@ -24,6 +24,9 @@ const yjzyInfo = ref({});
 const getYjzyList = function () {
   getYjzy().then((res) => {
     let data = res.data;
+    data.yjzj.jh.forEach(item=>{
+      item.expertName = item.expertName+"  " +item.linkPhone
+    })
     yjzyInfo.value = data;
     sessionStorage.setItem("yjzyInfos",JSON.stringify(data))
     store.commit("pointLists/SET_YJZYINFOS",data);
@@ -35,6 +38,7 @@ const getYjzyList = function () {
       { id: "bncs", name: "避灾场所", num: data.bncs.sl },
       { id: "spjk", name: "视频监控", num: data.spjk.sl },
     ];
+
   });
 };
 const openDialog = function (info) {

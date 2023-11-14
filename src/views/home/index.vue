@@ -156,21 +156,30 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive, inject } from "vue";
-import pageLeftContent from "@/components/common/pageLeftContent.vue";
-import pageRightContent from "@/components/common/pageRightContent.vue";
-import left from "./components/left.vue";
-import right from "./components/right.vue";
-import dialogVue from "../../components/common/dialog.vue";
-import integratedCommunication from "@/views/safe/components/integratedCommunication.vue";
-import videoConferencing from "./components/videoConferencing.vue";
+import { ref, onMounted, reactive, inject, defineAsyncComponent  } from "vue";
+// import pageLeftContent from "@/components/common/pageLeftContent.vue";
+// import pageRightContent from "@/components/common/pageRightContent.vue";
+// import left from "./components/left.vue";
+// import right from "./components/right.vue";
+// import dialogVue from "../../components/common/dialog.vue";
+// import integratedCommunication from "@/views/safe/components/integratedCommunication.vue";
+// import videoConferencing from "./components/videoConferencing.vue";
 import { viewDetail } from "../../utils/funcNames/tzk";
 import { useEventBus } from "@vueuse/core";
-import twoTableThreeePopup from "@/views/natural/components/twoTableThreeePopup.vue";
+// import twoTableThreeePopup from "@/views/natural/components/twoTableThreeePopup.vue";
 // import videoConferencing from "@/components/common/videoConferencing.vue";
 import { Vue3SeamlessScroll } from "vue3-seamless-scroll";
 import { getYjjcxx } from "@/api/modules/home.js";
 
+
+const pageLeftContent = defineAsyncComponent(() => import('@/components/common/pageLeftContent.vue'))
+const pageRightContent = defineAsyncComponent(() => import('@/components/common/pageRightContent.vue'))
+const left = defineAsyncComponent(() => import('./components/left.vue'))
+const right = defineAsyncComponent(() => import('./components/right.vue'))
+const dialogVue = defineAsyncComponent(() => import('../../components/common/dialog.vue'))
+const integratedCommunication = defineAsyncComponent(() => import('@/views/safe/components/integratedCommunication.vue'))
+const videoConferencing = defineAsyncComponent(() => import('./components/videoConferencing.vue'))
+const twoTableThreeePopup = defineAsyncComponent(() => import('@/views/natural/components/twoTableThreeePopup.vue'))
 const $mitt = inject("$mitt");
 const showDialog = ref({
   eventLevel: false,

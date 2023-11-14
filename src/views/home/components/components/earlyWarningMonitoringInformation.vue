@@ -114,8 +114,8 @@ const getDataList = function (item) {
     list = item.markerList.map((item) => {
       return {
         id: item.id,
-        disasterSite: item.disasterSite,
-        disasterType: item.disasterType,
+        yhdmc: item.yhdmc,
+        yhdlx: item.yhdlx,
         markerInfo: {
           markerType: "dzjc",
           id: item.id,
@@ -126,8 +126,11 @@ const getDataList = function (item) {
           label: { text: "地质监测", font_size: 16 },
           dialogType: "dzjc",
           details: {
-            disasterSite: item.disasterSite,
-            disasterType: item.disasterType,
+            yhdmc: item.yhdmc,
+            yhdlx: item.yhdlx,
+            dd: item.dd,
+            jcfzr: item.jcfzr,
+            jcfzrlxdh: item.jcfzrlxdh,
           },
         },
       };

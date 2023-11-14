@@ -6,6 +6,7 @@ import { useEventBus } from "@vueuse/core";
 const showPhoneCall = ref(false);
 const phoneCall = function (info) {
   let phone = info.phone || info.linkPhone;
+  console.log("Phone: ",phone)
   if (phone) {
     showPhoneCall.value = false;
     nextTick(() => {
@@ -13,7 +14,7 @@ const phoneCall = function (info) {
       nextTick(() => {
         const option = {
           access_type: 1,
-          key: "88b6bb347f2c4890bec4c76522cb4e4a",
+          key: window.kdApiKey,
           devices: [{ id: phone, type: "TEMP_MOBILEPHONE" }],
           isDemo: true,
         };

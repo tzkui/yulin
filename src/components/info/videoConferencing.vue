@@ -266,7 +266,7 @@ const beginConferencing = function () {
         index,
       };
     }),
-    key: "88b6bb347f2c4890bec4c76522cb4e4a",
+    key: window.kdApiKey,
   };
   meetingIns = kdDispatchConference.createMeeting(
     "#meeting_box",

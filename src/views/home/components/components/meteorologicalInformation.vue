@@ -1,19 +1,32 @@
 <script setup>
 import ViewBox from "@/components/common/view-box.vue";
-import { ref } from "vue";
+import { getWeatherInfo } from "@/api/modules/home.js";
+import { onMounted, ref } from "vue";
+import moment from "moment";
 
 const weatherList = ref([
   { id: 1, time: "10月18日", state: 1, weather: "15℃/21℃" },
   { id: 2, time: "10月19日", state: 1, weather: "14℃/22℃" },
-  { id: 3, time: "10月20日", state: 1, weather: "16℃/25℃" },
-  { id: 4, time: "10月21日", state: 1, weather: "14℃/22℃" },
-  { id: 5, time: "10月22日", state: 1, weather: "12℃/17℃" },
-  { id: 6, time: "10月23日", state: 1, weather: "14℃/20℃" },
-  { id: 7, time: "10月24日", state: 1, weather: "15℃/22℃" },
-  { id: 8, time: "10月25日", state: 1, weather: "16℃/25℃" },
-  { id: 9, time: "10月26日", state: 1, weather: "18℃/27℃" },
 ]);
-const showList = ref(false)
+const weatherInfo = ref({
+  zdwd1: "-4.0",
+  zgwd: "5.0",
+  fl: "<3级",
+  ybrq: "2023-11-13 00:00:00",
+  tq: "小雪",
+  fx2: "东北风",
+});
+const showList = ref(false);
+onMounted(() => {
+  const param = {
+    startTime: moment().subtract(1, "days").format("YYYY-MM-DD"),
+    endTime: moment().format("YYYY-MM-DD"),
+  };
+  getWeatherInfo(param).then((res) => {
+    weatherList.value = res.data;
+    weatherInfo.value = res.data[1] || {}
+  });
+});
 </script>
 <template>
   <ViewBox title="气象信息">
@@ -24,18 +37,17 @@ const showList = ref(false)
           <div class="item_cont">
             <span class="cont_name"> 风速 </span>
             <div class="cont_num">
-              2
-              <span class="unit">级</span>
+              {{weatherInfo.fl}}
+              <!-- <span class="unit">级</span> -->
             </div>
           </div>
         </div>
         <div class="weather_item">
           <img class="img" src="@/assets/home/weather_2.png" alt="" />
           <div class="item_cont">
-            <span class="cont_name"> 湿度 </span>
+            <span class="cont_name"> 温度 </span>
             <div class="cont_num">
-              60
-              <span class="unit">%</span>
+              {{weatherInfo.zgwd}}
             </div>
           </div>
         </div>
@@ -43,34 +55,42 @@ const showList = ref(false)
           <img class="img" src="@/assets/home/weather_3.png" alt="" />
           <div class="item_cont">
             <span class="cont_name"> 风向 </span>
-            <div class="cont_num">东南</div>
+            <div class="cont_num">{{weatherInfo.fx2}}</div>
           </div>
         </div>
       </div>
 
       <div class="weather_list">
-        <span class="time">10月19日</span>
-        <span class="date" @click="showList=!showList" style="cursor: pointer;">今天</span>
-        <img
+        <span class="time">{{ moment().format("MM月DD日") }}</span>
+        <span class="date" @click="showList = !showList" style="cursor: pointer"
+          >今天</span
+        >
+        <!-- <img
           class="weather"
           src="@/assets/naturalRightimg/taityang.png"
           alt=""
-        />
-        <span class="centigrade">14℃/22℃</span>
+        /> -->
+        <span>{{ weatherInfo.tq }}</span>
+        <span class="centigrade">{{weatherInfo.zdwd1}}℃/{{weatherInfo.zgwd}}℃</span>
       </div>
     </div>
     <ul class="infoList" v-if="showList">
-      <li v-for="(item, index) in weatherList" :key="item.id" :class="index===1?'spac':''">
-        <div class="time">{{ item.time }}</div>
+      <li
+        v-for="(item, index) in weatherList"
+        :key="item.id"
+        :class="index === 1 ? 'spac' : ''"
+      >
+        <div class="time">{{ moment(item.ybrq).format("MM月DD日") }}</div>
         <div class="today" v-if="index === 1">今天</div>
         <div class="icon">
-          <img
+          <!-- <img
             class="weather"
             src="@/assets/naturalRightimg/taityang.png"
             v-if="item.state === 1"
-          />
+          /> -->
+          <span>{{ item.tq }}</span>
         </div>
-        <div class="weather">{{ item.weather }}</div>
+        <div class="weather">{{item.zdwd1}}℃/{{item.zgwd}}℃</div>
       </li>
     </ul>
   </ViewBox>
@@ -87,13 +107,13 @@ const showList = ref(false)
 
     .weather_item {
       display: flex;
-      margin-right: 33px;
+      margin-right: 20px;
 
       &:last-child {
         margin: 0;
       }
 
-      width: calc((100% - 66px) / 3);
+      width: calc((100% - 40px) / 3);
 
       .img {
         width: 56px;
@@ -112,12 +132,12 @@ const showList = ref(false)
         }
 
         .cont_num {
-          font-size: 23px;
+          font-size: 18px;
           color: #ffffff;
           line-height: 33px;
           display: flex;
           align-items: center;
-
+          flex-wrap: nowrap;
           .unit {
             font-size: 12px;
             line-height: 14px;
@@ -153,10 +173,10 @@ const showList = ref(false)
   right: 460px;
   top: 40px;
   width: 80%;
-  background-color: #1D3664;
+  background-color: #1d3664;
   color: #d0deee;
   border-radius: 5px;
-  >li{
+  > li {
     display: flex;
     position: relative;
     height: 36px;
@@ -165,28 +185,28 @@ const showList = ref(false)
     background: rgba(13, 50, 90, 1);
     margin-bottom: 10px;
     margin-top: 10px;
-    .time{
+    .time {
       flex: 4;
     }
-    .today{
+    .today {
       position: absolute;
       left: 120px;
     }
-    .icon{
+    .icon {
       flex: 2;
-      img{
+      img {
         width: 23px;
         height: 23px;
       }
     }
-    .weather{
+    .weather {
       flex: 1;
-      margin-right: 20px;;
+      margin-right: 20px;
     }
   }
 }
-.spac{
+.spac {
   font-size: 14px;
-  color: #fff;;
+  color: #fff;
 }
 </style>

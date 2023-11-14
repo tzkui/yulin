@@ -199,7 +199,7 @@ export default {
     btns: [
       {
         name: "查 看",
-        funcName: 'rainfallThreePopup',
+        funcName: "rainfallThreePopup",
       },
     ],
   },
@@ -847,8 +847,16 @@ export default {
     title: "地质监测",
     // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
     rows: [
-      { name: "站点", key: "disasterSite" },
-      { name: "灾害类型", key: "disasterType" },
+      { name: "名称", key: "yhdmc" },
+      { name: "类型", key: "yhdlx" },
+      { name: "地点", key: "dd" },
+      { name: "责任人", key: "jcfzr" },
+      {
+        name: "联系电话",
+        key: "jcfzrlxdh",
+        iconUrl: assetsUrl("/icons/phone.png"),
+        funcName: "phone",
+      },
     ],
     // 右下角的按钮
     btns: [],
@@ -944,9 +952,7 @@ export default {
   wrj: {
     title: "无人机",
     // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
-    rows: [
-      { name: "名称", key: "name" },
-    ],
+    rows: [{ name: "名称", key: "name" }],
     // 右下角的按钮
     btns: [],
     // 左下角的列表
@@ -959,14 +965,13 @@ export default {
       { name: "单位", key: "sydw" },
       { name: "联系人", key: "lxr" },
       { name: "号码", key: "bgrlxdh" },
-
     ],
     // 右下角的按钮
     btns: [],
     // 左下角的列表
     leftBtns: [],
   },
-  
+
   dxjx: {
     title: "大型机械",
     // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
@@ -976,7 +981,6 @@ export default {
       { name: "车辆类型", key: "cllx" },
       { name: "车主姓名", key: "czxm" },
       { name: "联系电话", key: "lxdh" },
-
     ],
     // 右下角的按钮
     btns: [],
