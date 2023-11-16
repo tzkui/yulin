@@ -149,8 +149,7 @@
 
     <twoTableThreeePopup
       :type="twoTableThreeePopupType"
-      v-if="showTwoTableThreePopup"
-      @close-handle="showTwoTableThreePopup = false"
+      ref="twoTableThreeePopupRef"
     ></twoTableThreeePopup>
   </div>
 </template>
@@ -189,16 +188,17 @@ const showDialog = ref({
 });
 const newsList = ref([]);
 const twoTableThreeePopupType = ref(1);
-const showTwoTableThreePopup = ref(false);
+const twoTableThreeePopupRef = ref()
 const bus = useEventBus(viewDetail);
+
+
 const eventListener = function (e) {
-  if (e.dialogType === "jydw") {
-    showTwoTableThreePopup.value = true;
-    twoTableThreeePopupType.value = 1;
-  } else if (e.dialogType === "yjwzk") {
-    showTwoTableThreePopup.value = true;
-    twoTableThreeePopupType.value = 2;
-  }
+    twoTableThreeePopupRef.value.openDialog(e)
+  // if (e.dialogType === "jydw") {
+  //   twoTableThreeePopupType.value = 1;
+  // } else if (e.dialogType === "yjwzk") {
+  //   twoTableThreeePopupType.value = 2;
+  // }
 };
 bus.on(eventListener);
 // 事故等级||事故类型 数据

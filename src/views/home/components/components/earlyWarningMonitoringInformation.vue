@@ -90,7 +90,7 @@ const getDataList = function (item) {
     list = item.markerList.map((item) => {
       return {
         id: item.id,
-        name: item.stnm,
+        name: item.stcd,
         address: item.stlc,
         markerInfo: {
           markerType: "hdzd",
@@ -102,7 +102,7 @@ const getDataList = function (item) {
           label: { text: "河道站点", font_size: 16 },
           dialogType: "hdzd",
           details: {
-            name: item.stnm,
+            name: item.stcd,
             type: item.sttp,
             sxmc: item.hnnm,
             address: item.stlc,

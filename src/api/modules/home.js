@@ -44,3 +44,18 @@ export const getWeatherInfo = (data) => {
   console.log(data.startTime,data.endTime)
   return request.post("/home/qxyb?startTime="+data.startTime+"&endTime="+data.endTime,{});
 } 
+
+// 获取队伍详情
+export const getTeamDetail = (id) => {
+  return request.post("/home/dwxq?id="+id,{});
+} 
+
+// 获取仓库详情
+export const getStorageDetail = (id) => {
+  return request.post("/home/ckxq?id="+id,{});
+} 
+
+// 获取气象预警
+export const getQxyj = () => {
+  return request.post("/home/qxyj",{});
+}
