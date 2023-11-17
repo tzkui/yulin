@@ -2,7 +2,7 @@
 import ViewBox from "@/components/common/view-box.vue";
 import { ref, inject, onMounted, computed } from "vue";
 import { getFxgz } from "@/api/modules/zrzh.js";
-import { getYjjcxx } from "@/api/modules/home.js";
+import { getYjjcxx, getQxyj } from "@/api/modules/home.js";
 import ylzdFirDialog from "@/views/natural/components/syqxxFirDialogs/ylzd.vue";
 import hdzdFirDialog from "@/views/natural/components/syqxxFirDialogs/hdzd.vue";
 import skFirDialog from "@/views/natural/components/syqxxFirDialogs/sk.vue";
@@ -10,6 +10,8 @@ import dzjc from "./dialogs/dzjc.vue";
 import aqscjc from "./dialogs/aqscjc.vue";
 import lhjc from "./dialogs/lhjc.vue";
 import { assetsUrl } from "@/components/map/map2d/hook/index";
+import moment from "moment";
+
 const $mitt = inject("$mitt");
 const currentWarningType = ref("");
 // 监测预警
@@ -43,6 +45,70 @@ const bottomList = ref([
   },
 ]);
 const titleInfo = ref("");
+const yjDetail = ref({
+  img: "../images/qx_icon/2_1.png",
+  name: "高温橙色预警信号",
+  time1: "2023.09.04",
+  time2: "15:32",
+  areas: ["佳县"],
+});
+const citys = [
+  "榆阳区",
+  "横山区",
+  "神木市",
+  "府谷县",
+  "靖边县",
+  "定边县",
+  "绥德县",
+  "米脂县",
+  "佳县",
+  "吴堡县",
+  "清涧县",
+  "子洲县",
+];
+const getQxyjDetail = function () {
+  getQxyj().then((res) => {
+    console.log("包含城市：",res)
+    let data = res.data[0];
+    let areas = [];
+    citys.forEach((item) => {
+      if (data.alarmContent.includes(item)) {
+        areas.push(item);
+      }
+    });
+    console.log("包含城市：",areas)
+    let time1 = data.alarmTime.split(" ")[0];
+    let time2 = data.alarmTime.split(" ")[1].slice(0, 5);
+    let name = data.alarmName + data.alarmColor + "预警";
+    const arr1 = [
+      0,
+      1,
+      "暴雨",
+      "暴雪",
+      "寒潮",
+      "大风",
+      "沙尘暴",
+      "高温",
+      "干旱",
+      "雷电",
+      "冰雹",
+      "霜冻",
+      "大雾",
+      "霾",
+      "道路结冰",
+    ];
+    const arr2 = [0, "蓝色", "黄色", "橙色", "红色"];
+    let imgName =
+      arr1.indexOf(data.alarmType) + "_" + arr2.indexOf(data.alarmColor);
+    yjDetail.value = {
+      img: "../images/qx_icon/"+imgName+".png",
+      name: name,
+      time1: time1,
+      time2: time2,
+      areas: areas,
+    };
+  });
+};
 const getDatas = function () {
   getYjjcxx().then((res) => {
     titleInfo.value = res.data.zxyj[0]?.contentText;
@@ -56,6 +122,7 @@ const getDatas = function () {
       }
     }
   });
+  getQxyjDetail();
 };
 const getDataList = function (item) {
   let list = [];
@@ -259,18 +326,18 @@ onMounted(() => {
     <div class="warning_monitoring">
       <div class="warning_info">
         <img
-          src="@/assets/images/temperature/orange_warning.png"
+          :src="yjDetail.img"
           style="height: 100%; cursor: pointer"
           @click="setMap"
         />
         <div style="margin-left: 40px">
           <div class="row">
-            <div class="warning_type orange">高温橙色预警信号</div>
-            <div>2023.09.04</div>
+            <div class="warning_type orange">{{ yjDetail.name }}</div>
+            <div>{{ yjDetail.time1 }}</div>
           </div>
           <div class="row">
-            <div class="area">影响区域：佳县</div>
-            <div>15:32</div>
+            <div class="area" :title="yjDetail.areas.join('、')">影响区域：{{ yjDetail.areas.join("、") }}</div>
+            <div>{{ yjDetail.time2 }}</div>
           </div>
         </div>
         <!-- <p class="info_box">
@@ -398,6 +465,9 @@ onMounted(() => {
       }
       .area {
         width: 180px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
   }

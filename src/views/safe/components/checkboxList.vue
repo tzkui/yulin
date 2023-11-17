@@ -237,7 +237,7 @@ watch(selectedList, (val, old) => {
 </script>
 <template>
   <div class="checkboxs">
-    <div
+    <!-- <div
       :class="isHide ? 'hideIcon hideIconActive' : 'hideIcon'"
       @click="isHide = !isHide"
     ></div>
@@ -281,119 +281,119 @@ watch(selectedList, (val, old) => {
           </li>
         </ul>
       </li>
-    </ul>
+    </ul> -->
   </div>
 </template>
 <style lang="less" scoped>
-.checkboxs {
-  position: absolute;
-  left: 460px;
-  top: 190px;
-  min-width: 180px;
-  background: rgba(1, 23, 65, 0.8);
-  box-shadow: inset 0px 0px 12px 1px rgba(87, 229, 255, 0.5);
-  border-radius: 4px 4px 4px 4px;
-  opacity: 1;
-  .hideIcon {
-    width: 30px;
-    height: 30px;
-    position: absolute;
-    left: 0;
-    top: -30px;
-    cursor: pointer;
-    transition: 0.3s linear;
-    background: url(@/assets/safe/hide_icon.png) no-repeat;
-    background-size: 30px 30px;
-    background-color: rgba(4, 14, 21, 0.7);
-  }
-  .hideIconActive {
-    background-image: url(@/assets/safe/hide_icon_active.png);
-  }
-  .checkbox_list {
-    // padding-top: 12px;
-    padding-left: 7px;
-    padding-right: 7px;
-    overflow: hidden;
-    transition: 0.4s linear;
-    > li:first-child {
-      margin-top: 12px;
-    }
-    > li {
-      margin-bottom: 12px;
-      font-size: 14px;
-      font-family: Source Han Sans-Bold, Source Han Sans;
-      font-weight: bold;
-      color: #c6d1db;
-      // height: 20px;
-      line-height: 20px;
-      cursor: pointer;
+// .checkboxs {
+//   position: absolute;
+//   left: 460px;
+//   top: 190px;
+//   min-width: 180px;
+//   background: rgba(1, 23, 65, 0.8);
+//   box-shadow: inset 0px 0px 12px 1px rgba(87, 229, 255, 0.5);
+//   border-radius: 4px 4px 4px 4px;
+//   opacity: 1;
+//   .hideIcon {
+//     width: 30px;
+//     height: 30px;
+//     position: absolute;
+//     left: 0;
+//     top: -30px;
+//     cursor: pointer;
+//     transition: 0.3s linear;
+//     background: url(@/assets/safe/hide_icon.png) no-repeat;
+//     background-size: 30px 30px;
+//     background-color: rgba(4, 14, 21, 0.7);
+//   }
+//   .hideIconActive {
+//     background-image: url(@/assets/safe/hide_icon_active.png);
+//   }
+//   .checkbox_list {
+//     // padding-top: 12px;
+//     padding-left: 7px;
+//     padding-right: 7px;
+//     overflow: hidden;
+//     transition: 0.4s linear;
+//     > li:first-child {
+//       margin-top: 12px;
+//     }
+//     > li {
+//       margin-bottom: 12px;
+//       font-size: 14px;
+//       font-family: Source Han Sans-Bold, Source Han Sans;
+//       font-weight: bold;
+//       color: #c6d1db;
+//       // height: 20px;
+//       line-height: 20px;
+//       cursor: pointer;
 
-      .parent {
-        display: flex;
-        margin-bottom: 12px;
-        position: relative;
+//       .parent {
+//         display: flex;
+//         margin-bottom: 12px;
+//         position: relative;
 
-        .icon {
-          position: absolute;
-          top: 1px;
-          right: 0;
-          .el-icon {
-            transition: 0.3s linear;
-          }
-        }
+//         .icon {
+//           position: absolute;
+//           top: 1px;
+//           right: 0;
+//           .el-icon {
+//             transition: 0.3s linear;
+//           }
+//         }
 
-        &:hover {
-          color: #fff;
-        }
-      }
+//         &:hover {
+//           color: #fff;
+//         }
+//       }
 
-      .checkbox_box {
-        width: 20px;
-        height: 20px;
-        border: 1px solid #0075a4;
-        box-sizing: border-box;
-        margin-right: 6px;
-      }
+//       .checkbox_box {
+//         width: 20px;
+//         height: 20px;
+//         border: 1px solid #0075a4;
+//         box-sizing: border-box;
+//         margin-right: 6px;
+//       }
 
-      .icon {
-        width: 20px;
-        height: 20px;
-        margin-right: 6px;
+//       .icon {
+//         width: 20px;
+//         height: 20px;
+//         margin-right: 6px;
 
-        img {
-          width: 100%;
-          height: 100%;
-        }
-      }
+//         img {
+//           width: 100%;
+//           height: 100%;
+//         }
+//       }
 
-      .childList {
-        margin-left: 12px;
-        transition: 0.3s linear;
-        overflow: hidden;
+//       .childList {
+//         margin-left: 12px;
+//         transition: 0.3s linear;
+//         overflow: hidden;
 
-        > li {
-          margin-bottom: 12px;
-          font-size: 14px;
-          font-family: Source Han Sans-Bold, Source Han Sans;
-          font-weight: bold;
-          color: #c6d1db;
-          line-height: 20px;
-          cursor: pointer;
-          display: flex;
+//         > li {
+//           margin-bottom: 12px;
+//           font-size: 14px;
+//           font-family: Source Han Sans-Bold, Source Han Sans;
+//           font-weight: bold;
+//           color: #c6d1db;
+//           line-height: 20px;
+//           cursor: pointer;
+//           display: flex;
 
-          &:hover {
-            color: #fff;
-          }
-        }
-      }
-    }
+//           &:hover {
+//             color: #fff;
+//           }
+//         }
+//       }
+//     }
 
-    .checked_item {
-      .checkbox_box {
-        background: url(@/assets/common/checked.png) no-repeat;
-        background-size: 100% 100%;
-      }
-    }
-  }
-}
+//     .checked_item {
+//       .checkbox_box {
+//         background: url(@/assets/common/checked.png) no-repeat;
+//         background-size: 100% 100%;
+//       }
+//     }
+//   }
+// }
 </style>

@@ -11,7 +11,7 @@ const phoneCall = function (phone = "17323215510") {
       access_type: 1,
       key: window.kdApiKey,
       // devices: [{ id: phone, type: "TEMP_MOBILEPHONE" }],
-      devices: [{ id: "15682381478", type: "TEMP_MOBILEPHONE" }],
+      devices: [{ id: "0" + phone,  type: "TEMP_MOBILEPHONE" }],
       isDemo: true,
     };
     meetingIns = window.kdDispatchConference.createMeeting(
