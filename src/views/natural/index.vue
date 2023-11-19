@@ -3,6 +3,7 @@
 import pageLeftContent from "@/components/common/pageLeftContent.vue";
 import pageRightContent from "@/components/common/pageRightContent.vue";
 import dialogVue from "@/components/common/dialog.vue";
+import scrollBanner from '@/components/common/scrollBanner.vue'
 import right from "../../views/natural/right.vue";
 import { ref, onMounted, reactive, inject } from "vue";
 import left from "./left.vue";
@@ -10,6 +11,7 @@ import firDialog from "./components/firDialog.vue";
 
 import { assetsUrl } from "@/components/map/map2d/hook/index";
 import { Vue3SeamlessScroll } from "vue3-seamless-scroll";
+import {getQxyj} from '@/api/modules/home.js'
 
 const $mitt = inject("$mitt");
 const newsList = reactive([
@@ -23,8 +25,12 @@ const newsList = reactive([
   },
 ]);
 onMounted(() => {
+  getQxyj().then((res) => {
+    bannerContent.value = res.data[0]?.alarmContent
+  });
 })
 
+const bannerContent = ref("")
 const isyjShow = ref(false);
 
 const yjBox = () => {
@@ -431,13 +437,15 @@ const checkBoxPopupData = ref({
     <!-- 无缝滚动 -->
     <div class="scollBox" @click="yjBox">
       <img src="../../assets/natural/tongzhi.png" class="tz">
+      
+      <scrollBanner :content="bannerContent"></scrollBanner>
       <!-- <span class="tz-num">2</span> -->
-      <vue3-seamless-scroll :list="newsList" direction="left" limitScrollNum="1" class="seamless-warp2">
+      <!-- <vue3-seamless-scroll :list="newsList" direction="left" limitScrollNum="1" class="seamless-warp2">
 
         <ul class="item">
           <li v-for="(item, index) in newsList" v-text="item.title" :key="index"></li>
         </ul>
-      </vue3-seamless-scroll>
+      </vue3-seamless-scroll> -->
     </div>
     <!-- 左侧内容 -->
     <pageLeftContent>

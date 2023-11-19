@@ -5,8 +5,9 @@
     <!-- 无缝滚动 -->
     <div class="scollBox">
       <img src="../../assets/natural/tongzhi.png" class="tz" />
+      <scrollBanner :content="bannerContent"></scrollBanner>
       <!-- <span class="tz-num">2</span> -->
-      <vue3-seamless-scroll
+      <!-- <vue3-seamless-scroll
         :list="newsList"
         direction="left"
         class="seamless-warp2"
@@ -18,7 +19,7 @@
             :key="index"
           ></li>
         </ul>
-      </vue3-seamless-scroll>
+      </vue3-seamless-scroll> -->
     </div>
     <!-- 左侧内容 -->
     <pageLeftContent>
@@ -164,6 +165,7 @@ import { ref, onMounted, reactive, inject, defineAsyncComponent  } from "vue";
 // import videoConferencing from "./components/videoConferencing.vue";
 import { viewDetail } from "../../utils/funcNames/tzk";
 import { useEventBus } from "@vueuse/core";
+import scrollBanner from '@/components/common/scrollBanner.vue'
 // import twoTableThreeePopup from "@/views/natural/components/twoTableThreeePopup.vue";
 // import videoConferencing from "@/components/common/videoConferencing.vue";
 import { Vue3SeamlessScroll } from "vue3-seamless-scroll";
@@ -185,7 +187,7 @@ const showDialog = ref({
   video: false,
   video_conference: false,
 });
-const newsList = ref([]);
+const bannerContent = ref("")
 const twoTableThreeePopupType = ref(1);
 const twoTableThreeePopupRef = ref()
 const bus = useEventBus(viewDetail);
@@ -437,15 +439,7 @@ const setMarker = (type, item) => {
 };
 const getDatas = function () {
   getQxyj().then((res) => {
-    let text = res.data[0]?.alarmContent;
-    const n = text.length;
-    let arr = []
-    for(let i=0;i<n;i+=50){
-      arr.push(text.slice(i,i+50))
-    }
-    console.log("横幅数据", arr)
-    newsList.value = arr
-    // newsList.value = [{ title: text }, { title: text }];
+    bannerContent.value = res.data[0]?.alarmContent
   });
 };
 onMounted(() => {
