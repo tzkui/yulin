@@ -9,13 +9,12 @@
       <vue3-seamless-scroll
         :list="newsList"
         direction="left"
-        limitScrollNum="1"
         class="seamless-warp2"
       >
         <ul class="item">
           <li
             v-for="(item, index) in newsList"
-            v-text="item.title"
+            v-text="item"
             :key="index"
           ></li>
         </ul>
@@ -168,7 +167,7 @@ import { useEventBus } from "@vueuse/core";
 // import twoTableThreeePopup from "@/views/natural/components/twoTableThreeePopup.vue";
 // import videoConferencing from "@/components/common/videoConferencing.vue";
 import { Vue3SeamlessScroll } from "vue3-seamless-scroll";
-import { getYjjcxx } from "@/api/modules/home.js";
+import { getYjjcxx, getQxyj } from "@/api/modules/home.js";
 
 
 const pageLeftContent = defineAsyncComponent(() => import('@/components/common/pageLeftContent.vue'))
@@ -437,16 +436,16 @@ const setMarker = (type, item) => {
   }
 };
 const getDatas = function () {
-  getYjjcxx().then((res) => {
-    console.log("预警监测信息：", res);
-    let text = res.data.zxyj[0]?.contentText;
+  getQxyj().then((res) => {
+    let text = res.data[0]?.alarmContent;
     const n = text.length;
     let arr = []
-    for(let i=0;i<n/20;i++){
-      arr.push(text.slice(i,i+20))
+    for(let i=0;i<n;i+=50){
+      arr.push(text.slice(i,i+50))
     }
+    console.log("横幅数据", arr)
     newsList.value = arr
-    newsList.value = [{ title: text }, { title: text }];
+    // newsList.value = [{ title: text }, { title: text }];
   });
 };
 onMounted(() => {

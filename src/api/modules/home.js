@@ -57,5 +57,5 @@ export const getStorageDetail = (id) => {
 
 // 获取气象预警
 export const getQxyj = () => {
-  return request.post("/home/qxyj?startTime=2023-11-01",{});
+  return request.post("/home/qxyj",{});
 }

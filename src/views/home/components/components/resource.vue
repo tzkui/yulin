@@ -81,11 +81,11 @@ let resources_list_all = ref([
   ],
   [
     { name: "危化企业", num: 453, type: "whqy", icon: "spjk" },
-    { name: "公安", num: 453, type: "ga", icon: "spjk" },
-    { name: "交警", num: 453, type: "jj", icon: "spjk" },
-    { name: "水利", num: 453, type: "sl", icon: "spjk" },
-    { name: "住建", num: 1, type: "zj", icon: "spjk" },
-    { name: "综合执法", num: 1, type: "zhzf", icon: "spjk" },
+    { name: "公安", num: 0, type: "ga", icon: "spjk" },
+    { name: "交警", num: 0, type: "jj", icon: "spjk" },
+    { name: "水利", num: 0, type: "sl", icon: "spjk" },
+    { name: "住建", num: 0, type: "zj", icon: "spjk" },
+    { name: "综合执法", num: 0, type: "zhzf", icon: "spjk" },
   ],
 ]);
 let resources_list = ref([]);
@@ -197,6 +197,7 @@ const changeResources = (type, index) => {
 };
 const showTxl = ref(false);
 const openDialog = (item, index) => {
+  if(item.num===0) return ;
   $mitt.emit("hideAllMarker");
   if (item.type === "txl") {
     showSelect.value = false;

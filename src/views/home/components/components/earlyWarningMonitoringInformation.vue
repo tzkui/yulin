@@ -68,7 +68,7 @@ const citys = [
 ];
 const getQxyjDetail = function () {
   getQxyj().then((res) => {
-    console.log("包含城市：",res)
+    console.log("包含城市：", res);
     let data = res.data[0];
     let areas = [];
     citys.forEach((item) => {
@@ -76,7 +76,7 @@ const getQxyjDetail = function () {
         areas.push(item);
       }
     });
-    console.log("包含城市：",areas)
+    console.log("包含城市：", areas);
     let time1 = data.alarmTime.split(" ")[0];
     let time2 = data.alarmTime.split(" ")[1].slice(0, 5);
     let name = data.alarmName + data.alarmColor + "预警";
@@ -101,7 +101,7 @@ const getQxyjDetail = function () {
     let imgName =
       arr1.indexOf(data.alarmType) + "_" + arr2.indexOf(data.alarmColor);
     yjDetail.value = {
-      img: "../images/qx_icon/"+imgName+".png",
+      img: "../images/qx_icon/" + imgName + ".png",
       name: name,
       time1: time1,
       time2: time2,
@@ -298,23 +298,56 @@ const closeDialog = function () {
   $mitt.emit("hideAllMarker");
 };
 let areaFlag = false;
+const jsonUrls = {
+  榆阳区: "yyq",
+  横山区: "hsq",
+  神木市: "sms",
+  府谷县: "fgx",
+  靖边县: "jbx",
+  定边县: "dbx",
+  绥德县: "sdx",
+  米脂县: "mzx",
+  佳县: "jx",
+  吴堡县: "wbx",
+  清涧县: "qjx",
+  子洲县: "zzx",
+};
+const maskColors = {
+  "蓝色" : "#68E1FC",
+  "黄色": "#CD8F55",
+  "橙色": "#EF7C12",
+  "红色": "#D11216"
+}
 const setMap = function () {
   // //导入包含行政区划的geo数据 进行绘制
+  let list = yjDetail.value.areas;
   if (!areaFlag) {
     areaFlag = true;
-    let mittLineData = {
-      url: assetsUrl("/geoJson/jx.json"),
-      geoType: "jxArea",
-      mask: false,
-      type: "mask",
-      style: {
-        fillColor: "#CD8F55",
-      },
-    };
-    $mitt.emit("drawGeoGraph", mittLineData);
+    // let mittLineData = {
+    //   url: assetsUrl("/geoJson/jx.json"),
+    //   geoType: "jxArea",
+    //   mask: false,
+    //   type: "mask",
+    //   style: {
+    //     fillColor: "#CD8F55",
+    //   },
+    // };
+    list.forEach((item) => {
+      $mitt.emit("drawGeoGraph", {
+        url: assetsUrl(`/geoJson/${jsonUrls[item]}.json`),
+        geoType: jsonUrls[item],
+        mask: false,
+        type: "mask",
+        style: {
+          fillColor: maskColors[yjDetail.value.alarmColor],
+        },
+      });
+    });
   } else {
     areaFlag = false;
-    $mitt.emit("clearGeoGraph", "jxArea");
+    list.forEach((item) => {
+      $mitt.emit("clearGeoGraph", jsonUrls[item]);
+    });
   }
 };
 onMounted(() => {
@@ -336,7 +369,9 @@ onMounted(() => {
             <div>{{ yjDetail.time1 }}</div>
           </div>
           <div class="row">
-            <div class="area" :title="yjDetail.areas.join('、')">影响区域：{{ yjDetail.areas.join("、") }}</div>
+            <div class="area" :title="yjDetail.areas.join('、')">
+              影响区域：{{ yjDetail.areas.join("、") }}
+            </div>
             <div>{{ yjDetail.time2 }}</div>
           </div>
         </div>
