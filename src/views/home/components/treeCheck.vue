@@ -201,7 +201,8 @@ const yjjgList = ref([]);
 const getyjjgData = function () {
   getYjjg().then((res) => {
     yjjgList.value = res.data;
-    sessionStorage.setItem("yjjgListData", JSON.stringify(yjjgList.value));
+    window.STORE_INFO["yjjgListData"] = yjjgList.value
+    // sessionStorage.setItem("yjjgListData", JSON.stringify(yjjgList.value));
   });
 };
 const getYhddData = function () {
@@ -215,7 +216,8 @@ const getYhddData = function () {
         phone: item.lxdh,
       };
     });
-    sessionStorage.setItem("jsdListData", JSON.stringify(arr));
+    window.STORE_INFO["jsdListData"] = arr
+    // sessionStorage.setItem("jsdListData", JSON.stringify(arr));
   });
 };
 const nowTreeList = ref([]);
@@ -263,9 +265,10 @@ const nodeClick = (obj) => {
 const checkItem = (obj, checked) => {
   checkedData.value = checked.checkedNodes;
   if (checked.checkedNodes.includes(obj)) {
-    let listData = sessionStorage.getItem(obj.type + "ListData");
-    if (listData) {
-      let list = JSON.parse(listData);
+    let listData = window.STORE_INFO[obj.type + "ListData"]
+    // let listData = sessionStorage.getItem(obj.type + "ListData");
+    if (listData&&listData.length) {
+      let list = listData;
       for (let i = 0; i < list.length; i++) {
         let info = list[i];
         if (!info.mapX || !info.mapY) {

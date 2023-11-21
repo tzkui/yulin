@@ -200,7 +200,8 @@ const getInfos = function () {
         mapY: info.latitude
       }
     })
-    sessionStorage.setItem("qyxxListData",JSON.stringify(listData.value))
+    window.STORE_INFO["qyxxListData"] = listData.value
+    // sessionStorage.setItem("qyxxListData",JSON.stringify(listData.value))
   })
 };
 const closeDialog = function(){

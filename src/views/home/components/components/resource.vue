@@ -124,11 +124,12 @@ const getYjjyList = function () {
       // 向右下侧选择框传值
       let info = res.data[key];
       if (info.lx === "list") {
-        // window.STORE_INFO[key + "ListData"] = info.jh
-        sessionStorage.setItem(key + "ListData", JSON.stringify(info.jh));
+        window.STORE_INFO[key + "ListData"] = info.jh
+        // sessionStorage.setItem(key + "ListData", JSON.stringify(info.jh));
       } else {
         let arr = info.jh.filter((item) => item.dataType === 2);
-        sessionStorage.setItem(key + "ListData", JSON.stringify(arr));
+        window.STORE_INFO[key + "ListData"] = arr
+        // sessionStorage.setItem(key + "ListData", JSON.stringify(arr));
       }
     }
     resources_list_all.value[0].forEach((item) => {
@@ -199,7 +200,8 @@ const getSpjkList = function () {
     res.data.forEach((item) => {
       arr = [...arr, ...item.jh];
     });
-    sessionStorage.setItem("spjkListData", JSON.stringify(arr));
+    window.STORE_INFO["spjkListData"] = arr;
+    // sessionStorage.setItem("spjkListData", JSON.stringify(arr));
   });
 };
 // 切换应急资源

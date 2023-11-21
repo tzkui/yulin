@@ -23,13 +23,15 @@ const yjzyInfo = ref({});
 // 获取应急资源列表
 const getYjzyList = function () {
   getYjzy().then((res) => {
-    let data = res.data;
+    console.log("xxxxxxxxxxx",res.data)
+    let data = res.data
     data.yjzj.jh.forEach(item=>{
       item.expertName = item.expertName+"  " +item.linkPhone
     })
     yjzyInfo.value = data;
-    sessionStorage.setItem("yjzyInfos",JSON.stringify(data))
-    store.commit("pointLists/SET_YJZYINFOS",data);
+    window.STORE_INFO["yjzyInfos"] = data
+    // sessionStorage.setItem("yjzyInfos",JSON.stringify(data))
+    // store.commit("pointLists/SET_YJZYINFOS",data);
     yjzyList.value = [
       { id: "yjry", name: "应急人员", num: data.yjry.sl },
       { id: "yjzj", name: "应急专家", num: data.yjzj.sl },

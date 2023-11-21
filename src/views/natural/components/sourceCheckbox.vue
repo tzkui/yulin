@@ -109,7 +109,8 @@ const setTypes = function () {
 };
 const yjzyData = ref({});
 let getInfos = function () {
-  let yjzyInfos = store.state.pointLists.yjzyInfos;
+  let yjzyInfos = window.STORE_INFO["yjzyInfos"] || []
+  // let yjzyInfos = store.state.pointLists.yjzyInfos;
   if (Object.keys(yjzyInfos).length>0) {
     yjzyData.value = yjzyInfos;
     setTypes();

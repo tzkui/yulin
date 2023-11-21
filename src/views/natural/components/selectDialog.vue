@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, inject, watch } from "vue";
+import { onMounted, ref, inject, watch, onUnmounted } from "vue";
 import firDialog from "./firDialog.vue";
 import commonFun from "@/utils/common.js";
 const { initTree, calcDiff } = commonFun();
@@ -43,6 +43,7 @@ const closeDialog = function () {
 };
 const treeData = ref([]);
 const phoneList = ref(["应急专家","通讯录"]);
+let timer = null;
 const initData = function () {
   if (props.listType === "tree") {
     for (const info of props.listData) {
@@ -66,18 +67,43 @@ const initData = function () {
       );
     });
   } else {
-    treeData.value = props.listData.map((item) => {
-      idInfoDict[item.id] = item;
-      return {
-        ...item,
-        label:
-          item.label ||
-          item.name ||
-          item.jswz ||
-          item.monitorName ||
-          item.personalName,
-      };
-    });
+    if(props.listData.length> 500){
+      treeData.value = [];
+      let i=0;
+      timer = setInterval(()=>{
+        if((i+500)<props.listData.length){
+          let arr = props.listData.slice(i,i+500);
+          arr = arr.map(item=>{
+            idInfoDict[item.id] = item;
+            return {
+              ...item,
+              label:
+                item.label ||
+                item.name ||
+                item.jswz ||
+                item.monitorName ||
+                item.personalName,
+            }
+          })
+          treeData.value.push(...arr)
+          i+=500;
+        }else{
+          clearInterval(timer);
+        }
+      },100)
+    }
+    // treeData.value = props.listData.map((item) => {
+    //   idInfoDict[item.id] = item;
+    //   return {
+    //     ...item,
+    //     label:
+    //       item.label ||
+    //       item.name ||
+    //       item.jswz ||
+    //       item.monitorName ||
+    //       item.personalName,
+    //   };
+    // });
   }
 };
 console.log(props.dialogType);
@@ -122,7 +148,11 @@ const getMarkerInfoByType = function (info) {
     return base;
   }
 };
-
+onUnmounted(()=>{
+  if(timer){
+    clearInterval(timer)
+  }
+})
 const phoneBus = useEventBus("phone");
 const phone = function(info){
   phoneBus.emit(info)
