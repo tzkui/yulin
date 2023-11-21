@@ -10,3 +10,5 @@ window.baseWebrtcUrl = window.baseIp2 + ":8078"; // 视频监控的地址
 
 
 window.kdApiKey = "b264c6096dc545a5a7ea9ec1c47c333f"
+
+window.STORE_INFO = {}

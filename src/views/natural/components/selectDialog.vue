@@ -6,6 +6,7 @@ const { initTree, calcDiff } = commonFun();
 import { fxyhLists, yjzyLists, spjkLists } from "@/api/mock_tzk.js";
 import entityDict from "@/utils/entityDict.js";
 
+import { useEventBus } from "@vueuse/core";
 const $mitt = inject("$mitt");
 
 const props = defineProps({
@@ -41,11 +42,20 @@ const closeDialog = function () {
   emits("closeDialog", "select");
 };
 const treeData = ref([]);
+const phoneList = ref(["应急专家","通讯录"]);
 const initData = function () {
   if (props.listType === "tree") {
     for (const info of props.listData) {
       if (info.dataType === 2) {
         idInfoDict["2--" + info.id] = info;
+        if(phoneList.value.includes(props.name)){
+          try {
+            let a = JSON.parse(info.spare1)
+            info.linkPhone = a?.linkPhone
+          } catch (error) {
+            
+          }
+        }
       }
     }
     let arr = initTree(props.listData);
@@ -112,6 +122,11 @@ const getMarkerInfoByType = function (info) {
     return base;
   }
 };
+
+const phoneBus = useEventBus("phone");
+const phone = function(info){
+  phoneBus.emit(info)
+}
 onMounted(() => {
   initData();
 });
@@ -141,7 +156,6 @@ watch(selectedMarkers, (val, old) => {
     $mitt.emit("openPopup", markerList[0]);
   } else {
     markerList.forEach((item) => {
-      console.log(item);
       $mitt.emit("changeMarkerState", item);
     });
   }
@@ -164,6 +178,14 @@ watch(selectedMarkers, (val, old) => {
             <span class="yellow" v-if="data.dataType === 1">
               {{ data.num }}
             </span>
+            <span v-if="phoneList.includes(name)" class="phone">{{ data.linkPhone }}</span>
+            <img 
+              src="@/assets/home/icon_phone.png" 
+              v-if="phoneList.includes(name) && data.linkPhone"
+              alt="" 
+              @click="phone(data)" 
+              class="phone_icon"
+            />
           </span>
         </template>
       </el-tree>
@@ -223,6 +245,16 @@ watch(selectedMarkers, (val, old) => {
     .el-tree-node__content:hover {
       background-color: RGBA(10, 91, 131, 0.3);
     }
+  }
+  .phone{
+    display: inline-block;
+    margin: 0 5px;
+
+  }
+  .phone_icon{
+    width: 18px;
+    height: 18px;
+    margin-top: -2px;
   }
 }
 </style>

@@ -18,6 +18,7 @@ const phone = function(info){
     <ul class="list">
       <li v-for="(item, index) in addressBook" :key="index">
         <span>{{ item.name }}</span>
+        <span>{{ item.phone }}</span>
         <img src="@/assets/home/icon_phone.png" alt="" @click="phone(item)" />
       </li>
     </ul>

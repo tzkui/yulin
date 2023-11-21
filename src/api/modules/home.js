@@ -1,5 +1,5 @@
 import request from '../index'
-
+import axios from 'axios'
 // 企业分布
 export const getQyfb = () => request.post("/home/qyfb", {})
 
@@ -42,7 +42,7 @@ export const getZyfxList = (data) => request.post("/home/zyfx", data);
 // 获取气象信息
 export const getWeatherInfo = (data) => {
   console.log(data.startTime,data.endTime)
-  return request.post("/home/qxyb?startTime="+data.startTime+"&endTime="+data.endTime,{});
+  return request.post("/home/qxyb?startTime "+data.startTime+"&endTime="+data.endTime,{});
 } 
 
 // 获取队伍详情
@@ -58,4 +58,16 @@ export const getStorageDetail = (id) => {
 // 获取气象预警
 export const getQxyj = () => {
   return request.post("/home/qxyj",{});
+}
+
+// 获取通讯录数据
+export const getTxl = () => {
+  return request.post("/home/txl",{});
+}
+
+// 获取科达通讯录数据
+export const getKdtxl = () => {
+  return axios({
+    url: `https://10.112.143.193/kiop-gateway-core//tongxunlu/dept/search?apikey=${window.kdApiKey}&paging=false`
+  })
 }

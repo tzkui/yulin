@@ -6,7 +6,7 @@ import { bg_config } from "../../config";
 import { useEventBus } from "@vueuse/core";
 import selectDialogVue from "@/views/natural/components/selectDialog.vue";
 import addressBoox from "./dialogs/addressBoox.vue";
-import { getYjjy, getRhtx, getSpjk } from "@/api/modules/home.js";
+import { getYjjy, getRhtx, getSpjk, getTxl } from "@/api/modules/home.js";
 const imgefileUrl = (url) => {
   return new URL(url, import.meta.url).href;
 };
@@ -124,6 +124,7 @@ const getYjjyList = function () {
       // 向右下侧选择框传值
       let info = res.data[key];
       if (info.lx === "list") {
+        // window.STORE_INFO[key + "ListData"] = info.jh
         sessionStorage.setItem(key + "ListData", JSON.stringify(info.jh));
       } else {
         let arr = info.jh.filter((item) => item.dataType === 2);
@@ -166,6 +167,23 @@ const getRhtxList = function () {
     sessionStorage.setItem("wrjListData", JSON.stringify(wrjList));
   });
 };
+const getTxlList = function(){
+  getTxl().then(res=>{
+    console.log("通讯录数据：",res.data)
+    let list = res.data.map(item=>{
+      return {
+        ...item,
+        name: item.personalName
+      }
+    })
+    resources_list_all.value[1][4].num=list.length
+    markerDatas.txl = {
+      type: "list",
+      sl: list.length,
+      jh: list,
+    };
+  })
+}
 const getSpjkList = function () {
   getSpjk().then((res) => {
     const list = resources_list_all.value[3];
@@ -199,13 +217,13 @@ const showTxl = ref(false);
 const openDialog = (item, index) => {
   if(item.num===0) return ;
   $mitt.emit("hideAllMarker");
-  if (item.type === "txl") {
-    showSelect.value = false;
-    emit("closeAllDialog");
-    showTxl.value = true;
-    return;
-  }
-  showTxl.value = false;
+  // if (item.type === "txl") {
+  //   showSelect.value = false;
+  //   emit("closeAllDialog");
+  //   showTxl.value = true;
+  //   return;
+  // }
+  // showTxl.value = false;
   if (markerDatas[item.type]) {
     let info = markerDatas[item.type];
     let dialogType = item.type;
@@ -247,18 +265,13 @@ onMounted(() => {
   getYjjyList();
   getRhtxList();
   getSpjkList();
+  getTxlList();
   mockData();
 });
 </script>
 <template>
   <ViewBox title="应急资源">
     <div class="emergency_resources">
-      <!-- 搜索框 -->
-      <!-- <div class="search_box">
-        <el-input v-model="search_value" placeholder="请输入关键字" />
-        <img class="img" src="@/assets/home/icon_search.png" alt="" />
-      </div> -->
-      <!-- tab -->
       <div class="resources_tab">
         <div
           class="tab_item"
