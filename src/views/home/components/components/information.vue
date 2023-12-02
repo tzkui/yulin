@@ -12,8 +12,8 @@ const getEventList = function (id) {
   getSjxx().then((res) => {
     let today = moment().format("YYYY-MM-DD");
     let todayLen = res.data.filter(item=>item.eventDate.slice(0,10)===today).length
-    boxTitle.value = `突发事件<span style='font-size: 28px;color: #EFAD2C;'> ${res.data.length} </span>起&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;今日事件<span style='font-size: 28px;color: #EFAD2C;'> ${todayLen} </span>起`;
-    event_list.value = res.data.map((item) => {
+    boxTitle.value = `今日事件<span style='font-size: 28px;color: #EFAD2C;'> ${todayLen} </span>起`;
+    event_list.value = res.data.slice(0,50).map((item) => {
       return {
         typeName: item.typeName,
         time: item.reportDate?.slice(5),

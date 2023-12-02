@@ -46,7 +46,7 @@ onUnmounted(()=>{
     <div class="content" ref="contentRef">{{ content }}</div>
   </div>
 </template>
-<style scope>
+<style scoped>
 .scroll_banner{
   position: relative;
   height: 24px;
