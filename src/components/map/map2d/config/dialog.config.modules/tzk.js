@@ -132,10 +132,10 @@ export default {
     ],
     // 右下角的按钮
     btns: [
-      {
-        name: "物资调拨",
-        funcName: "wzdb",
-      },
+      // {
+      //   name: "物资调拨",
+      //   funcName: "wzdb",
+      // },
       {
         name: "查看 ",
         funcName: viewDetail,

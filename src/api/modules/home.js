@@ -42,7 +42,7 @@ export const getZyfxList = (data) => request.post("/home/zyfx", data);
 // 获取气象信息
 export const getWeatherInfo = (data) => {
   console.log(data.startTime,data.endTime)
-  return request.post("/home/qxyb?startTime "+data.startTime+"&endTime="+data.endTime,{});
+  return request.post("/home/qxyb?startTime="+data.startTime+"&endTime="+data.endTime,{});
 } 
 
 // 获取队伍详情

@@ -52,20 +52,23 @@ const initData = function () {
         if(phoneList.value.includes(props.name)){
           try {
             let a = JSON.parse(info.spare1)
-            info.linkPhone = a?.linkPhone
+            info.linkPhone = a?.linkPhone;
+            info.typeName = a?.typeName;
+            info.zc = a?.zc
           } catch (error) {
-            
+            console.log("解析json报错了：", info)
           }
         }
       }
     }
     let arr = initTree(props.listData);
+    // treeData.value = arr;
     treeData.value = arr.filter((item) => item.children?.length > 0);
-    treeData.value.map((item) => {
-      item.children = item.children.filter(
-        (val) => val.num > 0 || val.dataType != 1
-      );
-    });
+    // treeData.value.map((item) => {
+    //   item.children = item.children.filter(
+    //     (val) => val.num > 0 || val.dataType != 1
+    //   );
+    // });
   } else {
     if(props.listData.length> 500){
       treeData.value = [];
@@ -205,10 +208,11 @@ watch(selectedMarkers, (val, old) => {
         <template #default="{ node, data }">
           <span class="custom-tree-node">
             <span>{{ node.label }}</span>
-            <span class="yellow" v-if="data.dataType === 1">
+            <span class="yellow" v-if="data.dataType === 1&&!['通讯录','应急人员'].includes(name)">
               {{ data.num }}
             </span>
-            <span v-if="phoneList.includes(name)" class="phone">{{ data.linkPhone }}</span>
+            <span v-if="phoneList.includes(name)" class="phone">{{ data.typeName }}</span>
+            <span v-if="phoneList.includes(name)" class="phone">{{ data.zc }}</span>
             <img 
               src="@/assets/home/icon_phone.png" 
               v-if="phoneList.includes(name) && data.linkPhone"

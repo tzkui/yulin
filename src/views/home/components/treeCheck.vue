@@ -40,7 +40,7 @@
               :src="imgefileUrl(data.icon)"
               alt=""
             />
-            <span class="name">{{ data.name }}xxxxx</span>
+            <span class="name">{{ data.name }}</span>
           </span>
         </template>
       </el-tree>

@@ -23,7 +23,7 @@
               :key="index"
             >
               <div class="cont_num">
-                <span class="num">{{ item.num }}</span
+                <span class="num">{{ item.num.toFixed(0) }}</span
                 >{{ item.unit }}
               </div>
               <div class="cont_type">

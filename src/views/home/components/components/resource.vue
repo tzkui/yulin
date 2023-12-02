@@ -39,19 +39,6 @@ const mockData = function () {
       },
     ],
   };
-  // markerDatas.yjdb = {
-  //   lx: "list",
-  //   sl: 5,
-  //   jh: [
-  //     {
-  //       id: "yjdbmock1",
-  //       name: "应急单兵1",
-  //       typeName: "综合执法监控",
-  //       location: "榆林市郭家沟西南约4000米",
-  //       mapX: 109.43561,
-  //       mapY: 37.57452
-  //     },
-  //   ],}
 };
 const $mitt = inject("$mitt");
 const openVideoConferencingBus = useEventBus("openVideoConferencing");
@@ -171,19 +158,36 @@ const getRhtxList = function () {
 };
 const getTxlList = function(){
   getTxl().then(res=>{
-    console.log("通讯录数据：",JSON.parse(JSON.stringify(res.data[0])))
     let list = res.data.map(item=>{
-      return {
-        ...item,
-        name: item.personalName
+      if(item.dataType == 1){
+        return {
+          ...item,
+          name: item.title
+        }
+      }else{
+        try {
+          return {
+            ...item,
+            name: item.personalName,
+            linkPhone: JSON.parse(item.spare1)?.linkPhone
+          }
+          
+        } catch (error) {
+          return {
+            ...item,
+            name: item.personalName,
+
+          }
+        }
       }
     })
-    resources_list_all.value[1][4].num=list.length
+    resources_list_all.value[1][4].num=list.length - 13
     markerDatas.txl = {
-      type: "list",
-      sl: list.length,
+      lx: "tree",
+      sl: list.length-13,
       jh: list,
     };
+    window.STORE_INFO.txlList = list
   })
 }
 const getSpjkList = function () {
@@ -218,6 +222,7 @@ const changeResources = (type, index) => {
 };
 const showTxl = ref(false);
 const openDialog = (item, index) => {
+  console.log(item, index,selectDatas)
   if(item.num===0) return ;
   $mitt.emit("hideAllMarker");
   // if (item.type === "txl") {

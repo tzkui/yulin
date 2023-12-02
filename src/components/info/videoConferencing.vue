@@ -1,6 +1,6 @@
 <template>
-  <div v-if="showDialog" class="video_dialog animate__animated animate__zoomIn">
-    <div class="dialog_head">
+  <div v-if="showDialog" :style="style" class="video_dialog animate__animated animate__zoomIn" ref="videoConferencingRef">
+    <div class="dialog_head" ref="dialogHeaderRef">
       <h2 class="dialog_title">视频会商</h2>
       <img
         @click="closeDialog"
@@ -58,12 +58,13 @@
                   class="video_box_icon"
                   src="@/assets/integratedCommunication/icon_fullscreen.png"
                   alt=""
-                />
+                /> -->
                 <img
                   class="video_box_icon"
                   src="@/assets/integratedCommunication/icon_close.png"
                   alt=""
-                /> -->
+                  @click="remove(index)"
+                />
               </div>
             </div>
           </div>
@@ -94,17 +95,41 @@
   </div>
 </template>
 <script setup>
-import { onMounted, onUnmounted, ref } from "vue";
-import { useEventBus } from "@vueuse/core";
+import { computed, onMounted, onUnmounted, ref } from "vue";
+import { useEventBus, useDraggable } from "@vueuse/core";
 import { getOrgRoot, getOrgById } from "@/api/modules/videoConferencing.js";
 const showDialog = ref(false);
 import {addressBook} from '@/api/addressBook.js'
+import {getDeviceTree, getDeviceList} from "@/api/modules/kd.js"
 
+const txlLists = ref([])
+const kdLists = ref([])
+getDeviceTree().then(res=>{
+  kdLists.value = res.data.result || [];
+  kdLists.value.forEach(item=>{
+    item.label = item.name
+    getDeviceList({groupId: item.id}).then(devs=>{
+      item.children = devs.data.result.data.map(item=>{
+        return {
+          id: item.gbid,
+          type: "TEMP_GB",
+          label: item.deviceName
+        }
+
+      })
+    })
+  })
+})
 const openDialog = function (e) {
   showDialog.value = true;
   console.log("视频会商参数：", e);
 };
-
+const dialogHeaderRef = ref()
+const videoConferencingRef = ref()
+const { x, y, style } = useDraggable(dialogHeaderRef, {
+  initialValue: { x: 454, y: 404 },
+  draggingElement: videoConferencingRef.value
+})
 const meetingList = ref([]);
 const loadOrgNode = async function (node, resolve) {
   console.log("node: ", node);
@@ -121,6 +146,9 @@ const loadOrgNode = async function (node, resolve) {
     return resolve(res.data);
   }
 };
+const remove = function(i){
+  meetingList.value.splice(i, 1);
+}
 const openVideoConferencingBus = useEventBus("openVideoConferencing");
 openVideoConferencingBus.on(openDialog);
 onMounted(() => {
@@ -130,87 +158,11 @@ onUnmounted(() => {
   openVideoConferencingBus.off(openDialog);
 });
 
+
 // 树结构数据
-const treeData = ref([
-  {
-    id: 1,
-    label: "通讯录",
-    children: addressBook.map(item=>{
-      return {
-        ...item,
-        type: "TEMP_VOLTE",
-        label: item.name,
-        id: item.phone
-      }
-    })
-  },
-  {
-    id: 2,
-    label: "单兵",
-    children: [
-      {
-        id: "320571000013270000021",
-        type: "TEMP_GB",
-        label: "单兵1",
-      },
-    ],
-  },
-  {
-    id: 3,
-    label: "视频监控",
-    children: [
-      {
-        id: "1000000000137",
-        type: "TEMP_MT",
-        label: "地址一视频监控",
-      },
-    ],
-  },
-  {
-    id: 4,
-    label: "视频会议终端",
-    children: [
-      {
-        id: "32057100001327000002",
-        type: "TEMP_GB",
-        label: "视频会议终端1",
-      },
-    ],
-  },
-  {
-    id: 5,
-    label: "无人机",
-    children: [
-      {
-        id: "10000000001371",
-        type: "TEMP_MT",
-        label: "无人机1",
-      },
-    ],
-  },
-  {
-    id: 6,
-    label: "卫星电话",
-    children: [
-      {
-        id: "17323215510",
-        type: "TEMP_VOLTE",
-        label: "卫星电话1",
-      },
-    ],
-  },
-  {
-    id: 7,
-    label: "窄带对讲",
-    children: [
-      {
-        id: "111111111",
-        type: "TEMP_VOLTE",
-        label: "对讲机1",
-      },
-    ],
-  },
-]);
+const treeData = computed(()=>{
+  return [...txlLists.value,...kdLists.value]
+})
 // 树结构显示prop
 const treeProps = ref({
   label: "label",
@@ -267,7 +219,9 @@ const beginConferencing = function () {
       };
     }),
     key: window.kdApiKey,
+    isDemo: true
   };
+  console.log(options)
   meetingIns = kdDispatchConference.createMeeting(
     "#meeting_box",
     options,
@@ -331,7 +285,7 @@ defineExpose({
     align-items: center;
     background: url("@/assets/integratedCommunication/dialog_head_bg.png")
       center/965px 54px no-repeat;
-
+    cursor: move;
     .dialog_title {
       font-size: 20px;
       font-family: Source Han Sans SC-Medium, Source Han Sans SC;
