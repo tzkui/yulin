@@ -40,7 +40,7 @@
               :src="imgefileUrl(data.icon)"
               alt=""
             />
-            <span class="name">{{ data.name }}</span>
+            <span class="name">{{ data.name }}xxxxx</span>
           </span>
         </template>
       </el-tree>
@@ -58,7 +58,7 @@ import { getFxgz } from "@/api/modules/zrzh.js";
 const $mitt = inject("$mitt");
 const checked_all = ref(false);
 const elTreeRef = ref();
-const isHide = ref(false);
+const isHide = ref(true);
 const defaultProps = {
   children: "children",
   label: "name",

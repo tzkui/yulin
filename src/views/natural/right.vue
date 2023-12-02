@@ -10,7 +10,7 @@
           <img src="../../assets/naturalRightimg/icon6.png" alt="" />
           <div>
             <span>风速</span>
-            <p>2 <span class="smallicon">级</span></p>
+            <p>{{weatherInfo.fl}}</p>
           </div>
         </div>
         <div class="icon-item">
@@ -24,19 +24,20 @@
           <img src="../../assets/naturalRightimg/icon4.png" alt="" />
           <div>
             <span>风向</span>
-            <p>东南</p>
+            <p>{{weatherInfo.fx2}}</p>
           </div>
         </div>
       </div>
       <!-- 再下面就是日期时间这些的了 -->
       <div class="times">
         <div class="time-item" v-for="(item, index) in weathers" :key="index">
-          <p class="month">{{ item.time }}</p>
-          <p class="day">{{ item.day }}</p>
+          <p class="month">{{ item.ybrq.slice(0,10) }}</p>
+          <!-- <p class="day">{{ item.day }}</p> -->
           <p class="icon">
-            <img src="../../assets/naturalRightimg/taityang.png" alt="" />
+            <!-- <img src="../../assets/naturalRightimg/taityang.png" alt="" /> -->
+            {{ item.tq }}
           </p>
-          <p class="temperature">{{ item.temperature }}</p>
+          <p class="temperature">{{ item.zdwd1 }}℃/{{ item.zgwd }}℃</p>
         </div>
       </div>
     </div>
@@ -144,6 +145,8 @@
 
 <script setup>
 import { ref, reactive, inject, onMounted, onUnmounted } from "vue";
+import { getWeatherInfo } from "@/api/modules/home.js";
+import moment from "moment";
 const $mitt = inject("$mitt");
 import { getSjxx, getYjxx } from "@/api/modules/zrzh.js";
 // 定义数据,决定是查看还是隐藏
@@ -159,6 +162,8 @@ const transValue = () => {
   console.log(11111, "==============================>", cks.value);
 };
 transValue();
+const weatherInfo = ref({})
+
 const warnings = ref([]);
 const getWarnings = function () {
   getYjxx().then((res) => {
@@ -233,6 +238,14 @@ onMounted(() => {
     $mitt.emit("hideAllMarker")
     getEvents(id)
   })
+  const param = {
+    startTime: moment().subtract(1, "days").format("YYYY-MM-DD"),
+    endTime: moment().format("YYYY-MM-DD"),
+  };
+  getWeatherInfo(param).then((res) => {
+    weathers.value = res.data.slice(0,2);
+    weatherInfo.value = res.data[1] || {}
+  });
 });
 onUnmounted(()=>{
   

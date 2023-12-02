@@ -23,7 +23,7 @@ onMounted(() => {
     endTime: moment().format("YYYY-MM-DD"),
   };
   getWeatherInfo(param).then((res) => {
-    weatherList.value = res.data;
+    weatherList.value = res.data.slice(0,2);
     weatherInfo.value = res.data[1] || {}
   });
 });

@@ -233,7 +233,7 @@ const addLayer = (data) => {
     type: data.markerType,
     chunkedLoading: true, // 间隔添加数据，以便页面不冻结。
     showCoverageOnHover: false, // 是否显示聚合标记的边界。
-    disableClusteringAtZoom: 18, // 此级别下不聚合
+    disableClusteringAtZoom: 8, // 此级别下不聚合
     removeOutsideVisibleBounds: true,
     zoomToBoundsOnClick: false,
     iconCreateFunction: function (cluster) {
