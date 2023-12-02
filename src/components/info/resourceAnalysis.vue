@@ -246,7 +246,7 @@ const nowList = computed(() => {
 
 <template>
   <div class="resource_analysis_dialog" v-if="showDialog">
-    <div class="header">资源分析</div>
+    <div class="header">资源分析</div> 
     <div class="content">
       <div class="area">
         圈选范围：<span style="color: #fb8681"

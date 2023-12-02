@@ -1,7 +1,7 @@
 // window.baseIp1 = "http://10.112.143.192"
 
-window.baseIp1 = "http://10.127.136.147"
-window.baseIp2 = "http://10.127.136.86"
+window.baseIp1 = "http://10.112.143.191"
+window.baseIp2 = "http://10.112.143.191"
 
 window.baseRequestUrl = window.baseIp1 + ":20128/api"; // 后端接口地址
 window.baseDeploymentAddress = window.baseIp1 + ":8003";

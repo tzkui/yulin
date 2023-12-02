@@ -42,7 +42,7 @@ const closeDialog = function () {
   emits("closeDialog", "select");
 };
 const treeData = ref([]);
-const phoneList = ref(["应急专家","通讯录"]);
+const phoneList = ref(["应急专家","通讯录","应急人员"]);
 let timer = null;
 const initData = function () {
   if (props.listType === "tree") {

@@ -15,10 +15,10 @@ const getList = function () {
     list.value = res.data.map((item) => {
       return {
         id: item.id,
-        name: item.personalName,
-        job: item.roleName,
-        phone: item.personalPhone,
-        type: item.className,
+        name: item.xm,
+        job: item.gwmc,
+        phone: item.lxdh,
+        type: item.gwmc,
       };
     });
     list.value = list.value.slice(0, 3);

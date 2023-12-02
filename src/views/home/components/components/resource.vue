@@ -165,12 +165,13 @@ const getRhtxList = function () {
       sl: 3,
       jh: wrjList,
     };
-    sessionStorage.setItem("wrjListData", JSON.stringify(wrjList));
+    window.STORE_INFO.wrjListData = wrjList
+    // sessionStorage.setItem("wrjListData", JSON.stringify(wrjList));
   });
 };
 const getTxlList = function(){
   getTxl().then(res=>{
-    console.log("通讯录数据：",res.data)
+    console.log("通讯录数据：",JSON.parse(JSON.stringify(res.data[0])))
     let list = res.data.map(item=>{
       return {
         ...item,

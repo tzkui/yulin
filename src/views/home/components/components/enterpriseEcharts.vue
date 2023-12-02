@@ -171,14 +171,17 @@ const getInfos = function () {
   getQyfb().then((res) => {
     console.log("企业分布：", res);
     const arr = [
-      { name: "煤炭", key: "mt", data: [] },
       { name: "非煤矿山", key: "fmks", data: [] },
+      { name: "煤炭", key: "mk", data: [] },
+      { name: "危化企业", key: "wh", data: [] },
+      { name: "尾矿库", key: "wkk", data: [] },
       { name: "烟花爆竹", key: "yhbz", data: [] },
-      { name: "化工", key: "hg", data: [] },
-      { name: "危险物品", key: "wxwp", data: [] },
-      { name: "烟草", key: "yc", data: [] },
-      { name: "金属冶炼", key: "jsyl", data: [] },
-      { name: "机械", key: "jx", data: [] },
+      { name: "其他", key: "qt", data: [] },
+      // { name: "化工", key: "hg", data: [] },
+      // { name: "危险物品", key: "wxwp", data: [] },
+      // { name: "烟草", key: "yc", data: [] },
+      // { name: "金属冶炼", key: "jsyl", data: [] },
+      // { name: "机械", key: "jx", data: [] },
     ];
     res.data.forEach(item => {
       arr.forEach(info => {

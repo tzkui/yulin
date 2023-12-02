@@ -16,7 +16,7 @@ const getEventList = function (id) {
     event_list.value = res.data.map((item) => {
       return {
         typeName: item.typeName,
-        time: item.reportDate.slice(5),
+        time: item.reportDate?.slice(5),
         cont: item.eventContent,
         state: item.stateName,
         type: "sj",

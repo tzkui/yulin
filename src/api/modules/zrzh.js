@@ -6,7 +6,7 @@ export const getZbxx = (data) => {
   if(data.sj){
     str = "?sj=" + data.sj
   }
-  return request.post("/zrzh/zbxx"+str, );
+  return request.post("/home/zbxx"+str, );
 }
 
 // 获取风险隐患信息
