@@ -222,7 +222,6 @@ const addListOrObj = (layer, data) => {
 //添加marker聚合图层
 const addLayer = (data) => {
   let hasLayer = map.getLayerById(data.markerType);
-  console.log(hasLayer)
   if (hasLayer) {
     addListOrObj(hasLayer, data);
     return;
@@ -593,7 +592,6 @@ const drawPolygonLayer = (data) => {
     style: mystyle,
   });
   showLayer.addGraphic(showLayer[data.type]);
-  console.log(map.getLayers());
 };
 const upDataRadius = (data) => {
   let graphic = showLayer.getGraphicById(data.type + "_" + data.id);

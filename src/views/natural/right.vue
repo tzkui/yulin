@@ -31,7 +31,7 @@
       <!-- 再下面就是日期时间这些的了 -->
       <div class="times">
         <div class="time-item" v-for="(item, index) in weathers" :key="index">
-          <p class="month">{{ item.ybrq.slice(0,10) }}</p>
+          <p class="month">{{ item.ybrq?.slice(0,10) }}</p>
           <!-- <p class="day">{{ item.day }}</p> -->
           <p class="icon">
             <!-- <img src="../../assets/naturalRightimg/taityang.png" alt="" /> -->
@@ -243,7 +243,7 @@ onMounted(() => {
     endTime: moment().format("YYYY-MM-DD"),
   };
   getWeatherInfo(param).then((res) => {
-    weathers.value = res.data.slice(0,2);
+    weathers.value = res.data?.slice(0,2);
     weatherInfo.value = res.data[1] || {}
   });
 });

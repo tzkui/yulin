@@ -38,9 +38,9 @@
               :key="index"
               :class="{
                 check_item: true,
-                active: disaster_checked_data.includes(item),
+                active: disaster_checked_data === item.value,
               }"
-              @click="onCheck('effect', item)"
+              @click="selectZddx(item)"
             >
               {{ item.name }}
             </div>
@@ -49,9 +49,9 @@
           <div class="cont_lists">
             <div
               class="cont_list"
-              v-for="(item, index) in disaster_resources_list"
+              v-for="(item, index) in zddxList"
               :key="index"
-              @click="addMarker('zqzyfx', item)"
+              @click="flyTo(item)"
             >
               <div class="label">{{ item.name }}</div>
               <div class="value_1">
@@ -83,9 +83,9 @@
               :key="index"
               :class="{
                 check_item: true,
-                active: analysis_checked_data.includes(item),
+                active: analysis_checked_data===item.value,
               }"
-              @click="onCheck('analysis', item)"
+              @click="selectYjbzfx(item)"
             >
               {{ item.name }}
             </div>
@@ -94,9 +94,9 @@
           <div class="cont_lists">
             <div
               class="cont_list"
-              v-for="(item, index) in application_object_list"
+              v-for="(item, index) in yjbzfxList"
               :key="index"
-              @click="addMarker('yydxtj', item)"
+              @click="flyTo(item)"
             >
               <div class="label">{{ item.name }}</div>
               <div class="value_1">
@@ -114,7 +114,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, inject, nextTick } from "vue";
+import { ref, onMounted, inject, nextTick, computed } from "vue";
 const $mitt = inject("$mitt");
 const emit = defineEmits(["changeRadius"]);
 import {
@@ -123,9 +123,8 @@ import {
   getZdfhmbType,
   getYybzfxType,
 } from "@/api/decision_analysis.js";
-import { icon_config } from "../config";
+
 import ViewBox from "@/components/common/view-box.vue";
-import * as basicPoint from "./pointInfo.js";
 const props = defineProps({
   radius: {
     type: Object,
@@ -139,9 +138,6 @@ const props = defineProps({
     default: [],
   },
 });
-/**
- * 灾情资源分析 数据
- */
 
 // 灾情影响 统计内容
 const effect_cont = ref([
@@ -159,18 +155,11 @@ const effect_cont = ref([
 // 灾情资源 场所选择tab
 const disaster_check_data = ref([]);
 // 灾情资源 场所选择tab  已选择内容
-const disaster_checked_data = ref([]);
+const disaster_checked_data = ref("");
 
-const disaster_resources_list = ref([]);
-
-/**
- * 应用对象统计 数据
- */
-// 应用统计 选择tab
 const analysis_check_data = ref([]);
 // 应用统计 选择tab  已选择内容
-const analysis_checked_data = ref([]);
-const application_object_list = ref([]);
+const analysis_checked_data = ref("");
 onMounted(() => {
   initType();
 });
@@ -185,86 +174,296 @@ const changeRaduis = (type, val) => {
     timer1 = setTimeout(() => {
       getAllDisasters();
     }, 500);
+  } else if (type === "analysis_radius") {
+    if (timer1) {
+      clearTimeout(timer1);
+    }
+    timer1 = setTimeout(() => {
+      getAllAnalysis();
+    }, 500);
   }
 };
-// 撒点func
-const addMarker = (type, item) => {
-  console.log(type, item);
-
-  let markerData = {
-    markerType: item.markerType,
-    id: item.id,
-    lng: item.mapX,
-    lat: item.mapY,
-    name: item.name,
-    icon: icon_config[item.markerType].icon,
-    label: { text: item.name, font_size: 16 },
-    dialogType: type,
-    details: {},
-  };
-
-  if (type == "zqzyfx") {
-    markerData.details = {
-      name: item.name,
-      distance: item.distance,
-    };
-  } else if (type == "yydxtj") {
-    markerData.details = {
-      name: item.name,
-      num: item.num,
-      distance: item.distance,
-    };
-  }
-  $mitt.emit("addMarker", markerData);
-  $mitt.emit("openPopup", markerData);
-  $mitt.emit("flyTo", markerData);
-};
-
-const addMarkers = function (typeId, list) {
-  $mitt.emit("hideAllMarker");
+const getMarkerInfo = function (typeId, data) {
   if (typeId == "4dc072310d1310c95dd3d1d5349cdf9c") {
-    list.forEach((v) => {
-      console.log(v)
-      $mitt.emit("addMarker", {
-        markerType: "ltkc",
-        id: v.id,
-        icon: "/images/marker/icon_fei_meikuang.png",
-        lng: v.mapX || "",
-        lat: v.mapY || "",
-        name: "露天矿场",
-        label: { text: "露天矿场", font_size: 16 },
-        dialogType: "zqfx",
-        details: {
-          name: v.name,
-          linkName: v.linkName,
-          linkPhone: v.linkPhone,
-          storageCapacity: v.storageCapacity,
-        },
-      });
-    });
+    // 汽车站
+    return {
+      markerType: "qcz",
+      id: data.id,
+      icon: "/images/marker/icon_fei_meikuang.png",
+      lng: data.mapX || "",
+      lat: data.mapY || "",
+      name: "汽车站",
+      label: { text: "汽车站", font_size: 16 },
+      dialogType: "zqfx",
+      details: {
+        name: data.name,
+        areaCovered:data.areaCovered+" ㎡",
+        linkName: data.linkName,
+        linkPhone: data.linkPhone,
+      },
+    };
+  } else if (typeId == "5dfd1e89da99722490da9839145ab498") {
+    // 学校
+    return {
+      markerType: "xx",
+      id: data.id,
+      icon: "/images/marker//mapdot-school.png",
+      lng: data.mapX || "",
+      lat: data.mapY || "",
+      name: "学校",
+      label: { text: "学校", font_size: 16 },
+      dialogType: "zqfx_xx",
+      details: {
+        name: data.name,
+        area: data.areaCovered + " ㎡",
+        linkName: data.linkName,
+        linkPhone: data.linkPhone,
+        location: data.location,
+      },
+    };
+  } else if (typeId == "60f10175641c56360bf2c24d81a6f31c") {
+    // 加气站
+    return {
+      markerType: "cs",
+      id: data.id,
+      icon: "/images/marker/m2.png",
+      lng: data.mapX || "",
+      lat: data.mapY || "",
+      name: "加气站",
+      label: { text: "加气站", font_size: 16 },
+      dialogType: "jqz",
+      details: {
+        name: data.name,
+        area: data.areaCovered + " ㎡",
+        linkName: data.linkName,
+        linkPhone: data.linkPhone,
+        location: data.location,
+      },
+    };
+  } else if (typeId == "6a95025bf122e6150de7e0e142525b53") {
+    // 油气站
+    return {
+      markerType: "qy",
+      id: data.id,
+      icon: "/images/marker/mapdot-building-6.png",
+      lng: data.mapX || "",
+      lat: data.mapY || "",
+      name: "油气站",
+      label: { text: "油气站", font_size: 16 },
+      dialogType: "yqz",
+      details: {
+        name: data.name,
+        area: data.areaCovered + " ㎡",
+        linkName: data.linkName,
+        linkPhone: data.linkPhone,
+        location: data.location,
+      },
+    };
+  } else if (typeId == "87aff28c9ab509c703c70f99919a422b") {
+    // 旅游景区
+    return {
+      markerType: "lyjq",
+      id: data.id,
+      icon: "/images/marker/mapdot-construction-machinery.png",
+      lng: data.mapX || "",
+      lat: data.mapY || "",
+      name: "lyjq",
+      label: { text: "旅游景区", font_size: 16 },
+      dialogType: "lyjq",
+      details: {
+        name: data.name,
+        area: data.areaCovered + " ㎡",
+        linkName: data.linkName,
+        linkPhone: data.linkPhone,
+        location: data.location,
+      },
+    };
+  } else if (typeId == "8a7e9d3ff3e1c8bd4368f534f1fb4ac1") {
+    // 体育馆
+    return {
+      markerType: "tyg",
+      id: data.id,
+      icon: "/images/marker/icon_warehouse.png",
+      lng: data.mapX || "",
+      lat: data.mapY || "",
+      name: "体育馆",
+      label: { text: "体育馆", font_size: 16 },
+      dialogType: "tyg",
+      details: {
+        name: data.name,
+        area: data.areaCovered + " ㎡",
+        linkName: data.linkName,
+        linkPhone: data.linkPhone,
+        location: data.location,
+      },
+    };
+  } else if (typeId == "d9dbb206574b2bba3e61854c9619db75") {
+    // 公共文化场所
+    return {
+      markerType: "ggwhcs",
+      id: data.id,
+      icon: "/images/marker/mapdot-scientific.png",
+      lng: data.mapX || "",
+      lat: data.mapY || "",
+      name: "公共文化场所",
+      label: { text: "公共文化场所", font_size: 16 },
+      dialogType: "ggwhcs",
+      details: {
+        name: data.name,
+        area: data.areaCovered + " ㎡",
+        linkName: data.linkName,
+        linkPhone: data.linkPhone,
+        location: data.location,
+      },
+    };
+  } else if (typeId == "efdedec4f3450981d8d0fae0dc95b15a") {
+    // 医院
+    return {
+      markerType: "zddx_yy",
+      id: data.id,
+      icon: "/images/marker/mapdot-scientific.png",
+      lng: data.mapX || "",
+      lat: data.mapY || "",
+      name: "医院",
+      label: { text: "医院", font_size: 16 },
+      dialogType: "zddx_yy",
+      details: {
+        name: data.name,
+        area: data.areaCovered + " ㎡",
+        linkName: data.linkName,
+        linkPhone: data.linkPhone,
+        location: data.location,
+      },
+    };
+  } else if (typeId == "zdwz") {
+    // 重点物资
+    return {
+      markerType: "zdwz",
+      id: data.id,
+      icon: "/images/marker/icon-space.png",
+      lng: data.mapX || "",
+      lat: data.mapY || "",
+      name: "重点物资",
+      label: { text: "重点物资", font_size: 16 },
+      dialogType: "newyydxtj",
+      details: {
+        name: data.name,
+        linkName: data.linkName,
+        linkPhone: data.linkPhone,
+        storageCapacity: data.storageCapacity,
+      },
+    };
+  } else if (typeId == "wzck") {
+    // 物资仓库
+    return {
+      markerType: "wzck",
+      id: data.id,
+      icon: "/images/marker/icon_warehouse.png",
+      lng: data.mapX || "",
+      lat: data.mapY || "",
+      name: "物资仓库",
+      label: { text: "物资仓库", font_size: 16 },
+      dialogType: "yjwzk",
+      details: {
+        title: data.name,
+        person: data.linkName,
+        phone: data.linkPhone,
+        address: data.address,
+      },
+    };
+  } else if (typeId == "jydw") {
+    // 救援队伍
+    return {
+      markerType: "jydw",
+      id: data.id,
+      icon: "/images/marker/icon_team.png",
+      lng: data.mapX || "",
+      lat: data.mapY || "",
+      name: "救援队伍",
+      label: { text: "救援队伍", font_size: 16 },
+      dialogType: "newyydxtj",
+      details: {
+        name: data.name,
+        linkName: data.linkName,
+        linkPhone: data.linkPhone,
+        storageCapacity: data.storageCapacity,
+      },
+    };
+  } else if (typeId == "bncs") {
+    // 避难场所
+    return {
+      markerType: "bncs",
+      id: data.id,
+      icon: "/images/marker/icon-bncs.png",
+      lng: data.mapX || "",
+      lat: data.mapY || "",
+      name: "避难场所",
+      label: { text: "避难场所", font_size: 16 },
+      dialogType: "bncs",
+      details: {
+        title: data.name,
+        area: data.areaCovered,
+        accommodateNum: data.accommodateNum,
+        person: data.linkName,
+        phone: data.linkPhone,
+      },
+    };
+  } else if (typeId == "dxjx") {
+    // 大型机械
+    return {
+      markerType: "dxjx",
+      id: data.id,
+      icon: "/images/marker/mapdot-construction-machinery.png",
+      lng: data.mapX || "",
+      lat: data.mapY || "",
+      name: "大型机械",
+      label: { text: "大型机械", font_size: 16 },
+      dialogType: "yydxtj",
+      details: {
+        name: data.name,
+        linkName: data.linkName,
+        linkPhone: data.linkPhone,
+        storageCapacity: data.storageCapacity,
+      },
+    };
+  } else if (typeId == "yjgb") {
+    // 应急广播
+    return {
+      markerType: "yjgb",
+      id: data.id,
+      icon: "/images/marker/mapdot-volume-up-f.png",
+      lng: data.mapX || "",
+      lat: data.mapY || "",
+      name: "应急广播",
+      label: { text: "应急广播", font_size: 16 },
+      dialogType: "yydxtj",
+      details: {
+        name: data.name,
+        linkName: data.linkName,
+        linkPhone: data.linkPhone,
+        storageCapacity: data.storageCapacity,
+      },
+    };
+  } else if (typeId == "spjk") {
+    // 视频监控
+    return {
+      markerType: "spjk",
+      id: data.id,
+      icon: "/images/marker/mapdot-scientific.png",
+      lng: data.mapX || "",
+      lat: data.mapY || "",
+      name: "视频监控",
+      label: { text: "视频监控", font_size: 16 },
+      dialogType: "spjk",
+      details: {
+        monitorName: data.name,
+        typeName: data.typeName,
+        location: data.location,
+      },
+    };
   }
-  // else if(typeId == "4dc072310d1310c95dd3d1d5349cdf9c") {
-  //   basicPoint.ltkcdd.markerList = list.map((v) => {
-  //     return {
-  //       markerType: "ltkc",
-  //       id: v.id,
-  //       icon: "/images/marker/icon_fei_meikuang.png",
-  //       lng: v.mapX || "",
-  //       lat: v.mapY || "",
-  //       name: "露天矿场",
-  //       label: { text: "露天矿场1", font_size: 16 },
-  //       dialogType: "zqfx",
-  //       details: {
-  //         name: v.name,
-  //         linkName: v.linkName,
-  //         linkPhone: v.linkPhone,
-  //         storageCapacity: v.storageCapacity,
-  //       },
-  //     };
-  //   });
-  // }
 };
-let allDisasters = {};
+let allDisasters = ref({});
 const getAllDisasters = function () {
   const params = {
     map_x: props.centerPoint[0],
@@ -273,13 +472,55 @@ const getAllDisasters = function () {
     typeIds: disaster_check_data.value.map((item) => item.value),
   };
   getZdfhmb(params).then((res) => {
-    console.log(res);
     effect_cont.value[0].num = Math.floor(res.data.totalArea);
     effect_cont.value[1].num = Math.floor(res.data.total);
     res.data.data.forEach((item) => {
-      allDisasters[item.typeId] = item.defenceAims;
-      addMarkers(item.typeId, item.defenceAims);
+      allDisasters.value[item.typeId] = item.defenceAims.map((info) => {
+        return {
+          name: info.name,
+          id: info.id,
+          markerInfo: getMarkerInfo(item.typeId, info),
+        };
+      });
     });
+    nextTick(() => {
+      for (const key in allDisasters.value) {
+        allDisasters.value[key].forEach((item) => {
+          $mitt.emit("addMarker", item.markerInfo);
+        });
+      }
+    });
+  });
+};
+let allAnalysis = ref({});
+const getAllAnalysis = function () {
+  const params = {
+    map_x: props.centerPoint[0],
+    map_y: props.centerPoint[1],
+    radius: props.radius.analysis_radius / 1000,
+    typeIds: analysis_check_data.value.map((item) => item.value),
+  };
+  getYybzfx(params).then((res) => {
+    console.log(res);
+    let data = res.data;
+    for (const key in data) {
+      let list = data[key] || [];
+      allAnalysis.value[key] = list.map((item) => {
+        return {
+          name: item.name,
+          id: item.id,
+          markerInfo: getMarkerInfo(key, item),
+        };
+      }).slice(0,10);
+    }
+    nextTick(()=>{
+      console.log(allAnalysis.value)
+      for(const key in allAnalysis.value){
+        allAnalysis.value[key].forEach(item=>{
+          $mitt.emit("addMarker", item.markerInfo)
+        })
+      }
+    })
   });
 };
 const initType = function () {
@@ -289,517 +530,24 @@ const initType = function () {
   });
   getYybzfxType().then((res) => {
     analysis_check_data.value = res.data;
+    getAllAnalysis();
   });
 };
-/*
- * 资源分析
- */
-const onCheck = async (type, item) => {
-  let currentData, currentList, radius, funcName;
-  if (type == "effect") {
-    console.log(11);
-    currentData = disaster_checked_data.value;
-    currentList = disaster_resources_list.value;
-    radius = props.radius.effect_radius / 1000;
-    funcName = getZdfhmb;
-    // 清除打点的
-  } else if (type == "analysis") {
-    console.log(22);
-    currentData = analysis_checked_data.value;
-    currentList = application_object_list.value;
-    radius = props.radius.analysis_radius;
-    funcName = getYybzfx;
-  }
-
-  let index = currentData.indexOf(item);
-
-  // 判断 无则加，有则减
-  if (index == -1) {
-    currentData.push(item);
-  } else {
-    currentData.splice(index, 1);
-  }
-  // console.log('已选择场所=======>', currentData);
-  let ids = currentData.map((item) => {
-    return item.value;
-  });
-  let params = {
-    map_x: props.centerPoint[0],
-    map_y: props.centerPoint[1],
-    radius: radius,
-    typeIds: ids,
-  };
-
-  let res = await funcName(params);
-  console.log("获取列表=====》", params, "传递的是什么");
-  // 点击上面的
-  if (type == "effect") {
-    // 没有经过这个页数为0的了
-    $mitt.emit("hideAllMarker");
-    if (res.data) {
-      effect_cont.value[0].num = res.data.totalArea || 0;
-      effect_cont.value[1].num = res.data.total || 0;
-      res.data.data.forEach((v2, i2) => {
-        // 没有露天矿场的
-        if (ids.indexOf("4dc072310d1310c95dd3d1d5349cdf9c") == -1) {
-          basicPoint.ltkcdd.markerList = [];
-        }
-        // 没有学校
-        if (ids.indexOf("5dfd1e89da99722490da9839145ab498") == -1) {
-          basicPoint.xxdd.markerList = [];
-          // console.log(basicPoint.xxdd.markerList, "====>看这个数据的嘞")
-        }
-        // 没有超市
-        if (ids.indexOf("60f10175641c56360bf2c24d81a6f31c") == -1) {
-          basicPoint.csdd.markerList = [];
-        }
-        // 没有企业的
-        if (ids.indexOf("6a95025bf122e6150de7e0e142525b53") == -1) {
-          basicPoint.qydd.markerList = [];
-        }
-        // 没有旅游景区的
-        if (ids.indexOf("87aff28c9ab509c703c70f99919a422b") == -1) {
-          basicPoint.lyjqdd.markerList = [];
-        }
-        // 没有体育馆的
-        if (ids.indexOf("8a7e9d3ff3e1c8bd4368f534f1fb4ac1") == -1) {
-          basicPoint.tygdd.markerList = [];
-        }
-        // 公共文化场所的
-        if (ids.indexOf("d9dbb206574b2bba3e61854c9619db75") == -1) {
-          basicPoint.ggwhcsdd.markerList = [];
-        }
-        // 医院的
-        if (ids.indexOf("efdedec4f3450981d8d0fae0dc95b15a") == -1) {
-          basicPoint.yydd.markerList = [];
-        }
-
-        if (res.data.data[i2].typeId == "4dc072310d1310c95dd3d1d5349cdf9c") {
-          // 露天矿场的就是
-          console.log(v2.defenceAims, "进入露天矿场的");
-          basicPoint.ltkcdd.markerList = v2.defenceAims.map((v) => {
-            return {
-              markerType: "ltkc",
-              id: v.id,
-              icon: "/images/marker/icon_fei_meikuang.png",
-              lng: v.mapX || "",
-              lat: v.mapY || "",
-              name: "露天矿场",
-              label: { text: "露天矿场1", font_size: 16 },
-              dialogType: "zqfx",
-              details: {
-                name: v.name,
-                linkName: v.linkName,
-                linkPhone: v.linkPhone,
-                storageCapacity: v.storageCapacity,
-              },
-            };
-          });
-          // 学校的这个打点的了
-        } else if (
-          res.data.data[i2].typeId == "5dfd1e89da99722490da9839145ab498"
-        ) {
-          if (v2.defenceAims.length > 0) {
-            v2.defenceAims.forEach((v, i) => {
-              basicPoint.xxdd.markerList.push({
-                markerType: "xx",
-                id: v.id,
-                icon: "/images/marker//mapdot-school.png",
-                lng: v.mapX || "",
-                lat: v.mapY || "",
-                name: "学校",
-                label: { text: "学校1", font_size: 16 },
-                dialogType: "zqfx",
-                details: {
-                  name: "学校1",
-                  num: "115人",
-                  distance: "距2500km",
-                },
-              });
-            });
-          } else {
-            basicPoint.xxdd.markerList = [];
-          }
-          // 下面这个就是超市的打点的了
-        } else if (
-          res.data.data[i2].typeId == "60f10175641c56360bf2c24d81a6f31c"
-        ) {
-          if (v2.defenceAims.length > 0) {
-            v2.defenceAims.forEach((v, i) => {
-              basicPoint.csdd.markerList.push({
-                markerType: "cs",
-                id: v.id,
-                icon: "/images/marker/m2.png",
-                lng: v.mapX || "",
-                lat: v.mapY || "",
-                name: "超市",
-                label: { text: "超市1", font_size: 16 },
-                dialogType: "zqfx",
-                details: {
-                  name: v.name,
-                  linkName: v.linkName,
-                  linkPhone: v.linkPhone,
-                  storageCapacity: v.storageCapacity,
-                },
-              });
-            });
-          } else {
-            basicPoint.csdd.markerList = [];
-          }
-        }
-        // 企业的
-        else if (
-          res.data.data[i2].typeId == "6a95025bf122e6150de7e0e142525b53"
-        ) {
-          if (v2.defenceAims.length > 0) {
-            v2.defenceAims.forEach((v, i) => {
-              basicPoint.qydd.markerList.push({
-                markerType: "qy",
-                id: v.id,
-                icon: "/images/marker/mapdot-building-6.png",
-                lng: v.mapX || "",
-                lat: v.mapY || "",
-                name: "企业",
-                label: { text: "企业", font_size: 16 },
-                dialogType: "zqfx",
-                details: {
-                  name: v.name,
-                  linkName: v.linkName,
-                  linkPhone: v.linkPhone,
-                  storageCapacity: v.storageCapacity,
-                },
-              });
-            });
-          } else {
-            basicPoint.qydd.markerList = [];
-          }
-        }
-        // 旅游景区
-        else if (
-          res.data.data[i2].typeId == "87aff28c9ab509c703c70f99919a422b"
-        ) {
-          if (v2.defenceAims.length > 0) {
-            v2.defenceAims.forEach((v, i) => {
-              basicPoint.lyjqdd.markerList.push({
-                markerType: "lyjq",
-                id: v.id,
-                icon: "/images/marker/mapdot-construction-machinery.png",
-                lng: v.mapX || "",
-                lat: v.mapY || "",
-                name: "lyjq",
-                label: { text: "旅游景区", font_size: 16 },
-                dialogType: "zqfx",
-                details: {
-                  name: v.name,
-                  linkName: v.linkName,
-                  linkPhone: v.linkPhone,
-                  storageCapacity: v.storageCapacity,
-                },
-              });
-            });
-          } else {
-            basicPoint.lyjqdd.markerList = [];
-          }
-        }
-        // 体育馆
-        else if (
-          res.data.data[i2].typeId == "8a7e9d3ff3e1c8bd4368f534f1fb4ac1"
-        ) {
-          if (v2.defenceAims.length > 0) {
-            v2.defenceAims.forEach((v, i) => {
-              basicPoint.tygdd.markerList.push({
-                markerType: "tyg",
-                id: v.id,
-                icon: "/images/marker/icon_warehouse.png",
-                lng: v.mapX || "",
-                lat: v.mapY || "",
-                name: "体育馆",
-                label: { text: "体育馆1", font_size: 16 },
-                dialogType: "zqfx",
-                details: {
-                  name: v.name,
-                  linkName: v.linkName,
-                  linkPhone: v.linkPhone,
-                  storageCapacity: v.storageCapacity,
-                },
-              });
-            });
-          } else {
-            basicPoint.lyjqdd.markerList = [];
-          }
-        }
-        // 公共文化场所的
-        else if (
-          res.data.data[i2].typeId == "d9dbb206574b2bba3e61854c9619db75"
-        ) {
-          if (v2.defenceAims.length > 0) {
-            v2.defenceAims.forEach((v, i) => {
-              basicPoint.ggwhcsdd.markerList.push({
-                markerType: "ggwhcs",
-                id: v.id,
-                icon: "/images/marker/mapdot-scientific.png",
-                lng: v.mapX || "",
-                lat: v.mapY || "",
-                name: "公告文化场所",
-                label: { text: "公告文化场所1", font_size: 16 },
-                dialogType: "zqfx",
-                details: {
-                  name: v.name,
-                  linkName: v.linkName,
-                  linkPhone: v.linkPhone,
-                  storageCapacity: v.storageCapacity,
-                },
-              });
-            });
-          } else {
-            basicPoint.ggwhcsdd.markerList = [];
-          }
-        }
-        // 医院的
-        else if (
-          res.data.data[i2].typeId == "d9dbb206574b2bba3e61854c9619db75"
-        ) {
-          if (v2.defenceAims.length > 0) {
-            v2.defenceAims.forEach((v, i) => {
-              basicPoint.yydd.markerList.push({
-                markerType: "yy",
-                id: v.id,
-                icon: "/images/marker/mapdot-scientific.png",
-                lng: v.mapX || "",
-                lat: v.mapY || "",
-                name: "医院",
-                label: { text: "医院", font_size: 16 },
-                dialogType: "zqfx",
-                details: {
-                  name: v.name,
-                  linkName: v.linkName,
-                  linkPhone: v.linkPhone,
-                  storageCapacity: v.storageCapacity,
-                },
-              });
-            });
-          } else {
-            basicPoint.yydd.markerList = [];
-          }
-        }
-        // $mitt.emit('clearAll', { ignore: ['geo绘制图层'] })
-        $mitt.emit("hideAllMarker");
-        if (basicPoint.ltkcdd.markerList.length > 0) {
-          console.log("xxxxx:", basicPoint.ltkcdd);
-          $mitt.emit("addMarker", basicPoint.ltkcdd);
-        }
-        if (basicPoint.xxdd.markerList.length > 0) {
-          $mitt.emit("addMarker", basicPoint.xxdd);
-        }
-        if (basicPoint.csdd.markerList.length > 0) {
-          $mitt.emit("addMarker", basicPoint.csdd);
-        }
-        if (basicPoint.qydd.markerList.length > 0) {
-          $mitt.emit("addMarker", basicPoint.qydd);
-        }
-        if (basicPoint.lyjqdd.markerList.length > 0) {
-          $mitt.emit("addMarker", basicPoint.lyjqdd);
-        }
-        if (basicPoint.tygdd.markerList.length > 0) {
-          $mitt.emit("addMarker", basicPoint.tygdd);
-        }
-        if (basicPoint.ggwhcsdd.markerList.length > 0) {
-          $mitt.emit("addMarker", basicPoint.ggwhcsdd);
-        }
-        if (basicPoint.yydd.markerList.length > 0) {
-          $mitt.emit("addMarker", basicPoint.yydd);
-        }
-      });
-    }
-    // 下面就是点击下面的
-  } else if (type == "analysis") {
-    console.log(res, data, "我是下面点击的东西");
-    // 重点物资
-    if (res.data.zdwz) {
-      res.data.zdwz.forEach((v, i) => {
-        basicPoint.zdwzdd.markerList.push({
-          markerType: "zdwz",
-          id: v.id,
-          icon: "/images/marker/icon-space.png",
-          lng: v.mapX || "",
-          lat: v.mapY || "",
-          name: "重点物资",
-          label: { text: v.materialName || "", font_size: 16 },
-          dialogType: "newyydxtj",
-          details: {
-            name: v.name,
-            linkName: v.linkName,
-            linkPhone: v.linkPhone,
-            storageCapacity: v.storageCapacity,
-          },
-        });
-      });
-    } else {
-      basicPoint.zdwzdd.markerList = [];
-    }
-
-    // 物资仓库的
-    if (res.data.wzck) {
-      res.data.wzck.forEach((v, i) => {
-        basicPoint.wzckdd.markerList.push({
-          markerType: "wzck",
-          id: v.id,
-          icon: "/images/marker/icon_warehouse.png",
-          lng: v.mapX || "",
-          lat: v.mapY || "",
-          name: "物资仓库",
-          label: { text: v.name || "", font_size: 16 },
-          dialogType: "newyydxtj",
-          details: {
-            name: v.name,
-            linkName: v.linkName,
-            linkPhone: v.linkPhone,
-            storageCapacity: v.storageCapacity,
-          },
-        });
-      });
-    } else {
-      basicPoint.wzckdd.markerList = [];
-    }
-
-    // 救援队伍的
-    if (res.data.jydw) {
-      res.data.jydw.forEach((v, i) => {
-        basicPoint.jydwdd.markerList.push({
-          markerType: "jydw",
-          id: v.id,
-          icon: "/images/marker/icon_team.png",
-          lng: v.mapX || "",
-          lat: v.mapY || "",
-          name: "救援队伍",
-          label: { text: v.name || "", font_size: 16 },
-          dialogType: "newyydxtj",
-          details: {
-            name: v.name,
-            linkName: v.linkName,
-            linkPhone: v.linkPhone,
-            storageCapacity: v.storageCapacity,
-          },
-        });
-      });
-    } else {
-      basicPoint.jydwdd.markerList = [];
-    }
-    // 避难场所的
-    if (res.data.bncs) {
-      res.data.bncs.forEach((v, i) => {
-        basicPoint.bncsdd.markerList.push({
-          markerType: "bncs",
-          id: v.id,
-          icon: "/images/marker/icon-bncs.png",
-          lng: v.mapX || "",
-          lat: v.mapY || "",
-          name: "避难场所",
-          label: { text: v.name || "", font_size: 16 },
-          dialogType: "newyydxtj",
-          details: {
-            name: v.name,
-            linkName: v.linkName,
-            linkPhone: v.linkPhone,
-            storageCapacity: v.storageCapacity,
-          },
-        });
-      });
-    } else {
-      basicPoint.bncsdd.markerList = [];
-    }
-    // 大型机械的
-    if (res.data.dxjx) {
-      res.data.dxjx.forEach((v, i) => {
-        basicPoint.dxjxdd.markerList.push({
-          markerType: "dxjx",
-          id: v.id,
-          icon: "/images/marker/mapdot-construction-machinery.png",
-          lng: v.mapX || "",
-          lat: v.mapY || "",
-          name: "大型机械",
-          label: { text: v.name || "", font_size: 16 },
-          dialogType: "yydxtj",
-          details: {
-            name: v.name,
-            linkName: v.linkName,
-            linkPhone: v.linkPhone,
-            storageCapacity: v.storageCapacity,
-          },
-        });
-      });
-    } else {
-      basicPoint.dxjxdd.markerList = [];
-    }
-    // 应急广播的
-    if (res.data.yjgb) {
-      res.data.yjgb.forEach((v, i) => {
-        basicPoint.yjgbdd.markerList.push({
-          markerType: "yjgb",
-          id: v.id,
-          icon: "/images/marker/mapdot-volume-up-f.png",
-          lng: v.mapX || "",
-          lat: v.mapY || "",
-          name: "应急广播",
-          label: { text: "应急广播1", font_size: 16 },
-          dialogType: "yydxtj",
-          details: {
-            name: v.name,
-            linkName: v.linkName,
-            linkPhone: v.linkPhone,
-            storageCapacity: v.storageCapacity,
-          },
-        });
-      });
-    } else {
-      basicPoint.yjgbdd.markerList = [];
-    }
-    // 视频监控的
-    if (res.data.spjk) {
-      res.data.spjk.forEach((v, i) => {
-        basicPoint.spjkdd.markerList.push({
-          markerType: "spjk",
-          id: v.id,
-          icon: "/images/marker/mapdot-scientific.png",
-          lng: v.mapX || "",
-          lat: v.mapY || "",
-          name: "视频监控",
-          label: { text: "视频监控1", font_size: 16 },
-          dialogType: "yydxtj",
-          details: {
-            name: v.name,
-            linkName: v.linkName,
-            linkPhone: v.linkPhone,
-            storageCapacity: v.storageCapacity,
-          },
-        });
-      });
-    } else {
-      basicPoint.spjkdd.markerList = [];
-    }
-    $mitt.emit("hideAllMarker");
-    if (basicPoint.wzckdd.markerList.length > 0) {
-      $mitt.emit("addMarker", basicPoint.wzckdd);
-    }
-    if (basicPoint.jydwdd.markerList.length > 0) {
-      $mitt.emit("addMarker", basicPoint.jydwdd);
-    }
-    if (basicPoint.zdwzdd.markerList.length > 0) {
-      $mitt.emit("addMarker", basicPoint.zdwzdd);
-    }
-    if (basicPoint.bncsdd.markerList.length > 0) {
-      $mitt.emit("addMarker", basicPoint.bncsdd);
-    }
-    if (basicPoint.dxjxdd.markerList.length > 0) {
-      $mitt.emit("addMarker", basicPoint.dxjxdd);
-    }
-    if (basicPoint.yjgbdd.markerList.length > 0) {
-      $mitt.emit("addMarker", basicPoint.yjgbdd);
-    }
-    if (basicPoint.spjkdd.markerList.length > 0) {
-      $mitt.emit("addMarker", basicPoint.spjkdd);
-    }
-  }
+const flyTo = function (info) {
+  $mitt.emit("openPopup", info.markerInfo);
+  $mitt.emit("flyTo", info.markerInfo);
+};
+const zddxList = computed(() => {
+  return allDisasters.value[disaster_checked_data.value] || [];
+});
+const yjbzfxList = computed(() => {
+  return allAnalysis.value[analysis_checked_data.value] || [];
+})
+const selectZddx = function (info) {
+  disaster_checked_data.value = info.value;
+};
+const selectYjbzfx = function (info) {
+  analysis_checked_data.value = info.value;
 };
 </script>
 

@@ -5,35 +5,7 @@ export const zqzyfx = [
     id: "1",
     icon: "/images/marker/mapdot-school.png",
     name: "学校",
-    markerList: [
-      {
-        markerType: "xx",
-        id: "1_1",
-        icon: "/images/marker/mapdot-school.png",
-        lng: '110.97928', lat: "39.44162",
-        name: "学校1",
-        label: { text: "学校1", font_size: 16 },
-        dialogType: "zqzyfx",
-        details: {
-          name: "希望小学",
-          distance: "距4200km",
-        }
-      },
-      {
-        markerType: "xx",
-        id: "1_2",
-        lng: '110.74074', lat: "39.01995",
-        name: "学校2",
-        phone: "13511117659",
-        icon: "/images/marker/mapdot-school.png",
-        label: { text: "学校2", font_size: 16 },
-        dialogType: "zqzyfx",
-        details: {
-          name: "第七中学",
-          distance: "距2500km",
-        }
-      }
-    ]
+    markerList: []
   },
   {
     markerType: "yy",
