@@ -45,7 +45,7 @@ export const yjsjDetails = {
       id: "10",
       icon: "/images/marker/m2.png",
       name: "事件标记",
-      maekerList: [
+      markerList: [
         {
           markerType: "sj",
           id: "10-1",

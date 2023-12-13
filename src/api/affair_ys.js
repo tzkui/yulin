@@ -5,7 +5,7 @@ export const syqxxList = [
     id: "10",
     icon: "/images/marker/m2.png",
     name: "事件标记",
-    maekerList: [
+    markerList: [
       {
         markerType: "ssj",
         id: "10-1",
@@ -140,7 +140,7 @@ export const securemarList = [
     id: "11",
     icon: "/images/marker/m2.png",
     name: "事件标记",
-    maekerList: [
+    markerList: [
       {
         markerType: "wxx",
         id: "11-1",
@@ -243,7 +243,7 @@ export const qylxlist = [
     id: "12",
     icon: "/images/marker/icon_weixianyuan1.png",
     name: "企业类型标记",
-    maekerList: [
+    markerList: [
       {
         markerType: "wxx",
         id: "12-1",

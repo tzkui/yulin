@@ -48,7 +48,7 @@ export const syqxxLists = {
     id: "11",
     icon: "/images/marker/icon_ylzd.png",
     name: "雨量监测站",
-    maekerList: [
+    markerList: [
       {
         markerType: "ylzd",
         id: "11_1",
@@ -75,7 +75,7 @@ export const syqxxLists = {
     id: "12",
     icon: "/images/marker/icon_swzd.png",
     name: "水位站点",
-    maekerList: [
+    markerList: [
       {
         markerType: "swzd",
         id: "12_1",
@@ -99,7 +99,7 @@ export const syqxxLists = {
     id: "13",
     icon: "/images/marker/icon_sk.png",
     name: "水库",
-    maekerList: [
+    markerList: [
       {
         markerType: "sk",
         id: "13_1",
@@ -125,7 +125,7 @@ export const syqxxLists = {
     id: "14",
     icon: "/images/marker/icon_jsd.png",
     name: "积水点信息",
-    maekerList: [
+    markerList: [
       {
         markerType: "jsd",
         id: "14_1",
@@ -149,7 +149,7 @@ export const syqxxLists = {
     id: "11",
     icon: "/images/marker/icon_hdzd.png",
     name: "河道站点",
-    maekerList: [
+    markerList: [
       {
         markerType: "hdzd",
         id: "15_1",
@@ -177,7 +177,7 @@ export const yjzyLists = {
       id: "100",
       icon: "/images/marker/icon_renyuan.png",
       name: "物资标记",
-      maekerList: [
+      markerList: [
         {
           markerType: "yjry",
           id: "100_1",
@@ -204,7 +204,7 @@ export const yjzyLists = {
       id: "101",
       icon: "/images/marker/icon-expert.png",
       name: "应急专家",
-      maekerList: [
+      markerList: [
         {
           markerType: "yjzj",
           id: "101_1",
@@ -231,7 +231,7 @@ export const yjzyLists = {
       id: "102",
       icon: "/images/marker/icon_team.png",
       name: "物资标记",
-      maekerList: [
+      markerList: [
         {
           markerType: "jydw",
           id: "102_1",
@@ -276,7 +276,7 @@ export const yjzyLists = {
       id: "103",
       icon: "/images/marker/icon_material.png",
       name: "物资标记",
-      maekerList: [
+      markerList: [
         {
           markerType: "yjwzk",
           id: "103_1",
@@ -319,7 +319,7 @@ export const yjzyLists = {
       id: "104",
       icon: "/images/marker/icon_shelter.png",
       name: "避难场所",
-      maekerList: [
+      markerList: [
         {
           markerType: "bncs",
           id: "104_1",
@@ -345,7 +345,7 @@ export const yjzyLists = {
       id: "105",
       icon: "/images/marker/mapdot-scientific.png",
       name: "物资标记",
-      maekerList: [
+      markerList: [
         {
           markerType: "spjk",
           id: "105_2",
@@ -372,7 +372,7 @@ export const yjzyLists = {
       id: "105",
       icon: "/images/marker/icon-material.png",
       name: "救援装备",
-      maekerList: [
+      markerList: [
         {
           markerType: "yjzb",
           id: "105_2",
@@ -397,7 +397,7 @@ export const yjzyLists = {
       id: "105",
       icon: "/images/marker/mapdot-building-6.png",
       name: "企业信息",
-      maekerList: [
+      markerList: [
         {
           markerType: "qyxx",
           id: "105_2",
@@ -422,7 +422,7 @@ export const yjzyLists = {
       id: "1051",
       icon: "/images/marker/icon_fhmb.png",
       name: "防护目标",
-      maekerList: [
+      markerList: [
         {
           markerType: "fhmb",
           id: "10500",
@@ -445,7 +445,7 @@ export const yjzyLists = {
       id: "10025",
       icon: "/images/marker/icon_jigou.png",
       name: "应急机构",
-      maekerList: [
+      markerList: [
         {
           markerType: "yjjg",
           id: "10025_2",
@@ -470,7 +470,7 @@ export const yjzyLists = {
       id: "10025q",
       icon: "/images/marker/icon_wrj.png",
       name: "无人机",
-      maekerList: [
+      markerList: [
         {
           markerType: "wrj",
           id: "10025q_2",
@@ -494,7 +494,7 @@ export const yjzyLists = {
       id: "100125q",
       icon: "/images/marker/icon_wxdh.png",
       name: "卫星电话",
-      maekerList: [
+      markerList: [
         {
           markerType: "wxdh",
           id: "100215q_2",
@@ -523,7 +523,7 @@ export const fxyhLists = {
       id: "1000",
       icon: "/images/marker/icon_dzycd.png",
       name: "地灾隐患点",
-      maekerList: [
+      markerList: [
         {
           markerType: "dzyhd",
           id: "1000_2",
@@ -553,7 +553,7 @@ export const fxyhLists = {
       id: "1001",
       icon: "/images/marker/icon_lswjf.png",
       name: "历史危旧房",
-      maekerList: [
+      markerList: [
         {
           markerType: "lswjf",
           id: "1001_2",
@@ -583,7 +583,7 @@ export const fxyhLists = {
       id: "1002",
       icon: "/images/marker/icon_dzyfq.png",
       name: "地灾易发区",
-      maekerList: [
+      markerList: [
         {
           markerType: "dzyfq",
           id: "1002_2",
@@ -610,7 +610,7 @@ export const fxyhLists = {
       id: "1000",
       icon: "/images/marker/icon_shyhd.png",
       name: "森火隐患点",
-      maekerList: [
+      markerList: [
         {
           markerType: "shyhd",
           id: "1000_2",
@@ -636,7 +636,7 @@ export const fxyhLists = {
       id: "1004",
       icon: "/images/marker/icon_shzh.png",
       name: "山洪灾害",
-      maekerList: [
+      markerList: [
         {
           markerType: "shzh",
           id: "1004_2",
@@ -666,7 +666,7 @@ export const fxyhLists = {
       id: "1005",
       icon: "/images/marker/icon_csyl.png",
       name: "城市易涝点",
-      maekerList: [
+      markerList: [
         {
           markerType: "csyld",
           id: "1005_2",

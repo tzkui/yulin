@@ -346,7 +346,7 @@ export default {
       icon: "/images/marker/icon-fxyh.png",
       img: icon1,
       name: "滑坡",
-      maekerList: [
+      markerList: [
         {
           markerType: "hp",
           id: "2_7",
@@ -374,7 +374,7 @@ export default {
       icon: "/images/marker/icon-disaster.png",
       name: "泥石流",
       img: icon2,
-      maekerList: [
+      markerList: [
         {
           markerType: "nsl",
           id: "3_1",
@@ -392,7 +392,7 @@ export default {
       id: "4",
       name: "山体崩塌",
       img: icon3,
-      maekerList: [
+      markerList: [
         {
           markerType: "stbt",
           id: "4_1",
@@ -411,7 +411,7 @@ export default {
       icon: "/images/marker/icon-disaster.png",
       name: "地面塌陷",
       img: icon4,
-      maekerList: [
+      markerList: [
         {
           markerType: "dmtx",
           id: "5_1",
@@ -429,7 +429,7 @@ export default {
       icon: "/images/marker/icon-disaster.png",
       name: "地裂缝",
       img: icon5,
-      maekerList: [
+      markerList: [
         {
           markerType: "dlf",
           id: "6_1",
@@ -448,7 +448,7 @@ export default {
       icon: "/images/marker/icon-disaster.png",
       name: "地面沉降",
       img: icon6,
-      maekerList: [
+      markerList: [
         {
           markerType: "dmcj",
           id: "7_1",
@@ -467,7 +467,7 @@ export default {
       icon: "/images/marker/icon-disaster.png",
       name: "不稳定斜坡",
       img: icon7,
-      maekerList: [
+      markerList: [
         {
           markerType: "xp",
           id: "8_1",

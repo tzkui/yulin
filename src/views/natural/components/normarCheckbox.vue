@@ -53,7 +53,7 @@ watch(selectedList, (val, old) => {
       if (!val.includes(id)) {
         if (yjzyLists[id]) {
           for (const info of yjzyLists[id]) {
-            info.maekerList.forEach((item) => {
+            info.markerList.forEach((item) => {
               list.push({
                 markerType: item.markerType,
                 id: item.id,

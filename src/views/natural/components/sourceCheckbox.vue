@@ -81,7 +81,7 @@ const setTypes = function () {
     let info = yjzyData.value[item.id];
     const base = JSON.parse(JSON.stringify(yjzyLists[item.id]));
     const list = info.jh.filter(item=>item.dataType==2).map((v) => {
-      let baseChild = {...base[0].maekerList[0]};
+      let baseChild = {...base[0].markerList[0]};
       baseChild.lng = v.mapX;
       baseChild.lat = v.mapY;
       baseChild.id = v.id;
@@ -103,7 +103,7 @@ const setTypes = function () {
       }
       return baseChild;
     });
-    base[0].maekerList = list;
+    base[0].markerList = list;
     markerListDict[item.id] = base;
   });
 };
@@ -143,21 +143,21 @@ watch(selectedList, (val, old) => {
   console.log(diff, markerListDict);
   for (const id of diff) {
     if (markerListDict[id]) {
-      if (markerListDict[id][0].maekerList.length > 0) {
+      if (markerListDict[id][0].markerList.length > 0) {
         list.push(...markerListDict[id]);
       }
     }
   }
   if (val.length > old.length) {
     list.forEach((item) => {
-      item.maekerList.forEach((info) => {
+      item.markerList.forEach((info) => {
         if (info.lat && info.lng) {
           $mitt.emit("addMarker", info);
         }
       });
     });
     if (list.length > 0) {
-      let firstInfo = list[0].maekerList[0];
+      let firstInfo = list[0].markerList[0];
       if (firstInfo.lat && firstInfo.lng) {
         $mitt.emit("flyTo", firstInfo);
         $mitt.emit("openPopup", firstInfo);
@@ -167,7 +167,7 @@ watch(selectedList, (val, old) => {
     try {
       console.log(list)
       list.forEach((item) => {
-        for (const point of item.maekerList) {
+        for (const point of item.markerList) {
           console.log(point)
           if (point.lat && point.lng) {
             $mitt.emit("changeMarkerState", point);

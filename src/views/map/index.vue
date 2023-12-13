@@ -51,7 +51,7 @@ let markerList = [
     id: "1",
     icon: "/marker/m1.png",
     name: "应急标记",
-    maekerList: [
+    markerList: [
       {
         markerType: "yj",
         id: "1_2",
@@ -68,7 +68,7 @@ let markerList = [
     id: "2",
     icon: "/marker/m2.png",
     name: "物资标记",
-    maekerList: [
+    markerList: [
       {
         markerType: "wz",
         id: "2_2",
@@ -97,7 +97,7 @@ let markerList2 = [
     id: "2",
     icon: "/marker/m2.png",
     name: "物资标记",
-    maekerList: [
+    markerList: [
       {
         markerType: "wz",
         id: "2_7",

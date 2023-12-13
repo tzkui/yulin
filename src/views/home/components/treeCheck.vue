@@ -70,7 +70,7 @@ const otherLists = {
       id: "14",
       icon: "/images/marker/icon_jsd.png",
       name: "积水点信息",
-      maekerList: [
+      markerList: [
         {
           markerType: "jsd",
           id: "14_1",
@@ -277,7 +277,7 @@ const checkItem = (obj, checked) => {
         const model =
           fxyhLists[obj.type] || yjzyLists[obj.type] || otherLists[obj.type];
         if (model) {
-          let markerData = JSON.parse(JSON.stringify(model[0].maekerList[0]));
+          let markerData = JSON.parse(JSON.stringify(model[0].markerList[0]));
           markerData.id = info.id;
           markerData.lng = info.mapX;
           markerData.lat = info.mapY;

@@ -5,7 +5,7 @@ export const zqzyfx = [
     id: "1",
     icon: "/images/marker/mapdot-school.png",
     name: "学校",
-    maekerList: [
+    markerList: [
       {
         markerType: "xx",
         id: "1_1",
@@ -40,7 +40,7 @@ export const zqzyfx = [
     id: "2",
     icon: "/images/marker/mapdot-hospital.png",
     name: "医院",
-    maekerList: [
+    markerList: [
       {
         markerType: "yy",
         id: "2_1",
@@ -75,7 +75,7 @@ export const zqzyfx = [
     id: "3",
     icon: "/images/marker/icon-typhoon.png",
     name: "公共文化场所",
-    maekerList: [
+    markerList: [
       {
         markerType: "ggwhcs",
         id: "3_1",
@@ -96,7 +96,7 @@ export const zqzyfx = [
     id: "4",
     icon: "/images/marker/m7.png",
     name: "旅游景区",
-    maekerList: [
+    markerList: [
       {
         markerType: "lyjq",
         id: "4_1",
@@ -117,7 +117,7 @@ export const zqzyfx = [
     id: "4",
     icon: "/images/marker/mapdot-bank.png",
     name: "企业",
-    maekerList: [
+    markerList: [
       {
         markerType: "qy",
         id: "4_1",
@@ -138,7 +138,7 @@ export const zqzyfx = [
     id: "4",
     icon: "/images/marker/icon_warehouse.png",
     name: "体育馆",
-    maekerList: [
+    markerList: [
       {
         markerType: "tyg",
         id: "4_1",
@@ -159,7 +159,7 @@ export const zqzyfx = [
     id: "4",
     icon: "/images/marker/m2.png",
     name: "超市",
-    maekerList: [
+    markerList: [
       {
         markerType: "cs",
         id: "4_1",
@@ -180,7 +180,7 @@ export const zqzyfx = [
     id: "4",
     icon: "/images/marker/icon_kuangshan.png",
     name: "超市",
-    maekerList: [
+    markerList: [
       {
         markerType: "ltks",
         id: "4_1",
@@ -204,7 +204,7 @@ export const yydxtj = [
     id: "1",
     icon: "/images/marker/mapdot-materia.png",
     name: "重点物资",
-    maekerList: [
+    markerList: [
       {
         markerType: "zdwz",
         id: "1_1",
@@ -241,7 +241,7 @@ export const yydxtj = [
     id: "2",
     icon: "/images/marker/icon_warehouse.png",
     name: "物资仓库",
-    maekerList: [
+    markerList: [
       {
         markerType: "wzck",
         id: "2_1",
@@ -263,7 +263,7 @@ export const yydxtj = [
     id: "3",
     icon: "/images/marker/icon_team.png",
     name: "救援队伍",
-    maekerList: [
+    markerList: [
       // {
       //   markerType: "jydw",
       //   id: "3_1",
@@ -285,7 +285,7 @@ export const yydxtj = [
     id: "4",
     icon: "/images/marker/icon-bncs.png",
     name: "避难场所",
-    maekerList: [
+    markerList: [
       {
         markerType: "bncs",
         id: "4_1",
@@ -307,7 +307,7 @@ export const yydxtj = [
     id: "5",
     icon: "/images/marker/mapdot-construction-machinery.png",
     name: "大型机械",
-    maekerList: [
+    markerList: [
       {
         markerType: "dxjx",
         id: "5_1",
@@ -329,7 +329,7 @@ export const yydxtj = [
     id: "6",
     icon: "/images/marker/mapdot-volume-up-f.png",
     name: "应急广播",
-    maekerList: [
+    markerList: [
       {
         markerType: "yjgb",
         id: "6_1",
@@ -351,7 +351,7 @@ export const yydxtj = [
     id: "7",
     icon: "/images/marker/mapdot-scientific.png",
     name: "视频监控",
-    maekerList: [
+    markerList: [
       {
         markerType: "spjk",
         id: "7_1",
@@ -373,7 +373,7 @@ export const yydxtj = [
     id: "7",
     icon: "/images/marker/mapdot-scientific.png",
     name: "应急广播",
-    maekerList: [
+    markerList: [
       {
         markerType: "yjgb",
         id: "7_1",
@@ -399,7 +399,7 @@ export const newyydxtj = [
     id: "1",
     icon: "/images/marker/mapdot-materia.png",
     name: "重点物资",
-    maekerList: [
+    markerList: [
       {
         markerType: "zdwz",
         id: "1_1",
@@ -436,7 +436,7 @@ export const newyydxtj = [
     id: "2",
     icon: "/images/marker/icon_warehouse.png",
     name: "物资仓库",
-    maekerList: [
+    markerList: [
       {
         markerType: "wzck",
         id: "2_1",
@@ -458,7 +458,7 @@ export const newyydxtj = [
     id: "3",
     icon: "/images/marker/icon_team.png",
     name: "救援队伍",
-    maekerList: [
+    markerList: [
       // {
       //   markerType: "jydw",
       //   id: "3_1",
@@ -480,7 +480,7 @@ export const newyydxtj = [
     id: "4",
     icon: "/images/marker/icon-bncs.png",
     name: "避难场所",
-    maekerList: [
+    markerList: [
       {
         markerType: "bncs",
         id: "4_1",
@@ -502,7 +502,7 @@ export const newyydxtj = [
     id: "5",
     icon: "/images/marker/mapdot-construction-machinery.png",
     name: "大型机械",
-    maekerList: [
+    markerList: [
       {
         markerType: "dxjx",
         id: "5_1",
@@ -524,7 +524,7 @@ export const newyydxtj = [
     id: "6",
     icon: "/images/marker/mapdot-volume-up-f.png",
     name: "应急广播",
-    maekerList: [
+    markerList: [
       {
         markerType: "yjgb",
         id: "6_1",
@@ -546,7 +546,7 @@ export const newyydxtj = [
     id: "7",
     icon: "/images/marker/mapdot-scientific.png",
     name: "视频监控",
-    maekerList: [
+    markerList: [
       {
         markerType: "spjk",
         id: "7_1",
@@ -568,7 +568,7 @@ export const newyydxtj = [
     id: "7",
     icon: "/images/marker/mapdot-scientific.png",
     name: "应急广播",
-    maekerList: [
+    markerList: [
       {
         markerType: "yjgb",
         id: "7_1",
@@ -593,7 +593,7 @@ export const zqfx = [
     id: "1",
     icon: "/images/marker/mapdot-materia.png",
     name: "露天矿场",
-    maekerList: [
+    markerList: [
       {
         markerType: "ltkc",
         id: "1_1",
@@ -615,7 +615,7 @@ export const zqfx = [
     id: "2",
     icon: "/images/marker/icon_warehouse.png",
     name: "学校",
-    maekerList: [
+    markerList: [
       {
         markerType: "xx",
         id: "2_1",
@@ -637,7 +637,7 @@ export const zqfx = [
     id: "3",
     icon: "/images/marker/icon_team.png",
     name: "超市",
-    maekerList: [
+    markerList: [
       {
         markerType: "cs",
         id: "3_1",
@@ -659,7 +659,7 @@ export const zqfx = [
     id: "4",
     icon: "/images/marker/icon-bncs.png",
     name: "企业",
-    maekerList: [
+    markerList: [
       {
         markerType: "qy",
         id: "4_1",
@@ -681,7 +681,7 @@ export const zqfx = [
     id: "5",
     icon: "/images/marker/mapdot-construction-machinery.png",
     name: "大型机械",
-    maekerList: [
+    markerList: [
       {
         markerType: "lyjq",
         id: "5_1",
@@ -703,7 +703,7 @@ export const zqfx = [
     id: "6",
     icon: "/images/marker/mapdot-volume-up-f.png",
     name: "体育馆",
-    maekerList: [
+    markerList: [
       {
         markerType: "tyg",
         id: "6_1",
@@ -725,7 +725,7 @@ export const zqfx = [
     id: "7",
     icon: "/images/marker/mapdot-scientific.png",
     name: "公告文化场所",
-    maekerList: [
+    markerList: [
       {
         markerType: "ggwhcs",
         id: "7_1",
@@ -747,7 +747,7 @@ export const zqfx = [
     id: "8",
     icon: "/images/marker/mapdot-scientific.png",
     name: "医院",
-    maekerList: [
+    markerList: [
       {
         markerType: "yy",
         id: "8_1",

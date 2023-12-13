@@ -195,9 +195,9 @@ const addGraphicMarker = (graphicLayer, item) => {
 };
 //添加列表或对象的判断
 const addListOrObj = (layer, data) => {
-  if (data.maekerList && data.maekerList.length > 0) {
+  if (data.markerList && data.markerList.length > 0) {
     let hs = false;
-    data.maekerList.forEach((item) => {
+    data.markerList.forEach((item) => {
       layer.eachGraphic((lItm) => {
         if (lItm.options.type == data.markerType && lItm.id == item.id) {
           hs = true;
@@ -222,6 +222,7 @@ const addListOrObj = (layer, data) => {
 //添加marker聚合图层
 const addLayer = (data) => {
   let hasLayer = map.getLayerById(data.markerType);
+  console.log(hasLayer)
   if (hasLayer) {
     addListOrObj(hasLayer, data);
     return;
@@ -250,9 +251,9 @@ const addLayer = (data) => {
   clusterLayer.on("clusterclick", function (cluster) {
     $mitt.emit("clusterclick", {
       type: data.markerType,
-      data: data.maekerList,
+      data: data.markerList,
     });
-    console.log("clusterclick---->", cluster.target, data.maekerList);
+    console.log("clusterclick---->", cluster.target, data.markerList);
   });
   addListOrObj(clusterLayer, data);
 };

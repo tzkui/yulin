@@ -306,7 +306,7 @@ const openDialog = function (key, info) {
     if (!info.num) return;
     eventLevelPopupData.value.title = info.name;
 
-    // let mardata = qylxlist[0].maekerList[0]
+    // let mardata = qylxlist[0].markerList[0]
     let position = [109.92832, 38.27419];
 
     let arr = [];

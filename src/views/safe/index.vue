@@ -243,7 +243,7 @@ const updatePopupData = function (info, id) {
 // 把打点的数据放进行添加进去
 const getdatasj = function (index) {
   qylxdata.value.forEach((v, i) => {
-    qylxdata.value[i].marker = qylxlist[0].maekerList[index];
+    qylxdata.value[i].marker = qylxlist[0].markerList[index];
   });
 };
 

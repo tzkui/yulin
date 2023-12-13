@@ -127,7 +127,7 @@ const onCheckedChange = function (data, flag) {
 const getMarkerInfoByType = function (info) {
   const model = fxyhLists[props.dialogType] || yjzyLists[props.dialogType];
   if (model) {
-    let base = JSON.parse(JSON.stringify(model[0].maekerList[0]));
+    let base = JSON.parse(JSON.stringify(model[0].markerList[0]));
     base.id = info.id;
     base.lng = info.mapX;
     base.lat = info.mapY;
@@ -183,7 +183,7 @@ watch(selectedMarkers, (val, old) => {
       id: "1000",
       icon: markerList[0].icon,
       name: "地灾隐患点",
-      maekerList: markerList,
+      markerList: markerList,
     });
     $mitt.emit("flyTo", markerList[0]);
     $mitt.emit("openPopup", markerList[0]);
