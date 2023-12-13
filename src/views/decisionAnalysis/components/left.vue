@@ -253,10 +253,10 @@ const option = ref({
         show: false,
       },
       data: [
-        { value: 200, name: "一般火灾" },
-        { value: 40, name: "较大火灾" },
-        { value: 10, name: "重大火灾" },
-        { value: 5, name: "特大火灾" },
+        { value: 200, name: "一般灾害" },
+        { value: 40, name: "较大灾害" },
+        { value: 10, name: "重大灾害" },
+        { value: 5, name: "特大灾害" },
       ],
     },
     // 样式而已...
@@ -662,7 +662,7 @@ const changeChart = (item) => {
     case "分析":
     case "等级":
       let allNum = 0;
-      let level = ["", "一般火灾", "较大火灾", "重大火灾", "特大火灾"];
+      let level = ["", "一般灾害", "较大灾害", "重大灾害", "特大灾害"];
       option.value.series[0].data = chartData.value.level.map((item) => {
         allNum += item.count;
         return { value: item.count, name: level[item.eventlevel] };
