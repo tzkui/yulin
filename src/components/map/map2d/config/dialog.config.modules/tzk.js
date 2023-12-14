@@ -161,10 +161,10 @@ export default {
     ],
     // 右下角的按钮
     btns: [
-      {
-        name: "监控",
-        funcName: viewDetail,
-      },
+      // {
+      //   name: "监控",
+      //   funcName: viewDetail,
+      // },
     ],
   },
   spjk: {
@@ -406,38 +406,26 @@ export default {
     // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
     rows: [
       { name: "企业名称", key: "name" },
-      { name: "企业地址", key: "address" },
-      // { name: "联系人", key: "person" },
-      // {
-      //   name: "联系电话",
-      //   key: "phone",
-      //   iconUrl: assetsUrl("/icons/phone.png"),
-      //   funcName: "phone",
-      // },
       { name: "企业类型", key: "type" },
       { name: "所属区域", key: "area" },
+      { name: "企业地址", key: "address" },
     ],
     // 右下角的按钮
     btns: [
-      {
-        name: "查看",
-        funcName: viewDetail,
-      },
+      // {
+      //   name: "查看",
+      //   funcName: viewDetail,
+      // },
     ],
   },
   fmks: {
     title: "非煤矿山",
     // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
     rows: [
-      { name: "矿山名称", key: "name" },
-      { name: "矿山地址", key: "address" },
-      { name: "联系人", key: "person" },
-      {
-        name: "联系电话",
-        key: "phone",
-        iconUrl: assetsUrl("/icons/phone.png"),
-        funcName: "phone",
-      },
+      { name: "企业名称", key: "name" },
+      { name: "企业类型", key: "type" },
+      { name: "所属区域", key: "area" },
+      { name: "企业地址", key: "address" },
     ],
     // 右下角的按钮
     btns: [
@@ -474,14 +462,9 @@ export default {
     // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
     rows: [
       { name: "企业名称", key: "name" },
+      { name: "企业类型", key: "type" },
+      { name: "所属区域", key: "area" },
       { name: "企业地址", key: "address" },
-      { name: "联系人", key: "person" },
-      {
-        name: "联系电话",
-        key: "phone",
-        iconUrl: assetsUrl("/icons/phone.png"),
-        funcName: "phone",
-      },
     ],
     // 右下角的按钮
     btns: [
@@ -496,14 +479,9 @@ export default {
     // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
     rows: [
       { name: "企业名称", key: "name" },
+      { name: "企业类型", key: "type" },
+      { name: "所属区域", key: "area" },
       { name: "企业地址", key: "address" },
-      { name: "联系人", key: "person" },
-      {
-        name: "联系电话",
-        key: "phone",
-        iconUrl: assetsUrl("/icons/phone.png"),
-        funcName: "phone",
-      },
     ],
     // 右下角的按钮
     btns: [
@@ -518,14 +496,9 @@ export default {
     // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
     rows: [
       { name: "企业名称", key: "name" },
+      { name: "企业类型", key: "type" },
+      { name: "所属区域", key: "area" },
       { name: "企业地址", key: "address" },
-      { name: "联系人", key: "person" },
-      {
-        name: "联系电话",
-        key: "phone",
-        iconUrl: assetsUrl("/icons/phone.png"),
-        funcName: "phone",
-      },
     ],
     // 右下角的按钮
     btns: [

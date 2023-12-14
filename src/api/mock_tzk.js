@@ -1261,6 +1261,23 @@ export const safeCheckboxPoints = {
       address: "陕西省榆林市横山区",
     }
   },
+  whqy:{
+    markerType: "whqy",
+    id: "4",
+    lng: '108.7840',
+    lat: "37.6180",
+    name: "煤矿",
+    phone: "13511117659",
+    icon: "/images/marker/icon_meikuang.png",
+    label: { text: "煤矿", font_size: 16 },
+    dialogType: "whqy",
+    details: {
+      name: "煤矿1",
+      person: "张雅宇",
+      phone: "18900493799",
+      address: "陕西省榆林市横山区",
+    }
+  },
   wkk: {
     markerType: "wkk",
     id: "5",

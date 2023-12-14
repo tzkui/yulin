@@ -156,8 +156,18 @@
     </ViewBox>
     <ViewBox title="案例库">
       <div class="case_library">
-        <div class="case_library_btn">查看</div>
+        <div class="case_library_btn" @click="goPgae">查看</div>
       </div>
+      <ul class="alk_list">
+        <li v-for="item in alk_list" :key="item.id">
+          <div class="level">{{ item.eventLevelName }}</div>
+          <div class="infos">
+            <div>案例标题：{{ item.title }}</div>
+            <div>案例类型：{{ item.typeName }}</div>
+            <div>案例关键词：{{ item.keyword }}</div>
+          </div>
+        </li>
+      </ul> 
     </ViewBox>
   </div>
 </template>
@@ -176,6 +186,7 @@ import {
   getZqfxDropdowndata,
   getZqfxLeveldata,
   getZqzhcx,
+  getAlkList
 } from "@/api/decision_analysis.js";
 // tab
 const disaster_tab = ref(["分析", "等级", "趋势", "区域", "热力图"]);
@@ -183,6 +194,7 @@ const current_disater_tab = ref("分析");
 // 下拉选项
 const disaster_types = ref([]);
 const current_disater_type = ref();
+const alk_list = ref([])
 // 图表内容
 let Mychart = null;
 const option = ref({
@@ -411,6 +423,9 @@ const option = ref({
     },
   ],
 });
+const goPgae = function(){
+  window.location.href = window.baseIp1 + ":20128/basics/eventcase"
+}
 const chartData = ref();
 let chartInterval = null; //轮播 interval
 // 灾情综合查询列表
@@ -421,9 +436,16 @@ const disaster_synthesis = ref([]);
 // 灾情综合查询列表 详情
 const disaster_synthesis_details = ref([]);
 
+const initAlk = function(){
+  getAlkList({page: 1,limit: -1}).then(res=>{
+    alk_list.value = res.data
+  })
+}
+
 onMounted(() => {
   initDisasterTypes();
   initZqzhcx();
+  initAlk()
 });
 onUnmounted(() => {
   clearInterval(chartInterval);
@@ -1230,6 +1252,39 @@ const selectTime = function ([start, end]) {
       text-align: center;
       cursor: pointer;
       font-size: 14px;
+    }
+  }
+}
+.alk_list{
+  height: 360px;
+  overflow-y: auto;
+  >li{
+    font-size: 16px;
+    line-height: 28px;
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #0a3648;
+    .level{
+      width: 64px;
+      height: 24px;
+      background-color: #367ebc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 16px;
+      line-height: 24px;
+      text-align: center;
+      border-radius: 2px;
+    }
+    .infos{
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+    }
+    &:hover{
+      background: #092a33;
     }
   }
 }

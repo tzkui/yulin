@@ -760,3 +760,7 @@ export const getYybzfx = data => request.post(`/jcfx/yybzfx?map_x=${data.map_x}&
 // export const getYybzfx = data => request.post("/jcfx/yybzfx", data)
 // 应急保障分析类型
 export const getYybzfxType = data => request.post("/jcfx/yybzfxtypeid", data)
+
+
+// 获取案例库列表
+export const getAlkList = data => request.post("/jcfx/alk", data)

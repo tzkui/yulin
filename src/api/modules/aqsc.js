@@ -21,3 +21,4 @@ export const getZdddspjk = data => request.post("/aqsc/zdddspjk", data)
 
 // 获取错测选择框的数据
 export const getDtsd = data => request.post("/aqsc/dtsd", data)
+
