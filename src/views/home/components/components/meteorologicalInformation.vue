@@ -55,7 +55,7 @@ onMounted(() => {
           <img class="img" src="@/assets/home/weather_3.png" alt="" />
           <div class="item_cont">
             <span class="cont_name"> 风向 </span>
-            <div class="cont_num">{{weatherInfo.fx2}}</div>
+            <div class="cont_num" :title="weatherInfo.fx2">{{weatherInfo.fx2}}</div>
           </div>
         </div>
       </div>
@@ -104,6 +104,7 @@ onMounted(() => {
   .weather_box {
     display: flex;
     margin-bottom: 8px;
+    height: 56px;
 
     .weather_item {
       display: flex;
@@ -135,9 +136,10 @@ onMounted(() => {
           font-size: 18px;
           color: #ffffff;
           line-height: 33px;
-          display: flex;
-          align-items: center;
-          flex-wrap: nowrap;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          width: 60px;
           .unit {
             font-size: 12px;
             line-height: 14px;
