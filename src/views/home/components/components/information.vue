@@ -64,7 +64,7 @@ const setMarker = (data) => {
   const l2 = ["属实","已启动响应"]
   obj = {
     ...obj,
-    hideEventSupplementaryRecording:!l1.includes(item.state),
+    // hideEventSupplementaryRecording:!l1.includes(item.state),
     hideDispatch: !l2.includes(item.state),
     hideEventVerification: item.state !== "待处理",
   };

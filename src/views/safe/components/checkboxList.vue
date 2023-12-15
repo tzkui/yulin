@@ -81,33 +81,51 @@ const treeData = ref([
     children: [
       {
         name: "公安监控",
-        id: "gajk",
+        id: "公安监控",
         checked: false,
         iconUrl: getMarkerUrl("icon_gongan"),
       },
       {
         name: "住建局监控",
-        id: "zjjjk",
+        id: "住建监控",
         checked: false,
         iconUrl: getMarkerUrl("icon_zhujianju"),
       },
       {
         name: "水利局监控",
-        id: "sljjk",
+        id: "水利监控",
         checked: false,
         iconUrl: getMarkerUrl("icon_shuiliju"),
       },
       {
-        name: "自然灾害监控",
-        id: "zrzhjk",
+        name: "重点地点监控",
+        id: "重点地点",
         checked: false,
         iconUrl: getMarkerUrl("icon_ziranzaihai"),
       },
       {
         name: "化工园区监控",
-        id: "hgyqjk",
+        id: "园区监控",
         checked: false,
         iconUrl: getMarkerUrl("icon_huagongyuanqu"),
+      },
+      {
+        name: "综合执法局监控",
+        id: "综合执法局监控",
+        checked: false,
+        iconUrl: getMarkerUrl("icon_ziranzaihai"),
+      },
+      {
+        name: "危化企业监控",
+        id: "危化企业监控",
+        checked: false,
+        iconUrl: getMarkerUrl("icon_whqyjk"),
+      },
+      {
+        name: "交警监控",
+        id: "交警监控",
+        checked: false,
+        iconUrl: getMarkerUrl("icon_jjjk"),
       },
     ],
   },
@@ -134,8 +152,48 @@ const selectedItem = function (info) {
 };
 const getListData = function () {
   getDtsd().then((res) => {
-    console.log("hhhhhhhhhhh",res)
-    let listData = [res.whqy, res.qyzdwxy, res.spjk];
+    console.log("hhhhhhhhhhh", res);
+    let spjk = res.data.spjk;
+    let dict = {
+      "园区监控": "hgyqjk",
+      "重点地点": "zdddjk",
+      "综合执法局监控": "zhzfjjk",
+      "公安监控": "gajk",
+      "危化企业监控": "whqyjk",
+      "住建监控": "zjjjk",
+      "交警监控": "jjjk",
+      "水利监控": "sljjk",
+    }
+    let icons={
+      "园区监控": "icon_huagongyuanqu",
+      "重点地点": "icon_ziranzaihai",
+      "综合执法局监控": "icon_ziranzaihai",
+      "公安监控": "icon_gongan",
+      "危化企业监控": "icon_whqyjk",
+      "住建监控": "icon_zhujianju",
+      "交警监控": "icon_jjjk",
+      "水利监控": "icon_shuiliju",
+    }
+    spjk.forEach((item) => {
+      item.jh = item.jh || [];
+      safeCheckboxPoints[item.mc] = item.jh.map((info) => {
+        return {
+          markerType: dict[item.mc],
+          id: info.id,
+          lng: info.mapX + "",
+          lat: info.mapY + "",
+          name: info.typeName,
+          icon: `/images/marker/${icons[item.mc]}.png`,
+          label: { text: item.mc, font_size: 16 },
+          dialogType: dict[item.mc],
+          details: {
+            monitorName: info.monitorName,
+            typeName: info.typeName,
+            location: info.location,
+          },
+        };
+      });
+    });
   });
 };
 const allSelecteds = computed(() => {
@@ -190,8 +248,6 @@ onMounted(() => {
 });
 const getEnDatas = function () {
   getQyfbTree().then((res) => {
-    console.log(res);
-
     res.data.forEach((item) => {
       if (item.dataType == 2 && typeof item.spare1 === "string") {
         let info = JSON.parse(item.spare1);
@@ -274,12 +330,15 @@ const getEnDatas = function () {
 
 watch(selectedList, (val, old) => {
   let diff = calcArrayDiff(val, old);
+  console.log(safeCheckboxPoints, diff)
   for (const id of diff) {
     if (safeCheckboxPoints[id]) {
       console.log(safeCheckboxPoints[id]);
       if (val.length > old.length) {
         if (Array.isArray(safeCheckboxPoints[id])) {
+          console.log(2)
           safeCheckboxPoints[id].forEach((item) => {
+            console.log(item)
             $mitt.emit("addMarker", item);
           });
         }

@@ -83,7 +83,7 @@
               :key="index"
               :class="{
                 check_item: true,
-                active: analysis_checked_data===item.value,
+                active: analysis_checked_data === item.value,
               }"
               @click="selectYjbzfx(item)"
             >
@@ -197,7 +197,7 @@ const getMarkerInfo = function (typeId, data) {
       dialogType: "zqfx",
       details: {
         name: data.name,
-        areaCovered:data.areaCovered+" ㎡",
+        areaCovered: data.areaCovered + " ㎡",
         linkName: data.linkName,
         linkPhone: data.linkPhone,
       },
@@ -461,6 +461,91 @@ const getMarkerInfo = function (typeId, data) {
         location: data.location,
       },
     };
+  } else if (typeId == "煤矿") {
+    return {
+      markerType: "mk",
+      id: data.id,
+      lng: data.longitude,
+      lat: data.latitude,
+      name: "煤矿",
+      icon: "/images/marker/icon_meikuang.png",
+      label: { text: "煤矿", font_size: 16 },
+      dialogType: "mk",
+      details: {
+        name: data.enterpriseName,
+        type: data.enterpriseType,
+        area: data.xzqhName,
+        address: data.address,
+      },
+    };
+  } else if (typeId == "非煤矿山") {
+    return {
+      markerType: "fmks",
+      id: data.id,
+      lng: data.longitude,
+      lat: data.latitude,
+      name: "非煤矿山",
+      icon: "/images/marker/icon_kuangshan.png",
+      label: { text: "非煤矿山", font_size: 16 },
+      dialogType: "fmks",
+      details: {
+        name: data.enterpriseName,
+        type: data.enterpriseType,
+        area: data.xzqhName,
+        address: data.address,
+      },
+    };
+  } else if (typeId == "烟花爆竹") {
+    return {
+      markerType: "yhbzqy",
+      id: data.id,
+      lng: data.longitude,
+      lat: data.latitude,
+      name: "烟花爆竹企业",
+      icon: "/images/marker/icon_yanhua.png",
+      label: { text: "烟花爆竹企业", font_size: 16 },
+      dialogType: "yhbzqy",
+      details: {
+        name: data.enterpriseName,
+        type: data.enterpriseType,
+        area: data.xzqhName,
+        address: data.address,
+      },
+    };
+  } else if (typeId == "危化") {
+    return {
+      markerType: "qyxx",
+      id: data.id,
+      lng: data.longitude,
+      lat: data.latitude,
+      name: "危化企业",
+      icon: "/images/marker/mapdot-dangerous-chemicals.png",
+      label: { text: "危化企业", font_size: 16 },
+      dialogType: "qyxx",
+      details: {
+        name: data.enterpriseName,
+        type: data.enterpriseType,
+        area: data.xzqhName,
+        address: data.address,
+      },
+    };
+  }else if (typeId == "尾矿库") {
+    return {
+      markerType: "qyxx",
+      id: data.id,
+      lng: data.longitude,
+      lat: data.latitude,
+      name: "尾矿库",
+      icon: "/images/marker/mapdot-dangerous-chemicals.png",
+      label: { text: "尾矿库", font_size: 16 },
+      dialogType: "qyxx",
+      details: {
+        name: data.enterpriseName,
+        type: data.enterpriseType,
+        area: data.xzqhName,
+        address: data.address,
+      },
+    };
   }
 };
 let allDisasters = ref({});
@@ -477,12 +562,13 @@ const getAllDisasters = function () {
     res.data.data.forEach((item) => {
       allDisasters.value[item.typeId] = item.defenceAims.map((info) => {
         return {
-          name: info.name,
+          name: info.name || info.enterpriseName,
           id: info.id,
           markerInfo: getMarkerInfo(item.typeId, info),
         };
       });
     });
+    console.log("xxxxxx:",allDisasters.value)
     nextTick(() => {
       for (const key in allDisasters.value) {
         allDisasters.value[key].forEach((item) => {
@@ -505,22 +591,24 @@ const getAllAnalysis = function () {
     let data = res.data;
     for (const key in data) {
       let list = data[key] || [];
-      allAnalysis.value[key] = list.map((item) => {
-        return {
-          name: item.name,
-          id: item.id,
-          markerInfo: getMarkerInfo(key, item),
-        };
-      }).slice(0,10);
-    }
-    nextTick(()=>{
-      console.log(allAnalysis.value)
-      for(const key in allAnalysis.value){
-        allAnalysis.value[key].forEach(item=>{
-          $mitt.emit("addMarker", item.markerInfo)
+      allAnalysis.value[key] = list
+        .map((item) => {
+          return {
+            name: item.name,
+            id: item.id,
+            markerInfo: getMarkerInfo(key, item),
+          };
         })
+        .slice(0, 10);
+    }
+    nextTick(() => {
+      console.log(allAnalysis.value);
+      for (const key in allAnalysis.value) {
+        allAnalysis.value[key].forEach((item) => {
+          $mitt.emit("addMarker", item.markerInfo);
+        });
       }
-    })
+    });
   });
 };
 const initType = function () {
@@ -542,7 +630,7 @@ const zddxList = computed(() => {
 });
 const yjbzfxList = computed(() => {
   return allAnalysis.value[analysis_checked_data.value] || [];
-})
+});
 const selectZddx = function (info) {
   disaster_checked_data.value = info.value;
 };
@@ -603,7 +691,7 @@ const selectYjbzfx = function (info) {
 
     .effect_radius {
       .cont_lists {
-        height: 190px;
+        height: 100px;
 
         .cont_list {
           .label {

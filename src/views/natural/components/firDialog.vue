@@ -102,7 +102,8 @@ const closeDialog = function(){
     max-height: 500px;
     overflow-y: auto;
     &::-webkit-scrollbar{
-      display: none;
+      display: block;
+      width: 10px;
     }
   }
 }</style>

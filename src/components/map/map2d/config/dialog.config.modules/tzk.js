@@ -710,15 +710,9 @@ export default {
     title: "公安监控",
     // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
     rows: [
-      { name: "企业名称", key: "name" },
-      { name: "企业地址", key: "address" },
-      { name: "联系人", key: "person" },
-      {
-        name: "联系电话",
-        key: "phone",
-        iconUrl: assetsUrl("/icons/phone.png"),
-        funcName: "phone",
-      },
+      { name: "监控名称", key: "monitorName" },
+      { name: "监控类型", key: "typeName" },
+      { name: "监控地址", key: "location" },
     ],
     // 右下角的按钮
     btns: [
@@ -732,15 +726,9 @@ export default {
     title: "住建局监控",
     // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
     rows: [
-      { name: "企业名称", key: "name" },
-      { name: "企业地址", key: "address" },
-      { name: "联系人", key: "person" },
-      {
-        name: "联系电话",
-        key: "phone",
-        iconUrl: assetsUrl("/icons/phone.png"),
-        funcName: "phone",
-      },
+      { name: "监控名称", key: "monitorName" },
+      { name: "监控类型", key: "typeName" },
+      { name: "监控地址", key: "location" },
     ],
     // 右下角的按钮
     btns: [
@@ -754,15 +742,9 @@ export default {
     title: "水利局监控",
     // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
     rows: [
-      { name: "企业名称", key: "name" },
-      { name: "企业地址", key: "address" },
-      { name: "联系人", key: "person" },
-      {
-        name: "联系电话",
-        key: "phone",
-        iconUrl: assetsUrl("/icons/phone.png"),
-        funcName: "phone",
-      },
+      { name: "监控名称", key: "monitorName" },
+      { name: "监控类型", key: "typeName" },
+      { name: "监控地址", key: "location" },
     ],
     // 右下角的按钮
     btns: [
@@ -776,15 +758,9 @@ export default {
     title: "自然灾害监控",
     // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
     rows: [
-      { name: "企业名称", key: "name" },
-      { name: "企业地址", key: "address" },
-      { name: "联系人", key: "person" },
-      {
-        name: "联系电话",
-        key: "phone",
-        iconUrl: assetsUrl("/icons/phone.png"),
-        funcName: "phone",
-      },
+      { name: "监控名称", key: "monitorName" },
+      { name: "监控类型", key: "typeName" },
+      { name: "监控地址", key: "location" },
     ],
     // 右下角的按钮
     btns: [
@@ -798,15 +774,73 @@ export default {
     title: "化工园区监控",
     // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
     rows: [
-      { name: "企业名称", key: "name" },
-      { name: "企业地址", key: "address" },
-      { name: "联系人", key: "person" },
-      {
-        name: "联系电话",
-        key: "phone",
-        iconUrl: assetsUrl("/icons/phone.png"),
-        funcName: "phone",
-      },
+      { name: "监控名称", key: "monitorName" },
+      { name: "监控类型", key: "typeName" },
+      { name: "监控地址", key: "location" },
+    ],
+    // 右下角的按钮
+    btns: [
+      // {
+      //   name: "查看",
+      //   funcName: viewDetail
+      // }
+    ],
+  },
+  zdddjk: {
+    title: "重点地点监控",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: "监控名称", key: "monitorName" },
+      { name: "监控类型", key: "typeName" },
+      { name: "监控地址", key: "location" },
+    ],
+    // 右下角的按钮
+    btns: [
+      // {
+      //   name: "查看",
+      //   funcName: viewDetail
+      // }
+    ],
+  },
+  zhzfjjk: {
+    title: "综合执法局监控",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: "监控名称", key: "monitorName" },
+      { name: "监控类型", key: "typeName" },
+      { name: "监控地址", key: "location" },
+    ],
+    // 右下角的按钮
+    btns: [
+      // {
+      //   name: "查看",
+      //   funcName: viewDetail
+      // }
+    ],
+  },
+  whqyjk: {
+    title: "危化企业监控",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: "监控名称", key: "monitorName" },
+      { name: "监控类型", key: "typeName" },
+      { name: "监控地址", key: "location" },
+    ],
+    // 右下角的按钮
+    btns: [
+      // {
+      //   name: "查看",
+      //   funcName: viewDetail
+      // }
+    ],
+  },
+  jjjk: {
+    title: "交警监控",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: "监控名称", key: "monitorName" },
+      { name: "监控类型", key: "typeName" },
+      { name: "监控地址", key: "location" },
     ],
     // 右下角的按钮
     btns: [

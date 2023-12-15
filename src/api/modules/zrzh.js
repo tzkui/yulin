@@ -37,3 +37,6 @@ export const eventVerify = (data) => request.postForm("/zrzh/event_verify",data)
 
 // 补录
 export const eventUpdata = (data) => request.postForm("/zrzh/event_update",data)
+
+// 上传文件
+export const uploadFile = (data) => request.postForm("/zrzh/eventfile_upload",data)

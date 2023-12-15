@@ -64,11 +64,14 @@ const initData = function () {
     let arr = initTree(props.listData);
     // treeData.value = arr;
     treeData.value = arr.filter((item) => item.children?.length > 0);
-    // treeData.value.map((item) => {
-    //   item.children = item.children.filter(
-    //     (val) => val.num > 0 || val.dataType != 1
-    //   );
-    // });
+    console.log("获取到的treeData: ", treeData.value)
+    if(props.name==='通讯录'){
+      treeData.value.forEach(item=>{
+        item.children = item.children?.filter(info=>{
+          return info.children?.length>0
+        })
+      })
+    }
   } else {
     if(props.listData.length> 500){
       treeData.value = [];

@@ -6,6 +6,7 @@ import {
   getEventInfoById,
   getEventTypeList,
   eventUpdata,
+  uploadFile
 } from "@/api/modules/zrzh.js";
 import Common from "@/utils/common.js";
 import selectLocation from "@/components/common/selectLocation.vue";
@@ -27,6 +28,10 @@ getEventTypeList().then((res) => {
   const { initTree } = Common();
   eventTypeList.value = initTree(res.data, { pid: "parentId" });
 });
+const uploadUrl = ref(window.baseRequestUrl+"/zrzh/eventfile_upload")
+const uploadHeader = ref({
+  Authorization: "Bearer " + sessionStorage.getItem("token")
+})
 const eventTypeList = ref([]);
 bus.on(listener);
 const showDialog = ref(false);
@@ -110,6 +115,19 @@ const center = computed(() => {
     lat: formData.value.mapY,
   };
 });
+const fileList = ref([])
+const beforeAvatarUpload = function(data){
+  console.log(data)
+  let param = {
+    file: data,
+    eventId: formData.value.id
+  }
+  uploadFile(param).then(res=>{
+    // console.log(res)
+    fileList.value.push(data)
+  })
+  return false;
+}
 </script>
 
 <template>
@@ -141,7 +159,7 @@ const center = computed(() => {
             <el-col :span="12">
               <el-form-item label="事件类型" prop="eventType">
                 <el-tree-select
-                v-model="formData.typeId"
+                  v-model="formData.eventType"
                   :data="eventTypeList"
                   check-strictly
                   :render-after-expand="false"
@@ -317,14 +335,6 @@ const center = computed(() => {
                     placeholder="请输入"
                   /> </el-form-item
               ></el-col>
-              <!-- <el-col :span="6">
-                <el-form-item prop="region">
-                  <el-input
-                    v-model="formData.mapZ"
-                    placeholder="请输入高程"
-                    clearable
-                  /> </el-form-item
-              ></el-col> -->
               <el-col :span="6">
                 <el-form-item
                   prop="region"
@@ -356,38 +366,6 @@ const center = computed(() => {
         </el-form>
       </div>
 
-      <!-- <div class="title">
-        <span>事件信息</span>
-      </div>
-      <el-form class="smalform" :model="formData">
-        <el-form-item label="报送人员" prop="reportPersonal">
-          <el-input
-            v-model="formData.reportPersonal"
-            placeholder="'"
-            clearable
-          />
-        </el-form-item>
-        <el-form-item label="报送单位" prop="reportOrg">
-          <el-select
-            v-model="formData.reportOrg"
-            placeholder="Select"
-            size="large"
-          >
-          </el-select>
-        </el-form-item>
-        <el-form-item label="报送时间" prop="reportDate">
-          <el-date-picker
-            v-model="formData.reportDate"
-            type="datetime"
-            placeholder="选择时间"
-            value-format="YYYY-MM-DD HH:mm:ss"
-            style="width: 275px"
-          />
-        </el-form-item>
-        <el-form-item label="联系电话" prop="reportPhone">
-          <el-input v-model="formData.reportPhone" placeholder="'" clearable />
-        </el-form-item>
-      </el-form> -->
       <div class="title">
         <span>附件信息</span>
       </div>
@@ -395,11 +373,12 @@ const center = computed(() => {
       <div class="fj">
         <div class="fjimg">
           <el-upload
+            v-model="fileList"
             class="avatar-uploader"
-            action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-            :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload"
+            :action="uploadUrl"
+            :headers="uploadHeader"
+            :data="{eventId: formData.id}"
+            :show-file-list="true"
           >
             <img v-if="imageUrl" :src="imageUrl" class="avatar" />
             <el-icon v-else class="avatar-uploader-icon">
@@ -488,18 +467,16 @@ const center = computed(() => {
   // 下面是附件信息哪里的相关的样式的了
   .fj {
     width: 100%;
-    height: 170px;
     display: flex;
     align-items: center;
     justify-content: center;
-
     .fjimg {
       width: 752px;
-      height: 170px;
+      // height: 170px;
       border: 1px solid rgba(0, 163, 206, 0.5);
       display: flex;
       align-items: center;
-      padding-left: 20px;
+      padding: 20px 20px 10px;
 
       ::v-deep .el-upload {
         width: 200px;
