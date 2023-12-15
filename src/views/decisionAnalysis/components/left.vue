@@ -900,7 +900,7 @@ const selectTime = function ([start, end]) {
   }
 
   .disaster_synthesis {
-    height: 520px;
+    height: 330px;
     position: relative;
 
     .synthesis_search {
@@ -1256,7 +1256,7 @@ const selectTime = function ([start, end]) {
   }
 }
 .alk_list{
-  height: 360px;
+  height: 190px;
   overflow-y: auto;
   >li{
     font-size: 16px;
