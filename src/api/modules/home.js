@@ -71,3 +71,10 @@ export const getKdtxl = () => {
     url: `https://10.112.143.193/kiop-gateway-core//tongxunlu/dept/search?apikey=${window.kdApiKey}&paging=false`
   })
 }
+
+// 获取人员轨迹
+export const getRygj =  (data) => {
+  // let str = `?personalId=${data.personalId}&startTime="${data.startTime}"&endTime="${data.endTime}"`
+  // return request.post("/home/rygj"+str,{});
+  return request.post("/home/rygj",data);
+}

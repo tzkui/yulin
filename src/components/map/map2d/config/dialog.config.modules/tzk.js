@@ -18,10 +18,10 @@ export default {
     ],
     // 右下角的按钮
     btns: [
-      // {
-      //   name: "轨迹",
-      //   funcName: viewDetail,
-      // },
+      {
+        name: "轨迹",
+        funcName: "trajectory",
+      },
       {
         name: "调度",
         funcName: "goDispatchPage",

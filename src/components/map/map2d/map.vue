@@ -855,6 +855,15 @@ const addCenterTxt = (data) => {
         style: style,
       });
       label.text = name;
+      label.on('click',function(){
+        console.log(center)
+        // map.flyTo(center[1], center[0])
+        $mitt.emit("flyTo", {
+          lat: center[1],
+          lng: center[0],
+          zoom: 11
+        })
+      })
       labelLayer.addGraphic(label);
     });
   });

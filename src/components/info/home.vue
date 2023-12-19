@@ -13,6 +13,7 @@ import map2d from "@/components/map/map2d/map.vue";
 import { assetsUrl } from "@/components/map/map2d/hook/index";
 import rainfallThreePopup from './rainfallThreePopup.vue'
 import { useEventBus } from "@vueuse/core";
+import {getRygj} from '@/api/modules/home.js'
 
 const bus = useEventBus("goDispatchPage");
 const listener = function (e) {
@@ -32,6 +33,19 @@ const data = reactive({
   searchList: [],
 });
 
+const trajectoryBus = useEventBus("trajectory");
+const trajectoryBusListener = function (e) {
+  console.log("轨迹",e)
+  let param = {
+    personalId: e.id,
+    startTime: "2023-12-17 00:00:00",
+    endTime: "2023-12-18 00:00:00",
+  }
+  getRygj(param).then(res=>{
+    console.log("res:",res)
+  })
+};
+trajectoryBus.on(trajectoryBusListener);
 const toggleGeomtryGroupClick = (val) => {
   if (val) {
     //展开
@@ -52,6 +66,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   bus.off(listener);
+  trajectoryBus.off(trajectoryBusListener);
 });
 
 watch(route, (val) => {

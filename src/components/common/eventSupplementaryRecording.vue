@@ -22,6 +22,13 @@ const getEventInfo = function (id) {
     for (let key in formData.value) {
       formData.value[key] = res.data[key];
     }
+    // formData.value.eventType = 2
+    fileList.value=res.files.map(item=>{
+      return {
+        ...item,
+        name: item.fileName
+      }
+    })
   });
 };
 getEventTypeList().then((res) => {
@@ -65,9 +72,9 @@ const formData = ref({
   emergency: 1,
   deathNum: 0,
   poisoningNum: 0,
-  injuryNum: 0,
+  minorWoundNum: 0,
   seriousInjuryNum: 0,
-  relocationNum: 0,
+  trappedNum: 0,
   bemissingNum: 0,
   typeId: "",
   id: ""
@@ -78,6 +85,13 @@ const submitForm = function () {
     console.log(res)
     ElMessage.success("补录成功");
     closeDialog()
+  }).catch(err=>{
+    console.log("err",err)
+    ElMessage.warning({
+      type: "warning",
+      message: "请填写完整再保存",
+      offset: 500
+    })
   })
 };
 const selectLocationRef = ref();
@@ -91,17 +105,17 @@ const totalCount = computed(() => {
   let {
     deathNum,
     poisoningNum,
-    injuryNum,
+    minorWoundNum,
     seriousInjuryNum,
-    relocationNum,
+    trappedNum,
     bemissingNum,
   } = formData.value;
   return (
     (deathNum - 0 || 0) +
     (poisoningNum - 0 || 0) +
-    (injuryNum - 0 || 0) +
+    (minorWoundNum - 0 || 0) +
     (seriousInjuryNum - 0 || 0) +
-    (relocationNum - 0 || 0) +
+    (trappedNum - 0 || 0) +
     (bemissingNum - 0 || 0)
   );
 });
@@ -116,18 +130,6 @@ const center = computed(() => {
   };
 });
 const fileList = ref([])
-const beforeAvatarUpload = function(data){
-  console.log(data)
-  let param = {
-    file: data,
-    eventId: formData.value.id
-  }
-  uploadFile(param).then(res=>{
-    // console.log(res)
-    fileList.value.push(data)
-  })
-  return false;
-}
 </script>
 
 <template>
@@ -157,9 +159,9 @@ const beforeAvatarUpload = function(data){
                 /> </el-form-item
             ></el-col>
             <el-col :span="12">
-              <el-form-item label="事件类型" prop="eventType">
+              <el-form-item label="事件类型" prop="typeId">
                 <el-tree-select
-                  v-model="formData.eventType"
+                  v-model="formData.typeId"
                   :data="eventTypeList"
                   check-strictly
                   :render-after-expand="false"
@@ -275,20 +277,20 @@ const beforeAvatarUpload = function(data){
                   <div style="height: 10px"></div>
                   <el-row :gutter="20">
                     <el-col :span="6">
-                      <el-form-item label="合计轻伤" prop="injuryNum">
+                      <el-form-item label="合计轻伤" prop="minorWoundNum">
                         <el-input
                           class="sbl"
-                          v-model="formData.injuryNum"
+                          v-model="formData.minorWoundNum"
                           placeholder="请输入"
                           type="number"
                           clearable
                         /> </el-form-item
                     ></el-col>
                     <el-col :span="6">
-                      <el-form-item label="合计被困" prop="relocationNum">
+                      <el-form-item label="合计被困" prop="trappedNum">
                         <el-input
                           class="sbl"
-                          v-model="formData.relocationNum"
+                          v-model="formData.trappedNum"
                           placeholder="请输入"
                           type="number"
                           clearable
@@ -373,12 +375,13 @@ const beforeAvatarUpload = function(data){
       <div class="fj">
         <div class="fjimg">
           <el-upload
-            v-model="fileList"
+            :file-list="fileList"
             class="avatar-uploader"
             :action="uploadUrl"
             :headers="uploadHeader"
             :data="{eventId: formData.id}"
             :show-file-list="true"
+            :on-success="()=>console.log(fileList)"
           >
             <img v-if="imageUrl" :src="imageUrl" class="avatar" />
             <el-icon v-else class="avatar-uploader-icon">

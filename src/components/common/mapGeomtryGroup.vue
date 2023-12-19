@@ -35,6 +35,7 @@ const mapDrawClear = () => {
 };
 const mapAanlysis = () => {
   console.log("圈选");
+  $mitt.emit("hideAllMarker")
   $mitt.emit("drawGraph", { type: "circle" });
 };
 const mapDrawPic = () => {

@@ -8,6 +8,8 @@ export default {
       { name: "事件名称", key: "name" },
       { name: "事件类型", key: "typeName" },
       { name: "事发时间", key: "time" },
+      { name: "上报人", key: "reportPersonal" },
+      { name: "上报单位", key: "reportOrg" },
       { name: "事发地点", key: "location" },
       { name: "事件描述", key: "cont" },
       // { name: '分机号码', key: 'aphone', iconUrl: assetsUrl('/icons/video.png'), funcName:"phone" },
