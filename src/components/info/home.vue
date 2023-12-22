@@ -12,6 +12,8 @@ import eventView from "../common/eventView.vue";
 import map2d from "@/components/map/map2d/map.vue";
 import { assetsUrl } from "@/components/map/map2d/hook/index";
 import rainfallThreePopup from './rainfallThreePopup.vue'
+import yjxx from "@/views/components/yjxx.vue";
+
 import { useEventBus } from "@vueuse/core";
 import {getRygj} from '@/api/modules/home.js'
 
@@ -157,6 +159,7 @@ const handleScreenAuto = () => {
       <eventSupplementaryRecording></eventSupplementaryRecording>
       <eventView></eventView>
       <rainfallThreePopup></rainfallThreePopup>
+      <yjxx></yjxx>
       <router-view></router-view>
     </div>
   </div>

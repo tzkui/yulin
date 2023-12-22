@@ -1,21 +1,28 @@
 <script setup>
 import { nextTick, ref, onUnmounted } from "vue";
 import { ElMessage } from "element-plus";
+import phones from '@/api/phones.js'
 
 import { useEventBus } from "@vueuse/core";
 const showPhoneCall = ref(false);
 const phoneCall = function (info) {
   let phone = info.phone || info.linkPhone;
-  console.log("Phone: ",phone)
   if (phone) {
     showPhoneCall.value = false;
+    let id = "0" + phone;
+    for(const num of phones){
+      if(phone.startsWith(num)){
+        id = phone;
+        break;
+      }
+    }
     nextTick(() => {
       showPhoneCall.value = true;
       nextTick(() => {
         const option = {
           access_type: 1,
           key: window.kdApiKey,
-          devices: [{ id: "0" + phone, type: "TEMP_MOBILEPHONE" }],
+          devices: [{ id:id, type: "TEMP_MOBILEPHONE" }],
           isDemo: true,
         };
         window.kdDispatchConference.createMeeting(
