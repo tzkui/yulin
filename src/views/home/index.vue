@@ -3,7 +3,7 @@
     <!-- 地图 -->
     <div class="map"></div>
     <!-- 无缝滚动 -->
-    <div class="scollBox">
+    <div class="scollBox" @click="openYjxx">
       <img src="../../assets/natural/tongzhi.png" class="tz" />
       <scrollBanner :content="bannerContent"></scrollBanner>
       <!-- <span class="tz-num">2</span> -->
@@ -291,7 +291,9 @@ const disaster_synthesis = ref([
 ]);
 const eventListTitle = ref();
 //
-
+const openYjxx = function(){
+  $mitt.emit("openWarningDetailDialog", {})
+}
 const currentEvent = ref();
 
 const currentEventLevelType = ref({ markerType: "", id: "" });

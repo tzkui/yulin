@@ -15,7 +15,7 @@ import { getFxgz } from "@/api/modules/zrzh.js";
 
 const $mitt = inject("$mitt");
 
-const emits = defineEmits(['closeAll'])
+const emits = defineEmits(["closeAll"]);
 // 水雨情信息列表
 const syqList = ref([
   { id: "ylzd", name: "雨量站点" },
@@ -25,9 +25,24 @@ const syqList = ref([
   { id: "hdzd", name: "河道站点" },
 ]);
 const qxList = ref([
-  { id: "qxyt", name: "气象云图", imgUrl: assetsUrl("/natural/qxyt.png") },
-  { id: "qxldt", name: "气象雷达图", imgUrl: assetsUrl("/natural/qxldt.png") },
-  { id: "jslxx", name: "降水量信息", imgUrl: assetsUrl("/natural/jslxx.png") },
+  {
+    id: "qxyt",
+    name: "气象云图",
+    path: "https://weather.cma.cn/web/channel-d3236549863e453aab0ccc4027105bad.html",
+    height: 583
+  },
+  {
+    id: "qxldt",
+    name: "气象雷达图",
+    path: "https://weather.cma.cn/web/channel-281.html",
+    height: 726
+  },
+  {
+    id: "jslxx",
+    name: "降水量信息",
+    path: "https://weather.cma.cn/web/channel-339.html",
+    height: 700
+  },
 ]);
 const closeDialog = function () {
   clearAllMarker();
@@ -124,7 +139,7 @@ const getSyqList = function () {
             gsw: "123",
             address: "0mm",
             status: "#25E3D8",
-            name: item.name
+            name: item.name,
           },
         },
       };
@@ -180,18 +195,19 @@ const clearAllMarker = function () {
   $mitt.emit("hideAllMarker");
 };
 const openDialog = function (info, flag) {
-  if(info.id===selectedItem.value){
+  if (info.id === selectedItem.value) {
     clearAllMarker();
-    selectedItem.value = ""
+    selectedItem.value = "";
     return;
   }
-  emits("closeAll")
+  emits("closeAll");
   selectedItem.value = info.id;
   // 如果是气象信息
   if (flag) {
     qxxx_dialog_info.value = {
       name: info.name,
-      imgUrl: info.imgUrl,
+      path: info.path,
+      height: info.height,
     };
   }
 };
@@ -200,8 +216,8 @@ const showQxxxDialog = computed(() => {
   return arr.includes(selectedItem.value);
 });
 defineExpose({
-  closeDialog
-})
+  closeDialog,
+});
 onMounted(() => {
   getSyqList();
 });
@@ -275,16 +291,19 @@ onMounted(() => {
     class="qxxx_dialog"
     :title="qxxx_dialog_info.name"
     :dialogValue="showQxxxDialog"
-    width="970px"
-    height="800px"
+    width="875px"
+    :height="qxxx_dialog_info.height+80+'px'"
     @closeHandle="closeDialog"
   >
-    <div style="width: 928px; height: 720px">
-      <img
-        :src="qxxx_dialog_info.imgUrl"
-        style="width: 100%; height: 100%"
-        alt=""
-      />
+    <div style="width: 828px; overflow: hidden" :style="{height:qxxx_dialog_info.height+'px' }">
+      <div style="margin-left: -338px; margin-top: -415px">
+        <iframe
+          width="1200"
+          height="1200"
+          :src="qxxx_dialog_info.path"
+          scrolling="no"
+        ></iframe>
+      </div>
     </div>
   </qxxxDialog>
 </template>
@@ -335,9 +354,9 @@ onMounted(() => {
     }
   }
 }
-  .qxxx_dialog {
-    width: auto;
-    height: auto;
-    transform: translate(calc(960px - 50%), calc(540px - 50%));
-  }
+.qxxx_dialog {
+  width: auto;
+  height: auto;
+  transform: translate(calc(960px - 50%), calc(540px - 50%));
+}
 </style>
