@@ -35,6 +35,7 @@ import {
   defineCustomElement,
   defineProps,
 } from "vue";
+
 import mapEdit from "./components/map-edit.vue";
 import mapRoute from "./components/map-route.vue";
 import popupInx from "./components/index.vue";
@@ -63,6 +64,7 @@ let map = null,
   // showLayerGroup={},
   measure = null,
   editLayer = null,
+  pointLayer = null,
   editLayerGroup = {},
   labelLayer = null,
   routeLayer = null;
@@ -124,6 +126,11 @@ const initMap = () => {
     name: "文字渲染图层",
     id: "labelLayer",
   });
+  pointLayer = new mars2d.layer.GraphicLayer({
+    name: "点图层",
+    id: "pointLayer",
+  });
+  map.addLayer(pointLayer);
   // drawLayer = new mars2d.layer.GraphicLayer({
   //     hasEdit: true,
   //     isAutoEditing: true // 绘制完成后是否自动激活编辑
@@ -855,15 +862,15 @@ const addCenterTxt = (data) => {
         style: style,
       });
       label.text = name;
-      label.on('click',function(){
-        console.log(center)
+      label.on("click", function () {
+        console.log(center);
         // map.flyTo(center[1], center[0])
         $mitt.emit("flyTo", {
           lat: center[1],
           lng: center[0],
-          zoom: 11
-        })
-      })
+          zoom: 11,
+        });
+      });
       labelLayer.addGraphic(label);
     });
   });
@@ -932,7 +939,7 @@ const mapToPic = function () {
       img.src = dataUrl;
       const a = document.createElement("a");
       a.href = dataUrl;
-      a.download = "截图_"+new Date().getTime();
+      a.download = "截图_" + new Date().getTime();
 
       // 模拟点击链接以触发下载
       a.click();
@@ -940,6 +947,33 @@ const mapToPic = function () {
     .catch(function (error) {
       console.error("转换为图像时出错：", error);
     });
+};
+
+const addTrajectory = function (data) {
+  console.log(data);
+  const list = data.list || [];
+  if (list.length >= 2) {
+    let coordinates = list.map((item) => {
+      return [item.mapX, item.mapY];
+    });
+    // 遍历坐标点，添加点到图层
+    for (var i = 0; i < coordinates.length; i++) {
+      // 创建点要素
+      var pointGraphic = new mars2d.graphic.Point({
+        latlng: coordinates[i],
+        style: {
+          color: "red",
+          pixelSize: 10,
+        },
+      });
+      console.log(pointGraphic)
+      pointLayer.addGraphic(pointGraphic)
+    }
+    $mitt.emit("flyTo",{
+      lat: list[0].mapY,
+      lng: list[0].mapX,
+    })
+  }
 };
 
 onMounted(() => {
@@ -1112,6 +1146,9 @@ onMounted(() => {
       return;
     }
     addMapGlLayer(data);
+  });
+  $mitt.on("addTrajectory", (data) => {
+    addTrajectory(data);
   });
 });
 onUnmounted(() => {

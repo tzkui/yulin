@@ -40,11 +40,14 @@ const trajectoryBusListener = function (e) {
   console.log("轨迹",e)
   let param = {
     personalId: e.id,
-    startTime: "2023-12-17 00:00:00",
-    endTime: "2023-12-18 00:00:00",
+    // startTime: "2023-12-17 00:00:00",
+    // endTime: "2023-12-18 00:00:00",
   }
   getRygj(param).then(res=>{
     console.log("res:",res)
+    $mitt.emit("addTrajectory",{
+      list: res.data
+    })
   })
 };
 trajectoryBus.on(trajectoryBusListener);

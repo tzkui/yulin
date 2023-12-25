@@ -130,6 +130,14 @@ const center = computed(() => {
   };
 });
 const fileList = ref([])
+
+const pdfUrl = ref("")
+const previewFile = function(data){
+  console.log(data)
+  pdfUrl.value = "http://127.0.0.1:5500/test.pdf";
+  showPdf.value = true;
+}
+const showPdf = ref(false)
 </script>
 
 <template>
@@ -382,6 +390,7 @@ const fileList = ref([])
             :data="{eventId: formData.id}"
             :show-file-list="true"
             :on-success="()=>console.log(fileList)"
+            :onPreview="previewFile"
           >
             <img v-if="imageUrl" :src="imageUrl" class="avatar" />
             <el-icon v-else class="avatar-uploader-icon">
@@ -403,6 +412,17 @@ const fileList = ref([])
     ref="selectLocationRef"
     :center="center"
   ></selectLocation>
+  
+  <dialogVue
+    :dialogValue="showPdf"
+    :title="'文件预览'"
+    width="1000px"
+    height="780px"
+    top="500px"
+    @closeHandle="showPdf=false"
+  >
+  <iframe :src="pdfUrl" width="960" height="700" frameborder="0"></iframe>
+</dialogVue>
 </template>
 
 <style lang="scss" scoped>
@@ -535,5 +555,14 @@ const fileList = ref([])
     background: rgba(0, 163, 206, 0.2) !important;
     right: 0;
   }
+}
+.preview{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  height: 700px;
+  z-index: 99999;
 }
 </style>
