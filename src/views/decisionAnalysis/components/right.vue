@@ -31,7 +31,6 @@
               </div>
             </div>
           </div>
-          <!-- 可多选box -->
           <div class="checkboxs">
             <div
               v-for="(item, index) in disaster_check_data"
@@ -42,7 +41,7 @@
               }"
               @click="selectZddx(item)"
             >
-              {{ item.name }}
+              {{ item.name }}&nbsp;<span style="color: #e6964f;">{{ item.num }}</span>
             </div>
           </div>
           <!-- 列表 -->
@@ -529,7 +528,7 @@ const getMarkerInfo = function (typeId, data) {
         address: data.address,
       },
     };
-  }else if (typeId == "尾矿库") {
+  } else if (typeId == "尾矿库") {
     return {
       markerType: "qyxx",
       id: data.id,
@@ -557,9 +556,15 @@ const getAllDisasters = function () {
     typeIds: disaster_check_data.value.map((item) => item.value),
   };
   getZdfhmb(params).then((res) => {
+    console.log("zzzzz", res);
     effect_cont.value[0].num = Math.floor(res.data.totalArea);
     effect_cont.value[1].num = Math.floor(res.data.total);
     res.data.data.forEach((item) => {
+      for (const info of disaster_check_data.value) {
+        if (info.value === item.typeId) {
+          info.num = item.count;
+        }
+      }
       allDisasters.value[item.typeId] = item.defenceAims.map((info) => {
         return {
           name: info.name || info.enterpriseName,
@@ -568,7 +573,7 @@ const getAllDisasters = function () {
         };
       });
     });
-    console.log("xxxxxx:",allDisasters.value)
+    console.log("xxxxxx:", allDisasters.value);
     nextTick(() => {
       for (const key in allDisasters.value) {
         allDisasters.value[key].forEach((item) => {
@@ -587,19 +592,16 @@ const getAllAnalysis = function () {
     typeIds: analysis_check_data.value.map((item) => item.value),
   };
   getYybzfx(params).then((res) => {
-    console.log(res);
     let data = res.data;
     for (const key in data) {
       let list = data[key] || [];
-      allAnalysis.value[key] = list
-        .map((item) => {
-          return {
-            name: item.name,
-            id: item.id,
-            markerInfo: getMarkerInfo(key, item),
-          };
-        })
-        .slice(0, 10);
+      allAnalysis.value[key] = list.map((item) => {
+        return {
+          name: item.name,
+          id: item.id,
+          markerInfo: getMarkerInfo(key, item),
+        };
+      });
     }
     nextTick(() => {
       console.log(allAnalysis.value);

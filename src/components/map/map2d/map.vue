@@ -954,8 +954,16 @@ const addTrajectory = function (data) {
   const list = data.list || [];
   if (list.length >= 2) {
     let coordinates = list.map((item) => {
-      return [item.mapX, item.mapY];
+      return [item.mapY, item.mapX];
     });
+    coordinates = [
+      [38.441162, 110.129700],
+      [37.749023, 108.956909],
+      [37.545776, 108.533936],
+      [37.501831, 109.363403],
+      [37.776489, 110.473022],
+      [37.166748, 110.256042],
+    ]
     // 遍历坐标点，添加点到图层
     for (var i = 0; i < coordinates.length; i++) {
       // 创建点要素
@@ -966,13 +974,24 @@ const addTrajectory = function (data) {
           pixelSize: 10,
         },
       });
-      console.log(pointGraphic)
-      pointLayer.addGraphic(pointGraphic)
+      console.log(pointGraphic);
+      pointLayer.addGraphic(pointGraphic);
     }
-    $mitt.emit("flyTo",{
-      lat: list[0].mapY,
-      lng: list[0].mapX,
-    })
+    const latlngs = mars2d.PointTrans.coords2latlngs(coordinates.map(item=>[item[1],item[0]]));
+    
+    const polylineLayer = new mars2d.graphic.Polyline({
+      latlngs: latlngs,
+      style: {
+        color: "yellow",
+        width: 3,
+      },
+      attr: { remark: "示例1" },
+    });
+    LineLayer.addLayer(polylineLayer)
+    $mitt.emit("flyTo", {
+      lat: coordinates[0][0],
+      lng: coordinates[0][1],
+    });
   }
 };
 

@@ -7,13 +7,16 @@ import { getSjxx } from "@/api/modules/home.js";
 import moment from "moment";
 const $mitt = inject("$mitt");
 
+const originList = ref([]);
 const event_list = ref([]);
 const getEventList = function (id) {
   getSjxx().then((res) => {
     let today = moment().format("YYYY-MM-DD");
-    let todayLen = res.data.filter(item=>item.eventDate.slice(0,10)===today).length
+    let todayLen = res.data.filter(
+      (item) => item.eventDate.slice(0, 10) === today
+    ).length;
     boxTitle.value = `今日事件<span style='font-size: 28px;color: #EFAD2C;'> ${todayLen} </span>起`;
-    event_list.value = res.data.slice(0,50).map((item) => {
+    originList.value = res.data.map((item) => {
       return {
         typeName: item.typeName,
         time: item.reportDate?.slice(5),
@@ -28,25 +31,28 @@ const getEventList = function (id) {
         lat: item.mapY,
       };
     });
-    if(id){
-      nextTick(()=>{
-        $mitt.emit("hideAllMarker")
-        document.getElementById("event_"+id).click()
-      })
+    event_list.value = originList.value.slice(0, 50);
+    if (id) {
+      nextTick(() => {
+        $mitt.emit("hideAllMarker");
+        document.getElementById("event_" + id).click();
+      });
     }
   });
 };
+const isScroll = ref(true);
+const search_value = ref("");
 onMounted(() => {
   getEventList();
-  $mitt.on("changeEventState",function(info){
+  $mitt.on("changeEventState", function (info) {
     let id = info.id;
-    getEventList(id)
-  })
+    getEventList(id);
+  });
 });
 let currentMarkerTypeData = ref({});
 const setMarker = (data) => {
   // console.log(data);
-  $mitt.emit("hideAllMarker")
+  $mitt.emit("hideAllMarker");
   let position = [110.00449, 37.95844];
 
   let item = currentMarkerTypeData.value.item || {}; //撒点信息
@@ -60,8 +66,8 @@ const setMarker = (data) => {
   for (const key in obj) {
     obj[key] = (obj[key] + "").replace(" ", "&nbsp;");
   }
-  const l1 = ['待处理','属实'];
-  const l2 = ["属实","已启动响应"]
+  const l1 = ["待处理", "属实"];
+  const l2 = ["属实", "已启动响应"];
   obj = {
     ...obj,
     // hideEventSupplementaryRecording:!l1.includes(item.state),
@@ -70,7 +76,7 @@ const setMarker = (data) => {
   };
   let markerData = {
     markerType: item.type,
-    id:  item.id,
+    id: item.id,
     lng: item.lng,
     lat: item.lat,
     name: item.typeName + item.id,
@@ -83,15 +89,38 @@ const setMarker = (data) => {
   $mitt.emit("openPopup", markerData);
   $mitt.emit("flyTo", markerData);
 };
-const boxTitle= ref("")
-onUnmounted(()=>{
+const searchData = function () {
+  let keyWord = search_value.value || "";
+  if (keyWord) {
+    event_list.value = originList.value
+      .filter((item) => {
+        return item.cont?.includes(keyWord) || item.name?.includes(keyWord);
+      })
+      .slice(0, 50);
+    isScroll.value = false;
+  } else {
+    event_list.value = originList.value.slice(0, 50);
+    isScroll.value = true;
+  }
+};
+const boxTitle = ref("");
+onUnmounted(() => {
   $mitt.all.delete("changeEventState");
-})
-const a = ref(false)
+});
+const a = ref(false);
 </script>
 
 <template>
   <ViewBox :title="boxTitle">
+    <div class="search_box">
+      <el-input v-model="search_value" placeholder="请输入关键字" clearable />
+      <img
+        class="img"
+        @click="searchData"
+        src="@/assets/home/icon_search.png"
+        alt=""
+      />
+    </div>
     <div class="event_information">
       <ul class="event_list">
         <li class="list_head list">
@@ -106,12 +135,13 @@ const a = ref(false)
             :list="event_list"
             hover
             :step="0.5"
+            v-model="isScroll"
           >
             <li
               class="list_item list"
               v-for="(item, index) in event_list"
               :key="index"
-              :id="'event_'+item.id"
+              :id="'event_' + item.id"
               @click="setMarker(item)"
             >
               <span class="item_type">{{ item.typeName }}</span>
@@ -216,6 +246,31 @@ const a = ref(false)
       text-overflow: ellipsis;
       overflow: hidden;
     }
+  }
+}
+.search_box {
+  display: flex;
+  align-items: center;
+  width: 161px;
+  height: 32px;
+  background: rgba(9, 39, 67, 0.7);
+  border: 1px solid #1e89fd;
+  padding-right: 12px;
+  margin-bottom: 10px;
+  position: absolute;
+  right: 30px;
+  top: -40px;
+  :deep(.el-input__inner) {
+    &::-webkit-input-placeholder {
+      font-size: 16px;
+      color: #aacbf6 !important;
+    }
+  }
+
+  .img {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
   }
 }
 </style>

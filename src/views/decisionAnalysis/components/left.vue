@@ -467,9 +467,11 @@ const isEarthquake = computed(() => {
 const initDisasterTypes = async () => {
   let res = await getZqfxDropdowndata();
   // console.log('initDisasterTypes=========>',res);
-  disaster_types.value = res.data;
-  current_disater_type.value = res.data[0].value;
-  initZqfxLeveldata(res.data[0].value);
+  let list = res.data || []
+  disaster_types.value = [list.pop(),...list];
+  console.log("xxxxxx",disaster_types.value)
+  current_disater_type.value = disaster_types.value[0].value;
+  initZqfxLeveldata(disaster_types.value[0].value);
 };
 const startTime = ref("");
 const endTime = ref("");
@@ -865,7 +867,7 @@ const selectTime = function ([start, end]) {
         .el-select-dropdown__item {
           font-size: 16px !important;
           height: 28px !important;
-          padding: 4px 0 !important;
+          padding: 4px !important;
         }
       }
     }

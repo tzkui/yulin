@@ -48,7 +48,7 @@ const checkDisaster = function (value) {
 // 获取zqqy的类型选择数据
 const getxlType = async () => {
   let res = await getZqfxDropdowndata();
-  disaster_type.value = res.data;
+  disaster_type.value = res.data.slice(0,-1);
   // console.log(res, "数据看")
 };
 // 定义一个头部的数据
