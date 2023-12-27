@@ -13,9 +13,9 @@ import map2d from "@/components/map/map2d/map.vue";
 import { assetsUrl } from "@/components/map/map2d/hook/index";
 import rainfallThreePopup from './rainfallThreePopup.vue'
 import yjxx from "@/views/components/yjxx.vue";
+import timeSelect from './timeSelect.vue'
 
 import { useEventBus } from "@vueuse/core";
-import {getRygj} from '@/api/modules/home.js'
 
 const bus = useEventBus("goDispatchPage");
 const listener = function (e) {
@@ -37,18 +37,7 @@ const data = reactive({
 
 const trajectoryBus = useEventBus("trajectory");
 const trajectoryBusListener = function (e) {
-  console.log("轨迹",e)
-  let param = {
-    personalId: e.id,
-    // startTime: "2023-12-17 00:00:00",
-    // endTime: "2023-12-18 00:00:00",
-  }
-  getRygj(param).then(res=>{
-    console.log("res:",res)
-    $mitt.emit("addTrajectory",{
-      list: res.data
-    })
-  })
+  $mitt.emit("trajectoryTimeSelect",e)
 };
 trajectoryBus.on(trajectoryBusListener);
 const toggleGeomtryGroupClick = (val) => {
@@ -163,6 +152,7 @@ const handleScreenAuto = () => {
       <eventView></eventView>
       <rainfallThreePopup></rainfallThreePopup>
       <yjxx></yjxx>
+      <timeSelect></timeSelect>
       <router-view></router-view>
     </div>
   </div>

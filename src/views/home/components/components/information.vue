@@ -91,6 +91,7 @@ const setMarker = (data) => {
 };
 const searchData = function () {
   let keyWord = search_value.value || "";
+  console.log("zzzzzz",originList.value)
   if (keyWord) {
     event_list.value = originList.value
       .filter((item) => {

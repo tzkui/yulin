@@ -956,14 +956,14 @@ const addTrajectory = function (data) {
     let coordinates = list.map((item) => {
       return [item.mapY, item.mapX];
     });
-    coordinates = [
-      [38.441162, 110.129700],
-      [37.749023, 108.956909],
-      [37.545776, 108.533936],
-      [37.501831, 109.363403],
-      [37.776489, 110.473022],
-      [37.166748, 110.256042],
-    ]
+    // coordinates = [
+    //   [38.441162, 110.129700],
+    //   [37.749023, 108.956909],
+    //   [37.545776, 108.533936],
+    //   [37.501831, 109.363403],
+    //   [37.776489, 110.473022],
+    //   [37.166748, 110.256042],
+    // ]
     // 遍历坐标点，添加点到图层
     for (var i = 0; i < coordinates.length; i++) {
       // 创建点要素
@@ -987,11 +987,27 @@ const addTrajectory = function (data) {
       },
       attr: { remark: "示例1" },
     });
+    
     LineLayer.addLayer(polylineLayer)
+    
+    const movingMarker = new mars2d.graphic.MovingMarker({
+      latlngs: latlngs,
+      durations: [4000, 4000, 9000, 4000, 4000, 4000, 4000, 4000, 4000, 4000],
+      style: {
+        image: assetsUrl("/images/marker/icon_renyuan.png"),
+        iconSize: [30, 30],
+        autostart: true
+      },
+      attr: { remark: "示例1" }
+    })
+    LineLayer.addGraphic(movingMarker)
+    
     $mitt.emit("flyTo", {
       lat: coordinates[0][0],
       lng: coordinates[0][1],
+      zoom: 18
     });
+
   }
 };
 
