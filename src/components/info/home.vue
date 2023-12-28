@@ -14,6 +14,7 @@ import { assetsUrl } from "@/components/map/map2d/hook/index";
 import rainfallThreePopup from './rainfallThreePopup.vue'
 import yjxx from "@/views/components/yjxx.vue";
 import timeSelect from './timeSelect.vue'
+import searchDialog from './searchDialog.vue'
 
 import { useEventBus } from "@vueuse/core";
 
@@ -153,6 +154,7 @@ const handleScreenAuto = () => {
       <rainfallThreePopup></rainfallThreePopup>
       <yjxx></yjxx>
       <timeSelect></timeSelect>
+      <searchDialog></searchDialog>
       <router-view></router-view>
     </div>
   </div>

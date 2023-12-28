@@ -15,10 +15,15 @@ const getLists = function () {
     endTime: times.value[1],
   };
   getRygj(param).then((res) => {
+    if(res.data?.length>0){
     $mitt.emit("addTrajectory",{
       list: res.data
     })
     showDialog.value = false;
+
+    }else{
+      ElMessage.warning("该时间段内无轨迹信息")
+    }
   });
 };
 onMounted(() => {

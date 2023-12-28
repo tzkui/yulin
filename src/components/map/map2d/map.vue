@@ -189,7 +189,34 @@ const addGraphicMarker = (graphicLayer, item) => {
     let json = JSON.stringify(item);
     json = json.replaceAll(" ", "#####");
     e.target.setPopupContent(`<map-popup data=${json}></map-popup>`);
-    console.log("graphic--->", e);
+    console.log("graphic--->", e, item);
+    if (item.markerType === "yjry") {
+      if (graphic.style.html.includes("icon_renyuan_red.png")) {
+        graphic.style = {
+          html: `<div class="divMarker ${item.markerType}" id='icon_${item.markerType}_${item.id}'>
+                        <div class='markerIcon' style=' background-image:url(${url});'>
+                            <div class='markertxt'> ${lableData.text}</div>
+                        </div>
+                      </div>`,
+          offsetY: 0,
+          horizontalOrigin: mars2d.HorizontalOrigin.CENTER,
+          verticalOrigin: mars2d.VerticalOrigin.BOTTOM,
+        };
+      } else {
+        graphic.style = {
+          html: `<div class="divMarker ${item.markerType}" id='icon_${item.markerType}_${item.id}'>
+                  <div class='markerIcon' style=' background-image:url(${assetsUrl(
+                    "/images/marker/icon_renyuan_red.png"
+                  )});'>
+                      <div class='markertxt'> ${lableData.text}</div>
+                  </div>
+                </div>`,
+          offsetY: 0,
+          horizontalOrigin: mars2d.HorizontalOrigin.CENTER,
+          verticalOrigin: mars2d.VerticalOrigin.BOTTOM,
+        };
+      }
+    }
     let back = {
       cartesian: e.containerPoint, //转geojson需要的数据
       point: e.latlng, //点击点的经纬度
@@ -971,14 +998,18 @@ const addTrajectory = function (data) {
         latlng: coordinates[i],
         style: {
           color: "red",
-          pixelSize: 10,
+          pixelSize: 8,
         },
       });
-      console.log(pointGraphic);
+      pointGraphic.bindPopup(`
+        <div style="background: #12202F;padding: 10px;">${list[i].updateTime}</div>
+      `)
       pointLayer.addGraphic(pointGraphic);
     }
-    const latlngs = mars2d.PointTrans.coords2latlngs(coordinates.map(item=>[item[1],item[0]]));
-    
+    const latlngs = mars2d.PointTrans.coords2latlngs(
+      coordinates.map((item) => [item[1], item[0]])
+    );
+
     const polylineLayer = new mars2d.graphic.Polyline({
       latlngs: latlngs,
       style: {
@@ -987,27 +1018,26 @@ const addTrajectory = function (data) {
       },
       attr: { remark: "示例1" },
     });
-    
-    LineLayer.addLayer(polylineLayer)
-    
+
+    LineLayer.addLayer(polylineLayer);
+
     const movingMarker = new mars2d.graphic.MovingMarker({
       latlngs: latlngs,
       durations: [4000, 4000, 9000, 4000, 4000, 4000, 4000, 4000, 4000, 4000],
       style: {
         image: assetsUrl("/images/marker/icon_renyuan.png"),
         iconSize: [30, 30],
-        autostart: true
+        autostart: true,
       },
-      attr: { remark: "示例1" }
-    })
-    LineLayer.addGraphic(movingMarker)
-    
+      attr: { remark: "示例1" },
+    });
+    LineLayer.addGraphic(movingMarker);
+
     $mitt.emit("flyTo", {
       lat: coordinates[0][0],
       lng: coordinates[0][1],
-      zoom: 18
+      zoom: 16,
     });
-
   }
 };
 

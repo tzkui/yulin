@@ -45,6 +45,10 @@ const mapDrawPic = () => {
 const mapToPic = function(){
   $mitt.emit("mapToPic")
 }
+const mapSearch = function(){
+  $mitt.emit("openSearchDialog")
+}
+
 const videoConferencingBus = useEventBus("openVideoConferencing")
 const mapLayer = function(){
   videoConferencingBus.emit({id:1})
