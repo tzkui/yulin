@@ -29,6 +29,8 @@ const getEventList = function (id) {
         id: item.id,
         lng: item.mapX,
         lat: item.mapY,
+        reportPersonal: item.reportPersonal,
+        reportOrgName: item.reportOrgName
       };
     });
     event_list.value = originList.value.slice(0, 50);

@@ -369,7 +369,7 @@ const getEnterpriseTypeList = async function (type = "1") {
 const getmonitorList = async function (type = "1") {
   let res = await getZdddspjk({ type });
   if (res.code == 200) {
-    monitorList.value = res.data.slice(0,2)
+    monitorList.value = res.data.slice(0,10)
   } 
 };
 
@@ -497,30 +497,23 @@ const setChartAction = function () {
 
 // 自动播放
 let timer = null;
+
+let videoTimer = null;
 let chartDataIndex = 0;
-// const chartAutoPlay = function () {
-//   timer = setInterval(() => {
-//     // const n = accidentData.value.length;
-//     // if (chartDataIndex === n - 1) {
-//     //   chartDataIndex = 0;
-//     // } else {
-//     //   chartDataIndex++;
-//     // }
-//     accidentTypeChart.dispatchAction({
-//       type: "highlight",
-//       dataIndex: chartDataIndex,
-//     });
-//     accidentTypeChart.dispatchAction({
-//       type: "downplay",
-//       dataIndex: chartDataIndex === 0 ? n - 1 : chartDataIndex - 1,
-//     });
-//     accidentTypeChart.dispatchAction({
-//       type: "showTip",
-//       seriesIndex: 0,
-//       dataIndex: chartDataIndex,
-//     });
-//   }, 1000);
-// };
+
+const monitorListRef = ref()
+const scrollVideo = function (){
+  let i=1
+  videoTimer = setInterval(()=>{
+    monitorListRef.value.scrollTo({
+      left: 382*i++,
+      behavior: "smooth",
+    })
+    if(monitorList.value.length/2<=i){
+      i = 0
+    }
+  },10000)
+}
 
 onMounted(() => {
   getAccidentTypeList();
@@ -531,10 +524,12 @@ onMounted(() => {
     let id = info.id;
     getAccidentTypeList("4",id)
   })
+  scrollVideo()
   // chartAutoPlay();
 });
 onUnmounted(() => {
   clearInterval(timer);
+  clearInterval(videoTimer)
   $mitt.all.delete("changeEventState");
 });
 // 使用defineEmits注册一个自定义事件
@@ -548,6 +543,8 @@ const qylxcl = (item,index) => {
   console.log(item, "看看我是个什么东东");
   emit("getValue10", item,index, qylxisshow.value);
 };
+
+
 
 // 下面这个就是企业类型的的相关的打点的事件的了
 // const qilxclick=function(item){
@@ -623,9 +620,9 @@ const qylxcl = (item,index) => {
         </div>
       </div>
     </ViewBox>
-    <ViewBox title="重点地点视频监控" :height="198">
+    <ViewBox title="风险隐患点视频监控" :height="198">
       <div class="box2">
-        <ul class="monitorList">
+        <ul class="monitorList" ref="monitorListRef">
           <li v-for="(item,index) in monitorList" :key="item.id" @click="openVideoConferencing(item)">
             <h265 :playerUrl="item.playerUrl"></h265>
             <div class="infoBox">
@@ -854,23 +851,25 @@ const qylxcl = (item,index) => {
   }
 
   .box2 {
+    width: 100%;
+    height: 130px;
     .monitorList {
       display: flex;
-      flex-wrap: wrap;
-      overflow-y: auto;
-      height: 122px;
-      justify-content: space-between;
-
-      &::-webkit-scrollbar {
-        display: none;
+      height: 125px;
+      position: relative;
+      width: auto;
+      gap: 10px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      &::--webkit-scrollbar{
+        display: block;
       }
-
       li {
         position: relative;
         width: 181px;
         height: 120px;
-        margin-top: 4px;
         cursor: pointer;
+        flex-shrink: 0;
 
         &:nth-child(1),
         &:nth-child(2) {

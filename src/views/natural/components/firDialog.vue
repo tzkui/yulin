@@ -103,7 +103,7 @@ const closeDialog = function(){
     overflow-y: auto;
     &::-webkit-scrollbar{
       display: block;
-      width: 10px;
+      width: 8px;
     }
   }
 }</style>

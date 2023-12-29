@@ -910,7 +910,6 @@ export default {
     // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
     rows: [
       { name: "名称", key: "name" },
-      { name: "位置", key: "location" },
       { name: "联系人", key: "linkName" },
       {
         name: "联系方式",
@@ -918,6 +917,7 @@ export default {
         iconUrl: assetsUrl("/icons/phone.png"),
         funcName: "phone",
       },
+      { name: "位置", key: "location" },
     ],
     // 右下角的按钮
     btns: [],
@@ -930,7 +930,6 @@ export default {
     rows: [
       { name: "名称", key: "name" },
       { name: "类型", key: "typeName" },
-      { name: "位置", key: "location" },
       { name: "联系人", key: "linkName" },
       {
         name: "联系方式",
@@ -938,6 +937,7 @@ export default {
         iconUrl: assetsUrl("/icons/phone.png"),
         funcName: "phone",
       },
+      { name: "位置", key: "location" },
     ],
     // 右下角的按钮
     btns: [],

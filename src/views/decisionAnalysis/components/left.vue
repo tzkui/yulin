@@ -808,6 +808,9 @@ const setMarker = (type, data) => {
       name: item.eventName,
       location: item.eventAddress,
       cont: item.eventContent,
+      typeName: item.typeName,
+      eventLevelName: item.eventLevelName,
+
     },
   };
   if (type === "zqzhcx") {

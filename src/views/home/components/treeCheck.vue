@@ -297,8 +297,8 @@ const checkItem = (obj, checked) => {
             }
           }
           $mitt.emit("addMarker", markerData);
-          $mitt.emit("openPopup", markerData);
-          $mitt.emit("flyTo", markerData);
+          // $mitt.emit("openPopup", markerData);
+          // $mitt.emit("flyTo", markerData);
         }
       }
     }

@@ -8,6 +8,8 @@ export default {
       { name: "名称", key: "name" },
       { name: "地址", key: "location" },
       { name: "事件", key: "cont" },
+      { name: "灾情类型", key: "typeName" },
+      { name: "灾情等级", key: "eventLevelName" },
       // { name: '分机号码', key: 'aphone', iconUrl: assetsUrl('/icons/video.png'), funcName:"phone" },
       // { name: '移动号码', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName:"phone" },
     ],
