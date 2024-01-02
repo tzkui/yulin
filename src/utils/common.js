@@ -145,7 +145,7 @@ export default function Common() {
     return rgbaColor;
   }
   function initTree(data, config = {}) {
-    // data = cloneData(data)
+    data = cloneData(data)
     var id = config.id || "id"
     var pid = config.pid || "pid"
     var children = config.children || "children"
@@ -179,119 +179,6 @@ export default function Common() {
     }
     return Object.keys(dict);
   };
-  // 导出
-  // function exportModsHandle(title, head, arr, isMore) {
-  //     let data = [];
-  //     if (isMore) {
-  //         data = [[title], head, ...arr]
-  //     } else {
-  //         data = [[title], head, arr]
-  //     }
-  //     let titles = [title];
-  //     var sheet = XLSX.utils.json_to_sheet(data, {
-  //         skipHeader: true,
-  //     });
-  //     /**设置标题头背景色 */
-  //     for (const key in sheet) {
-  //         // 第一行，表头
-  //         let ix = key.replace(/[^0-9]/ig, '');
-  //         if (ix === '1') {
-  //             sheet[key].s = {
-  //                 font: {//字体
-  //                     sz: 18,
-  //                 },
-  //                 alignment: {
-  //                     horizontal: 'center' //水平居中
-  //                 }
-  //             }
-  //         } else if (ix === '2') {
-  //             sheet[key].s = {
-  //                 font: {//字体
-  //                     bold: true
-  //                 },
-  //                 // border: {//边框
-  //                 //     bottom: {
-  //                 //         style: 'thin',
-  //                 //         color: 'FF000000'
-  //                 //     }
-  //                 // },
-  //                 alignment: {
-  //                     horizontal: 'center' //水平居中
-  //                 }
-  //             }
-  //         } else {
-  //             if (Object.prototype, toString.call(sheet[key]) === '[object Object]') {
-  //                 sheet[key].s = {
-  //                     alignment: {
-  //                         horizontal: 'center' //水平居中
-  //                     }
-  //                 }
-  //             }
-  //         }
-  //     }
-  //     let colsP = head.map(() => {
-  //         let obj = {
-  //             'wch': 20 //列宽
-  //         }
-  //         return obj;
-  //     })
-  //     sheet['!cols'] = colsP;//列宽
-  //     sheet['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: head.length - 1 } }]
-  //     openDownload(
-  //         sheet2blob(sheet, titles.join("-")),
-  //         titles.join("-") + ".xlsx"
-  //     );
-  // }
-  // function sheet2blob(sheet, sheetName) {
-  //     let wb = XLSX.utils.book_new();
-  //     wb.SheetNames.push(sheetName);
-  //     wb.Sheets[sheetName] = sheet;
-  //     var wbout = XLSXStyle.write(wb, {
-  //         bookType: "",
-  //         bookSST: false,
-  //         type: "binary",
-  //     });
-  //     var blob = new Blob([s2ab(wbout)], { type: "" }, sheetName);
-  //     // 字符串转ArrayBuffer
-  //     function s2ab(s) {
-  //         var buf = new ArrayBuffer(s.length);
-  //         var view = new Uint8Array(buf);
-  //         for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xff;
-  //         return buf;
-  //     }
-  //     return blob;
-  // }
-  // function openDownload(url, saveName) {
-  //     if (typeof url == "object" && url instanceof Blob) {
-  //         url = URL.createObjectURL(url); // 创建blob地址
-  //     }
-  //     var aLink = document.createElement("a");
-  //     aLink.href = url;
-  //     aLink.download = saveName || ""; // HTML5新增的属性，指定保存文件名，可以不要后缀，注意，file:///模式下不会生效
-  //     var event;
-  //     if (window.MouseEvent) event = new MouseEvent("click");
-  //     else {
-  //         event = document.createEvent("MouseEvents");
-  //         event.initMouseEvent(
-  //             "click",
-  //             true,
-  //             false,
-  //             window,
-  //             0,
-  //             0,
-  //             0,
-  //             0,
-  //             0,
-  //             false,
-  //             false,
-  //             false,
-  //             false,
-  //             0,
-  //             null
-  //         );
-  //     }
-  //     aLink.dispatchEvent(event);
-  // }
   return {
     objCopyPro,
     cloneData,

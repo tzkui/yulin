@@ -57,9 +57,6 @@
   <qyxxCheckbox
     name="辖区企业列表"
     :listData="qyListData"
-    :treeConfig="{ label: 'title' }"
-    listType="tree"
-    dialogType="qyxx"
     v-if="firDialogFlags.qyxx"
     @closeDialog="closeDialog"
   ></qyxxCheckbox>
@@ -76,12 +73,9 @@ import selectDate from "./selectDate.vue";
 import "../components/lunbo";
 // 导入这个柱状图的图表
 import { inject, ref, onMounted, reactive, onUnmounted } from "vue";
-// 导入需要打点的这些数据
-import { securemarList } from "../../../api/affair_ys";
-import { viewDetail } from "@/utils/funcNames/ys";
 import { viewDetail as viewDetailx } from "@/utils/funcNames/tzk.js";
 import { useEventBus } from "@vueuse/core";
-import qyxxCheckbox from "@/views/natural/components/selectDialog.vue";
+import qyxxCheckbox from "@/views/safe/components/qyxxSelectDialog.vue";
 import checkboxList from "./checkboxList.vue";
 import { getWhqyjcyj, getXqqytjfx, getYjxxtjfx } from "@/api/modules/aqsc.js";
 // 定义一个数据来代表环形图是否显示和隐藏的
@@ -302,24 +296,35 @@ const getco = async function () {
     coxdata.value = res.data.tj.map((item) => item.mc);
     cxydata.value = res.data.tj.map((item) => item.sz);
     console.log(coxdata.value, cxydata.value);
+    let typeDict = {}
     qyListData.value = res.data.tree.map((item) => {
       if (item.spare1) {
         let json = JSON.parse(item.spare1);
+        let type = json.enterpriseType;
+        typeDict[type] = typeDict[type] || 0;
+        typeDict[type]+=1
         return {
-          ...item,
+          id: item.id,
+          dataType: item.dataType,
+          pid: item.pid,
+          title: item.title,
           num:item.count,
           treeId: item.dataType + "--" + item.id,
           mapX: json.longitude,
-          mapY: json.latitude
+          mapY: json.latitude,
+          searchInfo: json.enterpriseType+","+item.title,
+          detail: json,
         }
       } else {
         return {
           ...item,
           num: item.count,
           treeId: item.dataType + "--" + item.id,
+          searchInfo: ""
         };
       }
     });
+    console.log(typeDict,"mmmmmm")
   }
   // 下面就是柱状图的一些配置的了
   var chartDom = document.getElementById("columnar");

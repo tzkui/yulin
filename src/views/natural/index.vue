@@ -1,23 +1,37 @@
-
 <script setup>
 import pageLeftContent from "@/components/common/pageLeftContent.vue";
 import pageRightContent from "@/components/common/pageRightContent.vue";
-import scrollBanner from '@/components/common/scrollBanner.vue'
+import scrollBanner from "@/components/common/scrollBanner.vue";
 import right from "../../views/natural/right.vue";
 import { ref, onMounted, reactive, inject } from "vue";
 import left from "./left.vue";
-import {getQxyj} from '@/api/modules/home.js'
+import { getQxyj } from "@/api/modules/home.js";
+import { getDzsb } from "@/api/modules/zrzh.js";
 
 const $mitt = inject("$mitt");
-let yjInfo = {}
+let yjInfo = {};
+let dzInfo = {};
+const dzScrollContent = ref("");
 onMounted(() => {
   getQxyj().then((res) => {
-    yjInfo = res.data[0]
-    bannerContent.value = res.data[0]?.alarmContent
+    yjInfo = res.data[0];
+    bannerContent.value = res.data[0]?.alarmContent;
   });
-})
+  getDzsb().then((res) => {
+    let data = res.data;
+    dzScrollContent.value = `${data.locationC}于 ${
+      data.oTime
+    } 发生了${parseFloat(data.m)}级地震，震源深度为${data.epiDepth}千米`;
 
-const bannerContent = ref("")
+    dzInfo = {
+      ...data,
+      alarmContent: dzScrollContent.value,
+      alarmName: `${data.locationC}发生地震`,
+    };
+  });
+});
+
+const bannerContent = ref("");
 // 决定这些框线是否需要隐藏的东东
 const showDialog = ref({
   ck: false,
@@ -28,20 +42,27 @@ const showDialog = ref({
 
 // 下面就是接收子组件的数据
 const getValue = (value) => {
-  showDialog.value = value
-}
-const openYjxx = function(){
-  $mitt.emit("openWarningDetailDialog", yjInfo)
-}
+  showDialog.value = value;
+};
+const openYjxx = function () {
+  $mitt.emit("openWarningDetailDialog", { ...yjInfo, warningType11: "yj" });
+};
+
+const openDz = function () {
+  $mitt.emit("openWarningDetailDialog", { ...dzInfo, warningType11: "dz" });
+};
 </script>
 
 <template>
   <div class="bigScreen" ref="bigScreen">
     <!-- 无缝滚动 -->
     <div class="scollBox" @click="openYjxx">
-      <img src="../../assets/natural/tongzhi.png" class="tz">
-      
+      <img src="../../assets/natural/tongzhi.png" class="tz" />
       <scrollBanner :content="bannerContent"></scrollBanner>
+    </div>
+    <div class="scollBox" style="top: 140px" @click="openDz">
+      <img src="../../assets/natural/tongzhi.png" class="tz" />
+      <scrollBanner :content="dzScrollContent"></scrollBanner>
     </div>
     <!-- 左侧内容 -->
     <pageLeftContent>
@@ -53,8 +74,6 @@ const openYjxx = function(){
     </pageRightContent>
   </div>
 </template>
-
-
 
 <style scoped lang="less">
 .mapBox {
@@ -106,7 +125,7 @@ const openYjxx = function(){
         margin-right: 10px;
         font-size: 16px;
         font-weight: 500;
-        color: #FFFFFF;
+        color: #ffffff;
         padding-left: 10px;
       }
     }
@@ -129,7 +148,6 @@ const openYjxx = function(){
   height: 400px;
 }
 
-
 // 多选框 弹框内容样式
 .checkbox_popup {
   padding: 0 10px;
@@ -140,10 +158,15 @@ const openYjxx = function(){
     :deep(.el-input) {
       flex: 1;
       height: 36px;
-      background: linear-gradient(90deg, #0698D7 0%, #1E89FD 100%);
+      background: linear-gradient(90deg, #0698d7 0%, #1e89fd 100%);
       border-radius: 4px 4px 4px 4px;
       border: 1px solid !important;
-      border-image: linear-gradient(90deg, rgba(6, 152, 215, 1), rgba(30, 137, 253, 1)) 1 1 !important;
+      border-image: linear-gradient(
+          90deg,
+          rgba(6, 152, 215, 1),
+          rgba(30, 137, 253, 1)
+        )
+        1 1 !important;
       margin-right: 3px;
       font-size: 16px;
     }
@@ -151,7 +174,7 @@ const openYjxx = function(){
     .button {
       width: 97px;
       height: 36px;
-      background: linear-gradient(90deg, #0698D7 0%, #1E89FD 100%) !important;
+      background: linear-gradient(90deg, #0698d7 0%, #1e89fd 100%) !important;
       border-radius: 4px 4px 4px 4px;
       font-size: 16px;
     }
@@ -169,14 +192,15 @@ const openYjxx = function(){
     .el-checkbox__inner {
       width: 20px;
       height: 20px;
-      border: 1px solid #0075A4;
+      border: 1px solid #0075a4;
       border-radius: 0;
       background: transparent;
     }
 
     .el-checkbox__input.is-checked .el-checkbox__inner {
       border: none;
-      background: url('@/assets/natural/check_Property.png') center/99% 99% no-repeat;
+      background: url("@/assets/natural/check_Property.png") center/99% 99%
+        no-repeat;
 
       &::after {
         display: none;
@@ -187,11 +211,11 @@ const openYjxx = function(){
       font-size: 16px;
       font-family: Source Han Sans SC-Regular, Source Han Sans SC;
       font-weight: 400;
-      color: #FFFFFF;
+      color: #ffffff;
       line-height: 19px;
 
       .yellow {
-        color: #FFDF53;
+        color: #ffdf53;
         margin-left: 10px;
       }
     }
@@ -200,9 +224,9 @@ const openYjxx = function(){
       margin: 4px 0;
     }
 
-    .el-tree-node:focus>.el-tree-node__content,
+    .el-tree-node:focus > .el-tree-node__content,
     .el-tree-node__content:hover {
-      background-color: RGBA(10, 91, 131, .3);
+      background-color: RGBA(10, 91, 131, 0.3);
     }
   }
 }

@@ -7,10 +7,13 @@ const warningInfo = ref({});
 const closeHandle = function () {
   showDialog.value = false;
 };
+const type = ref("")
 const showDialog = ref(false);
 $mitt.on("openWarningDetailDialog", function (info) {
   showDialog.value = true;
   console.log(info)
+  warningInfo.value = info
+  type.value = info.warningType11
 });
 </script>
 
@@ -19,7 +22,7 @@ $mitt.on("openWarningDetailDialog", function (info) {
     :dialogValue="showDialog"
     :title="'预警信息'"
     width="980px"
-    height="460px"
+    height="490px"
     top="500px"
     @closeHandle="closeHandle"
   >
@@ -27,41 +30,47 @@ $mitt.on("openWarningDetailDialog", function (info) {
       <table class="table-box">
         <tr>
           <td class="label">预警标题</td>
-          <td colspan="3">榆林气象台解除霜冻蓝色预警信号</td>
+          <td colspan="3">{{warningInfo.alarmName || "暂无数据"}}</td>
         </tr>
         <tr>
           <td class="label">预警类别</td>
-          <td>霜冻</td>
+          <td>{{warningInfo.alarmType || "暂无数据"}}</td>
           <td class="label">预警信号名称</td>
-          <td>霜冻蓝色</td>
+          <td>{{"暂无数据"}}</td>
         </tr>
         <tr>
-          <td class="label">预警等级</td>
-          <td>蓝色</td>
-          <td class="label">发布状态</td>
-          <td>已解除</td>
+          <td class="label" v-if="type==='yj'">预警等级</td>
+          <td class="label" v-else>地震等级</td>
+          <td>{{warningInfo.alarmColor || parseFloat(warningInfo.m) || "暂无数据"}}</td>
+          <template v-if="type==='yj'">
+            <td class="label">发布状态</td>
+            <td>{{"暂无数据"}}</td>
+          </template>
+          <template v-else>
+            <td class="label">震源深度</td>
+            <td>{{warningInfo.epiDepth}}千米</td>
+          </template>
         </tr>
         <tr>
           <td class="label">发布时间</td>
-          <td>2022-0404 09:05:34</td>
+          <td>{{warningInfo.alarmTime||warningInfo.oTime||"暂无数据"}}</td>
           <td class="label">签发者姓名</td>
-          <td>夏XX</td>
+          <td>{{"暂无数据"}}</td>
         </tr>
-        <tr>
+        <tr class="tr-h6">
           <td class="label">预警内容</td>
-          <td colspan="3">解除霜冻蓝色预警</td>
+          <td colspan="3">{{warningInfo.alarmContent || "暂无数据"}}</td>
         </tr>
         <tr class="tr-h6">
           <td class="label">预警原因说明</td>
           <td colspan="3">
-            3至4月和10至11月，48小时内最低气温将降至4摄氏度以下，或者已经下降到4摄氏度以下并将持续可能或已对农业、林业等产生一定影响
+            {{ "暂无数据" }}
           </td>
         </tr>
         <tr class="tr-h6">
           <td class="label">防范建议</td>
           <td colspan="3">
-            1.政府及相关部门做好防需冻准备工作;
-            2.对茶叶、蔬菜、花卉、瓜果等作物采取一定防护措施
+            {{"暂无数据"}}
           </td>
         </tr>
       </table>
@@ -74,7 +83,7 @@ $mitt.on("openWarningDetailDialog", function (info) {
 .from-content {
   margin: auto;
   width: 937px;
-  height: 364px;
+  height: 400px;
   margin-top: 10px;
   background: rgba(0, 163, 206, 0.2);
 

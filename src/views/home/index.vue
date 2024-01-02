@@ -6,20 +6,10 @@
     <div class="scollBox" @click="openYjxx">
       <img src="../../assets/natural/tongzhi.png" class="tz" />
       <scrollBanner :content="bannerContent"></scrollBanner>
-      <!-- <span class="tz-num">2</span> -->
-      <!-- <vue3-seamless-scroll
-        :list="newsList"
-        direction="left"
-        class="seamless-warp2"
-      >
-        <ul class="item">
-          <li
-            v-for="(item, index) in newsList"
-            v-text="item"
-            :key="index"
-          ></li>
-        </ul>
-      </vue3-seamless-scroll> -->
+    </div>
+    <div class="scollBox" style="top: 140px" @click="openDz">
+      <img src="../../assets/natural/tongzhi.png" class="tz" />
+      <scrollBanner :content="dzScrollContent"></scrollBanner>
     </div>
     <!-- 左侧内容 -->
     <pageLeftContent>
@@ -172,6 +162,7 @@ import { Vue3SeamlessScroll } from "vue3-seamless-scroll";
 import { getYjjcxx, getQxyj } from "@/api/modules/home.js";
 
 
+import { getDzsb } from "@/api/modules/zrzh.js";
 const pageLeftContent = defineAsyncComponent(() => import('@/components/common/pageLeftContent.vue'))
 const pageRightContent = defineAsyncComponent(() => import('@/components/common/pageRightContent.vue'))
 const left = defineAsyncComponent(() => import('./components/left.vue'))
@@ -292,8 +283,11 @@ const disaster_synthesis = ref([
 const eventListTitle = ref();
 //
 const openYjxx = function(){
-  $mitt.emit("openWarningDetailDialog", {})
+  $mitt.emit("openWarningDetailDialog", { ...yjInfo, warningType11: "yj" })
 }
+const openDz = function () {
+  $mitt.emit("openWarningDetailDialog", { ...dzInfo, warningType11: "dz" });
+};
 const currentEvent = ref();
 
 const currentEventLevelType = ref({ markerType: "", id: "" });
@@ -439,9 +433,26 @@ const setMarker = (type, item) => {
     $mitt.emit("flyTo", markerData);
   }
 };
+let dzInfo = {};
+let yjInfo = {}
+const dzScrollContent = ref("");
 const getDatas = function () {
   getQxyj().then((res) => {
+    yjInfo = res.data[0];
     bannerContent.value = res.data[0]?.alarmContent
+  });
+  
+  getDzsb().then((res) => {
+    let data = res.data;
+    dzScrollContent.value = `${data.locationC}于 ${
+      data.oTime
+    } 发生了${parseFloat(data.m)}级地震，震源深度为${data.epiDepth}千米`;
+
+    dzInfo = {
+      ...data,
+      alarmContent: dzScrollContent.value,
+      alarmName: `${data.locationC}发生地震`,
+    };
   });
 };
 onMounted(() => {
