@@ -1,17 +1,18 @@
 <script setup>
 import ViewBox from "@/components/common/view-box.vue";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, inject, onUnmounted } from "vue";
 import { getZbxx } from "@/api/modules/zrzh.js";
 import moment from "moment";
 import "moment/locale/zh-cn"; // 引入中文语言文件
 
+const $mitt = inject("$mitt");
 const phoneCallRef = ref();
 const phone = function (info) {
   phoneCallRef.value.phoneCall(info.phone);
 };
 const list = ref([]);
 const getList = function () {
-  getZbxx({sj: moment().format("YYYY-MM-DD")}).then((res) => {
+  getZbxx({ sj: moment().format("YYYY-MM-DD") }).then((res) => {
     list.value = res.data.map((item) => {
       return {
         id: item.id,
@@ -46,17 +47,28 @@ const getDialogTime = function () {
   }
   return parseTime(time1) + " ~ " + parseTime(time2);
 };
-const showDutyDialog = ref(false)
-const openDutyDialog = function(){
+const showDutyDialog = ref(false);
+const openDutyDialog = function () {
   showDutyDialog.value = true;
-}
-const closeDutyDialog = function(){
-  showDutyDialog.value = false
-}
+};
+const closeDutyDialog = function () {
+  showDutyDialog.value = false;
+};
 const viewTitle = ref(getCnTime() + " 值班安排");
+
+const audioControlFun = function (info = {}) {
+  if (info.order === "openDuty") {
+    openDutyDialog();
+  }
+};
+
 onMounted(() => {
   getList();
   getDialogTime();
+  $mitt.on("audioControl", audioControlFun);
+});
+onUnmounted(() => {
+  $mitt.off("audioControl", audioControlFun);
 });
 </script>
 <template>
@@ -64,7 +76,12 @@ onMounted(() => {
     <div class="onduty_information">
       <!-- <div class="btn"></div> -->
       <div class="onduty_box">
-        <div class="onduty_item" v-for="item in list" :key="item.id" @click="openDutyDialog">
+        <div
+          class="onduty_item"
+          v-for="item in list"
+          :key="item.id"
+          @click="openDutyDialog"
+        >
           <div class="duty">{{ item.job }}</div>
           <div>
             <span class="name"> {{ item.name }} </span>
@@ -84,11 +101,7 @@ onMounted(() => {
     <div class="duty_detail_dialog">
       <div class="dialog_title">值班安排</div>
       <div class="close_box">
-        <el-icon 
-        size="20" 
-        color="#fff" 
-        style="cursor: pointer"
-        >
+        <el-icon size="20" color="#fff" style="cursor: pointer">
           <Close @click="closeDutyDialog" />
         </el-icon>
       </div>
@@ -195,7 +208,7 @@ onMounted(() => {
     line-height: 56px;
     font-size: 20px;
   }
-  .close_box{
+  .close_box {
     position: absolute;
     right: 20px;
     top: 18px;

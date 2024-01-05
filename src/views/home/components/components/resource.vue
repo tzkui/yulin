@@ -1,6 +1,6 @@
 <script setup>
 import ViewBox from "@/components/common/view-box.vue";
-import { onMounted, ref, nextTick, inject } from "vue";
+import { onMounted, ref, nextTick, inject, onUnmounted } from "vue";
 import { bg_config } from "../../config";
 
 import { useEventBus } from "@vueuse/core";
@@ -225,13 +225,6 @@ const openDialog = (item, index) => {
   console.log(item, index,selectDatas)
   if(item.num===0) return ;
   $mitt.emit("hideAllMarker");
-  // if (item.type === "txl") {
-  //   showSelect.value = false;
-  //   emit("closeAllDialog");
-  //   showTxl.value = true;
-  //   return;
-  // }
-  // showTxl.value = false;
   if (markerDatas[item.type]) {
     let info = markerDatas[item.type];
     let dialogType = item.type;
@@ -265,6 +258,27 @@ const openDialog = (item, index) => {
     emit("openDialog", item, index);
   }
 };
+const audioControlFun = function (info = {}) {
+  if (info.order === "openHomeYjzy") {
+    let type = info.type;
+    outer: for(let i=0;i<resources_list_all.value.length; i++){
+      let list = resources_list_all.value[i]
+      console.log(list)
+      let index=0;
+      for(const item of list){
+        if(item.type===type){
+          changeResources(resources_tab.value[i].type,i)
+          nextTick(()=>{
+            openDialog(item,index)
+          })
+          break outer;
+        }
+        index++;
+      }
+    }
+
+  }
+};
 const closeDialog = function () {
   $mitt.emit("hideAllMarker");
   showSelect.value = false;
@@ -275,6 +289,10 @@ onMounted(() => {
   getSpjkList();
   getTxlList();
   mockData();
+  $mitt.on("audioControl", audioControlFun)
+});
+onUnmounted(() => {
+  $mitt.off("audioControl", audioControlFun);
 });
 </script>
 <template>

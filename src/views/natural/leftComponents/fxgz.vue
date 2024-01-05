@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref, inject } from "vue";
+import { computed, onMounted, ref, inject, onUnmounted } from "vue";
 import { assetsUrl } from "@/components/map/map2d/hook/index";
 
 import qxxxDialog from "@/components/common/dialog.vue";
@@ -218,8 +218,28 @@ const showQxxxDialog = computed(() => {
 defineExpose({
   closeDialog,
 });
+const audioControlFun = function (info = {}) {
+  if (info.order === "openZrzhFxgz") {
+    let id = info.id;
+    for(const syq of syqList.value){
+      if(syq.id === id){
+        return openDialog(syq)
+      }
+    }
+    for(const qx of qxList.value){
+      if(qx.id === id){
+        return openDialog(qx, true)
+      }
+    }
+
+  }
+};
 onMounted(() => {
   getSyqList();
+  $mitt.on("audioControl", audioControlFun)
+});
+onUnmounted(() => {
+  $mitt.off("audioControl", audioControlFun);
 });
 </script>
 

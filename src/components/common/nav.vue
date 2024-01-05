@@ -1,6 +1,6 @@
 <script setup>
 import fscreen from "@/utils/fullscreen.js";
-import { reactive, ref, onMounted } from "vue";
+import { reactive, ref, onMounted, inject, onUnmounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import tabzrurl from "@/assets/header/head_tab1_active.png";
 import zrzh from "@/assets/header/head_tab1.png";
@@ -9,12 +9,11 @@ import aqsc from "@/assets/header/head_tab2.png";
 import aqscActive from "@/assets/header/head_tab2_active.png";
 
 import zhdd from "@/assets/header/head_tab3.png";
-import sy from "@/assets/header/sy.png";
-import syActive from "@/assets/header/sy_active.png";
 import zhddActive from "@/assets/header/head_tab3_active.png";
 import jcfx from "@/assets/header/head_tab4.png";
 import jcfxActive from "@/assets/header/head_tab4_active.png";
 
+const $mitt = inject("$mitt");
 const pageHeader = ref();
 // 全屏
 const toggleFullscreen = function () {
@@ -35,13 +34,6 @@ const data = reactive({
       taburl: zhdd,
       activeurl: zhddActive,
     },
-    // {
-    //   name: "首页",
-    //   path: "/home",
-    //   value: 3,
-    //   taburl: sy,
-    //   activeurl: syActive,
-    // },
     {
       name: "自然灾害",
       path: "/natural",
@@ -71,6 +63,12 @@ const data = reactive({
   },
 });
 
+const audioControlFun = function (info = {}) {
+  if (info.order === "changeRoute") {
+    let index = info.index;
+    navCheckHandle(data.navList[index])
+  }
+};
 onMounted(() => {
   data.pageRoute = ROUTE_INFO.path;
   data.navList.forEach((item) => {
@@ -78,6 +76,10 @@ onMounted(() => {
       data.checkValue = item.value;
     }
   });
+  $mitt.on("audioControl", audioControlFun)
+});
+onUnmounted(() => {
+  $mitt.off("audioControl", audioControlFun);
 });
 
 const navCheckHandle = (row) => {
@@ -101,7 +103,6 @@ const gohome = () => {
   window.location.href = href;
 };
 const gosjfx = () => {
-  console.log(window.baseIp1)
   let href = window.baseIp1 + ":20128/map/analysis/page/danger/sjfx";
   window.location.href = href;
 };

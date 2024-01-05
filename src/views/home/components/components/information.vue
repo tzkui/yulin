@@ -55,8 +55,6 @@ let currentMarkerTypeData = ref({});
 const setMarker = (data) => {
   // console.log(data);
   $mitt.emit("hideAllMarker");
-  let position = [110.00449, 37.95844];
-
   let item = currentMarkerTypeData.value.item || {}; //撒点信息
   if (!data.icon) {
     item = { ...item, ...data };
@@ -72,7 +70,7 @@ const setMarker = (data) => {
   const l2 = ["属实", "已启动响应"];
   obj = {
     ...obj,
-    // hideEventSupplementaryRecording:!l1.includes(item.state),
+    hideEventSupplementaryRecording:!l1.includes(item.state),
     hideDispatch: !l2.includes(item.state),
     hideEventVerification: item.state !== "待处理",
   };
@@ -93,7 +91,6 @@ const setMarker = (data) => {
 };
 const searchData = function () {
   let keyWord = search_value.value || "";
-  console.log("zzzzzz",originList.value)
   if (keyWord) {
     event_list.value = originList.value
       .filter((item) => {

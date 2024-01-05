@@ -324,7 +324,6 @@ const getco = async function () {
         };
       }
     });
-    console.log(typeDict,"mmmmmm")
   }
   // 下面就是柱状图的一些配置的了
   var chartDom = document.getElementById("columnar");

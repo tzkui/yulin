@@ -1,7 +1,6 @@
 <script setup>
 import ViewBox from "@/components/common/view-box.vue";
-import { ref, inject, onMounted, computed } from "vue";
-import { getFxgz } from "@/api/modules/zrzh.js";
+import { ref, inject, onMounted, onUnmounted } from "vue";
 import { getYjjcxx, getQxyj } from "@/api/modules/home.js";
 import ylzdFirDialog from "@/views/natural/components/syqxxFirDialogs/ylzd.vue";
 import hdzdFirDialog from "@/views/natural/components/syqxxFirDialogs/hdzd.vue";
@@ -323,15 +322,6 @@ const setMap = function () {
   let list = yjDetail.value.areas;
   if (!areaFlag) {
     areaFlag = true;
-    // let mittLineData = {
-    //   url: assetsUrl("/geoJson/jx.json"),
-    //   geoType: "jxArea",
-    //   mask: false,
-    //   type: "mask",
-    //   style: {
-    //     fillColor: "#CD8F55",
-    //   },
-    // };
     list.forEach((item) => {
       $mitt.emit("drawGeoGraph", {
         url: assetsUrl(`/geoJson/${jsonUrls[item]}.json`),
@@ -350,8 +340,22 @@ const setMap = function () {
     });
   }
 };
+const audioControlFun = function (info = {}) {
+  if (info.order === "openHomeYjjcxx") {
+    let type = info.type;
+    for(const typeInfo of warning_type.value){
+      if(typeInfo.type === type){
+        checkWarningType(typeInfo)
+      }
+    }
+  }
+};
 onMounted(() => {
   getDatas();
+  $mitt.on("audioControl", audioControlFun)
+});
+onUnmounted(() => {
+  $mitt.off("audioControl", audioControlFun);
 });
 </script>
 <template>

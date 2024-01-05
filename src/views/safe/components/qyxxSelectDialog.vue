@@ -103,9 +103,6 @@ const searchTreeData = function () {
     initData();
   } else {
     let arr = props.listData.filter((item) => {
-      if (item.dataType === 1) {
-        return true;
-      }
       return item.dataType === 1 || item.searchInfo.includes(searchValue.value);
     });
 
@@ -145,7 +142,7 @@ const searchTreeData = function () {
       />
     </div>
     <div class="checkbox_popup">
-      <el-tree
+      <el-tree-v2
         :data="treeData"
         :props="treeConfig"
         show-checkbox
@@ -161,7 +158,7 @@ const searchTreeData = function () {
             </span>
           </span>
         </template>
-      </el-tree>
+      </el-tree-v2>
     </div>
   </firDialog>
 </template>

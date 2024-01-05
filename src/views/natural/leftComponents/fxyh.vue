@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, inject, nextTick } from "vue";
+import { onMounted, ref, inject, nextTick, onUnmounted } from "vue";
 
 import selectDialogVue from "../components/selectDialog.vue";
 import { getFxyh } from "@/api/modules/zrzh.js";
@@ -64,8 +64,17 @@ const getFxyhInfo = function () {
 };
 
 const selectedItem = ref("");
+const audioControlFun = function (info = {}) {
+  if (info.order === "openZrzhFxyh") {
+    openDialog(info.data)
+  }
+};
 onMounted(() => {
   getFxyhInfo();
+  $mitt.on("audioControl", audioControlFun)
+});
+onUnmounted(() => {
+  $mitt.off("audioControl", audioControlFun);
 });
 </script>
 

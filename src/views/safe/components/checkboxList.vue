@@ -152,7 +152,6 @@ const selectedItem = function (info) {
 };
 const getListData = function () {
   getDtsd().then((res) => {
-    console.log("hhhhhhhhhhh", res);
     let spjk = res.data.spjk;
     let dict = {
       "园区监控": "hgyqjk",

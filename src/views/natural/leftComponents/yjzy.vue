@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, inject, nextTick } from "vue";
+import { onMounted, ref, inject, nextTick, onUnmounted } from "vue";
 import {useStore} from 'vuex'
 import { getYjzy } from "@/api/modules/zrzh.js";
 import selectDialogVue from "../components/selectDialog.vue";
@@ -30,8 +30,6 @@ const getYjzyList = function () {
     })
     yjzyInfo.value = data;
     window.STORE_INFO["yjzyInfos"] = data
-    // sessionStorage.setItem("yjzyInfos",JSON.stringify(data))
-    // store.commit("pointLists/SET_YJZYINFOS",data);
     yjzyList.value = [
       { id: "yjry", name: "应急人员", num: data.yjry.sl },
       { id: "yjzj", name: "应急专家", num: data.yjzj.sl },
@@ -86,8 +84,17 @@ defineExpose({
 const selectedItem = ref("");
 
 const treeConfig = ref({});
+const audioControlFun = function (info = {}) {
+  if (info.order === "openZrzhYjzy") {
+    openDialog(info.data)
+  }
+};
 onMounted(() => {
   getYjzyList();
+  $mitt.on("audioControl", audioControlFun)
+});
+onUnmounted(() => {
+  $mitt.off("audioControl", audioControlFun);
 });
 </script>
 
