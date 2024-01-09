@@ -994,4 +994,18 @@ export default {
     // 左下角的列表
     leftBtns: [],
   },
+  dzxx: {
+    title: "地震监测",
+    // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 colorKey: "xxx"
+    rows: [
+      { name: "地震时间", key: "time" },
+      { name: "地震等级", key: "m" },
+      { name: "震源深度", key: "epiDepth" },
+      { name: "地震地址", key: "location" },
+    ],
+    // 右下角的按钮
+    btns: [],
+    // 左下角的列表
+    leftBtns: [],
+  },
 };

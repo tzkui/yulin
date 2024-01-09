@@ -70,7 +70,7 @@ const getSyqList = function () {
       return {
         id: item.id,
         name: item.stnm,
-        num: "--",
+        num: "0mm",
         markerInfo: {
           markerType: "ylzd",
           id: item.id,
@@ -121,9 +121,9 @@ const getSyqList = function () {
       return {
         id: item.id,
         name: item.name,
-        num1: "--",
-        num2: "--",
-        num3: "--",
+        num1: "0",
+        num2: "0",
+        num3: "0",
         markerInfo: {
           markerType: "sk",
           id: item.id,
@@ -134,10 +134,10 @@ const getSyqList = function () {
           label: { text: "水库", font_size: 16 },
           dialogType: "sk",
           details: {
-            dqsw: "123",
-            xxsw: "123",
-            gsw: "123",
-            address: "0mm",
+            dqsw: "0",
+            xxsw: "0",
+            gsw: "0",
+            address: item.xzqhName,
             status: "#25E3D8",
             name: item.name,
           },

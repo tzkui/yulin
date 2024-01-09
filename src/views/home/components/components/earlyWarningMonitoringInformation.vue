@@ -286,6 +286,10 @@ const getDataList = function (item) {
 const checkWarningType = (item) => {
   $mitt.emit("hideAllMarker");
   getDataList(item);
+  console.log(dataList.value)
+  dataList.value.forEach(item=>{
+    $mitt.emit("addMarker", item.markerInfo)
+  })
   if (currentWarningType.value == item.type) {
     currentWarningType.value = "";
   } else {

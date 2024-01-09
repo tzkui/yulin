@@ -41,9 +41,9 @@ const setMarker = function (info) {
             @click="setMarker(item.markerInfo)"
           >
             <div class="line1">{{ item.name }}</div>
-            <div class="line2">{{ item.num1 }}</div>
-            <div class="line3">{{ item.num2 }}</div>
-            <div class="line4">{{ item.num3 }}</div>
+            <div class="line2">{{ 0 }}</div>
+            <div class="line3">{{ 0 }}</div>
+            <div class="line4">{{ 0 }}</div>
           </li>
         </ul>
       </div>

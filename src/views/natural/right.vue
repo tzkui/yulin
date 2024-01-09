@@ -51,15 +51,17 @@
       <div class="main">
         <!-- 这里通过筛选进行判断,然后循环渲染 -->
         <template v-for="(item, index) in warnings" :key="index">
-          <div class="itemtext">
+          <div class="itemtext" @click="yjxxClick(item)">
             <div class="main-title">
-              <p class="maintitleimg" :class="item.type">{{ item.name }}</p>
+              <div class="yjType">{{ item.yjType }}</div>
+              <p class="maintitleimg" :class="item.type" v-if="item.name">{{ item.name }}</p>
               <!-- <img class="maintitleimg" src="../../assets//naturalRightimg/Frame 427320375.png" alt=""> -->
               <p>{{ item.title }}</p>
             </div>
+            <div class="dztime" v-if="item.time">{{ item.time }}</div>
             <div class="text">
               <p>
-                {{ item.content }}
+                预警详情：{{ item.content }}
               </p>
             </div>
           </div>
@@ -170,14 +172,32 @@ const getWarnings = function () {
     console.log(res);
     const levels = ["蓝色预警", "黄色预警", "橙色预警", "红色预警"];
     const types = ["blue_level", "yellow_level", "orange_level", "red_level"];
-    warnings.value = res.data.map((item) => {
+    console.log("zcacaf",res.dzjcList)
+    warnings.value = res.qxyjList.map((item) => {
+      let type = "";
+      for(let i=0;i<levels.length;i++){
+        if(levels[i].includes(item.alarmColor)){
+          type = types[i]
+          break;
+        }
+      }
       return {
-        type: types[item.eventLvl],
-        name: levels[item.eventLvl],
-        title: item.title,
-        content: item.contentText,
+        type: type,
+        name: item.alarmColor,
+        title: item.alarmName,
+        content: item.alarmContent,
+        yjType: "天气预警"
       };
     });
+    res.dzjcList?.forEach(item=>{
+      warnings.value.push({
+        time: item.oTime,
+        title: `${item.locationC}发生${parseFloat(item.m)}级地震`,
+        content: `${item.locationC}发生${parseFloat(item.m)}级地震，震源深度为${item.epiDepth}千米`,
+        yjType: "地震监测",
+        oData: item,
+      })
+    })
   });
 };
 // 下面就是事件信息这个的数据的了哟
@@ -257,6 +277,31 @@ let monedata = ref("");
 // 来判断我点击的是不是原来的这个
 let mmid = ref("");
 const currentIndex = ref();
+const yjxxClick = function(info){
+  console.log(info)
+  if(info.yjType==="天气预警") return;
+  let data = info.oData;
+  let markerInfo = {
+    id: data.cataId,
+    markerType: "dzxx",
+    dialogType: "dzxx",
+    icon: "/images/marker/icon_Earthquake.png",
+    label: {text: "地震监测", font_size: 16},
+    lat: data.epiLat-0,
+    lng: data.epiLon-0,
+    name: "地震监测",
+    details: {
+      location: data.locationC,
+      epiDepth: data.epiDepth+"km",
+      m: data.m-0,
+      time: data.oTime,
+    }
+  }
+  $mitt.emit("hideAllMarker")
+  $mitt.emit("addMarker",markerInfo)
+  $mitt.emit("flyTo",markerInfo)
+  $mitt.emit("openPopup",markerInfo)
+}
 const setMarker = function (type, item, index) {
   // 这个是为了变背景颜色的
   currentIndex.value = index;
@@ -550,7 +595,7 @@ const weathers = ref([
           }
 
           p {
-            width: 180px;
+            width: 270px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -810,5 +855,16 @@ const weathers = ref([
       }
     }
   }
+}
+.yjType{
+  margin-right: 10px;
+  background-color: #061b42;
+  padding: 5px 10px;
+  border: 1px solid #1d75d6;
+  flex-shrink: 0;
+}
+.dztime{
+  font-size: 16px;
+  margin-bottom: 5px;
 }
 </style>

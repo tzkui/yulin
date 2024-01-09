@@ -26,8 +26,8 @@ const setMarker = function (info) {
   <firDialog name="雨量站点" @closeDialog="closeDialog">
     <div class="firDialog_main">
       <div class="btns">
-        <div class="btn btn1">站点雨量排名</div>
-        <div class="btn btn2">乡镇雨量排名</div>
+        <!-- <div class="btn btn1">站点雨量排名</div>
+        <div class="btn btn2">乡镇雨量排名</div> -->
         <select>
           <option value="1">1小时</option>
           <option value="2">2小时</option>
@@ -88,8 +88,9 @@ const setMarker = function (info) {
   }
 
   select {
-    width: 77px;
+    width: 177px;
     height: 36px;
+    padding: 0 10px;
     background: #006688;
     border-radius: 4px;
     font-size: 16px;

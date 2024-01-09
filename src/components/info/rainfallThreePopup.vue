@@ -6,18 +6,64 @@ const bus = useEventBus("rainfallThreePopup");
 const eventListener = function (e) {
   console.log(e);
   showDialog.value = true;
-  popupTitle.value=e.name
+  popupTitle.value = e.name;
+  let str = ["1小时", "3小时", "6小时", "12小时", "24小时"];
+  for (let i = 1; i < 6; i++) {
+    dataList.value[i - 1] = {
+      line1: str[i - 1],
+      line2: parseFloat(e["h" + i]) || 0,
+    };
+  }
   nextTick(() => {
+    const barOption = {
+      tooltip: {
+        trigger: "axis",
+        backgroundColor: "rgba(13,20,26,1)",
+        showContent: true,
+        borderColor: "rgba(255,255,255,0)", //设置自定义边框颜色
+        extraCssText:
+          "box-shadow: 0 0 5px rgba(181, 245, 236, 0.5);padding:5px 15px",
+        textStyle: {
+          color: "#FFF", // 文字的颜色
+          fontSize: "14", // 文字字体大小
+        },
+        axisPointer: {
+          type: "shadow",
+          shadowStyle: {
+            color: "rgba(200, 255, 255, 0.2)",
+            width: "1",
+          },
+        },
+      },
+      xAxis: {
+        type: "category",
+        data: dataList.value.map((item) => item.line1),
+        axisTick: {
+          alignWithLabel: true,
+        },
+      },
+      yAxis: {
+        type: "value",
+        min: 1,
+      },
+      series: [
+        {
+          data: dataList.value.map((item) => item.line2),
+          type: "bar",
+          barWidth: "60%",
+          name: "雨量",
+          itemStyle: {
+            color: "#20BC8A",
+          },
+        },
+      ],
+    };
     chart.value = echarts.init(barEchartRef.value);
     chart.value.setOption(barOption);
   });
 };
-const popupTitle = ref("")
-const dataList = ref([
-  { id: 1, line1: "00：00", line2: "3.9" },
-  { id: 2, line1: "03：00", line2: "2.0" },
-  { id: 3, line1: "06：00", line2: "8.9" },
-]);
+const popupTitle = ref("");
+const dataList = ref([]);
 const showDialog = ref(false);
 bus.on(eventListener);
 const echarts = inject("echarts");
@@ -26,48 +72,6 @@ const closeDialog = function () {
   showDialog.value = false;
 };
 const chart = ref({});
-const barOption = {
-  tooltip: {
-    trigger: "axis",
-    backgroundColor: "rgba(13,20,26,1)",
-    showContent: true,
-    borderColor: "rgba(255,255,255,0)", //设置自定义边框颜色
-    extraCssText:
-      "box-shadow: 0 0 5px rgba(181, 245, 236, 0.5);padding:5px 15px",
-    textStyle: {
-      color: "#FFF", // 文字的颜色
-      fontSize: "14", // 文字字体大小
-    },
-    axisPointer: {
-      type: "shadow",
-      shadowStyle: {
-        color: "rgba(200, 255, 255, 0.2)",
-        width: "1",
-      },
-    },
-  },
-  xAxis: {
-    type: "category",
-    data: dataList.value.map((item) => item.line1),
-    axisTick: {
-      alignWithLabel: true,
-    },
-  },
-  yAxis: {
-    type: "value",
-  },
-  series: [
-    {
-      data: dataList.value.map((item) => item.line2),
-      type: "bar",
-      barWidth: "60%",
-      name: "雨量",
-      itemStyle: {
-        color: "#20BC8A",
-      },
-    },
-  ],
-};
 onUnmounted(() => {
   bus.off(eventListener);
 });
@@ -75,7 +79,7 @@ onUnmounted(() => {
 <template>
   <div class="rainfallThreePopup" v-if="showDialog">
     <div class="header">
-      <div class="title">{{popupTitle}}</div>
+      <div class="title">{{ popupTitle }}</div>
       <div class="close" @click="closeDialog()">
         <el-icon color="#00A3CE" :size="20">
           <Close></Close>
@@ -99,7 +103,7 @@ onUnmounted(() => {
   position: fixed;
   right: 600px;
   top: 400px;
-  min-width: 300px;
+  min-width: 400px;
   box-sizing: border-box;
   z-index: 999;
   // background: #003A54;
