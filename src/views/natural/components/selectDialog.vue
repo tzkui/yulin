@@ -73,6 +73,7 @@ const initData = function () {
       })
     }
   } else {
+    console.log("listdata",props.listData)
     if(props.listData.length> 500){
       treeData.value = [];
       let i=0;
@@ -97,19 +98,20 @@ const initData = function () {
           clearInterval(timer);
         }
       },100)
+    }else{
+      treeData.value = props.listData.map((item) => {
+        idInfoDict[item.id] = item;
+        return {
+          ...item,
+          label:
+            item.label ||
+            item.name ||
+            item.jswz ||
+            item.monitorName ||
+            item.personalName,
+        };
+      });
     }
-    // treeData.value = props.listData.map((item) => {
-    //   idInfoDict[item.id] = item;
-    //   return {
-    //     ...item,
-    //     label:
-    //       item.label ||
-    //       item.name ||
-    //       item.jswz ||
-    //       item.monitorName ||
-    //       item.personalName,
-    //   };
-    // });
   }
 };
 console.log(props.dialogType);

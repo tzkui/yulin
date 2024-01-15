@@ -67,12 +67,14 @@ let resources_list_all = ref([
     { name: "科达", type: "kd", icon: "sphs" },
   ],
   [
-    { name: "危化企业", num: 453, type: "whqy", icon: "spjk" },
     { name: "公安", num: 0, type: "ga", icon: "spjk" },
-    { name: "交警", num: 0, type: "jj", icon: "spjk" },
+    { name: "危化二期", num: 0, type: "wheq", icon: "spjk" },
+    { name: "风险隐患", num: 0, type: "fxyhd", icon: "spjk" },
+    { name: "危化企业", num: 453, type: "whqy", icon: "spjk" },
     { name: "水利", num: 0, type: "sl", icon: "spjk" },
     { name: "住建", num: 0, type: "zj", icon: "spjk" },
     { name: "综合执法", num: 0, type: "zhzf", icon: "spjk" },
+    { name: "高新管委会", num: 0, type: "gxgwh", icon: "spjk" },
   ],
 ]);
 let resources_list = ref([]);
@@ -422,16 +424,17 @@ onUnmounted(() => {
     display: flex;
     flex-wrap: wrap;
     padding-top: 12px;
-
+    overflow-y: auto;
+    height: 150px;
     .list_item {
-      margin: 0 12px 16px 0;
+      margin: 0 6px 16px 0;
       cursor: pointer;
 
       &:nth-child(3n) {
         margin: 0;
       }
 
-      width: calc((100% - 24px) / 3);
+      width: calc((100% - 12px) / 3);
       display: flex;
       font-family: Source Han Sans SC-Regular, Source Han Sans SC;
       font-weight: 400;
@@ -439,7 +442,7 @@ onUnmounted(() => {
       .img {
         width: 56px;
         height: 56px;
-        margin-right: 7px;
+        margin-right: 3px;
       }
 
       .item_cont {
@@ -448,7 +451,7 @@ onUnmounted(() => {
         flex-direction: column;
 
         .cont_name {
-          font-size: 16px;
+          font-size: 15px;
           color: #ffffff;
           line-height: 23px;
           margin-bottom: 6px;

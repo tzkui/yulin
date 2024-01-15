@@ -28,6 +28,7 @@ const closeDialog = function () {
 const treeData = ref([]);
 const originTreeData = ref([]);
 const initData = function () {
+  console.log("xxxxx,执行initData",props)
   for (const info of props.listData) {
     if (info.dataType === 2) {
       idInfoDict["2--" + info.id] = getMarkerInfoByType(info);
@@ -142,7 +143,7 @@ const searchTreeData = function () {
       />
     </div>
     <div class="checkbox_popup">
-      <el-tree-v2
+      <el-tree
         :data="treeData"
         :props="treeConfig"
         show-checkbox
@@ -158,7 +159,7 @@ const searchTreeData = function () {
             </span>
           </span>
         </template>
-      </el-tree-v2>
+      </el-tree>
     </div>
   </firDialog>
 </template>

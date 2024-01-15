@@ -936,17 +936,18 @@ const addHostLayer = (data) => {
   if (layerWork) {
     map.getLayerById("HeatLayer").remove();
   }
+  console.log("热力图数据：", data)
   layerWork = new mars2d.layer.HeatLayer(data, {
     id: "HeatLayer",
     radius: 30,
     blur: 10, //模糊度 越大越模糊
     minOpacity: 0.3, //最开始不透明度
     gradient: {
-      0.4: "blue",
-      0.6: "cyan",
+      0.4: "red",
+      0.6: "yellow",
       0.7: "lime",
-      0.8: "yellow",
-      1: "red",
+      0.8: "cyan",
+      1: "blue",
     }, //渐变色
   });
   map.addLayer(layerWork);

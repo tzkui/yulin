@@ -116,7 +116,11 @@ const getDatas = function () {
       for (const data of list) {
         if (info.name === data.mc) {
           info.num = data.sl;
-          info.markerList = data.jh;
+          if(info.name==="地质监测"){
+
+          }else{
+            info.markerList = data.jh;
+          }
         }
       }
     }
