@@ -6,7 +6,7 @@ import { bg_config } from "../../config";
 import { useEventBus } from "@vueuse/core";
 import selectDialogVue from "@/views/natural/components/selectDialog.vue";
 import addressBoox from "./dialogs/addressBoox.vue";
-import { getYjjy, getRhtx, getSpjk, getTxl } from "@/api/modules/home.js";
+import { getYjjy, getRhtx, getSpjk, getTxl, getSpjkTree } from "@/api/modules/home.js";
 const imgefileUrl = (url) => {
   return new URL(url, import.meta.url).href;
 };
@@ -69,12 +69,12 @@ let resources_list_all = ref([
   [
     { name: "公安", num: 0, type: "ga", icon: "spjk" },
     { name: "危化二期", num: 0, type: "wheq", icon: "spjk" },
+    { name: "综合执法", num: 0, type: "zhzf", icon: "spjk" },
+    { name: "高新管委会", num: 0, type: "gxgwh", icon: "spjk" },
     { name: "风险隐患", num: 0, type: "fxyhd", icon: "spjk" },
     { name: "危化企业", num: 453, type: "whqy", icon: "spjk" },
     { name: "水利", num: 0, type: "sl", icon: "spjk" },
     { name: "住建", num: 0, type: "zj", icon: "spjk" },
-    { name: "综合执法", num: 0, type: "zhzf", icon: "spjk" },
-    { name: "高新管委会", num: 0, type: "gxgwh", icon: "spjk" },
   ],
 ]);
 let resources_list = ref([]);
@@ -194,11 +194,15 @@ const getTxlList = function(){
 }
 const getSpjkList = function () {
   getSpjk().then((res) => {
+    console.log("Spjk: ",res)
     const list = resources_list_all.value[3];
     for (const info of list) {
       for (const data of res.data) {
         if (data.mc.startsWith(info.name)) {
           info.num = data.sz;
+          getSpjkTree({typeId: data.typeId}).then(res=>{
+            console.log("spjk_tree", res)
+          })
           markerDatas[info.type] = { ...data, lx: "list", sl: data.sz };
         }
       }

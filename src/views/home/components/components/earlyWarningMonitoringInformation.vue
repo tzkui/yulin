@@ -116,11 +116,7 @@ const getDatas = function () {
       for (const data of list) {
         if (info.name === data.mc) {
           info.num = data.sl;
-          if(info.name==="地质监测"){
-
-          }else{
-            info.markerList = data.jh;
-          }
+          info.markerList = data.jh;
         }
       }
     }
@@ -289,11 +285,15 @@ const getDataList = function (item) {
 };
 const checkWarningType = (item) => {
   $mitt.emit("hideAllMarker");
-  getDataList(item);
-  console.log(dataList.value)
-  dataList.value.forEach(item=>{
-    $mitt.emit("addMarker", item.markerInfo)
-  })
+  console.log("zzz,",item)
+  if(item.name==="地质监测"){
+    dataList.value = item.markerList
+  }else{
+    getDataList(item);
+    dataList.value.forEach(item=>{
+      $mitt.emit("addMarker", item.markerInfo)
+    })
+  }
   if (currentWarningType.value == item.type) {
     currentWarningType.value = "";
   } else {
@@ -447,7 +447,7 @@ onUnmounted(() => {
   <dzjc
     v-if="currentWarningType === 'dzjc'"
     @closeDialog="closeDialog"
-    :list="dataList"
+    :listData="dataList"
     style="right: 460px; left: unset"
   ></dzjc>
   <aqscjc
