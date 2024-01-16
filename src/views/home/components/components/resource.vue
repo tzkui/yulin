@@ -200,10 +200,11 @@ const getSpjkList = function () {
       for (const data of res.data) {
         if (data.mc.startsWith(info.name)) {
           info.num = data.sz;
-          getSpjkTree(data.typeId).then(res=>{
-            console.log("spjk_tree", res)
+          markerDatas[info.type] = { ...data, lx: "tree", sl: data.sz };
+          getSpjkTree(data.typeId).then(resp=>{
+            console.log("spjk_tree", resp)
+            markerDatas[info.type].jh = resp.data
           })
-          markerDatas[info.type] = { ...data, lx: "list", sl: data.sz };
         }
       }
     }

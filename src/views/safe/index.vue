@@ -6,7 +6,7 @@ import dialogVue from "../../components/common/dialog.vue";
 import { ref, onMounted, inject, nextTick } from "vue";
 import left from "./components/left.vue";
 import right from "./components/right.vue";
-import integratedCommunication from "./components/integratedCommunication.vue";
+// import integratedCommunication from "./components/integratedCommunication.vue";
 import { yjsjDetails, enterpriseLists } from "@/api/mock_tzk.js";
 // 导入需要打点的数据
 import { qylxlist } from "../../api/affair_ys";
@@ -307,11 +307,11 @@ const closeqyxxshow = function () {
       </ViewBox> -->
     </pageRightContent>
     <!-- 视频监控 -->
-    <integratedCommunication
+    <!-- <integratedCommunication
       :show-dialog="showDialog.video"
       @closeVideoDialog="closeDialog('video')"
     >
-    </integratedCommunication>
+    </integratedCommunication> -->
 
     <!-- 应急事件 -->
     <dialogVue

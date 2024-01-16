@@ -97,6 +97,8 @@ import { useEventBus } from "@vueuse/core";
 import { getSpjk } from "@/api/modules/home.js";
 import rtspPlayer from "../common/h265Play.vue";
 import { ElMessageBox } from "element-plus";
+import commonFun from "@/utils/common.js";
+const { initTree } = commonFun();
 
 const showDialog = ref(false);
 const openDialog = function (e) {
@@ -143,22 +145,28 @@ let originTreeData = ref([]);
 getSpjk().then((res) => {
   console.log("spjk,", res);
   let arr = [];
-  res.data.forEach((item) => {
-    arr.push({
-      id: item.typeId,
-      label: item.mc,
-      children: item.jh.map((info) => {
-        return {
-          id: info.id,
-          type: info.typeName,
-          playerUrl: info.playerUrl,
-          label: info.monitorName,
-        };
-      }),
-    });
-  });
+  for(let i=0;i <res.data.length;i++) {
+    getSpjkTree(data.typeId).then(resp=>{
+      console.log("spjk_tree", resp)
+      arr[i] = initTree(resp.data)
+    })
+  }
+  // res.data.forEach((item) => {
+  //   arr.push({
+  //     id: item.typeId,
+  //     label: item.mc,
+  //     children: item.jh.map((info) => {
+  //       return {
+  //         id: info.id,
+  //         type: info.typeName,
+  //         playerUrl: info.playerUrl,
+  //         label: info.monitorName,
+  //       };
+  //     }),
+  //   });
+  // });
   treeData.value = arr;
-  originTreeData.value = JSON.parse(JSON.stringify(arr));
+  originTreeData.value = treeData.value
   console.log(treeData.value);
 });
 const meetingList = ref([]);
