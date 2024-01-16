@@ -13,7 +13,7 @@ export const getRhtx = () => request.post("/home/rhtx", {})
 export const getSpjk = () => request.post("/home/spjk", {})
 
 // 视频监控
-export const getSpjkTree = (data) => request.post("/home/spjk_tree", data)
+export const getSpjkTree = (id) => request.post("/home/spjk_tree?typeId="+id, {})
 
 // 灾情区域分析
 export const getZqqxfx = (sj,lx) => request.post(`/home/zqqyfx?sj=${sj}${lx?'&lx='+lx:''}`)

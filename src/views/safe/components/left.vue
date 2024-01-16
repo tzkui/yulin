@@ -506,6 +506,7 @@ const getring = async function (type = "1") {
   let newsum = 0;
   let bardata = [];
   let res = await getYjxxtjfx({ type });
+  console.log("xxxxxxxx预警信息统计分析",  res )
   if (res.code == 200) {
     newringdata = res.data.map((item) => item.sz);
     newsum = ref(sum(newringdata));

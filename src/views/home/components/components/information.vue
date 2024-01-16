@@ -24,13 +24,13 @@ const getEventList = function (id) {
         state: item.stateName,
         type: "sj",
         icon: "sj",
-        location: item.eventAddress,
-        name: item.eventName,
+        location: item.eventAddress || "",
+        name: item.eventName || "",
         id: item.id,
         lng: item.mapX,
         lat: item.mapY,
-        reportPersonal: item.reportPersonal,
-        reportOrgName: item.reportOrgName
+        reportPersonal: item.reportPersonal || "",
+        reportOrgName: item.reportOrgName || ""
       };
     });
     event_list.value = originList.value.slice(0, 50);

@@ -89,7 +89,7 @@ if (dialogConfigs[props.dialogType]) {
           >
             <div class="left">{{ item.label }}：</div>
             <div class="right">
-              <span :style="item.style">{{ item.value }}</span>
+              <span :style="item.style">{{ item.value || "" }}</span>
             </div>
           </li>
         </template>

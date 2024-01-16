@@ -225,6 +225,11 @@ const addGraphicMarker = (graphicLayer, item) => {
     };
     console.log("markerClickBck--->", back);
     $mitt.emit("markerClick", back);
+    // setTimeout(() => {
+    //   map.setZoom(16)
+    // }, 500);
+    // $mitt.emit("flyTo",{...item, zoom: 16})
+    map.flyTo([item.lat, item.lng],16, {duration: 2})
   });
 };
 //添加列表或对象的判断
