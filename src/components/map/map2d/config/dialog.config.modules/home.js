@@ -10,6 +10,7 @@ export default {
       { name: "事发时间", key: "time" },
       { name: "上报人", key: "reportPersonal" },
       { name: "上报单位", key: "reportOrgName" },
+      { name: "值班人员", key: "zbry" },
       { name: "事发地点", key: "location" },
       { name: "事件描述", key: "cont" },
       // { name: '分机号码', key: 'aphone', iconUrl: assetsUrl('/icons/video.png'), funcName:"phone" },

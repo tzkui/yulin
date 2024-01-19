@@ -32,7 +32,7 @@ const changeTab = function (tab) {
         </li>
       </ul>
     </div>
-    <!-- <div class="center_word">这是中间的文字</div> -->
+    <div class="center_word">这是中间的文字</div>
     <div class="right_content">
       <!-- <div class="fullscreen_box" @click="toggleFullscreen">
         <el-icon size="48" color="gray">

@@ -30,7 +30,8 @@ const getEventList = function (id) {
         lng: item.mapX,
         lat: item.mapY,
         reportPersonal: item.reportPersonal || "",
-        reportOrgName: item.reportOrgName || ""
+        reportOrgName: item.reportOrgName || "",
+        zbry: item.zbry || "",
       };
     });
     event_list.value = originList.value.slice(0, 50);

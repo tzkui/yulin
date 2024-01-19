@@ -106,6 +106,15 @@ const gosjfx = () => {
   let href = window.baseIp1 + ":20128/map/analysis/page/danger/sjfx";
   window.location.href = href;
 };
+const typeValue = ref(1);
+const typeList = ref([
+  {id: 1, name: "单屏"},
+  {id: 2, name: "双屏"},
+  {id: 3, name: "多屏"},
+  {id: 4, name: "超高分"},
+  {id: 5, name: "异形屏"},
+  {id: 6, name: "驾驶舱"},
+])
 </script>
 
 <template>
@@ -141,6 +150,11 @@ const gosjfx = () => {
             />
           </li>
         </ul>
+      </div>
+      <div class="model_selects">
+        <select v-model="typeValue">
+          <option v-for="item in typeList" :key="item.id" :value="item.id">{{ item.name }}</option>
+        </select>
       </div>
       <div class="aside-link" @click="gosjfx()"></div>
       <div class="home" @click="gohome()"></div>

@@ -43,6 +43,15 @@
             >
               {{ item.name }}&nbsp;<span style="color: #e6964f;">{{ item.num }}</span>
             </div>
+            <div 
+              :class="{
+                check_item: true,
+                active: disaster_checked_data === dxzhtData.value,
+              }"
+              @click="selectZddx(dxzhtData)"
+            >
+            {{ dxzhtData.name }}&nbsp;<span style="color: #e6964f;" v-if="showNum">{{ dxzhtData.num }}</span>
+            </div>
           </div>
           <!-- 列表 -->
           <div class="cont_lists">
@@ -137,7 +146,7 @@ const props = defineProps({
     default: [],
   },
 });
-
+const showNum = ref(false)
 // 灾情影响 统计内容
 const effect_cont = ref([
   {
@@ -151,6 +160,11 @@ const effect_cont = ref([
     type: "防护目标",
   },
 ]);
+const dxzhtData = ref({
+  name: "大型综合体",
+  num: 0,
+  value: "大型综合体"
+})
 // 灾情资源 场所选择tab
 const disaster_check_data = ref([]);
 // 灾情资源 场所选择tab  已选择内容
@@ -557,6 +571,7 @@ const getAllDisasters = function () {
   };
   getZdfhmb(params).then((res) => {
     console.log("zzzzz", res);
+    showNum.value = true;
     effect_cont.value[0].num = Math.floor(res.data.totalArea);
     effect_cont.value[1].num = Math.floor(res.data.total);
     res.data.data.forEach((item) => {
@@ -634,6 +649,7 @@ const yjbzfxList = computed(() => {
   return allAnalysis.value[analysis_checked_data.value] || [];
 });
 const selectZddx = function (info) {
+  console.log(info,info.value)
   disaster_checked_data.value = info.value;
 };
 const selectYjbzfx = function (info) {
