@@ -4,6 +4,7 @@ import { ref, computed, watch, inject, openBlock, onMounted } from "vue";
 import { assetsUrl } from "@/components/map/map2d/hook/index";
 import { getDtsd } from "@/api/modules/aqsc.js";
 import { getQyfbTree } from "@/api/modules/home.js";
+import dialogVue from "@/components/common/dialog.vue";
 const $mitt = inject("$mitt");
 const getMarkerUrl = function (name) {
   return assetsUrl("/images/marker/" + name + ".png");
@@ -79,54 +80,54 @@ const treeData = ref([
     name: "视频监控 ",
     id: "spjk",
     children: [
-      {
-        name: "公安监控",
-        id: "公安监控",
-        checked: false,
-        iconUrl: getMarkerUrl("icon_gongan"),
-      },
-      {
-        name: "住建局监控",
-        id: "住建监控",
-        checked: false,
-        iconUrl: getMarkerUrl("icon_zhujianju"),
-      },
-      {
-        name: "水利局监控",
-        id: "水利监控",
-        checked: false,
-        iconUrl: getMarkerUrl("icon_shuiliju"),
-      },
+      // {
+      //   name: "公安监控",
+      //   id: "公安监控",
+      //   checked: false,
+      //   iconUrl: getMarkerUrl("icon_gongan"),
+      // },
+      // {
+      //   name: "住建局监控",
+      //   id: "住建监控",
+      //   checked: false,
+      //   iconUrl: getMarkerUrl("icon_zhujianju"),
+      // },
+      // {
+      //   name: "水利局监控",
+      //   id: "水利监控",
+      //   checked: false,
+      //   iconUrl: getMarkerUrl("icon_shuiliju"),
+      // },
       {
         name: "重点地点监控",
         id: "重点地点",
         checked: false,
         iconUrl: getMarkerUrl("icon_ziranzaihai"),
       },
-      {
-        name: "化工园区监控",
-        id: "园区监控",
-        checked: false,
-        iconUrl: getMarkerUrl("icon_huagongyuanqu"),
-      },
-      {
-        name: "综合执法局监控",
-        id: "综合执法局监控",
-        checked: false,
-        iconUrl: getMarkerUrl("icon_ziranzaihai"),
-      },
+      // {
+      //   name: "化工园区监控",
+      //   id: "园区监控",
+      //   checked: false,
+      //   iconUrl: getMarkerUrl("icon_huagongyuanqu"),
+      // },
+      // {
+      //   name: "综合执法局监控",
+      //   id: "综合执法局监控",
+      //   checked: false,
+      //   iconUrl: getMarkerUrl("icon_ziranzaihai"),
+      // },
       {
         name: "危化企业监控",
         id: "危化企业监控",
         checked: false,
         iconUrl: getMarkerUrl("icon_whqyjk"),
       },
-      {
-        name: "交警监控",
-        id: "交警监控",
-        checked: false,
-        iconUrl: getMarkerUrl("icon_jjjk"),
-      },
+      // {
+      //   name: "交警监控",
+      //   id: "交警监控",
+      //   checked: false,
+      //   iconUrl: getMarkerUrl("icon_jjjk"),
+      // },
     ],
   },
 ]);
@@ -154,25 +155,25 @@ const getListData = function () {
   getDtsd().then((res) => {
     let spjk = res.data.spjk;
     let dict = {
-      "园区监控": "hgyqjk",
-      "重点地点": "zdddjk",
-      "综合执法局监控": "zhzfjjk",
-      "公安监控": "gajk",
-      "危化企业监控": "whqyjk",
-      "住建监控": "zjjjk",
-      "交警监控": "jjjk",
-      "水利监控": "sljjk",
-    }
-    let icons={
-      "园区监控": "icon_huagongyuanqu",
-      "重点地点": "icon_ziranzaihai",
-      "综合执法局监控": "icon_ziranzaihai",
-      "公安监控": "icon_gongan",
-      "危化企业监控": "icon_whqyjk",
-      "住建监控": "icon_zhujianju",
-      "交警监控": "icon_jjjk",
-      "水利监控": "icon_shuiliju",
-    }
+      园区监控: "hgyqjk",
+      重点地点: "zdddjk",
+      综合执法局监控: "zhzfjjk",
+      公安监控: "gajk",
+      危化企业监控: "whqyjk",
+      住建监控: "zjjjk",
+      交警监控: "jjjk",
+      水利监控: "sljjk",
+    };
+    let icons = {
+      园区监控: "icon_huagongyuanqu",
+      重点地点: "icon_ziranzaihai",
+      综合执法局监控: "icon_ziranzaihai",
+      公安监控: "icon_gongan",
+      危化企业监控: "icon_whqyjk",
+      住建监控: "icon_zhujianju",
+      交警监控: "icon_jjjk",
+      水利监控: "icon_shuiliju",
+    };
     spjk.forEach((item) => {
       item.jh = item.jh || [];
       safeCheckboxPoints[item.mc] = item.jh.map((info) => {
@@ -245,6 +246,53 @@ onMounted(() => {
   getListData();
   getEnDatas();
 });
+const filters = ref([
+  {
+    name: "区域",
+    id: "area",
+    children: [
+      { name: "全部", id: "all" },
+      { name: "榆阳区", id: "榆阳区" },
+      { name: "横山区", id: "横山区" },
+      { name: "神木市", id: "神木市" },
+      { name: "府谷县", id: "府谷县" },
+      { name: "靖边县", id: "靖边县" },
+      { name: "定边县", id: "定边县" },
+      { name: "绥德县", id: "绥德县" },
+      { name: "米脂县", id: "米脂县" },
+      { name: "佳县", id: "佳县" },
+      { name: "吴堡县", id: "吴堡县" },
+      { name: "清涧县", id: "清涧县" },
+      { name: "子洲县", id: "子洲县" },
+    ],
+  },
+  {
+    name: "企业类型",
+    id: "type",
+    children: [
+      { name: "全部", id: "all" },
+      { name: "煤矿", id: "煤矿" },
+      { name: "非煤矿山", id: "非煤矿山" },
+      { name: "烟花爆竹企业", id: "烟花爆竹企业" },
+      { name: "危化企业", id: "危化企业" },
+      { name: "尾矿库", id: "尾矿库" },
+      { name: "其他", id: "其他" },
+      { name: "粉尘涉爆", id: "粉尘涉爆" },
+      { name: "涉氨制冷", id: "涉氨制冷" },
+      { name: "机械制造", id: "机械制造" },
+    ],
+  },
+  {
+    name: "企业规模",
+    id: "gm",
+    children: [
+      { name: "全部", id: "all" },
+      { name: "大", id: 1 },
+      { name: "中", id: 2 },
+      { name: "小", id: 3 },
+    ],
+  },
+]);
 const getEnDatas = function () {
   getQyfbTree().then((res) => {
     res.data.forEach((item) => {
@@ -329,15 +377,15 @@ const getEnDatas = function () {
 
 watch(selectedList, (val, old) => {
   let diff = calcArrayDiff(val, old);
-  console.log(safeCheckboxPoints, diff)
+  console.log(safeCheckboxPoints, diff);
   for (const id of diff) {
     if (safeCheckboxPoints[id]) {
       console.log(safeCheckboxPoints[id]);
       if (val.length > old.length) {
         if (Array.isArray(safeCheckboxPoints[id])) {
-          console.log(2)
+          console.log(2);
           safeCheckboxPoints[id].forEach((item) => {
-            console.log(item)
+            console.log(item);
             $mitt.emit("addMarker", item);
           });
         }
@@ -358,6 +406,7 @@ watch(selectedList, (val, old) => {
       :class="isHide ? 'hideIcon hideIconActive' : 'hideIcon'"
       @click="isHide = !isHide"
     ></div>
+    <div class="filter_btn">筛选</div>
     <ul class="checkbox_list" :style="{ maxHeight: isHide ? '0' : '800px' }">
       <li v-for="types in treeData">
         <div
@@ -400,6 +449,17 @@ watch(selectedList, (val, old) => {
       </li>
     </ul>
   </div>
+  <Teleport to="body">
+    <dialogVue
+      :dialogValue="showDialog"
+      :title="'战评总结'"
+      width="640px"
+      height="455px"
+      top="500px"
+      @closeHandle="closeHandle"
+    >
+    </dialogVue>
+  </Teleport>
 </template>
 <style lang="less" scoped>
 .checkboxs {
@@ -510,5 +570,16 @@ watch(selectedList, (val, old) => {
       }
     }
   }
+}
+.filter_btn {
+  line-height: 24px;
+  font-size: 16px;
+  margin-left: 6px;
+  border: 2px solid #1d75d6;
+  width: 72px;
+  border-radius: 2px;
+  text-align: center;
+  margin-top: 6px;
+  cursor: pointer;
 }
 </style>

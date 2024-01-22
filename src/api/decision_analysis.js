@@ -764,3 +764,9 @@ export const getYybzfxType = data => request.post("/jcfx/yybzfxtypeid", data)
 
 // 获取案例库列表
 export const getAlkList = data => request.post("/jcfx/alk", data)
+
+// 战评总结
+export const zpzj = data => request.post("/jcfx/zpzj?eventId="+data.eventId+"&zpzj="+data.content, {})
+
+// 归档
+export const doGdApi = data => request.post("/jcfx/gd?eventId="+data.eventId, {})

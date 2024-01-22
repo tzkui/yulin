@@ -4,12 +4,13 @@ export default {
     title: "灾情综合查询",
     // 每一行的信息， name和key必填，如果有icon，加上iconUrl: 'xxx',如果字有颜色，加上 color: "xxx"
     rows: [
-      { name: "日期", key: "date" },
       { name: "名称", key: "name" },
-      { name: "地址", key: "location" },
       { name: "事件", key: "cont" },
+      { name: "日期", key: "date" },
       { name: "灾情类型", key: "typeName" },
       { name: "灾情等级", key: "eventLevelName" },
+      { name: "战评总结", key: "zpzj" },
+      { name: "地址", key: "location" },
       // { name: '分机号码', key: 'aphone', iconUrl: assetsUrl('/icons/video.png'), funcName:"phone" },
       // { name: '移动号码', key: 'phone', iconUrl: assetsUrl('/icons/phone.png'), funcName:"phone" },
     ],

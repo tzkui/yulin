@@ -82,7 +82,7 @@ const toggleRightBottomList = function () {
 </template>
 
 <style lang="less" scoped>
-@padding_right: 10px; // 内容距离右边的宽度
+@padding_right: 0; // 内容距离右边的宽度
 @boxWidth: 440px; //内容宽度
 @margin_top: 69px; //距离上面的宽度
 

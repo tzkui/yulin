@@ -45,34 +45,29 @@ const props = defineProps({
     default: false,
   },
 });
-watch(
-  () => props.isEarthquake,
-  (val) => {
-    selectedItem.value = "";
-    if (val) {
-      tabs.value = [
-        { id: 1, name: "本年", startTime: parseTime(4), endTime: parseTime() },
-        { id: 2, name: "去年", startTime: parseTime(6), endTime: parseTime(7) },
-        { id: 3, name: "近5年", startTime: parseTime(8), endTime: parseTime() },
-        {
-          id: 4,
-          name: "近十年",
-          startTime: parseTime(9),
-          endTime: parseTime(),
-        },
-        { id: 5, name: "时间", startTime: "", endTime: "" },
-      ];
-    } else {
-      tabs.value = [
-        { id: 1, name: "上月", startTime: parseTime(1), endTime: parseTime(5) },
-        { id: 2, name: "本月", startTime: parseTime(2), endTime: parseTime() },
-        { id: 3, name: "本季", startTime: parseTime(3), endTime: parseTime() },
-        { id: 4, name: "本年", startTime: parseTime(4), endTime: parseTime() },
-        { id: 5, name: "时间", startTime: "", endTime: "" },
-      ];
-    }
-  }
-);
+if(props.isEarthquake){
+  tabs.value = [
+    { id: 1, name: "本年", startTime: parseTime(4), endTime: parseTime() },
+    { id: 2, name: "去年", startTime: parseTime(6), endTime: parseTime(7) },
+    { id: 3, name: "近5年", startTime: parseTime(8), endTime: parseTime() },
+    {
+      id: 4,
+      name: "近十年",
+      startTime: parseTime(9),
+      endTime: parseTime(),
+    },
+    { id: 5, name: "时间", startTime: "", endTime: "" },
+  ];
+}else{
+  tabs.value = [
+    { id: 1, name: "上月", startTime: parseTime(1), endTime: parseTime(5) },
+    { id: 2, name: "本月", startTime: parseTime(2), endTime: parseTime() },
+    { id: 3, name: "本季", startTime: parseTime(3), endTime: parseTime() },
+    { id: 4, name: "本年", startTime: parseTime(4), endTime: parseTime() },
+    { id: 5, name: "时间", startTime: "", endTime: "" },
+  ];
+}
+
 const isClosePicker = ref(false);
 const timePickerClose = function (e) {
   console.log(1, e);
