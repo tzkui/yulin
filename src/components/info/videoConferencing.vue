@@ -206,54 +206,54 @@ const changeFullscreen = () => {
 
 const showMeeting = ref(false);
 let meetingIns = null;
-// const beginConferencing = function () {
-//   if (meetingIns || meetingList.value.length === 0) return;
-//   showMeeting.value = true;
-//   let options = {
-//     access_type: 2,
-//     devices: meetingList.value.map((item, index) => {
-//       return {
-//         id: item.id,
-//         type: item.type,
-//         index,
-//       };
-//     }),
-//     key: window.kdApiKey,
-//     isDemo: true
-//   };
-//   console.log(options)
-//   meetingIns = kdDispatchConference.createMeeting(
-//     "#meeting_box",
-//     options,
-//     (data, name) => {
-//       // data 回调数据  name 回调事件名称
-//       console.log("回调数据", data, name);
-//       // data.groupId 用于还原调度组组件或者调用http高级接口
-//       console.log("组件Id", data.groupId);
-//       if (data.status === 13) {
-//         closeMeeting();
-//       }
-//     }
-//   );
-// };
-const  beginConferencing = function(){
+const beginConferencing = function () {
   if (meetingIns || meetingList.value.length === 0) return;
   showMeeting.value = true;
   let options = {
-    layoutType: "AUTO",
-    meetDevices: meetingList.value.map((item, index) => {
+    access_type: 2,
+    devices: meetingList.value.map((item, index) => {
       return {
         id: item.id,
         type: item.type,
-        index: index,
-      }
+        index,
+      };
     }),
-    listenDevices: [],
-  }
-  initMeeting(options).then(res=>{
-    console.log(res)
-  })
-}
+    key: window.kdApiKey,
+    isDemo: true
+  };
+  console.log(options)
+  meetingIns = kdDispatchConference.createMeeting(
+    "#meeting_box",
+    options,
+    (data, name) => {
+      // data 回调数据  name 回调事件名称
+      console.log("回调数据", data, name);
+      // data.groupId 用于还原调度组组件或者调用http高级接口
+      console.log("组件Id", data.groupId);
+      if (data.status === 13) {
+        closeMeeting();
+      }
+    }
+  );
+};
+// const  beginConferencing = function(){
+//   if (meetingIns || meetingList.value.length === 0) return;
+//   showMeeting.value = true;
+//   let options = {
+//     layoutType: "AUTO",
+//     meetDevices: meetingList.value.map((item, index) => {
+//       return {
+//         id: item.id,
+//         type: item.type,
+//         index: index,
+//       }
+//     }),
+//     listenDevices: [],
+//   }
+//   initMeeting(options).then(res=>{
+//     console.log(res)
+//   })
+// }
 const closeMeeting = function () {
   if (meetingIns) {
     showMeeting.value = false;

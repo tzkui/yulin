@@ -271,15 +271,15 @@ const filters = ref([
     id: "type",
     children: [
       { name: "全部", id: "all" },
-      { name: "煤矿", id: "煤矿" },
-      { name: "非煤矿山", id: "非煤矿山" },
-      { name: "烟花爆竹企业", id: "烟花爆竹企业" },
-      { name: "危化企业", id: "危化企业" },
-      { name: "尾矿库", id: "尾矿库" },
-      { name: "其他", id: "其他" },
-      { name: "粉尘涉爆", id: "粉尘涉爆" },
-      { name: "涉氨制冷", id: "涉氨制冷" },
-      { name: "机械制造", id: "机械制造" },
+      { name: "煤矿", id: "mk" },
+      { name: "非煤矿山", id: "fmks" },
+      { name: "烟花爆竹企业", id: "yhbzqy" },
+      { name: "危化企业", id: "whqy" },
+      { name: "尾矿库", id: "wkk" },
+      { name: "其他", id: "qt" },
+      { name: "粉尘涉爆", id: "fcsb" },
+      { name: "涉氨制冷", id: "sazl" },
+      { name: "机械制造", id: "jxzz" },
     ],
   },
   {
@@ -293,6 +293,15 @@ const filters = ref([
     ],
   },
 ]);
+const showDialog = ref(false)
+const filter_Infos = ref({
+  area: "all",
+  type: "all",
+  gm: "all"
+})
+const closeHandle = function(){
+  showDialog.value = false;
+}
 const getEnDatas = function () {
   getQyfbTree().then((res) => {
     res.data.forEach((item) => {
@@ -374,7 +383,39 @@ const getEnDatas = function () {
     });
   });
 };
-
+const selectFilter = function(type, info){
+  let oldVal = filter_Infos.value[type.id];
+  let newVal = info.id;
+  if(oldVal !== newVal){
+    filter_Infos.value[type.id] = newVal;
+  }
+}
+const filterResult = ref([])
+const filterEnt = function(){
+  let baseLists = []
+  console.log(safeCheckboxPoints)
+  const {mk,fmks,yhbzqy,whqy} = safeCheckboxPoints;
+  let areaType = filter_Infos.value.type;
+  if(areaType==="all"){
+    baseLists = [...mk,...fmks,...yhbzqy,...whqy]
+  }else{
+    baseLists = safeCheckboxPoints[areaType] || []
+  }
+  if(filter_Infos.value.area==="all"){
+    filterResult.value = baseLists;
+  }else{
+    filterResult.value = baseLists.filter(item=>{
+      return item.details.area===filter_Infos.value.area
+    })
+  }
+  console.log(filterResult.value)
+}
+const addFilterMarker = function(info){
+  $mitt.emit("addMarker", info);
+  showDialog.value = false
+  $mitt.emit("flyTo", info);
+  $mitt.emit("openPopup", info);
+}
 watch(selectedList, (val, old) => {
   let diff = calcArrayDiff(val, old);
   console.log(safeCheckboxPoints, diff);
@@ -406,8 +447,8 @@ watch(selectedList, (val, old) => {
       :class="isHide ? 'hideIcon hideIconActive' : 'hideIcon'"
       @click="isHide = !isHide"
     ></div>
-    <div class="filter_btn">筛选</div>
     <ul class="checkbox_list" :style="{ maxHeight: isHide ? '0' : '800px' }">
+      <div class="filter_btn" @click="showDialog=true">筛选</div>
       <li v-for="types in treeData">
         <div
           class="parent"
@@ -452,12 +493,29 @@ watch(selectedList, (val, old) => {
   <Teleport to="body">
     <dialogVue
       :dialogValue="showDialog"
-      :title="'战评总结'"
+      :title="'企业筛选'"
       width="640px"
-      height="455px"
+      height="600px"
       top="500px"
       @closeHandle="closeHandle"
-    >
+    > 
+      <div class="filter_lists">
+        <div class="filter_lists_item" v-for="item in filters" :key="item.id">
+          <div class="filter_name">{{ item.name }}</div>
+          <ul>
+            <li 
+              v-for="filterItem in item.children" 
+              :class="{active_filter: filterItem.id===filter_Infos[item.id]}" 
+              :key="filterItem.id"
+              @click="selectFilter(item,filterItem)"
+            >{{ filterItem.name }}</li>
+          </ul>
+        </div>
+        <div class="submit_btn" @click="filterEnt">确定</div>
+      </div>
+      <ul class="ent_list">
+        <li v-for="item in filterResult" :key="item.id" @click="addFilterMarker(item)">{{ item.details.name }}</li>
+      </ul>
     </dialogVue>
   </Teleport>
 </template>
@@ -574,12 +632,71 @@ watch(selectedList, (val, old) => {
 .filter_btn {
   line-height: 24px;
   font-size: 16px;
-  margin-left: 6px;
   border: 2px solid #1d75d6;
   width: 72px;
   border-radius: 2px;
   text-align: center;
   margin-top: 6px;
+  margin-bottom: 6px;
   cursor: pointer;
+}
+.filter_lists{
+  font-size: 16px;
+  line-height: 24px;
+  position: relative;
+  &_item{
+    display: flex;
+    margin-bottom: 16px;
+    .filter_name{
+      width: 80px;
+      color: #fff;
+    }
+    >ul{
+      display: flex;
+      align-items: center;
+      width: 500px;
+      flex-wrap: wrap;
+      gap: 8px;
+      >li{
+        border: 1px solid #fff;
+        color: #fff;
+        padding: 0 8px;
+        // margin-bottom: 16px;
+        cursor: pointer;
+      }
+      >.active_filter{
+        border-color: #1976d2;
+        background-color: #1976d2;
+      }
+    }
+  }
+  .submit_btn{
+    width: 60px;
+    padding: 0 8px;
+    border: 1px solid #1976d2;
+    background-color: #1976d2;
+    text-align: center;
+    border-radius: 3px;
+    cursor: pointer;
+    color: #fff;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
+}
+.ent_list{
+  height: 300px;
+  overflow-y: auto;
+    margin-left: -10px;
+  >li{
+    color: #fff;
+    font-size: 16px;
+    line-height: 24px;
+    padding-left: 10px;
+    cursor: pointer;
+    &:hover{
+      background-color: #1976D2;
+    }
+  }
 }
 </style>
