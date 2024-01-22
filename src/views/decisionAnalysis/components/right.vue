@@ -70,7 +70,7 @@
         </div>
       </div>
     </ViewBox>
-    <ViewBox title="应急保障分析">
+    <!-- <ViewBox title="应急保障分析">
       <div class="application_object">
         <div class="analysis_radius">
           分析半径<span class="blue">{{ radius.analysis_radius }}米</span>
@@ -84,7 +84,6 @@
             :max="150000"
             :show-tooltip="false"
           ></el-slider>
-          <!-- 可多选box -->
           <div class="checkboxs">
             <div
               v-for="(item, index) in analysis_check_data"
@@ -98,7 +97,6 @@
               {{ item.name }}
             </div>
           </div>
-          <!-- 列表 -->
           <div class="cont_lists">
             <div
               class="cont_list"
@@ -117,7 +115,7 @@
           </div>
         </div>
       </div>
-    </ViewBox>
+    </ViewBox> -->
   </div>
 </template>
 
@@ -146,6 +144,7 @@ const props = defineProps({
     default: [],
   },
 });
+const showDetail = ref(false)
 const showNum = ref(false)
 // 灾情影响 统计内容
 const effect_cont = ref([
@@ -654,6 +653,13 @@ const selectZddx = function (info) {
 };
 const selectYjbzfx = function (info) {
   analysis_checked_data.value = info.value;
+};
+// 灾情综合查询
+const initZqzhcx = async () => {
+  let res = await getZqzhcx();
+  console.log("getZqzhcx===========>", res);
+  disaster_synthesis.value = res.data;
+  setMarker("zqzhcx", disaster_synthesis.value[0]);
 };
 </script>
 

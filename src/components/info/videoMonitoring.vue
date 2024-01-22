@@ -94,7 +94,7 @@
 <script setup>
 import { computed, nextTick, onMounted, onUnmounted, ref } from "vue";
 import { useEventBus } from "@vueuse/core";
-import { getSpjk } from "@/api/modules/home.js";
+import { getSpjk, getSpjkTree } from "@/api/modules/home.js";
 import rtspPlayer from "../common/h265Play.vue";
 import { ElMessageBox } from "element-plus";
 import commonFun from "@/utils/common.js";

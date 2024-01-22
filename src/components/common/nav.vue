@@ -115,6 +115,23 @@ const typeList = ref([
   {id: 5, name: "异形屏"},
   {id: 6, name: "驾驶舱"},
 ])
+const screenModelChange = function(){
+  console.log(typeValue.value)
+  const type = typeValue.value;
+  let baseIp = window.location.href.split("/#/")[0]+"/#/"
+  if(type===1 || type === 4){
+    window.open(baseIp+"home", "_blank");
+  }else if(type===2){
+    window.open(baseIp+"home", "_blank");
+    window.open(baseIp+"natural", "_blank");
+  }else if(type===3){
+    window.open(baseIp+"home", "_blank");
+    window.open(baseIp+"natural", "_blank");
+    window.open(baseIp+"safePage", "_blank");
+    window.open(baseIp+"decisionAnalysis", "_blank");
+    window.open("http://10.112.143.191:20128/map/analysis/page/danger/sjfx", "_blank");
+  }
+}
 </script>
 
 <template>
@@ -152,7 +169,7 @@ const typeList = ref([
         </ul>
       </div>
       <div class="model_selects">
-        <select v-model="typeValue">
+        <select v-model="typeValue" @change="screenModelChange">
           <option v-for="item in typeList" :key="item.id" :value="item.id">{{ item.name }}</option>
         </select>
       </div>
@@ -283,5 +300,21 @@ header {
   );
   background-size: 100% 100%;
   z-index: 3;
+}
+.model_selects{
+  position: absolute;
+  right: 120px;
+  top: 30px;
+  >select{
+    color: #fff;
+    border: 1px solid #1E89FD;
+    height: 24px;
+    border-radius: 2px;;
+    padding: 0 6px;
+  }
+  option{
+    color: #fff;
+    background-color: #122F4F;
+  }
 }
 </style>
