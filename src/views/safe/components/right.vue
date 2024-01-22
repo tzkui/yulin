@@ -305,26 +305,208 @@ import img3 from "../../../assets/safe/type3.png";
 import img4 from "../../../assets/safe/type4.png";
 // '/src/assets/safe/num' + (index + 1) + '.png'
 // import imm1 from "../../../assets/safe/num1.png"
-const getAccidentTypeList = async function (type = "4",id) {
+// const getAccidentTypeList = async function (type = "4",id) {
+//   let res = await getSglxfx(type);
+//   const IMGLIST = [img1, img2, img3, img4];
+//   if (res.code == 200) {
+//     accidentTypeList.value = res.data.map((item, index) => {
+//       return {
+//         imgSrc: IMGLIST[index],
+//         id: index,
+//         num: item.sz,
+//         name: item.mc,
+//         ...item,
+//       };
+//     });
+//     if(id){
+//       nextTick(()=>{
+//         $mitt.emit("hideAllMarker")
+//         emit("updatePopupData",accidentTypeList.value[nowType.value].jh,id)
+//       })
+//     }
+//   }
+// };
+const coxdata = ref();
+// 下面就是数量的数据了
+const echarts = inject("echarts");
+const cxydata = ref();
+const sum = function (arr) {
+  return eval(arr.join("+"));
+};
+let myChart = null;
+const getAccidentTypeList = async function (type = "4", id) {
   let res = await getSglxfx(type);
-  const IMGLIST = [img1, img2, img3, img4];
   if (res.code == 200) {
-    accidentTypeList.value = res.data.map((item, index) => {
-      return {
-        imgSrc: IMGLIST[index],
-        id: index,
-        num: item.sz,
-        name: item.mc,
-        ...item,
-      };
+    coxdata.value = [];
+    cxydata.value = [];
+    coxdata.value = res.data.map((item) => item.name);
+    cxydata.value = res.data.map((item) => item.value);
+    // 下面就是柱状图的一些配置的了
+    var chartDom = document.getElementById("columnartype");
+    // const pageZoom = document.getElementById("app").style.zoom;
+    // chartDom.style.zoom = 1 / pageZoom;
+    myChart = echarts.init(chartDom);
+    var option;
+    option = {
+      // 这里就是移入之后显示的东西
+      tooltip: {
+        trigger: "axis",
+        show: true,
+        axisPointer: {
+          type: "shadow",
+        },
+      },
+      grid: {
+        top: "47px",
+        left: "10px",
+        right: "5px",
+        bottom: "25px",
+        containLabel: true,
+      },
+      xAxis: [
+        {
+          type: "category",
+          data: coxdata.value,
+          show: true, // 不显示坐标轴线、坐标轴刻度线和坐标轴上的文字
+          axisTick: {
+            show: false, // 不显示坐标轴刻度线
+          },
+          axisLine: {
+            show: true, // 不显示坐标轴线
+          },
+          axisLabel: {
+            show: true,
+            textStyle: {
+              color: "rgba(255, 255, 255, 0.85)",
+            },
+          },
+          splitLine: {
+            show: false, // 不显示网格线
+          },
+        },
+      ],
+      yAxis: [
+        {
+          type: "value",
+          minInterval: 1,
+          axisLine: {
+            show: true,
+            lineStyle: {
+              color: "rgba(255, 255, 255, 0.85)",
+              width: 0,
+              type: "dashed",
+            },
+          },
+          splitLine: {
+            show: true,
+            lineStyle: {
+              type: "dashed",
+              color: "rgba(41, 49, 54, 1)",
+            },
+          },
+        },
+      ],
+      series: [
+        {
+          // name: "企业总数:" ,s
+          type: "bar",
+          barWidth: "12px",
+          data: cxydata.value,
+          itemStyle: {
+            normal: {
+              // 设置背景颜色的渐变色
+              color: new echarts.graphic.LinearGradient(
+                0,
+                0,
+                0,
+                1,
+                [
+                  { offset: 0, color: "rgba(34, 118, 252, 1)" },
+                  { offset: 1, color: "rgba(0, 166, 219, 1)" },
+                ],
+                false
+              ),
+
+              // 开启显示顶部的数据
+              label: {
+                show: true, //开启显示
+                position: "top", //在上方显示
+                textStyle: {
+                  //数值样式
+                  color: "rgba(165, 166, 168, 1)",
+                  fontSize: 12,
+                },
+              },
+            },
+          },
+        },
+      ],
+      legend: {
+        // 图例
+        show: true,
+        top: 12,
+        itemGap: 10, // 各个item之间的间隔，单位px，默认为10
+        itemWidth: 14, // 图例图形宽度
+        itemHeight: 14, // 图例图形高度
+        icon: "circle",
+        textStyle: {
+          fontSize: "14px",
+          color: "#C6D1DB", // 图例文字颜色
+          lineHeight: 14,
+          // 设置图例之间的间距,距离
+          rich: {
+            verticalAlign: "middle",
+          },
+          padding: [0, 0, -2, 0], //[上、右、下、左]
+        },
+        // 盒子的阴影
+        itemStyle: {
+          shadowColor: "rgba(0, 0, 0, 0.5)",
+          shadowBlur: 5,
+          shadowOffsetX: 3,
+          shadowOffsetY: 5,
+        },
+      },
+      // 下面这个就是提示框的相关的一个配置了
+      tooltip: {
+        show: true,
+        trigger: "axis",
+        showContent: true,
+        backgroundColor: "rgba(13,20,26,1)",
+        showContent: true,
+        borderColor: "rgba(255,255,255,0)", //设置自定义边框颜色
+        // confine: true,//是否将tooltip框限制在图表的区域内，默认为false
+        extraCssText:
+          //额外附加到浮层的css样式，此处为为浮层添加阴影及padding
+          "box-shadow: 0 0 5px rgba(181, 245, 236, 0.5);padding:5px 15px",
+        textStyle: {
+          color: "#FFF", // 文字的颜色
+          // fontStyle: 'normal',    // 文字字体的风格（'normal'，无样式；'italic'，斜体；'oblique'，倾斜字体）
+          // fontWeight: 'normal',    // 文字字体的粗细（'normal'，无样式；'bold'，加粗；'bolder'，加粗的基础上再加粗；'lighter'，变细；数字定义粗细也可以，取值范围100至700）
+          fontSize: "14", // 文字字体大小
+          // lineHeight: '60',    // 行高
+        },
+        axisPointer: {
+          type: "shadow",
+          shadowStyle: {
+            color: "rgba(200, 255, 255, 0.2)",
+            width: "1",
+          },
+        },
+      },
+    };
+
+    option && myChart.setOption(option);
+     myChart.on("click", function (params) {
+       emit("updatePopupData", res.data[params.dataIndex].list, `id${params.dataIndex}`)
     });
-    if(id){
-      nextTick(()=>{
-        $mitt.emit("hideAllMarker")
-        emit("updatePopupData",accidentTypeList.value[nowType.value].jh,id)
-      })
-    }
-  } 
+    // tools.loopShowTooltip(myChart, option, { loopSeries: true });//自动轮播主要看这段话
+    window.onresize = function () {
+      setTimeout(function () {
+        myChart.resize();
+      }, 10);
+    };
+  }
 };
 // 获取企业类型分析数据
 import imms1 from "../../../assets/safe/num1.png";
@@ -369,12 +551,12 @@ const getEnterpriseTypeList = async function (type = "1") {
 const getmonitorList = async function (type = "1") {
   let res = await getZdddspjk({ type });
   if (res.code == 200) {
-    monitorList.value = res.data.slice(0,10)
-  } 
+    monitorList.value = res.data.slice(0, 10)
+  }
 };
 
 // 编写echarts图
-const echarts = inject("echarts");
+// const echarts = inject("echarts");
 let accidentTypeChart = null;
 const setAccidentTypeChart = function (option) {
   let chart_box = document.getElementById("accident_type_chart_box");
@@ -382,7 +564,6 @@ const setAccidentTypeChart = function (option) {
   chart_box.style.zoom = pageZoom;
   accidentTypeChart = echarts.init(chart_box);
   accidentTypeChart.setOption(option);
-
   accidentTypeChart.on("click", function (params) {
     console.log("accidentTypeChart=========>", params);
     openDialog("eventLevel", {
@@ -502,17 +683,17 @@ let videoTimer = null;
 let chartDataIndex = 0;
 
 const monitorListRef = ref()
-const scrollVideo = function (){
-  let i=1
-  videoTimer = setInterval(()=>{
+const scrollVideo = function () {
+  let i = 1
+  videoTimer = setInterval(() => {
     monitorListRef.value.scrollTo({
-      left: 382*i++,
+      left: 382 * i++,
       behavior: "smooth",
     })
-    if(monitorList.value.length/2<=i){
+    if (monitorList.value.length / 2 <= i) {
       i = 0
     }
-  },10000)
+  }, 10000)
 }
 
 onMounted(() => {
@@ -520,12 +701,15 @@ onMounted(() => {
   getEnterpriseTypeList();
   getmonitorList();
   getAccidentLevelList();
-  $mitt.on("changeEventState",function(info){
+  $mitt.on("changeEventState", function (info) {
     let id = info.id;
-    getAccidentTypeList("4",id)
+    getAccidentTypeList("4", id)
   })
   scrollVideo()
   // chartAutoPlay();
+  window.addEventListener("resize", () => {
+    myChart.resize();
+  });
 });
 onUnmounted(() => {
   clearInterval(timer);
@@ -533,15 +717,15 @@ onUnmounted(() => {
   $mitt.all.delete("changeEventState");
 });
 // 使用defineEmits注册一个自定义事件
-const emit = defineEmits(["getValue10", "openDialog","updatePopupData"]);
-const openDialog = function (type, info,index) {
+const emit = defineEmits(["getValue10", "openDialog", "updatePopupData"]);
+const openDialog = function (type, info, index) {
   nowType.value = index
   emit("openDialog", type, info);
 };
 const qylxisshow = ref(true);
-const qylxcl = (item,index) => {
+const qylxcl = (item, index) => {
   console.log(item, "看看我是个什么东东");
-  emit("getValue10", item,index, qylxisshow.value);
+  emit("getValue10", item, index, qylxisshow.value);
 };
 
 
@@ -576,9 +760,12 @@ const qylxcl = (item,index) => {
             </div>
           </div>
           <div class="main">
-            <div class="typeList">
-              <div class="typeItem" @click="openDialog('eventLevel', item,index)" v-for="(item,index) in accidentTypeList"
-                :key="item.id">
+            <div class="cosss">
+              <div id="columnartype"></div>
+            </div>
+            <!-- <div class="typeList">
+              <div class="typeItem" @click="openDialog('eventLevel', item, index)"
+                v-for="(item, index) in accidentTypeList" :key="item.id">
                 <div class="imgBox">
                   <img :src="item.imgSrc" alt="" />
                 </div>
@@ -590,7 +777,7 @@ const qylxcl = (item,index) => {
                   <div class="typeBox">{{ item.name }}</div>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
         <div class="qylxfx">
@@ -606,7 +793,8 @@ const qylxcl = (item,index) => {
             <div class="line3">事故占比</div>
           </div>
           <ul class="type_list">
-            <li class="type_list_item" v-for="(item, index) in newenterpriseTypeList" :key="index" @click="qylxcl(item,index)">
+            <li class="type_list_item" v-for="(item, index) in newenterpriseTypeList" :key="index"
+              @click="qylxcl(item, index)">
               <div class="line1">
                 <img :src="item.img" alt="" />
                 <div class="word" :style="{ color: item.color }">
@@ -623,7 +811,7 @@ const qylxcl = (item,index) => {
     <ViewBox title="风险隐患点视频监控" :height="198">
       <div class="box2">
         <ul class="monitorList" ref="monitorListRef">
-          <li v-for="(item,index) in monitorList" :key="item.id" @click="openVideoConferencing(item)">
+          <li v-for="(item, index) in monitorList" :key="item.id" @click="openVideoConferencing(item)">
             <h265 :playerUrl="item.playerUrl"></h265>
             <div class="infoBox">
               <div class="word">{{ item.monitorName }}</div>
@@ -853,6 +1041,7 @@ const qylxcl = (item,index) => {
   .box2 {
     width: 100%;
     height: 130px;
+
     .monitorList {
       display: flex;
       height: 125px;
@@ -861,9 +1050,11 @@ const qylxcl = (item,index) => {
       gap: 10px;
       overflow-x: auto;
       overflow-y: hidden;
-      &::--webkit-scrollbar{
+
+      &::--webkit-scrollbar {
         display: block;
       }
+
       li {
         position: relative;
         width: 181px;
@@ -916,5 +1107,18 @@ const qylxcl = (item,index) => {
       }
     }
   }
+}
+
+.cosss {
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+/* 下面就是这个柱状图的样式的了 */
+#columnartype {
+  height: 260px;
+  margin-bottom: -10px;
+  margin-top: -10px;
 }
 </style>
