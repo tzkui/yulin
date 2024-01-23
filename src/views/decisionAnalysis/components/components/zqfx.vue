@@ -17,7 +17,7 @@
           </el-option>
         </el-select> -->
       </div>
-      <timeSelect @selectTime="selectTime" :isEarthquake="false"></timeSelect>
+      <timeSelect @selectTime="selectTime" v-if="current_disater_tab!=='分析'" :isEarthquake="false"></timeSelect>
       <!-- tab 切换chart -->
       <div class="disaster_tabs">
         <div
@@ -130,156 +130,6 @@ const option = ref({
         { value: 5, name: "特大灾害" },
       ],
     },
-    // 样式而已...
-    {
-      type: "gauge",
-      name: "",
-      radius: "93%",
-      startAngle: "0",
-      endAngle: "-359.99",
-      splitNumber: "40",
-      center: ["30%", "50%"],
-      pointer: {
-        show: false,
-      },
-      title: {
-        show: false,
-      },
-      detail: {
-        show: false,
-      },
-      data: [
-        {
-          value: 95,
-          name: "",
-        },
-      ],
-      axisLine: {
-        lineStyle: {
-          width: 15,
-          opacity: 0,
-        },
-      },
-      axisTick: {
-        show: false,
-      },
-      splitLine: {
-        show: true,
-        length: 2,
-        lineStyle: {
-          color: "#4f5c64",
-          width: 8,
-          type: "solid",
-        },
-      },
-      axisLabel: {
-        show: false,
-      },
-    },
-    {
-      name: "",
-      type: "pie",
-      startAngle: 90,
-      radius: ["72%", "74%"],
-      emphasis: {
-        scale: false,
-      },
-      tooltip: {
-        show: false,
-      },
-      center: ["30%", "50%"],
-      labelLine: {
-        show: false,
-      },
-      itemStyle: {
-        color: "rgba(66, 66, 66, .4)",
-        shadowBlur: 10,
-        shadowColor: "rgba(253, 249, 20, .3)",
-      },
-      data: [
-        {
-          value: 100,
-        },
-      ],
-    },
-    {
-      name: "",
-      type: "pie",
-      startAngle: 90,
-      radius: ["74.5%", "76%"],
-      emphasis: {
-        scale: false,
-      },
-      tooltip: {
-        show: false,
-      },
-      center: ["30%", "50%"],
-      labelLine: {
-        show: false,
-      },
-      itemStyle: {
-        color: "rgba(66, 66, 66, .3)",
-        shadowBlur: 10,
-        shadowColor: "rgba(253, 249, 20, .3)",
-      },
-      data: [
-        {
-          value: 100,
-        },
-      ],
-    },
-    {
-      name: "",
-      type: "pie",
-      startAngle: 90,
-      radius: ["76.5%", "77.8%"],
-      emphasis: {
-        scale: false,
-      },
-      tooltip: {
-        show: false,
-      },
-      center: ["30%", "50%"],
-      labelLine: {
-        show: false,
-      },
-      itemStyle: {
-        color: "rgba(66, 66, 66, .2)",
-        shadowBlur: 10,
-        shadowColor: "rgba(253, 249, 20, .3)",
-      },
-      data: [
-        {
-          value: 100,
-        },
-      ],
-    },
-    {
-      name: "",
-      type: "pie",
-      startAngle: 90,
-      radius: ["79.5%", "80.5%"],
-      emphasis: {
-        scale: false,
-      },
-      tooltip: {
-        show: false,
-      },
-      center: ["30%", "50%"],
-      labelLine: {
-        show: false,
-      },
-      itemStyle: {
-        color: "rgba(66, 66, 66, .1)",
-        shadowBlur: 10,
-        shadowColor: "rgba(253, 249, 20, .3)",
-      },
-      data: [
-        {
-          value: 100,
-        },
-      ],
-    },
   ],
 });
 const chartData = ref();
@@ -290,20 +140,23 @@ onMounted(() => {
 onUnmounted(() => {
   clearInterval(chartInterval);
 });
-
 // 灾情分析下拉
 const initDisasterTypes = async () => {
   let res = await getZqfxDropdowndata();
   // console.log('initDisasterTypes=========>',res);
-  let list = res.data || []
-  disaster_types.value = [list.pop(),...list];
-  console.log("xxxxxx",disaster_types.value)
+  let list = res.data || [];
+  disaster_types.value = [list.pop(), ...list];
+  console.log("xxxxxx", disaster_types.value);
   current_disater_type.value = disaster_types.value[0].value;
+  typeId.value = disaster_types.value[0].value
+  
+  initFxTimes() 
   initZqfxLeveldata(disaster_types.value[0].value);
 };
+const typeId = ref("")
 const startTime = ref("");
 const endTime = ref("");
-// 灾情分析等级与区域
+// 灾情分析等级与区域 
 const initZqfxLeveldata = async (id) => {
   const param = {
     typeId: id,
@@ -319,6 +172,40 @@ const initZqfxLeveldata = async (id) => {
 const changeDisaster = (val) => {
   initZqfxLeveldata(val);
 };
+
+const initFxTimes = function(){
+  let year = new Date().getFullYear();
+  const getData = function(year,index){
+    for(let i=1;i<13;i++){
+      let month = i<10?`0${i}`:i+"";
+      let endDay = "31"
+      if([4,6,9,11].includes(i)){
+        endDay="30"
+      }else if(i===2){
+        if(year%4===0){
+          endDay = "29"
+        }else{
+          endDay="28"
+        }
+      }
+      let param = {
+        typeId: typeId.value,
+        startTime: year+"-"+month+"-01",
+        endTime: year+"-"+month+"-"+endDay,
+      }
+      getZqfxLeveldata(param).then(res=>{ 
+        console.log(res.data.area, res.data.area.reduce((a,b)=>a.value+b.value, {value: 0}))
+        let num = 0;
+        res.data.area.forEach(item=>{
+          num+=item.value||0;
+        })
+        hbtOption.series[index].data[i-1] = num
+      })
+    }
+  }
+  getData(year,0)
+  getData(year-1,1)
+}
 // 图表
 const initChart = function (option) {
   let chartDom = document.getElementById("disaster-chart");
@@ -377,6 +264,204 @@ const initChart = function (option) {
     if (chartInterval) clearInterval(chartInterval);
     chartInterval = setInterval(carouselFuc, interval);
   });
+};
+const hbtOption = {
+  tooltip: {
+    trigger: "axis",
+    axisPointer: {
+      type: "shadow",
+    },
+  },
+  legend: {
+    show: false,
+  },
+  grid: [
+    // 调整上下图表的大小及位置
+    {
+      show: false,
+      top: "10%",
+      left: 30,
+      right: 0,
+      height: "38%",
+    },
+    {
+      show: false,
+      top: "50%",
+      left: 30,
+      right: 30,
+      height: "0%",
+    },
+    {
+      show: false,
+      bottom: "5%",
+      left: 30,
+      right: 0,
+      height: "38%",
+    },
+  ],
+  xAxis: [
+    {
+      type: "category",
+      position: "center",
+      axisLine: {
+        show: false,
+      },
+      axisTick: {
+        show: false,
+      },
+      zlevel: 200,
+      splitLine: {
+        show: false,
+      },
+      axisLabel: {
+        show: true,
+        align: "center",
+        textStyle: {
+          color: "#fff",
+          fontSize: 10,
+        },
+      },
+      data: [
+        "1月",
+        "2月",
+        "3月",
+        "4月",
+        "5月",
+        "6月",
+        "7月",
+        "8月",
+        "9月",
+        "10月",
+        "11月",
+        "12月",
+      ],
+    },
+    {
+      gridIndex: 1,
+      type: "category",
+      position: "center",
+      axisLine: {
+        show: false,
+      },
+      axisTick: {
+        show: true,
+      },
+      zlevel: 200,
+      axisLabel: {
+        show: false,
+      },
+      data: [],
+    },
+    {
+      gridIndex: 2,
+      type: "category",
+      position: "top",
+      axisLine: {
+        show: false,
+      },
+      axisTick: {
+        show: false,
+      },
+      zlevel: 200,
+      splitLine: {
+        show: false,
+      },
+      axisLabel: {
+        show: false,
+        textStyle: {
+          color: "#fff",
+          fontSize: 10,
+        },
+      },
+      data: [
+        "1月",
+        "2月",
+        "3月",
+        "4月",
+        "5月",
+        "6月",
+        "7月",
+        "8月",
+        "9月",
+        "10月",
+        "11月",
+        "12月",
+      ],
+    },
+  ],
+  yAxis: [
+    {
+      type: "value",
+      axisLine: {
+        show: false,
+      },
+      axisTick: {
+        show: false,
+      },
+      splitLine: {
+        show: false,
+      },
+      minInterval: 1,
+      axisLabel: {
+        show: true,
+        textStyle: {
+          color: "#fff",
+        },
+      },
+    },
+    {
+      gridIndex: 1,
+      show: false,
+    },
+    {
+      gridIndex: 2,
+      type: "value",
+      inverse: true,
+      minInterval: 1,
+      axisLine: {
+        show: false,
+      },
+      axisTick: {
+        show: false,
+      },
+      splitLine: {
+        show: false,
+      },
+      axisLabel: {
+        show: true,
+        textStyle: {
+          color: "#fff",
+        },
+      },
+    },
+  ],
+  series: [
+    {
+      name: new Date().getFullYear()+"年",
+      type: "bar",
+      xAxisIndex: 0,
+      yAxisIndex: 0,
+      itemStyle: {
+        color: "#EE7E2D",
+      },
+      stack: "center1",
+      data: [2, 3, 4, 5, 6, 7, 8, 3, 5, 7, 4, 2],
+      barWidth: 15,
+    },
+    {
+      name: new Date().getFullYear()-1+"年",
+      type: "bar",
+      showBackground: false,
+      xAxisIndex: 2,
+      yAxisIndex: 2,
+      itemStyle: {
+        color: "#4273C5",
+      },
+      stack: "center2",
+      data: [8, 3, 2, 3, 4, 5, 6, 7, 8, 3, 5, 7],
+      barWidth: 15,
+    },
+  ],
 };
 const changeChart = (item) => {
   current_disater_tab.value = item;
@@ -512,12 +597,15 @@ const changeChart = (item) => {
   };
   switch (item) {
     case "分析":
+      initChart(hbtOption);
+      break;
     case "等级":
       let allNum = 0;
       let level = ["", "一般灾害", "较大灾害", "重大灾害", "特大灾害"];
-      option.value.series[0].data = chartData.value.level.map((item) => {
+      const colors = ["","#EE7E2D", "#FC5531", "#FEA67E","#FEC300"]
+      option.value.series[0].data = chartData.value.level.map((item, index) => {
         allNum += item.count;
-        return { value: item.count, name: level[item.eventlevel] };
+        return { value: item.count, name: level[item.eventlevel], itemStyle: {color: colors[item.eventlevel]} };
       });
       option.value.series[0].label.formatter = () => {
         return `{total|${allNum}} 个\r\n{text|总数}`;
@@ -617,73 +705,72 @@ const selectTime = function ([start, end]) {
 </script>
 
 <style scoped lang="less">
-  .disaster_situation {
-    height: 230px;
-    position: relative;
-    display: flex;
+.disaster_situation {
+  height: 230px;
+  position: relative;
+  display: flex;
 
-    .type_select_box {
-      position: absolute;
-      top: -50px;
-      right: 30px;
+  .type_select_box {
+    position: absolute;
+    top: -50px;
+    right: 30px;
 
-      :deep(.el-select) {
-        .el-input {
-          height: 25px;
-          width: 120px;
-        }
-
-        .el-input__wrapper {
-          box-shadow: none !important;
-          border-radius: 0;
-          background: #09262e !important;
-          border: 2px solid #0698d7 !important;
-        }
-
-        .el-input__inner {
-          height: 100%;
-        }
-
-        .el-select-dropdown__item.selected {
-          background-color: rgba(0, 0, 0, 0.1) !important;
-          color: #53befc !important;
-        }
-
-        .el-select-dropdown__item {
-          font-size: 16px !important;
-          height: 28px !important;
-          padding: 4px !important;
-        }
+    :deep(.el-select) {
+      .el-input {
+        height: 25px;
+        width: 120px;
       }
-    }
 
-    .disaster_tabs {
-      width: 96px;
-
-      .disaster_tab {
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        width: 100%;
-        font-size: 12px;
-        background: url("@/assets/decisionAnalysis/tab.png") center/99% 100%
-          no-repeat;
-        margin-bottom: 8px;
-
-        &:hover,
-        &.active {
-          background: url("@/assets/decisionAnalysis/tab_active.png") center/99%
-            100% no-repeat;
-        }
+      .el-input__wrapper {
+        box-shadow: none !important;
+        border-radius: 0;
+        background: #09262e !important;
+        border: 2px solid #0698d7 !important;
       }
-    }
 
-    .disaster_chart {
-      flex: 1;
-      overflow: hidden;
+      .el-input__inner {
+        height: 100%;
+      }
+
+      .el-select-dropdown__item.selected {
+        background-color: rgba(0, 0, 0, 0.1) !important;
+        color: #53befc !important;
+      }
+
+      .el-select-dropdown__item {
+        font-size: 16px !important;
+        height: 28px !important;
+        padding: 4px !important;
+      }
     }
   }
 
+  .disaster_tabs {
+    width: 96px;
+
+    .disaster_tab {
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      width: 100%;
+      font-size: 12px;
+      background: url("@/assets/decisionAnalysis/tab.png") center/99% 100%
+        no-repeat;
+      margin-bottom: 8px;
+
+      &:hover,
+      &.active {
+        background: url("@/assets/decisionAnalysis/tab_active.png") center/99%
+          100% no-repeat;
+      }
+    }
+  }
+
+  .disaster_chart {
+    flex: 1;
+    overflow: hidden;
+  }
+}
 </style>

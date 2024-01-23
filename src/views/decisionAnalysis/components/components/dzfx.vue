@@ -49,8 +49,8 @@ import {
   getZqfxLeveldata,
 } from "@/api/decision_analysis.js";
 // tab
-const disaster_tab = ref(["分析", "等级", "趋势", "区域", "热力图"]);
-const current_disater_tab = ref("区域");
+const disaster_tab = ref(["震级", "趋势", "类型", "地震震级分布"]);
+const current_disater_tab = ref("类型");
 // 下拉选项
 const disaster_types = ref([]);
 const current_disater_type = ref();
@@ -302,7 +302,7 @@ const initDisasterTypes = async () => {
 };
 const startTime = ref("");
 const endTime = ref("");
-// 灾情分析等级与区域
+// 灾情分析震级与区域
 const initZqfxLeveldata = async (id) => {
   const param = {
     typeId: id,
@@ -313,10 +313,6 @@ const initZqfxLeveldata = async (id) => {
   console.log("getZqfxLeveldata=========>灾情", res);
   chartData.value = res.data;
   changeChart(current_disater_tab.value);
-};
-// 切换灾情类型
-const changeDisaster = (val) => {
-  initZqfxLeveldata(val);
 };
 // 图表
 const initChart = function (option) {
@@ -428,6 +424,7 @@ const changeChart = (item) => {
       {
         type: "value",
         name: "",
+        minInterval: 1,
         nameTextStyle: {
           color: "#fff",
         },
@@ -437,7 +434,7 @@ const changeChart = (item) => {
         axisTick: {
           show: false,
         },
-        axisLine: {
+        axisLine: { 
           show: false,
         },
         axisLabel: {
@@ -510,13 +507,13 @@ const changeChart = (item) => {
     ],
   };
   switch (item) {
-    case "分析":
-    case "等级":
+    case "震级":
       let allNum = 0;
-      let level = ["", "一般灾害", "较大灾害", "重大灾害", "特大灾害"];
-      option.value.series[0].data = chartData.value.level.map((item) => {
+      let level = ["", "微震", "有感地震", "中强震", "强震", "大地震", "巨大地震",];
+      const colors = ["","#EE7E2D", "#FC5531", "#FEA67E","#FEC300"]
+      option.value.series[0].data = chartData.value.level.map((item, index) => {
         allNum += item.count;
-        return { value: item.count, name: level[item.eventlevel] };
+        return { value: item.count, name: level[item.eventlevel], itemStyle: {color: colors[item.eventlevel]} };
       });
       option.value.series[0].label.formatter = () => {
         return `{total|${allNum}} 个\r\n{text|总数}`;
@@ -549,7 +546,7 @@ const changeChart = (item) => {
 
       initChart(noption);
       break;
-    case "区域":
+    case "类型":
       let dataArea = [];
       noption.xAxis.data = chartData.value.area.map((item) => {
         dataArea.push(item.value);

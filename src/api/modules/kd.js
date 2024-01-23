@@ -17,8 +17,32 @@ export function getDeviceList(data){
 
 export function initMeeting(data){
   return axios({
-    url: "https://10.112.143.193/dispatch-micoservice/meeting/multi/init?apikey="+kdApiKey,
+    url: "https://10.112.143.193/dispatch-micoservice/meeting/multi/init",
     method: 'post',
-    data
+    data,
+    headers: {
+      apiKey: kdApiKey
+    }
+  })
+}
+
+export function getMeetingMember(groupId){
+  return axios({
+    url: "https://10.112.143.193/dispatch-micoservice/meeting/meetingMember/"+groupId,
+    method: 'get',
+    headers: {
+      apiKey: kdApiKey
+    }
+  })
+}
+
+export function getResourceLiveUrl(data){
+  return axios({
+    url: "https://10.112.143.193/dispatch-micoservice/meeting/getResourceLiveUrl",
+    method: 'get',
+    params: data,
+    headers: {
+      apiKey: kdApiKey
+    }
   })
 }

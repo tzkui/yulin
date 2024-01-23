@@ -409,6 +409,7 @@ const changeChart = (item) => {
       {
         type: "value",
         name: "",
+        minInterval: 1,
         nameTextStyle: {
           color: "#fff",
         },
@@ -495,9 +496,10 @@ const changeChart = (item) => {
     case "等级":
       let allNum = 0;
       let level = ["", "一般灾害", "较大灾害", "重大灾害", "特大灾害"];
+      const colors = ["","#EE7E2D", "#FC5531", "#FEA67E","#FEC300"]
       option.value.series[0].data = chartData.value.level.map((item) => {
         allNum += item.count;
-        return { value: item.count, name: level[item.eventlevel] };
+        return { value: item.count, name: level[item.eventlevel], itemStyle: {color: colors[item.eventlevel]} };
       });
       option.value.series[0].label.formatter = () => {
         return `{total|${allNum}} 个\r\n{text|总数}`;

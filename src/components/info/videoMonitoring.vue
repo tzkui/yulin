@@ -105,8 +105,10 @@ const openDialog = function (e) {
   console.log(e);
   showDialog.value = true;
   if (e && e.playerUrl) {
+    console.log(treeData.value)
     nextTick(() => {
       for (const item of treeData.value) {
+        if(item.children)
         for (const info of item.children) {
           if (info.id === e.id) {
             handleCheckChange(info, true);
@@ -145,26 +147,27 @@ let originTreeData = ref([]);
 getSpjk().then((res) => {
   console.log("spjk,", res);
   let arr = [];
-  for(let i=0;i <res.data.length;i++) {
-    getSpjkTree(data.typeId).then(resp=>{
-      console.log("spjk_tree", resp)
-      arr[i] = initTree(resp.data)
-    })
-  }
-  // res.data.forEach((item) => {
-  //   arr.push({
-  //     id: item.typeId,
-  //     label: item.mc,
-  //     children: item.jh.map((info) => {
-  //       return {
-  //         id: info.id,
-  //         type: info.typeName,
-  //         playerUrl: info.playerUrl,
-  //         label: info.monitorName,
-  //       };
-  //     }),
-  //   });
-  // });
+  // for(let i=0;i <res.data.length;i++) {
+  //   getSpjkTree(res.data[i].typeId).then(resp=>{
+  //     console.log("spjk_tree", resp)
+  //     arr[i] = initTree(resp.data)
+  //     console.log("zzzzzzz", arr[i], treeData.value)
+  //   })
+  // }
+  res.data.forEach((item) => {
+    arr.push({
+      id: item.typeId,
+      label: item.mc,
+      children: item.jh.map((info) => {
+        return {
+          id: info.id,
+          type: info.typeName,
+          playerUrl: info.playerUrl,
+          label: info.monitorName,
+        };
+      }),
+    });
+  });
   treeData.value = arr;
   originTreeData.value = treeData.value
   console.log(treeData.value);

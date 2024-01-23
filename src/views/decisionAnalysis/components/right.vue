@@ -189,7 +189,8 @@
                 </p>
                 <p class="labels-top">
                   <span class="three" @click.stop="doZj(item)">战评总结</span>
-                  <span class="three" @click.stop="doGd(item)">归档</span>
+                  <span class="three" @click.stop="doGd(item)" v-if="item.event.sfgd==='未归档'">归档</span>
+                  <span class="three" v-else style="background-color: #5C7CDA;">已归档</span>
                 </p>
                 <p class="labels-bottoms">
                   <span class="labels-bottom">{{
@@ -225,11 +226,12 @@
                     v-if="item.event.stateName == '处理中'"
                     >{{ item.event.stateName }}</span
                   >
-                  <span class="two" v-else>{{ item.event.stateName }}</span>
+                  <span class="two" v-else>{{ item.event.stateName }}</span> 
                 </p>
                 <p class="labels-top">
                   <span class="three" @click.stop="doZj(item)">战评总结</span>
-                  <span class="three" @click.stop="doGd(item)">归档</span>
+                  <span class="three" @click.stop="doGd(item)" v-if="item.event.sfgd==='未归档'">归档</span>
+                  <span class="three" v-else style="background-color: #5C7CDA;">已归档</span>
                 </p>
                 <p class="labels-bottoms">
                   <span class="labels-bottom">{{
@@ -314,7 +316,7 @@ const analysis_checked_data = ref("");
 onMounted(() => {
   initType();
   initZqzhcx();
-  initAlk()
+  // initAlk()
 });
 let timer1 = null;
 // 滑块改变
@@ -859,7 +861,9 @@ const doZj = function(info){
 }
 const doGd = function(info){
   console.log("归档了")
-  doGdApi({eventId: info.event.id}).then(res=>{}).catch(()=>{}).finally(()=>{
+  doGdApi({eventId: info.event.id}).then(res=>{
+    info.event.sfgd = "已归档"
+  }).catch(()=>{}).finally(()=>{
     ElMessage.success("归档成功")
   })
 }

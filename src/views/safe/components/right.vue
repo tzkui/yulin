@@ -16,8 +16,23 @@ const dataSelectors = reactive({
 
 const videoConferencingBus = useEventBus("openVideoMonitoring")
 const openVideoConferencing = function (info) {
+  $mitt.emit("addMarker", {
+    markerType: "spjk",
+    id: info.id,
+    icon: "/images/marker/mapdot-scientific.png",
+    lng: info.mapX,
+    lat: info.mapY,
+    name: "视频监控",
+    label: { text: "视频监控", font_size: 16 },
+    dialogType: "spjk",
+    details: {
+      monitorName: info.monitorName,
+      typeName: info.typeName,
+      location: info.location,
+      playerUrl: info.playerUrl,
+    },
+  })
   videoConferencingBus.emit(info)
-
 }
 const toogleDate = function (key, val) {
   if (dataSelectors[key] !== val) {
@@ -551,7 +566,7 @@ const getEnterpriseTypeList = async function (type = "1") {
 const getmonitorList = async function (type = "1") {
   let res = await getZdddspjk({ type });
   if (res.code == 200) {
-    monitorList.value = res.data.slice(0, 10)
+    monitorList.value = res.data.slice(0, 4)
   }
 };
 
