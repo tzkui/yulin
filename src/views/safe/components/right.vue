@@ -1117,7 +1117,7 @@ const qylxcl = (item, index) => {
 
 /* 下面就是这个柱状图的样式的了 */
 #columnartype {
-  height: 260px;
+  height: 205px;
   margin-bottom: -10px;
   margin-top: -10px;
 }
