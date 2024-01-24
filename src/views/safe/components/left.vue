@@ -17,7 +17,7 @@
               item.name
             }}</span>
             <span class="title">{{ item.title }}</span>
-            <span class="time">{{ item.rqStr }}</span>
+            <span class="time">{{ item.time }}</span>
           </div>
           <!-- 下面是内容部分的 -->
           <div class="content">
@@ -155,10 +155,10 @@ const getdatasj = async function () {
     secureList.value = res.data.map((item) => {
       return {
         ...item,
-        name: item.eventLvl == 0 ? "一般" : "较大",
-        title: item.title,
-        time: item.rqStr,
-        content: item.contentText,
+        name: item.eventLevel == 1 ? "较大" : "一般",
+        title: item.eventName,
+        time: item.eventDate,
+        content: item.eventContent,
       };
     });
   }
@@ -175,7 +175,7 @@ const getdatasj = async function () {
         details: {
           name: v.title,
           level: v.eventLvl===0?'一般':'重大',
-          time: v.rqStr,
+          time: v.eventDate,
           content: v.content,
         }
     }

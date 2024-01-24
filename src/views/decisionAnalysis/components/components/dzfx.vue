@@ -78,6 +78,7 @@ const option = ref({
     type: "",
     top: "center",
     right: "15",
+    left: "15",
     icon: "circle",
     itemWidth: 16,
     itemHeight: 16,
@@ -377,8 +378,9 @@ const changeChart = (item) => {
   current_disater_tab.value = item;
   let noption = {
     grid: {
-      top: "18%",
-      bottom: "23%", //也可设置left和right设置距离来控制图表的大小
+      top: "15%",
+      bottom: "25%", //也可设置left和right设置距离来控制图表的大小
+      left: "10%"
     },
     tooltip: {
       trigger: "axis",
@@ -548,10 +550,11 @@ const changeChart = (item) => {
       break;
     case "类型":
       let dataArea = [];
-      noption.xAxis.data = chartData.value.area.map((item) => {
-        dataArea.push(item.value);
-        return item.name;
-      });
+      // noption.xAxis.data = chartData.value.area.map((item) => {
+      //   dataArea.push(item.value);
+      //   return item.name;
+      // });
+      noption.xAxis.data = ["构造地震","火山地震","塌陷地震","诱发地震","人工地震",]
       noption.series = [
         {
           name: "数量",
@@ -575,7 +578,8 @@ const changeChart = (item) => {
               },
             ]),
           },
-          data: dataArea,
+          // data: dataArea,
+          data: [0,0,0,0,0],
         },
       ];
       initChart(noption);
@@ -614,7 +618,7 @@ const selectTime = function ([start, end]) {
 
 <style scoped lang="less">
   .disaster_situation {
-    height: 230px;
+    height: 300px;
     position: relative;
     display: flex;
 
