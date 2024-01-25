@@ -92,51 +92,7 @@ const toogleDate = function (key, val) {
     dataSelectors[key] = val;
     // 然后这里请求数据,到时候改变不同的一个数据格式就是可以的了
     console.log(key, val, "看看这两个玩意是什么");
-    if (val == "1") {
-      let aaaa = ref([
-        { value: 38, name: "未带安全帽" },
-        { value: 35, name: "烟感" },
-        { value: 30, name: "人员脱岗" },
-        { value: 44, name: "水浸" },
-        { value: 50, name: "防火区明火" },
-        { value: 40, name: "高空坠物" },
-      ]);
-      ringdata.value = aaaa.value;
-      getring(val);
-    } else if (val == "2") {
-      let aaaa = ref([
-        { value: 48, name: "安全帽" },
-        { value: 135, name: "烟感" },
-        { value: 180, name: "人员脱岗" },
-        { value: 184, name: "水浸" },
-        { value: 100, name: "防火区明火" },
-        { value: 50, name: "高空坠物" },
-      ]);
-      ringdata.value = aaaa.value;
-      getring(ringdata.value);
-    } else if (val == "3") {
-      let aaaa = ref([
-        { value: 88, name: "安全帽" },
-        { value: 255, name: "烟感" },
-        { value: 210, name: "人员脱岗" },
-        { value: 224, name: "水浸" },
-        { value: 200, name: "防火区明火" },
-        { value: 100, name: "高空坠物" },
-      ]);
-      ringdata.value = aaaa.value;
-      getring(val);
-    } else if (val == "4") {
-      let aaaa = ref([
-        { value: 148, name: "安全帽" },
-        { value: 335, name: "烟感" },
-        { value: 280, name: "人员脱岗" },
-        { value: 384, name: "水浸" },
-        { value: 400, name: "防火区明火" },
-        { value: 133, name: "高空坠物" },
-      ]);
-      ringdata.value = aaaa.value;
-      getring(val);
-    }
+    getring(val);
   }
 };
 
@@ -502,6 +458,7 @@ const ringdata = ref([
 ]);
 // 下面这个就是显示环形图的图表的了
 const getring = async function (type = "1") {
+  console.log("fjkdf", type)
   let newringdata = [];
   let newsum = 0;
   let bardata = [];

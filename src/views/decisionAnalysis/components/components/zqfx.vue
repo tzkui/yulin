@@ -1,5 +1,5 @@
 <template>
-  <ViewBox title="灾情分析">
+  <ViewBox title="灾情总体分析">
     <div class="disaster_situation">
       <div class="type_select_box">
         <!-- <el-select
@@ -17,7 +17,7 @@
           </el-option>
         </el-select> -->
       </div>
-      <timeSelect @selectTime="selectTime" v-if="current_disater_tab!=='分析'" :isEarthquake="false"></timeSelect>
+      <timeSelect @selectTime="selectTime" v-if="current_disater_tab!=='总体分析'" :isEarthquake="false"></timeSelect>
       <!-- tab 切换chart -->
       <div class="disaster_tabs">
         <div
@@ -49,8 +49,8 @@ import {
   getZqfxLeveldata,
 } from "@/api/decision_analysis.js";
 // tab
-const disaster_tab = ref(["分析", "等级", "趋势", "区域", "热力图"]);
-const current_disater_tab = ref("分析");
+const disaster_tab = ref(["总体分析", "类型分析", "趋势分析", "区域分析", "灾情热力图"]);
+const current_disater_tab = ref("总体分析");
 // 下拉选项
 const disaster_types = ref([]);
 const current_disater_type = ref();
@@ -63,7 +63,7 @@ const option = ref({
     backgroundColor: "rgba(13,20,26,1)",
     showContent: true,
     borderColor: "rgba(255,255,255,0)", //设置自定义边框颜色
-    confine: true, //是否将tooltip框限制在图表的区域内，默认为false
+    confine: true, //是否将tooltip框限制在图表的区域分析内，默认为false
     formatter: `{a}{b} : {c} ({d}%)`,
     extraCssText:
       // 额外附加到浮层的css样式，此处为为浮层添加阴影及padding
@@ -140,7 +140,7 @@ onMounted(() => {
 onUnmounted(() => {
   clearInterval(chartInterval);
 });
-// 灾情分析下拉
+// 灾情总体分析下拉
 const initDisasterTypes = async () => {
   let res = await getZqfxDropdowndata();
   // console.log('initDisasterTypes=========>',res);
@@ -156,7 +156,7 @@ const initDisasterTypes = async () => {
 const typeId = ref("")
 const startTime = ref("");
 const endTime = ref("");
-// 灾情分析等级与区域 
+// 灾情总体分析类型分析与区域分析 
 const initZqfxLeveldata = async (id) => {
   const param = {
     typeId: id,
@@ -596,10 +596,10 @@ const changeChart = (item) => {
     ],
   };
   switch (item) {
-    case "分析":
+    case "总体分析":
       initChart(hbtOption);
       break;
-    case "等级":
+    case "类型分析":
       let allNum = 0;
       let level = ["", "一般灾害", "较大灾害", "重大灾害", "特大灾害"];
       const colors = ["","#EE7E2D", "#FC5531", "#FEA67E","#FEC300"]
@@ -613,7 +613,7 @@ const changeChart = (item) => {
 
       initChart(option.value);
       break;
-    case "趋势":
+    case "趋势分析":
       let dataArr = [];
       noption.xAxis.data = chartData.value.date.map((item) => {
         dataArr.push(item.count);
@@ -638,7 +638,7 @@ const changeChart = (item) => {
 
       initChart(noption);
       break;
-    case "区域":
+    case "区域分析":
       let dataArea = [];
       noption.xAxis.data = chartData.value.area.map((item) => {
         dataArea.push(item.value);
@@ -672,7 +672,7 @@ const changeChart = (item) => {
       ];
       initChart(noption);
       break;
-    case "热力图":
+    case "灾情热力图":
       addHotMap();
       break;
     default:
