@@ -1,5 +1,10 @@
 <template>
-  <div v-if="showDialog" :style="style" class="video_dialog animate__animated animate__zoomIn" ref="videoConferencingRef">
+  <div
+    v-if="showDialog"
+    :style="style"
+    class="video_dialog animate__animated animate__zoomIn"
+    ref="videoConferencingRef"
+  >
     <div class="dialog_head" ref="dialogHeaderRef">
       <h2 class="dialog_title">视频会商</h2>
       <img
@@ -99,37 +104,43 @@ import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useEventBus, useDraggable } from "@vueuse/core";
 import { getOrgRoot, getOrgById } from "@/api/modules/videoConferencing.js";
 const showDialog = ref(false);
-import {addressBook} from '@/api/addressBook.js'
-import {getDeviceTree, getDeviceList, initMeeting, getMeetingMember, getResourceLiveUrl} from "@/api/modules/kd.js"
-
-const txlLists = ref([])
-const kdLists = ref([])
-getDeviceTree().then(res=>{
+import { addressBook } from "@/api/addressBook.js";
+import {
+  getDeviceTree,
+  getDeviceList,
+  initMeeting,
+  getMeetingMember,
+  getResourceLiveUrl,
+  deleteMeeting,
+} from "@/api/modules/kd.js";
+import { ElMessage } from "element-plus";
+const txlLists = ref([]);
+const kdLists = ref([]);
+getDeviceTree().then((res) => {
   kdLists.value = res.data.result || [];
-  kdLists.value.forEach(item=>{
-    item.label = item.name
-    getDeviceList({groupId: item.id}).then(devs=>{
-      item.children = devs.data.result.data.map(item=>{
+  kdLists.value.forEach((item) => {
+    item.label = item.name;
+    getDeviceList({ groupId: item.id }).then((devs) => {
+      item.children = devs.data.result.data.map((item) => {
         return {
           id: item.gbid,
           type: "TEMP_GB",
-          label: item.deviceName
-        }
-
-      })
-    })
-  })
-})
+          label: item.deviceName,
+        };
+      });
+    });
+  });
+});
 const openDialog = function (e) {
   showDialog.value = true;
   console.log("视频会商参数：", e);
 };
-const dialogHeaderRef = ref()
-const videoConferencingRef = ref()
+const dialogHeaderRef = ref();
+const videoConferencingRef = ref();
 const { x, y, style } = useDraggable(dialogHeaderRef, {
   initialValue: { x: 454, y: 404 },
-  draggingElement: videoConferencingRef.value
-})
+  draggingElement: videoConferencingRef.value,
+});
 const meetingList = ref([]);
 const loadOrgNode = async function (node, resolve) {
   console.log("node: ", node);
@@ -146,9 +157,9 @@ const loadOrgNode = async function (node, resolve) {
     return resolve(res.data);
   }
 };
-const remove = function(i){
+const remove = function (i) {
   meetingList.value.splice(i, 1);
-}
+};
 const openVideoConferencingBus = useEventBus("openVideoConferencing");
 openVideoConferencingBus.on(openDialog);
 onMounted(() => {
@@ -158,11 +169,10 @@ onUnmounted(() => {
   openVideoConferencingBus.off(openDialog);
 });
 
-
 // 树结构数据
-const treeData = computed(()=>{
-  return [...txlLists.value,...kdLists.value]
-})
+const treeData = computed(() => {
+  return [...txlLists.value, ...kdLists.value];
+});
 // 树结构显示prop
 const treeProps = ref({
   label: "label",
@@ -186,7 +196,7 @@ const handleCheckChange = (data, checked, indeterminate) => {
 };
 // 关闭弹框
 const closeDialog = () => {
-  closeMeeting()
+  closeMeeting();
   showDialog.value = false;
 };
 // 切换分屏
@@ -236,8 +246,8 @@ let meetingIns = null;
 //     }
 //   );
 // };
-const groupId = ref("")
-const  beginConferencing = function(){
+const groupId = ref("MS8d11f0dd0f45aa9bbc5154e09c8d84");
+const beginConferencing = function () {
   if (meetingIns || meetingList.value.length === 0) return;
   // showMeeting.value = true;
   let options = {
@@ -247,51 +257,58 @@ const  beginConferencing = function(){
         id: item.id,
         type: item.type,
         index: index,
-      }
+      };
     }),
     listenDevices: [],
-  }
-  initMeeting(options).then(res=>{
-    console.log(res)
+  };
+  initMeeting(options).then((res) => {
+    console.log(res);
     groupId.value = res.data.result?.groupId || "";
-    if(groupId.value){
-      getMeetingMemberById()
+    if (groupId.value) {
+      getMeetingMemberById();
     }
-  })
-}
-let meetingTimer = null;
-const getMeetingMemberById = function(){
-  getMeetingMember(groupId.value).then(res=>{
-    res.data.result.forEach(item=>{
-      if(item.videoSendResourceId){
-        getRtspUrl(item.videoSendResourceId)
-      }else{
-        if(meetingTimer){
-          clearTimeout(meetingTimer)
-        }
-        meetingTimer = setTimeout(()=>{
-          getMeetingMemberById()
-        },2000)
+    if (res.data.result.failDevices.length > 0) {
+      for (const info of res.data.result.failDevices) {
+        ElMessage.error(info.messageBody.desc);
       }
-    })
-    
-  })
-}
-const getRtspUrl = function(resourceId){
+    }
+  });
+};
+let meetingTimer = null;
+const getMeetingMemberById = function () {
+  getMeetingMember(groupId.value).then((res) => {
+    res.data.result.forEach((item) => {
+      if (item.videoSendResourceId) {
+        getRtspUrl(item.videoSendResourceId);
+      } else {
+        if (meetingTimer) {
+          clearTimeout(meetingTimer);
+        }
+        meetingTimer = setTimeout(() => {
+          getMeetingMemberById();
+        }, 2000);
+      }
+    });
+  });
+};
+const getRtspUrl = function (resourceId) {
   const params = {
     resourceId: resourceId,
-    protocol: "rtsp"
-  }
-  getResourceLiveUrl(params).then(res=>{
+    protocol: "flv",
+  };
+  getResourceLiveUrl(params).then((res) => {
+    console.log(res);
+  });
+};
+const closeMeeting = function () {
+  deleteMeeting(groupId.value).then(res=>{
     console.log(res)
   })
-}
-const closeMeeting = function () {
-  if (meetingIns) {
-    showMeeting.value = false;
-    meetingIns.closeMeeting();
-    meetingIns = null;
-  }
+  // if (meetingIns) {
+  //   showMeeting.value = false;
+  //   meetingIns.closeMeeting();
+  //   meetingIns = null;
+  // }
 };
 const onNodeClick = function (info) {
   console.log(info);
@@ -308,7 +325,7 @@ const onNodeClick = function (info) {
 };
 defineExpose({
   openDialog,
-  closeDialog
+  closeDialog,
 });
 </script>
 

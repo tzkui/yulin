@@ -165,14 +165,16 @@ const submitCustomTime = function (time) {
     line-height: 24px;
     padding: 0 10px;
     text-align: center;
-    border: 1px solid #fff;
+    border: 1px solid #5399D9;
+    background-color: #5399D9;
+    border-radius: 2px;
     color: #fff;
     margin-left: 8px;
     cursor: pointer;
   }
   .selected_item {
-    border-color: #1976d2;
-    background-color: #1976d2;
+    border-color: #053164;
+    background-color: #053164;
   }
 }
 .timebox {

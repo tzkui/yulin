@@ -26,6 +26,17 @@ export function initMeeting(data){
   })
 }
 
+export function deleteMeeting(groupId="MS8d11f0dd0f45aa9bbc5154e09c8d84"){
+  return axios({
+    url: "https://10.112.143.193/dispatch-micoservice/meeting/destroy/"+groupId,
+    method: 'delete',
+    data: {},
+    headers: {
+      apiKey: kdApiKey
+    }
+  })
+}
+
 export function getMeetingMember(groupId){
   return axios({
     url: "https://10.112.143.193/dispatch-micoservice/meeting/meetingMember/"+groupId,

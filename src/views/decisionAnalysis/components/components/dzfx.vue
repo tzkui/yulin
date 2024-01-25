@@ -49,240 +49,19 @@ import {
   getZqfxLeveldata,
 } from "@/api/decision_analysis.js";
 // tab
-const disaster_tab = ref(["震级", "趋势", "类型", "地震震级分布"]);
-const current_disater_tab = ref("类型");
+const disaster_tab = ref([
+  "类型占比",
+  "类型分布",
+  "震级分析",
+  "重点关注",
+  "地震频发区",
+]);
+const current_disater_tab = ref("震级分析");
 // 下拉选项
 const disaster_types = ref([]);
 const current_disater_type = ref();
 // 图表内容
 let Mychart = null;
-const option = ref({
-  tooltip: {
-    show: true,
-    showContent: true,
-    backgroundColor: "rgba(13,20,26,1)",
-    showContent: true,
-    borderColor: "rgba(255,255,255,0)", //设置自定义边框颜色
-    confine: true, //是否将tooltip框限制在图表的区域内，默认为false
-    formatter: `{a}{b} : {c} ({d}%)`,
-    extraCssText:
-      // 额外附加到浮层的css样式，此处为为浮层添加阴影及padding
-      "box-shadow: 0 0 5px rgba(181, 245, 236, 0.5);padding:5px 15px",
-    textStyle: {
-      color: "#FFF", // 文字的颜色
-      fontSize: "14", // 文字字体大小
-    },
-  },
-  legend: {
-    orient: "vertical",
-    type: "",
-    top: "center",
-    right: "15",
-    left: "15",
-    icon: "circle",
-    itemWidth: 16,
-    itemHeight: 16,
-    itemGap: 30,
-    formatter: function (name) {
-      return "{title|" + name + "}";
-    },
-    textStyle: {
-      color: "inherit",
-      rich: {
-        title: {
-          fontSize: 14,
-          padding: [0, 15, 0, 15],
-        },
-      },
-    },
-  },
-  series: [
-    {
-      name: "",
-      type: "pie",
-      radius: ["52%", "65%"],
-      center: ["30%", "50%"],
-      avoidLabelOverlap: false,
-      label: {
-        position: "center",
-        formatter: () => {
-          return "{total|255} 个\r\n{text|总数}";
-        },
-        rich: {
-          total: {
-            fontSize: 30,
-            lineHeight: 60,
-          },
-          text: {
-            color: "#ccc",
-            fontSize: 18,
-          },
-        },
-        color: "#fff",
-        fontSize: 14,
-      },
-      labelLine: {
-        show: false,
-      },
-      data: [
-        { value: 200, name: "一般灾害" },
-        { value: 40, name: "较大灾害" },
-        { value: 10, name: "重大灾害" },
-        { value: 5, name: "特大灾害" },
-      ],
-    },
-    // 样式而已...
-    {
-      type: "gauge",
-      name: "",
-      radius: "93%",
-      startAngle: "0",
-      endAngle: "-359.99",
-      splitNumber: "40",
-      center: ["30%", "50%"],
-      pointer: {
-        show: false,
-      },
-      title: {
-        show: false,
-      },
-      detail: {
-        show: false,
-      },
-      data: [
-        {
-          value: 95,
-          name: "",
-        },
-      ],
-      axisLine: {
-        lineStyle: {
-          width: 15,
-          opacity: 0,
-        },
-      },
-      axisTick: {
-        show: false,
-      },
-      splitLine: {
-        show: true,
-        length: 2,
-        lineStyle: {
-          color: "#4f5c64",
-          width: 8,
-          type: "solid",
-        },
-      },
-      axisLabel: {
-        show: false,
-      },
-    },
-    {
-      name: "",
-      type: "pie",
-      startAngle: 90,
-      radius: ["72%", "74%"],
-      emphasis: {
-        scale: false,
-      },
-      tooltip: {
-        show: false,
-      },
-      center: ["30%", "50%"],
-      labelLine: {
-        show: false,
-      },
-      itemStyle: {
-        color: "rgba(66, 66, 66, .4)",
-        shadowBlur: 10,
-        shadowColor: "rgba(253, 249, 20, .3)",
-      },
-      data: [
-        {
-          value: 100,
-        },
-      ],
-    },
-    {
-      name: "",
-      type: "pie",
-      startAngle: 90,
-      radius: ["74.5%", "76%"],
-      emphasis: {
-        scale: false,
-      },
-      tooltip: {
-        show: false,
-      },
-      center: ["30%", "50%"],
-      labelLine: {
-        show: false,
-      },
-      itemStyle: {
-        color: "rgba(66, 66, 66, .3)",
-        shadowBlur: 10,
-        shadowColor: "rgba(253, 249, 20, .3)",
-      },
-      data: [
-        {
-          value: 100,
-        },
-      ],
-    },
-    {
-      name: "",
-      type: "pie",
-      startAngle: 90,
-      radius: ["76.5%", "77.8%"],
-      emphasis: {
-        scale: false,
-      },
-      tooltip: {
-        show: false,
-      },
-      center: ["30%", "50%"],
-      labelLine: {
-        show: false,
-      },
-      itemStyle: {
-        color: "rgba(66, 66, 66, .2)",
-        shadowBlur: 10,
-        shadowColor: "rgba(253, 249, 20, .3)",
-      },
-      data: [
-        {
-          value: 100,
-        },
-      ],
-    },
-    {
-      name: "",
-      type: "pie",
-      startAngle: 90,
-      radius: ["79.5%", "80.5%"],
-      emphasis: {
-        scale: false,
-      },
-      tooltip: {
-        show: false,
-      },
-      center: ["30%", "50%"],
-      labelLine: {
-        show: false,
-      },
-      itemStyle: {
-        color: "rgba(66, 66, 66, .1)",
-        shadowBlur: 10,
-        shadowColor: "rgba(253, 249, 20, .3)",
-      },
-      data: [
-        {
-          value: 100,
-        },
-      ],
-    },
-  ],
-});
 const chartData = ref();
 let chartInterval = null; //轮播 interval
 onMounted(() => {
@@ -295,9 +74,9 @@ onUnmounted(() => {
 // 灾情分析下拉
 const initDisasterTypes = async () => {
   let res = await getZqfxDropdowndata();
-  let list = res.data || []
-  disaster_types.value = [list.pop(),...list];
-  console.log("xxxxxx",disaster_types.value)
+  let list = res.data || [];
+  disaster_types.value = [list.pop(), ...list];
+  console.log("xxxxxx", disaster_types.value);
   current_disater_type.value = disaster_types.value[3].value;
   initZqfxLeveldata(disaster_types.value[3].value);
 };
@@ -376,215 +155,20 @@ const initChart = function (option) {
 };
 const changeChart = (item) => {
   current_disater_tab.value = item;
-  let noption = {
-    grid: {
-      top: "15%",
-      bottom: "25%", //也可设置left和right设置距离来控制图表的大小
-      left: "10%"
-    },
-    tooltip: {
-      trigger: "axis",
-      backgroundColor: "rgba(13,20,26,1)",
-      showContent: true,
-      borderColor: "rgba(255,255,255,0)", //设置自定义边框颜色
-      extraCssText:
-        "box-shadow: 0 0 5px rgba(181, 245, 236, 0.5);padding:5px 15px",
-      textStyle: {
-        color: "#FFF", // 文字的颜色
-        fontSize: "14", // 文字字体大小
-      },
-      axisPointer: {
-        type: "shadow",
-        shadowStyle: {
-          color: "rgba(200, 255, 255, 0.2)",
-          width: "1",
-        },
-      },
-    },
-    xAxis: {
-      data: ["1", "2", "3", "4", "5"],
-      axisLine: {
-        show: true, //隐藏X轴轴线
-        lineStyle: {
-          color: "#26353c",
-        },
-      },
-      axisTick: {
-        show: false, //隐藏X轴刻度
-      },
-      axisLabel: {
-        show: true,
-        color: "#fff", //X轴文字颜色
-        fontSize: 16,
-        interval: 0,
-        formatter: function (value) {
-          return value.split("").join("\n");
-        },
-      },
-    },
-    yAxis: [
-      {
-        type: "value",
-        name: "",
-        minInterval: 1,
-        nameTextStyle: {
-          color: "#fff",
-        },
-        splitLine: {
-          show: false,
-        },
-        axisTick: {
-          show: false,
-        },
-        axisLine: { 
-          show: false,
-        },
-        axisLabel: {
-          show: true,
-          color: "#fff",
-          fontSize: 16,
-        },
-      },
-      {
-        type: "value",
-        gridIndex: 0,
-        min: 50,
-        max: 100,
-        splitLine: {
-          show: true,
-          lineStyle: {
-            color: "#10222d",
-          },
-        },
-        axisLine: {
-          show: false,
-        },
-        axisTick: {
-          show: false,
-        },
-        axisLabel: {
-          show: false,
-        },
-      },
-    ],
-    series: [
-      // {
-      //   name: "数量",
-      //   type: "bar",
-      //   barWidth: 25,
-      //   label: {
-      //     show: true,
-      //     position: "top",
-      //     color: "#fff",
-      //     fontSize: 16,
-      //   },
-      //   itemStyle: {
-      //     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-      //       {
-      //         offset: 0,
-      //         color: "rgba(38,218,207,1)",
-      //       },
-      //       {
-      //         offset: 1,
-      //         color: "rgba(38,218,207,0)",
-      //       },
-      //     ]),
-      //   },
-      //   data: [4.2, 3.8, 4.8, 3.5, 2.9],
-      // },
-      // {
-      //   name: "数量",
-      //   type: "line",
-      //   showAllSymbol: true, //显示所有图形。
-      //   symbolSize: 2, //标记的大小
-      //   itemStyle: {
-      //     //折线拐点标志的样式
-      //     color: "#c5cf9b",
-      //   },
-      //   lineStyle: {
-      //     color: "#c5cf9b",
-      //   },
-      //   data: [4.2, 3.8, 4.8, 3.5, 2.9],
-      // },
-    ],
-  };
   switch (item) {
-    case "震级":
-      let allNum = 0;
-      let level = ["", "微震", "有感地震", "中强震", "强震", "大地震", "巨大地震",];
-      const colors = ["","#EE7E2D", "#FC5531", "#FEA67E","#FEC300"]
-      option.value.series[0].data = chartData.value.level.map((item, index) => {
-        allNum += item.count;
-        return { value: item.count, name: level[item.eventlevel], itemStyle: {color: colors[item.eventlevel]} };
-      });
-      option.value.series[0].label.formatter = () => {
-        return `{total|${allNum}} 个\r\n{text|总数}`;
-      };
-
-      initChart(option.value);
+    case "类型占比":
+      setLxzbChart();
       break;
-    case "趋势":
-      let dataArr = [];
-      noption.xAxis.data = chartData.value.date.map((item) => {
-        dataArr.push(item.count);
-        return item.month + "月";
-      });
-      noption.series = [
-        {
-          name: "数量",
-          type: "line",
-          showAllSymbol: true, //显示所有图形。
-          symbolSize: 2, //标记的大小
-          itemStyle: {
-            //折线拐点标志的样式
-            color: "#c5cf9b",
-          },
-          lineStyle: {
-            color: "#c5cf9b",
-          },
-          data: dataArr,
-        },
-      ];
-
-      initChart(noption);
+    case "类型分布":
+      setLxfbChart();
       break;
-    case "类型":
-      let dataArea = [];
-      // noption.xAxis.data = chartData.value.area.map((item) => {
-      //   dataArea.push(item.value);
-      //   return item.name;
-      // });
-      noption.xAxis.data = ["构造地震","火山地震","塌陷地震","诱发地震","人工地震",]
-      noption.series = [
-        {
-          name: "数量",
-          type: "bar",
-          barWidth: 14,
-          label: {
-            show: true,
-            position: "top",
-            color: "#fff",
-            fontSize: 16,
-          },
-          itemStyle: {
-            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-              {
-                offset: 0,
-                color: "rgba(38,218,207,1)",
-              },
-              {
-                offset: 1,
-                color: "rgba(38,218,207,0)",
-              },
-            ]),
-          },
-          // data: dataArea,
-          data: [0,0,0,0,0],
-        },
-      ];
-      initChart(noption);
+    case "震级分析":
+      setZjfxChart();
       break;
-    case "热力图":
+    case "重点关注":
+      setZdgzChart();
+      break;
+    case "地震频发区":
       addHotMap();
       break;
     default:
@@ -592,6 +176,81 @@ const changeChart = (item) => {
       break;
   }
 };
+const setLxzbChart = function () {
+  let option = {
+    tooltip: {
+      trigger: "item",
+    },
+    legend: {
+      icon: "circle",
+      top: "center",
+      left: "0",
+      orient: "vertical",
+      textStyle: {
+        color: "#fff",
+        fontSize: 10
+      }
+    },
+    series: [
+      {
+        type: "pie",
+        radius: ["40%", "70%"],
+        avoidLabelOverlap: false,
+        label: {
+          show: false,
+          position: "center",
+        },
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: 20,
+            color: "#fff",
+            fontWeight: "500",
+          },
+        },
+        labelLine: {
+          show: false,
+        },
+        data: [
+          { value: 12, name: "构造地震", itemStyle:{color: "#5B9BD5"} },
+          { value: 13, name: "火山地震", itemStyle:{color: "#ED7D31"} },
+          { value: 14, name: "塌陷地震", itemStyle:{color: "#A5A5A5"} },
+          { value: 15, name: "诱发地震", itemStyle:{color: "#FFC000"} },
+          { value: 16, name: "人工地震", itemStyle:{color: "#4472C4"} },
+        ],
+      },{
+        type: "pie",
+        radius: ["60%", "60%"],
+        avoidLabelOverlap: false,
+        label: {
+          show: false,
+          position: "center",
+        },
+        emphasis: {
+          label: {
+            show: true,
+            position: 'outside',
+            alignTo: 'none',
+          },
+        },
+        labelLine: {
+          show: false,
+        },
+        data: [
+          { value: 12, name: "构造地震", itemStyle:{color: "#5B9BD5"} },
+          { value: 13, name: "火山地震", itemStyle:{color: "#ED7D31"} },
+          { value: 14, name: "塌陷地震", itemStyle:{color: "#A5A5A5"} },
+          { value: 15, name: "诱发地震", itemStyle:{color: "#FFC000"} },
+          { value: 16, name: "人工地震", itemStyle:{color: "#4472C4"} },
+        ],
+      },
+    ],
+  };
+  initChart(option);
+};
+const setLxfbChart = function () {};
+const setZjfxChart = function () {};
+const setZdgzChart = function () {};
 const addHotMap = function () {
   console.log(chartData.value);
   let list = chartData.value.hot.filter((item) => {
@@ -617,73 +276,72 @@ const selectTime = function ([start, end]) {
 </script>
 
 <style scoped lang="less">
-  .disaster_situation {
-    height: 300px;
-    position: relative;
-    display: flex;
+.disaster_situation {
+  height: 300px;
+  position: relative;
+  display: flex;
 
-    .type_select_box {
-      position: absolute;
-      top: -50px;
-      right: 30px;
+  .type_select_box {
+    position: absolute;
+    top: -50px;
+    right: 30px;
 
-      :deep(.el-select) {
-        .el-input {
-          height: 25px;
-          width: 120px;
-        }
-
-        .el-input__wrapper {
-          box-shadow: none !important;
-          border-radius: 0;
-          background: #09262e !important;
-          border: 2px solid #0698d7 !important;
-        }
-
-        .el-input__inner {
-          height: 100%;
-        }
-
-        .el-select-dropdown__item.selected {
-          background-color: rgba(0, 0, 0, 0.1) !important;
-          color: #53befc !important;
-        }
-
-        .el-select-dropdown__item {
-          font-size: 16px !important;
-          height: 28px !important;
-          padding: 4px !important;
-        }
+    :deep(.el-select) {
+      .el-input {
+        height: 25px;
+        width: 120px;
       }
-    }
 
-    .disaster_tabs {
-      width: 96px;
-
-      .disaster_tab {
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        width: 100%;
-        font-size: 12px;
-        background: url("@/assets/decisionAnalysis/tab.png") center/99% 100%
-          no-repeat;
-        margin-bottom: 8px;
-
-        &:hover,
-        &.active {
-          background: url("@/assets/decisionAnalysis/tab_active.png") center/99%
-            100% no-repeat;
-        }
+      .el-input__wrapper {
+        box-shadow: none !important;
+        border-radius: 0;
+        background: #09262e !important;
+        border: 2px solid #0698d7 !important;
       }
-    }
 
-    .disaster_chart {
-      flex: 1;
-      overflow: hidden;
+      .el-input__inner {
+        height: 100%;
+      }
+
+      .el-select-dropdown__item.selected {
+        background-color: rgba(0, 0, 0, 0.1) !important;
+        color: #53befc !important;
+      }
+
+      .el-select-dropdown__item {
+        font-size: 16px !important;
+        height: 28px !important;
+        padding: 4px !important;
+      }
     }
   }
 
+  .disaster_tabs {
+    width: 96px;
+
+    .disaster_tab {
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      width: 100%;
+      font-size: 12px;
+      background: url("@/assets/decisionAnalysis/tab.png") center/99% 100%
+        no-repeat;
+      margin-bottom: 8px;
+
+      &:hover,
+      &.active {
+        background: url("@/assets/decisionAnalysis/tab_active.png") center/99%
+          100% no-repeat;
+      }
+    }
+  }
+
+  .disaster_chart {
+    flex: 1;
+    overflow: hidden;
+  }
+}
 </style>
