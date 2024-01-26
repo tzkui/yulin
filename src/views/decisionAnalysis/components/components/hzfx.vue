@@ -3,7 +3,7 @@
     <div class="disaster_situation">
       <timeSelect
         @selectTime="selectTime"
-        v-if="['等级', '区域分析'].includes(current_disater_tab)"
+        v-if="['等级分析', '区域分析'].includes(current_disater_tab)"
         :isEarthquake="false"
       ></timeSelect>
       <!-- tab 切换chart -->
@@ -35,6 +35,7 @@ import ViewBox from "@/components/common/view-box.vue";
 import {
   getZqfxDropdowndata,
   getZqfxLeveldata,
+  getZqcxNew,
 } from "@/api/decision_analysis.js";
 // tab
 const disaster_tab = ref([
@@ -143,6 +144,9 @@ const initChart = function (option) {
   });
 };
 const changeChart = (item) => {
+  if(current_disater_tab.value==="热力图"){
+    $mitt.emit("removeHostLayer")
+  }
   current_disater_tab.value = item;
   switch (item) {
     case "总体分析":
@@ -167,39 +171,366 @@ const changeChart = (item) => {
   }
 };
 const setZtfxChart = function () {
-  let option = {
-    backgroundColor: "",
-    color: ["#72A9FE", "#FFC533", "#56C994", "#F6856E", "#ffa43a"],
-    title: {},
-    legend: {
-      orient: "horizontal",
-      data: ["2024年", "2023年", "增长率"],
-      left: 0,
-      top: "0%",
-      textStyle: {
-        color: "#fff",
-        fontSize: 12,
+  let year = new Date().getFullYear();
+  let param = {
+    typeId: "de539197ff68c6a96958928925e8ba7c",
+    startTime: year - 1 + "-01-01",
+    endTime: year + "-12-31",
+  };
+  getZqcxNew(param).then((res) => {
+    let lists = res.data["de539197ff68c6a96958928925e8ba7c"];
+    let rate = [];
+    for (let i = 0; i < 12; i++) {
+      if (lists[i].num == 0) {
+        rate.push(0);
+      } else {
+        let num = parseInt(
+          ((lists[i + 12].num - lists[i].num) / lists[i].num) * 100
+        );
+        rate.push(num);
+      }
+    }
+    console.log("xxxx", rate);
+    let option = {
+      backgroundColor: "",
+      color: ["#72A9FE", "#FFC533", "#56C994", "#F6856E", "#ffa43a"],
+      title: {},
+      legend: {
+        orient: "horizontal",
+        data: ["2024年", "2023年", "增长率"],
+        left: 0,
+        top: "0%",
+        textStyle: {
+          color: "#fff",
+          fontSize: 12,
+        },
       },
-    },
-    grid: {
-      left: "2%",
-      right: "4%",
-      bottom: "8%",
-      top: "16%",
-      containLabel: true,
-    },
-    tooltip: {
-      trigger: "axis",
-      axisPointer: {
-        type: "shadow",
+      grid: {
+        left: "2%",
+        right: "4%",
+        bottom: "8%",
+        top: "16%",
+        containLabel: true,
       },
-      textStyle: {
-        align: "left",
+      tooltip: {
+        trigger: "axis",
+        axisPointer: {
+          type: "shadow",
+        },
+        textStyle: {
+          align: "left",
+        },
       },
-    },
-    xAxis: [
+      xAxis: [
+        {
+          type: "category",
+          data: [
+            "1月",
+            "2月",
+            "3月",
+            "4月",
+            "5月",
+            "6月",
+            "7月",
+            "8月",
+            "9月",
+            "10月",
+            "11月",
+            "12月",
+          ],
+          axisTick: {
+            show: false,
+          },
+          axisLine: {
+            show: true,
+            lineStyle: {
+              color: "#BFC3C6",
+            },
+          },
+          axisLabel: {
+            show: true,
+            textStyle: {
+              color: "#fff",
+              fontSize: 12,
+            },
+            formatter: "{value}",
+          },
+        },
+      ],
+      yAxis: [
+        {
+          type: "value",
+          minInterval: 1,
+          axisTick: {
+            show: false,
+          },
+          axisLine: {
+            show: false,
+            lineStyle: {
+              color: "#cdd5e2",
+            },
+          },
+          axisLabel: {
+            show: true,
+            textStyle: {
+              color: "#fff",
+              fontSize: 12,
+            },
+          },
+          splitLine: {
+            show: true,
+            lineStyle: {
+              color: "rgba(255,255,255,0.2)",
+            },
+          },
+        },
+        {
+          type: "value",
+          nameTextStyle: {
+            color: "#fff",
+          },
+          position: "right",
+          axisLine: {
+            lineStyle: {
+              color: "#cdd5e2",
+            },
+          },
+          splitLine: {
+            show: false,
+          },
+          axisLabel: {
+            show: true,
+            formatter: "{value} %", //右侧Y轴文字显示
+            textStyle: {
+              color: "#fff",
+              fontSize: 12,
+            },
+          },
+        },
+      ],
+      dataZoom: [
+        {
+          show: true,
+          realtime: true,
+          height: 12,
+          start: 0,
+          end: 70,
+          bottom: "2%",
+          textStyle: {
+            color: "#fff",
+          },
+        },
+        {
+          type: "inside",
+          realtime: true,
+          height: 12,
+          start: 0,
+          end: 70,
+          textStyle: {
+            color: "#fff",
+          },
+        },
+      ],
+      series: [
+        {
+          name: "2024年",
+          type: "bar",
+          barWidth: "40%",
+          data: lists.slice(12).map((item) => item.num),
+          itemStyle: {
+            color: "#B3CDE3",
+          },
+        },
+        {
+          name: "2023年",
+          type: "bar",
+          barWidth: "40%",
+          data: lists.slice(0, 12).map((item) => item.num),
+          itemStyle: {
+            color: "#386CB0",
+          },
+        },
+        {
+          name: "增长率",
+          type: "line",
+          yAxisIndex: 1, //使用的 y 轴的 index，在单个图表实例中存在多个 y轴的时候有用
+          smooth: false, //平滑曲线显示
+          symbol: "circle", //标记的图形为实心圆
+          symbolSize: 6, //标记的大小
+          itemStyle: {
+            normal: {
+              color: "#ffa43a",
+            },
+          },
+          lineStyle: {
+            color: "#B99614",
+          },
+          data: rate,
+        },
+      ],
+    };
+    initChart(option);
+  });
+};
+const setDjfxChart = function () {
+  let param = {
+    typeId: "de539197ff68c6a96958928925e8ba7c",
+    startTime: startTime.value,
+    endTime: endTime.value,
+  };
+  getZqfxLeveldata(param).then((res) => {
+    let levels = res.data.level;
+    let arr = [0, 0, 0, 0];
+    levels.forEach((item) => {
+      console.log(item);
+      arr[item.eventlevel - 1] = item.count;
+    });
+    let data = [
       {
+        value: arr[0],
+        name: "一般",
+        id: "595cb6699fd2833adae0a96ea29900a9",
+        itemStyle: { color: "#5298D8" },
+      },
+      {
+        value: arr[1],
+        name: "较大",
+        id: "ec6d04e1f363c1655d1a7aaed2d88e5a",
+        itemStyle: { color: "#FED001" },
+      },
+      {
+        value: arr[2],
+        name: "重大",
+        id: "b894936f083fe9333ef883e6f4ad3048",
+        itemStyle: { color: "#EF7C12" },
+      },
+      {
+        value: arr[3],
+        name: "特别重大",
+        id: "de539197ff68c6a96958928925e8ba7c",
+        itemStyle: { color: "#ED1C24" },
+      },
+    ];
+    let option = {
+      tooltip: {
+        trigger: "item",
+      },
+      legend: {
+        orient: "vertical",
+        top: "60",
+        right: "right",
+        formatter: function (name) {
+          let num = 0;
+          data.forEach((item) => {
+            if (item.name === name) {
+              num = item.value;
+            }
+          });
+          return `${name}：{b|${num}}`;
+        },
+        textStyle: {
+          color: "#fff",
+          rich: {
+            b: {
+              fontWeight: 600,
+            },
+          },
+        },
+      },
+      series: [
+        {
+          type: "pie",
+          radius: "60%",
+          center: ["35%", "60%"],
+          label: {
+            show: false,
+          },
+          silent: true,
+          clockwise: true,
+          data: data,
+        },
+      ],
+    };
+    initChart(option);
+  });
+};
+const setQsfxChart = function () {
+  let year = new Date().getFullYear();
+  let param = {
+    typeId: "de539197ff68c6a96958928925e8ba7c",
+    startTime: year + "-01-01",
+    endTime: year + "-12-31",
+  };
+  let levels = [];
+  getZqcxNew(param).then((res) => {
+    let lists = res.data["de539197ff68c6a96958928925e8ba7c"];
+    levels = lists.map((item) => item.num);
+    let option = {
+      tooltip: {
+        trigger: "axis",
+      },
+      legend: {
+        icon: "circle",
+        data: ["一般", "较大", "重大", "特别重大"],
+        textStyle: {
+          color: "#fff",
+          fontSize: 12,
+        },
+        top: 0,
+        left: "center",
+      },
+      dataZoom: [
+        {
+          show: true,
+          realtime: true,
+          height: 12,
+          start: 0,
+          end: 50,
+          bottom: "2%",
+          textStyle: {
+            color: "#fff",
+          },
+        },
+        {
+          type: "inside",
+          realtime: true,
+          height: 12,
+          start: 0,
+          end: 50,
+          textStyle: {
+            color: "#fff",
+          },
+        },
+      ],
+      grid: {
+        top: "16%",
+        left: "3%",
+        right: "1%",
+        bottom: "13%",
+        containLabel: true,
+      },
+      toolbox: {
+        feature: {
+          saveAsImage: {},
+        },
+      },
+      xAxis: {
         type: "category",
+        boundaryGap: false,
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: "#BFC3C6",
+          },
+        },
+        axisLabel: {
+          show: true,
+          textStyle: {
+            color: "#fff",
+            fontSize: 12,
+          },
+          formatter: "{value}",
+        },
         data: [
           "1月",
           "2月",
@@ -214,38 +545,10 @@ const setZtfxChart = function () {
           "11月",
           "12月",
         ],
-        axisTick: {
-          show: false,
-        },
-        axisLine: {
-          show: true,
-          lineStyle: {
-            color: "#BFC3C6",
-          },
-        },
-        axisLabel: {
-          show: true,
-          textStyle: {
-            color: "#fff",
-            fontSize: 12,
-          },
-          formatter: "{value}",
-        },
       },
-    ],
-    yAxis: [
-      {
+      yAxis: {
         type: "value",
         minInterval: 1,
-        axisTick: {
-          show: false,
-        },
-        axisLine: {
-          show: false,
-          lineStyle: {
-            color: "#cdd5e2",
-          },
-        },
         axisLabel: {
           show: true,
           textStyle: {
@@ -253,445 +556,183 @@ const setZtfxChart = function () {
             fontSize: 12,
           },
         },
-        splitLine: {
-          show: true,
-          lineStyle: {
-            color: "rgba(255,255,255,0.2)",
+      },
+      series: [
+        {
+          name: "一般",
+          type: "line",
+          stack: "Total",
+          data: levels,
+          smooth: true,
+          itemStyle: {
+            color: "#5298D8",
           },
         },
-      },
-      {
-        type: "value",
-        nameTextStyle: {
-          color: "#fff",
-        },
-        position: "right",
-        axisLine: {
-          lineStyle: {
-            color: "#cdd5e2",
+        {
+          name: "较大",
+          type: "line",
+          stack: "Total",
+          data: levels,
+          smooth: true,
+          itemStyle: {
+            color: "#FED001",
           },
         },
-        splitLine: {
-          show: false,
-        },
-        axisLabel: {
-          show: true,
-          formatter: "{value} %", //右侧Y轴文字显示
-          textStyle: {
-            color: "#fff",
-            fontSize: 12,
+        {
+          name: "重大",
+          type: "line",
+          stack: "Total",
+          data: levels,
+          smooth: true,
+          itemStyle: {
+            color: "#EF7C12",
           },
         },
-      },
-    ],
-    dataZoom: [
-      {
-        show: true,
-        realtime: true,
-        height: 12,
-        start: 0,
-        end: 70,
-        bottom: "2%",
-        textStyle: {
-          color: "#fff",
-        },
-      },
-      {
-        type: "inside",
-        realtime: true,
-        height: 12,
-        start: 0,
-        end: 70,
-        textStyle: {
-          color: "#fff",
-        },
-      },
-    ],
-    series: [
-      {
-        name: "2024年",
-        type: "bar",
-        barWidth: "40%",
-        data: [5, 7, 3, 2, 1, 8, 2, 3, 3, 6, 8, 4],
-        itemStyle: {
-          color: "#B3CDE3",
-        },
-      },
-      {
-        name: "2023年",
-        type: "bar",
-        barWidth: "40%",
-        data: [7, 1, 2, 4, 2, 6, 1, 4, 6, 1, 2, 6],
-        itemStyle: {
-          color: "#386CB0",
-        },
-      },
-      {
-        name: "增长率",
-        type: "line",
-        yAxisIndex: 1, //使用的 y 轴的 index，在单个图表实例中存在多个 y轴的时候有用
-        smooth: false, //平滑曲线显示
-        symbol: "circle", //标记的图形为实心圆
-        symbolSize: 6, //标记的大小
-        itemStyle: {
-          normal: {
-            color: "#ffa43a",
+        {
+          name: "特别重大",
+          type: "line",
+          stack: "Total",
+          data: levels,
+          smooth: true,
+          itemStyle: {
+            color: "#ED1C24",
           },
         },
-        lineStyle: {
-          color: "#B99614",
-        },
-        data: [10, 10, 40, -20, 30, 20, -10, -30, 20, 50, 10, 30],
-      },
-    ],
-  };
-  initChart(option)
-};
-const setDjfxChart = function(){
-  let data = [
-    {
-      value: 10,
-      name: "一般",
-      id: "595cb6699fd2833adae0a96ea29900a9",
-      itemStyle: { color: "#5298D8" },
-    },
-    {
-      value: 20,
-      name: "较大",
-      id: "ec6d04e1f363c1655d1a7aaed2d88e5a",
-      itemStyle: { color: "#FED001" },
-    },
-    {
-      value: 30,
-      name: "重大",
-      id: "b894936f083fe9333ef883e6f4ad3048",
-      itemStyle: { color: "#EF7C12" },
-    },
-    {
-      value: 1,
-      name: "特别重大",
-      id: "de539197ff68c6a96958928925e8ba7c",
-      itemStyle: { color: "#ED1C24" },
-    },
-  ];
-  let option = {
-    tooltip: {
-      trigger: "item",
-    },
-    legend: {
-      orient: "vertical",
-      top: "60",
-      right: "right",
-      formatter: function (name) {
-        let num = 0;
-        data.forEach((item) => {
-          if (item.name === name) {
-            num = item.value;
-          }
-        });
-        return `${name}：{b|${num}}`;
-      },
-      textStyle: {
-        color: "#fff",
-        rich: {
-          b: {
-            fontWeight: 600,
-          },
-        },
-      },
-    },
-    series: [
-      {
-        type: "pie",
-        radius: "60%",
-        center: ["35%", "60%"],
-        label: {
-          show: false,
-        },
-        silent: true,
-        clockwise: true,
-        data: data,
-      },
-    ],
-  };
-  initChart(option)
-}
-const setQsfxChart = function(){
-  let option = {
-    tooltip: {
-      trigger: "axis",
-    },
-    legend: {
-      icon: "circle",
-      data: ["一般", "较大", "重大", "特别重大"],
-      textStyle: {
-        color: "#fff",
-        fontSize: 12,
-      },
-      top: 0,
-      orient: "vertical",
-      right: 0,
-    },
-    dataZoom: [
-      {
-        show: true,
-        realtime: true,
-        height: 12,
-        start: 0,
-        end: 50,
-        bottom: "2%",
-        textStyle: {
-          color: "#fff",
-        },
-      },
-      {
-        type: "inside",
-        realtime: true,
-        height: 12,
-        start: 0,
-        end: 50,
-        textStyle: {
-          color: "#fff",
-        },
-      },
-    ],
-    grid: {
-      top: "3%",
-      left: "3%",
-      right: "25%",
-      bottom: "13%",
-      containLabel: true,
-    },
-    toolbox: {
-      feature: {
-        saveAsImage: {},
-      },
-    },
-    xAxis: {
-      type: "category",
-      boundaryGap: false,
-      axisLine: {
-        show: true,
-        lineStyle: {
-          color: "#BFC3C6",
-        },
-      },
-      axisLabel: {
-        show: true,
-        textStyle: {
-          color: "#fff",
-          fontSize: 12,
-        },
-        formatter: "{value}",
-      },
-      data: [
-        "1月",
-        "2月",
-        "3月",
-        "4月",
-        "5月",
-        "6月",
-        "7月",
-        "8月",
-        "9月",
-        "10月",
-        "11月",
-        "12月",
       ],
-    },
-    yAxis: {
-      type: "value",
-      minInterval: 1,
-      axisLabel: {
-        show: true,
+    };
+    initChart(option);
+  });
+};
+const setQyfxChart = function () {
+  let param = {
+    typeId: "de539197ff68c6a96958928925e8ba7c",
+    startTime: startTime.value,
+    endTime: endTime.value,
+  };
+  getZqfxLeveldata(param).then((res) => {
+    let area = res.data.area;
+    let option = {
+      backgroundColor: "",
+      color: ["#72A9FE", "#FFC533", "#56C994", "#F6856E", "#ffa43a"],
+      legend: {
+        data: ["灾情数量"],
+        left: 0,
+        top: "12%",
         textStyle: {
           color: "#fff",
           fontSize: 12,
         },
       },
-    },
-    series: [
-      {
-        name: "一般",
-        type: "line",
-        stack: "Total",
-        data: [120, 132, 101, 134, 90, 230, 210],
-        smooth: true,
-        itemStyle: {
-          color: "#5298D8",
+      grid: {
+        left: "2%",
+        right: "4%",
+        bottom: "8%",
+        top: "28%",
+        containLabel: true,
+      },
+      tooltip: {
+        trigger: "axis",
+        axisPointer: {
+          type: "shadow",
+        },
+        textStyle: {
+          align: "left",
         },
       },
-      {
-        name: "较大",
-        type: "line",
-        stack: "Total",
-        data: [220, 182, 191, 234, 290, 330, 310],
-        smooth: true,
-        itemStyle: {
-          color: "#FED001",
-        },
-      },
-      {
-        name: "重大",
-        type: "line",
-        stack: "Total",
-        data: [150, 232, 201, 154, 190, 330, 410],
-        smooth: true,
-        itemStyle: {
-          color: "#EF7C12",
-        },
-      },
-      {
-        name: "特别重大",
-        type: "line",
-        stack: "Total",
-        data: [320, 332, 301, 334, 390, 330, 320],
-        smooth: true,
-        itemStyle: {
-          color: "#ED1C24",
-        },
-      },
-    ],
-  };
-  initChart(option);
-}
-const setQyfxChart = function () {
-  let option = {
-    backgroundColor: "",
-    color: ["#72A9FE", "#FFC533", "#56C994", "#F6856E", "#ffa43a"],
-    legend: {
-      data: ["灾情数量"],
-      left: 0,
-      top: "12%",
-      textStyle: {
-        color: "#fff",
-        fontSize: 12,
-      },
-    },
-    grid: {
-      left: "2%",
-      right: "4%",
-      bottom: "8%",
-      top: "26%",
-      containLabel: true,
-    },
-    tooltip: {
-      trigger: "axis",
-      axisPointer: {
-        type: "shadow",
-      },
-      textStyle: {
-        align: "left",
-      },
-    },
-    xAxis: [
-      {
-        type: "category",
-        data: [
-          "榆林市",
-          "神木市",
-          "榆阳区",
-          "横山区",
-          "府谷县",
-          "靖边县",
-          "定边县",
-          "绥德县",
-          "米脂县",
-          "佳县",
-          "吴堡县",
-          "清润县",
-          "子洲县",
-        ],
-        axisTick: {
-          show: false,
-        },
-        axisLine: {
-          show: true,
-          lineStyle: {
-            color: "#BFC3C6",
+      xAxis: [
+        {
+          type: "category",
+          data: area.map(item=>item.name),
+          axisTick: {
+            show: false,
+          },
+          axisLine: {
+            show: true,
+            lineStyle: {
+              color: "#BFC3C6",
+            },
+          },
+          axisLabel: {
+            show: true,
+            textStyle: {
+              color: "#fff",
+              fontSize: 12,
+            },
+            formatter: "{value}",
           },
         },
-        axisLabel: {
+      ],
+      yAxis: [
+        {
+          type: "value",
+          minInterval: 1,
+          axisTick: {
+            show: false,
+          },
+          axisLine: {
+            show: false,
+            lineStyle: {
+              color: "#cdd5e2",
+            },
+          },
+          axisLabel: {
+            show: true,
+            textStyle: {
+              color: "#fff",
+              fontSize: 12,
+            },
+          },
+          splitLine: {
+            show: true,
+            lineStyle: {
+              color: "rgba(255,255,255,0.2)",
+            },
+          },
+        },
+      ],
+      dataZoom: [
+        {
           show: true,
+          realtime: true,
+          height: 12,
+          start: 0,
+          end: 40,
+          bottom: "2%",
           textStyle: {
             color: "#fff",
-            fontSize: 12,
-          },
-          formatter: "{value}",
-        },
-      },
-    ],
-    yAxis: [
-      {
-        type: "value",
-        minInterval: 1,
-        axisTick: {
-          show: false,
-        },
-        axisLine: {
-          show: false,
-          lineStyle: {
-            color: "#cdd5e2",
           },
         },
-        axisLabel: {
-          show: true,
+        {
+          type: "inside",
+          realtime: true,
+          height: 12,
+          start: 0,
+          end: 40,
           textStyle: {
             color: "#fff",
-            fontSize: 12,
           },
         },
-        splitLine: {
-          show: true,
-          lineStyle: {
-            color: "rgba(255,255,255,0.2)",
+      ],
+      series: [
+        {
+          name: "灾情数量",
+          type: "bar",
+          barWidth: "40%",
+          data: area.map(item=>item.value),
+          itemStyle: {
+            color: {
+              type: "linear",
+              x: 0,
+              y: 0,
+              x2: 1,
+              y2: 0,
+              colorStops: [
+                { offset: 0, color: "#00B0F0" },
+                { offset: 1, color: "#9BE4FF" },
+              ],
+            },
           },
-        },
-      },
-    ],
-    dataZoom: [
-      {
-        show: true,
-        realtime: true,
-        height: 12,
-        start: 0,
-        end: 40,
-        bottom: "2%",
-        textStyle: {
-          color: "#fff",
-        },
-      },
-      {
-        type: "inside",
-        realtime: true,
-        height: 12,
-        start: 0,
-        end: 40,
-        textStyle: {
-          color: "#fff",
-        },
-      },
-    ],
-    series: [
-      {
-        name: "灾情数量",
-        type: "bar",
-        barWidth: "40%",
-        data: [7, 6, 2, 5, 9, 8, 9, 2, 1, 1, 7, 4],
-        itemStyle: {
-          color: {
-            type: "linear",
-            x: 0,
-            y: 0,
-            x2: 1,
-            y2: 0,
-            colorStops: [
-              { offset: 0, color: "#00B0F0" },
-              { offset: 1, color: "#9BE4FF" },
-            ],
-          },
-        },
-        label: {
+          label: {
             normal: {
               show: true, //是否显示
               position: "top", //文字位置
@@ -699,11 +740,12 @@ const setQyfxChart = function () {
               color: "#ffffff",
               fontSize: 12,
             },
+          },
         },
-      },
-    ],
-  };
-  initChart(option);
+      ],
+    };
+    initChart(option);
+  });
 };
 const addHotMap = function () {
   console.log(chartData.value);
