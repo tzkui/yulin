@@ -890,7 +890,7 @@ const selectTime = function ([start, end]) {
 
   .disaster_chart {
     flex: 1;
-    overflow: hidden;
+    // overflow: hidden;
   }
 }
 </style>

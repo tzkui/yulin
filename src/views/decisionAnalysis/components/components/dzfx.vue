@@ -188,14 +188,14 @@ const setLxzbChart = function () {
       orient: "vertical",
       textStyle: {
         color: "#fff",
-        fontSize: 10
-      }
+        fontSize: 10,
+      },
     },
     series: [
       {
         type: "pie",
         radius: ["40%", "70%"],
-        center: ["60%","50%"],
+        center: ["60%", "50%"],
         avoidLabelOverlap: false,
         label: {
           show: false,
@@ -213,43 +213,230 @@ const setLxzbChart = function () {
           show: false,
         },
         data: [
-          { value: 12, name: "构造地震", itemStyle:{color: "#5B9BD5"} },
-          { value: 13, name: "火山地震", itemStyle:{color: "#ED7D31"} },
-          { value: 14, name: "塌陷地震", itemStyle:{color: "#A5A5A5"} },
-          { value: 15, name: "诱发地震", itemStyle:{color: "#FFC000"} },
-          { value: 16, name: "人工地震", itemStyle:{color: "#4472C4"} },
-        ],
-      },{
-        type: "pie",
-        radius: ["60%", "60%"],
-        avoidLabelOverlap: false,
-        label: {
-          show: false,
-          position: "center",
-        },
-        emphasis: {
-          label: {
-            show: true,
-            position: 'outside',
-            alignTo: 'none',
-          },
-        },
-        labelLine: {
-          show: false,
-        },
-        data: [
-          { value: 12, name: "构造地震", itemStyle:{color: "#5B9BD5"} },
-          { value: 13, name: "火山地震", itemStyle:{color: "#ED7D31"} },
-          { value: 14, name: "塌陷地震", itemStyle:{color: "#A5A5A5"} },
-          { value: 15, name: "诱发地震", itemStyle:{color: "#FFC000"} },
-          { value: 16, name: "人工地震", itemStyle:{color: "#4472C4"} },
+          { value: 12, name: "构造地震", itemStyle: { color: "#5B9BD5" } },
+          { value: 13, name: "火山地震", itemStyle: { color: "#ED7D31" } },
+          { value: 14, name: "塌陷地震", itemStyle: { color: "#A5A5A5" } },
+          { value: 15, name: "诱发地震", itemStyle: { color: "#FFC000" } },
+          { value: 16, name: "人工地震", itemStyle: { color: "#4472C4" } },
         ],
       },
     ],
   };
   initChart(option);
 };
-const setLxfbChart = function () {};
+const setLxfbChart = function () {
+  let option = {
+    tooltip: {
+      trigger: "axis",
+      axisPointer: {
+        type: "shadow",
+      },
+    },
+    legend: {
+      orient: "vertical",
+      textStyle: {
+        color: "#fff",
+        fontSize: 12,
+      },
+      icon: "circle",
+      right: 0,
+      top: "20%",
+
+    },
+    grid: {
+      left: "3%",
+      right: "24%",
+      bottom: "13%",
+      top: "20%",
+      containLabel: true,
+    },
+    xAxis: [
+      {
+        type: "category",
+        data: [
+          "榆林市",
+          "神木市",
+          "榆阳区",
+          "横山区",
+          "府谷县",
+          "靖边县",
+          "定边县",
+          "绥德县",
+          "米脂县",
+          "佳县",
+          "吴堡县",
+          "清润县",
+          "子洲县",
+        ],
+        axisTick: {
+          show: false,
+        },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: "#BFC3C6",
+          },
+        },
+        axisLabel: {
+          show: true,
+          textStyle: {
+            color: "#fff",
+            fontSize: 12,
+          },
+          formatter: "{value}",
+        }
+      },
+    ],
+    yAxis: [
+      {
+        type: "value",
+        axisLabel: {
+          show: true,
+          textStyle: {
+            color: "#fff",
+            fontSize: 12,
+          },
+        },
+      },
+    ],
+    dataZoom: [
+      {
+        show: true,
+        realtime: true,
+        height: 12,
+        start: 0,
+        end: 40,
+        bottom: "2%",
+        textStyle: {
+          color: "#fff",
+        },
+      },
+      {
+        type: "inside",
+        realtime: true,
+        height: 12,
+        start: 0,
+        end: 40,
+        textStyle: {
+          color: "#fff",
+        },
+      },
+    ],
+    series: [
+      {
+        name: "构造地震",
+        type: "bar",
+        stack: "Ad",
+        emphasis: {
+          focus: "series",
+        },
+        itemStyle: {
+          color: {
+            type: "linear",
+            x: 0,
+            y: 1,
+            x2: 0,
+            y2: 0,
+            colorStops: [
+              { offset: 0, color: "#2D5E9A" },
+              { offset: 1, color: "#3A7CCB" },
+            ],
+          },
+        },
+        data: [1, 2, 1, 0, 2, 1, 1,1,1,1,1,1,2],
+      },
+      {
+        name: "火山地震",
+        type: "bar",
+        stack: "Ad",
+        emphasis: {
+          focus: "series",
+        },
+        itemStyle: {
+          color: {
+            type: "linear",
+            x: 0,
+            y: 1,
+            x2: 0,
+            y2: 0,
+            colorStops: [
+              { offset: 0, color: "#9D2D2A" },
+              { offset: 1, color: "#CE3B37" },
+            ],
+          },
+        },
+        data: [1,2,3,4,1,0,3,1,2,1,1,2,3],
+      },
+      {
+        name: "塌陷地震",
+        type: "bar",
+        stack: "Ad",
+        emphasis: {
+          focus: "series",
+        },
+        itemStyle: {
+          color: {
+            type: "linear",
+            x: 0,
+            y: 1,
+            x2: 0,
+            y2: 0,
+            colorStops: [
+              { offset: 0, color: "#769635" },
+              { offset: 1, color: "#9CC746" },
+            ],
+          },
+        },
+        data: [1, 2, 1, 0, 2, 1, 1,1,1,1,1,1,2],
+      },
+      {
+        name: "诱发地震",
+        type: "bar",
+        stack: "Ad",
+        emphasis: {
+          focus: "series",
+        },
+        itemStyle: {
+          color: {
+            type: "linear",
+            x: 0,
+            y: 1,
+            x2: 0,
+            y2: 0,
+            colorStops: [
+              { offset: 0, color: "#5E427E" },
+              { offset: 1, color: "#7B57A8" },
+            ],
+          },
+        },
+        data: [1, 2, 1, 0, 2, 1, 1,1,1,1,1,1,2],
+      },
+      {
+        name: "人工地震",
+        type: "bar",
+        stack: "Ad",
+        emphasis: {
+          focus: "series",
+        },
+        itemStyle: {
+          color: {
+            type: "linear",
+            x: 0,
+            y: 1,
+            x2: 0,
+            y2: 0,
+            colorStops: [
+              { offset: 0, color: "#2788A1" },
+              { offset: 1, color: "#35B2D4" },
+            ],
+          },
+        },
+        data: [1, 2, 1, 2, 2, 1, 1,1,1,1,1,1,2],
+      },
+    ],
+  };
+  initChart(option);
+};
 const setZjfxChart = function () {};
 const setZdgzChart = function () {};
 const addHotMap = function () {
@@ -342,7 +529,7 @@ const selectTime = function ([start, end]) {
 
   .disaster_chart {
     flex: 1;
-    overflow: hidden;
+    // overflow: hidden;
   }
 }
 </style>
