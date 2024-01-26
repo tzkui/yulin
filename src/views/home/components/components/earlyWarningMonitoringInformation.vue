@@ -79,6 +79,7 @@ const getQxyjDetail = function () {
     let time1 = data.alarmTime.split(" ")[0];
     let time2 = data.alarmTime.split(" ")[1].slice(0, 5);
     let name = data.alarmName + data.alarmColor + "预警";
+    console.log("xxxxxxxxx",name)
     const arr1 = [
       0,
       1,
@@ -99,7 +100,9 @@ const getQxyjDetail = function () {
     const arr2 = [0, "蓝色", "黄色", "橙色", "红色"];
     let imgName =
       arr1.indexOf(data.alarmType) + "_" + arr2.indexOf(data.alarmColor);
+      console.log("xxxxxx",imgName)
     yjDetail.value = {
+      alarmColor: data.alarmColor,
       img: "../images/qx_icon/" + imgName + ".png",
       name: name,
       time1: time1,
@@ -321,11 +324,12 @@ const jsonUrls = {
 };
 const maskColors = {
   "蓝色" : "#68E1FC",
-  "黄色": "#CD8F55",
+  "黄色": "#FCCB12",
   "橙色": "#EF7C12",
   "红色": "#D11216"
 }
 const setMap = function () {
+  console.log("xxxxxxx",yjDetail.value,yjDetail.value.alarmColor)
   // //导入包含行政区划的geo数据 进行绘制
   let list = yjDetail.value.areas;
   if (!areaFlag) {
@@ -387,9 +391,6 @@ onUnmounted(() => {
             <div>{{ yjDetail.time2 }}</div>
           </div>
         </div>
-        <!-- <p class="info_box">
-          {{ titleInfo }}
-        </p> -->
       </div>
       <div class="monitor_box">
         <div

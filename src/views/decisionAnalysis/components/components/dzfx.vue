@@ -233,21 +233,19 @@ const setLxfbChart = function () {
       },
     },
     legend: {
-      orient: "vertical",
       textStyle: {
         color: "#fff",
         fontSize: 12,
       },
       icon: "circle",
-      right: 0,
-      top: "20%",
-
+      bottom: "5%",
+      left: "center",
     },
     grid: {
       left: "3%",
-      right: "24%",
-      bottom: "13%",
-      top: "20%",
+      right: "4%",
+      bottom: "23%",
+      top: "16%",
       containLabel: true,
     },
     xAxis: [
@@ -284,7 +282,7 @@ const setLxfbChart = function () {
             fontSize: 12,
           },
           formatter: "{value}",
-        }
+        },
       },
     ],
     yAxis: [
@@ -343,7 +341,7 @@ const setLxfbChart = function () {
             ],
           },
         },
-        data: [1, 2, 1, 0, 2, 1, 1,1,1,1,1,1,2],
+        data: [1, 2, 1, 0, 2, 1, 1, 1, 1, 1, 1, 1, 2],
       },
       {
         name: "火山地震",
@@ -360,12 +358,12 @@ const setLxfbChart = function () {
             x2: 0,
             y2: 0,
             colorStops: [
-              { offset: 0, color: "#9D2D2A" },
-              { offset: 1, color: "#CE3B37" },
+              { offset: 0, color: "#ED1C24" },
+              { offset: 1, color: "#9D2D2A" },
             ],
           },
         },
-        data: [1,2,3,4,1,0,3,1,2,1,1,2,3],
+        data: [1, 2, 3, 4, 1, 0, 3, 1, 2, 1, 1, 2, 3],
       },
       {
         name: "塌陷地震",
@@ -387,7 +385,7 @@ const setLxfbChart = function () {
             ],
           },
         },
-        data: [1, 2, 1, 0, 2, 1, 1,1,1,1,1,1,2],
+        data: [1, 2, 1, 0, 2, 1, 1, 1, 1, 1, 1, 1, 2],
       },
       {
         name: "诱发地震",
@@ -409,7 +407,7 @@ const setLxfbChart = function () {
             ],
           },
         },
-        data: [1, 2, 1, 0, 2, 1, 1,1,1,1,1,1,2],
+        data: [1, 2, 1, 0, 2, 1, 1, 1, 1, 1, 1, 1, 2],
       },
       {
         name: "人工地震",
@@ -431,14 +429,125 @@ const setLxfbChart = function () {
             ],
           },
         },
-        data: [1, 2, 1, 2, 2, 1, 1,1,1,1,1,1,2],
+        data: [1, 2, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2],
       },
     ],
   };
   initChart(option);
 };
-const setZjfxChart = function () {};
-const setZdgzChart = function () {};
+const setZjfxChart = function () {
+  let option = {
+    tooltip: {
+      trigger: "item",
+    },
+    legend: {
+      bottom: "1%",
+      left: "center",
+      icon: "circle",
+      textStyle: {
+        color: "#fff",
+      },
+    },
+    series: [
+      {
+        type: "pie",
+        radius: ["30%", "50%"],
+        avoidLabelOverlap: false,
+        label: {
+          show: true,
+          textStyle: {
+            color: "#FFFFFF",
+          },
+          formatter(param) {
+            return `${param.name}: ${param.percent}%`;
+          },
+        },
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: 24,
+            fontWeight: "bold",
+          },
+        },
+        data: [
+          { value: 1, name: "超微震", itemStyle: { color: "#00E9DB" } },
+          { value: 1, name: "微震", itemStyle: { color: "#00D0FF" } },
+          { value: 1, name: "有感地震", itemStyle: { color: "#2F6FFF" } },
+          { value: 1, name: "中强震", itemStyle: { color: "#4E60FF" } },
+          { value: 1, name: "强震", itemStyle: { color: "#164FFF" } },
+          { value: 1, name: "大地震", itemStyle: { color: "#39A8C4" } },
+          { value: 1, name: "巨大地震", itemStyle: { color: "#ED7D31" } },
+        ],
+      },
+    ],
+  };
+  initChart(option);
+};
+const setZdgzChart = function () {
+  let data = [
+    { value: 21, name: "巨大地震", itemStyle: { color: "#255E91" } },
+    { value: 16, name: "大地震", itemStyle: { color: "#39A8C4" } },
+    { value: 15, name: "强震", itemStyle: { color: "#4472C4" } },
+    { value: 14, name: "中强震", itemStyle: { color: "#FFC000" } },
+    { value: 13, name: "有感地震", itemStyle: { color: "#A5A5A5" } },
+    { value: 12, name: "微震", itemStyle: { color: "#ED7D31" } },
+    { value: 11, name: "超微震", itemStyle: { color: "#5B9BD5" } },
+  ]
+  let total = 0;
+  data.forEach(item=>{
+    total += item.value
+  })
+  if(total===0){
+    total = 1
+  }
+  let option = {
+    legend: {
+      orient: "vertical",
+      right: 0,
+      top: 60,
+      icon: "",
+      textStyle: {
+        color: "#fff",
+      },
+      formatter(param) {
+        let percent = 0
+        for(const info of data){
+          if(info.name===param){
+            percent = parseInt(info.value / total * 10000) / 100;
+            break;
+          }
+        }
+        return `${param}: ${percent}%`;
+      },
+    },
+    toolbox: {
+      show: true,
+      feature: {
+        mark: { show: true },
+        dataView: { show: true, readOnly: false },
+        restore: { show: true },
+        saveAsImage: { show: true },
+      },
+    },
+    series: [
+      {
+        name: "Nightingale Chart",
+        type: "pie",
+        radius: [0, 80],
+        center: ["30%", "50%"],
+        roseType: "area",
+        label: {
+          show: false
+        },
+        itemStyle: {
+          borderRadius: 8,
+        },
+        data: data,
+      },
+    ],
+  };
+  initChart(option);
+};
 const addHotMap = function () {
   console.log(chartData.value);
   let list = chartData.value.hot.filter((item) => {

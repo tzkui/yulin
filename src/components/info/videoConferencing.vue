@@ -275,6 +275,7 @@ const beginConferencing = function () {
   });
 };
 let meetingTimer = null;
+let times = 0;
 const getMeetingMemberById = function () {
   getMeetingMember(groupId.value).then((res) => {
     res.data.result.forEach((item) => {
@@ -285,6 +286,9 @@ const getMeetingMemberById = function () {
           clearTimeout(meetingTimer);
         }
         meetingTimer = setTimeout(() => {
+          if(times++>10){
+            return times = 0
+          }
           getMeetingMemberById();
         }, 2000);
       }
