@@ -19,24 +19,25 @@ const toggleRightBottomList = function () {
 };
 
 const clickWg = function(){
-  fetch(assetsUrl("/geoJson/jiedao.json")).then(res=>res.json()).then(res=>{
-    console.log("jiedao",res)
-  })
-  fetch(assetsUrl("/geoJson/yl.json")).then(res=>res.json()).then(res=>{
-    console.log("yj",res)
-  })
-  let mittData = {
-    url: assetsUrl("/geoJson/jiedao.json"),
-    // url: "http://1.85.55.225:8085/YouMapServer/rest/service/sxwwCGCS2000/VectorTileServer/styles/blue_yj-225.json",
-    geoType: "maskGeo",
-    mask: true,
-    type: "mask",
-    style: {
-      outlineColor: "#fff",
-      outlineWidth: 5, //宽度
-    },
-  };
-  $mitt.emit("drawGeoGraph", mittData);
+  $mitt.emit("drawWg",{url: "/geoJson/jiedao.json"})
+  // fetch(assetsUrl("/geoJson/jiedao.json")).then(res=>res.json()).then(res=>{
+  //   console.log("jiedao",res)
+  // })
+  // fetch(assetsUrl("/geoJson/yl.json")).then(res=>res.json()).then(res=>{
+  //   console.log("yj",res)
+  // })
+  // let mittData = {
+  //   url: assetsUrl("/geoJson/jiedao.json"),
+  //   // url: "http://1.85.55.225:8085/YouMapServer/rest/service/sxwwCGCS2000/VectorTileServer/styles/blue_yj-225.json",
+  //   geoType: "maskGeo",
+  //   mask: true,
+  //   type: "mask",
+  //   style: {
+  //     outlineColor: "#fff",
+  //     outlineWidth: 5, //宽度
+  //   },
+  // };
+  // $mitt.emit("drawGeoGraph", mittData);
 }
 
 </script>

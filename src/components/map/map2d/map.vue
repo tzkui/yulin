@@ -295,6 +295,25 @@ const addLayer = (data) => {
   });
   addListOrObj(clusterLayer, data);
 };
+const drawWg = function(data){
+  fetch(assetsUrl(data.url)).then(res=>res.json()).then(res=>{
+    let features = res.features;
+    for(const obj of features){
+      let lnglatArray = obj.geometry.rings[0];
+      let poly = new mars2d.graphic.Polygon({
+        latlngs: lnglatArray,
+        style: {
+          fillColor: "red",
+          fill: true,
+          outlineWidth: 100
+        }
+      })
+      poly.addTo(map)
+    }
+    console.log(map)
+  })
+}
+
 //隐藏大类或数据
 const hideMarker = (data) => {
   console.log("hideMarker--->", data);
@@ -1164,6 +1183,9 @@ onMounted(() => {
     }
     updataMoveRoute(data);
   });
+  $mitt.on("drawWg",(data)=>{
+    drawWg(data)
+  })
   $mitt.on("clearAll", (data) => {
     let layers = map.getLayers();
     let ignoreAry = data && data.ignore ? data.ignore : []; // ['geo绘制图层','聚合图层_wz','路径规划']//data.ignore;
