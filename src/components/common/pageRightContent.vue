@@ -1,7 +1,9 @@
 <script setup>
-import { ref } from "vue";
+import { ref, inject } from "vue";
 import soundRecording from "./soundRecording.vue";
+import { assetsUrl } from "@/components/map/map2d/hook/index";
 
+const $mitt = inject("$mitt");
 const right_content = ref();
 const isHide = ref(false);
 const show_right_top_list = ref(true);
@@ -15,6 +17,28 @@ const toggleRightTopList = function () {
 const toggleRightBottomList = function () {
   show_right_bottom_list.value = !show_right_bottom_list.value;
 };
+
+const clickWg = function(){
+  fetch(assetsUrl("/geoJson/jiedao.json")).then(res=>res.json()).then(res=>{
+    console.log("jiedao",res)
+  })
+  fetch(assetsUrl("/geoJson/yl.json")).then(res=>res.json()).then(res=>{
+    console.log("yj",res)
+  })
+  let mittData = {
+    url: assetsUrl("/geoJson/jiedao.json"),
+    // url: "http://1.85.55.225:8085/YouMapServer/rest/service/sxwwCGCS2000/VectorTileServer/styles/blue_yj-225.json",
+    geoType: "maskGeo",
+    mask: true,
+    type: "mask",
+    style: {
+      outlineColor: "#fff",
+      outlineWidth: 5, //宽度
+    },
+  };
+  $mitt.emit("drawGeoGraph", mittData);
+}
+
 </script>
 
 <template>
@@ -30,7 +54,7 @@ const toggleRightBottomList = function () {
       <div class="openAudio">
         <soundRecording></soundRecording>
       </div>
-      <div class="wg"></div>
+      <div class="wg" @click="clickWg"></div>
     </div>
 
     <div class="right_top_box">

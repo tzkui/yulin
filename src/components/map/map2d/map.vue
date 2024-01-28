@@ -937,8 +937,10 @@ const addMapGlLayer = (data = {}) => {
 };
 // 热力图
 const addHostLayer = (data) => {
-  if (layerWork) {
+  try {
     map.getLayerById("HeatLayer").remove();
+  } catch (error) {
+    
   }
   console.log("热力图数据：", data)
   layerWork = new mars2d.layer.HeatLayer(data, {
@@ -959,7 +961,9 @@ const addHostLayer = (data) => {
 };
 
 const removeHostLayer = (data) => {
-  map.removeLayer(layerWork);
+  if(layerWork){
+    map.removeLayer(layerWork);
+  }
 };
 
 let expImg;

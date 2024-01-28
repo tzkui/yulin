@@ -1,22 +1,6 @@
 <template>
   <ViewBox title="总体分析">
     <div class="disaster_situation">
-      <div class="type_select_box">
-        <!-- <el-select
-          @change="changeDisaster"
-          v-model="current_disater_type"
-          placeholder="请选择类型"
-          :teleported="false"
-        >
-          <el-option
-            v-for="item in disaster_types"
-            :key="item.value"
-            :label="item.name"
-            :value="item.value"
-          >
-          </el-option>
-        </el-select> -->
-      </div>
       <timeSelect
         @selectTime="selectTime"
         v-if="['类型分析', '区域分析'].includes(current_disater_tab)"
@@ -83,6 +67,18 @@ const initDisasterTypes = async () => {
   current_disater_type.value = disaster_types.value[0].value;
   typeId.value = disaster_types.value[0].value;
   initFxTimes();
+  initZqfxLeveldata(typeId.value)
+};
+// 灾情分析等级与区域
+const initZqfxLeveldata = async (id) => {
+  const param = {
+    typeId: id,
+    startTime: startTime.value,
+    endTime: endTime.value,
+  };
+  let res = await getZqfxLeveldata(param);
+  console.log("getZqfxLeveldata=========>灾情", res);
+  chartData.value = res.data;
 };
 const typeId = ref("");
 const startTime = ref("");

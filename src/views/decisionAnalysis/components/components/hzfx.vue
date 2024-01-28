@@ -161,7 +161,6 @@ const changeChart = (item) => {
     case "区域分析":
       setQyfxChart();
       break;
-      break;
     case "热力图":
       addHotMap();
       break;

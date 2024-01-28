@@ -210,7 +210,8 @@ const qylxdd = function (item) {
 const updatePopupData = function (info, id) {
   console.log(id);
   console.log(info);
-  let item = info.find((item) => item.id === id);
+  // let item = info.find((item) => item.id === id);
+  let item = info[0];
   let l1 = ["待处理", "属实"];
   const l2 = ["属实", "已启动响应"];
   let pointInfo = {
