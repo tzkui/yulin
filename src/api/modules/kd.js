@@ -53,7 +53,8 @@ export function getResourceLiveUrl(data){
     method: 'get',
     params: data,
     headers: {
-      apiKey: kdApiKey
+      apiKey: kdApiKey,
+      type: "flv"
     }
   })
 }

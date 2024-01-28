@@ -749,6 +749,9 @@ export const getZqfxLeveldata = data => request.post(`/jcfx/zqfx?typeId=${data.t
 // 灾情综合查询
 export const getZqzhcx = data => request.post("/jcfx/zqzhcx", data)
 
+// 新灾情综合查询
+export const getZqcxNew = data => request.post(`/jcfx/zqfxNew?typeId=${data.typeId}&startTime=${data.startTime}&endTime=${data.endTime}`, {})
+
 // 重点防护目标列表
 export const getZdfhmb = data => request.post(`/jcfx/zdfhmb?map_x=${data.map_x}&map_y=${data.map_y}&radius=${data.radius}`, data.typeIds)
 // export const getZdfhmb = data => request.post(`/jcfx/zdfhmb`, data)

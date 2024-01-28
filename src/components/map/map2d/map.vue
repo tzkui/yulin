@@ -935,7 +935,6 @@ const addMapGlLayer = (data = {}) => {
     mapboxMap.scrollZoom.disable();
   });
 };
-
 // 热力图
 const addHostLayer = (data) => {
   if (layerWork) {
@@ -957,6 +956,10 @@ const addHostLayer = (data) => {
   });
   map.addLayer(layerWork);
   map.fitBounds(data);
+};
+
+const removeHostLayer = (data) => {
+  map.removeLayer(layerWork);
 };
 
 let expImg;
@@ -1135,6 +1138,9 @@ onMounted(() => {
   $mitt.on("addHostLayer", (data) => {
     addHostLayer(data);
   });
+  $mitt.on("removeHostLayer",(data)=>{
+    removeHostLayer(data)
+  })
   $mitt.on("setBaseMap", (data) => {
     //获取可视区域坐标
     if (!data.name) {
@@ -1237,6 +1243,7 @@ onUnmounted(() => {
   $mitt.all.delete("flyHome");
   $mitt.all.delete("postBounds");
   $mitt.all.delete("setBaseMap");
+  $mitt.all.delete("removeHostLayer");
   map.destroy();
   map = null;
 });
