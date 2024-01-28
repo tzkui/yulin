@@ -299,6 +299,7 @@ const getRtspUrl = function (resourceId) {
   const params = {
     resourceId: resourceId,
     protocol: "flv",
+    requestType: "flv"
   };
   getResourceLiveUrl(params).then((res) => {
     console.log(res);
