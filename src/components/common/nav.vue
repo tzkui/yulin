@@ -1,6 +1,6 @@
 <script setup>
 import fscreen from "@/utils/fullscreen.js";
-import { reactive, ref, onMounted, inject, onUnmounted } from "vue";
+import { reactive, ref, onMounted, inject, onUnmounted, defineAsyncComponent } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import tabzrurl from "@/assets/header/head_tab1_active.png";
 import zrzh from "@/assets/header/head_tab1.png";
@@ -12,6 +12,14 @@ import zhdd from "@/assets/header/head_tab3.png";
 import zhddActive from "@/assets/header/head_tab3_active.png";
 import jcfx from "@/assets/header/head_tab4.png";
 import jcfxActive from "@/assets/header/head_tab4_active.png";
+
+import decisionAnalysis from "@/assets/header/decisionAnalysis.png";
+import safePage from "@/assets/header/safePage.png";
+import natural from "@/assets/header/natural.png";
+import home from "@/assets/header/home.png";
+
+const dialogNav = defineAsyncComponent(() => import('./dialogNav.vue'))
+
 
 const $mitt = inject("$mitt");
 const pageHeader = ref();
@@ -108,29 +116,74 @@ const gosjfx = () => {
 };
 const typeValue = ref(1);
 const typeList = ref([
-  {id: 1, name: "单屏"},
-  {id: 2, name: "双屏"},
-  {id: 3, name: "多屏"},
-  {id: 4, name: "超高分"},
-  {id: 5, name: "异形屏"},
-  {id: 6, name: "驾驶舱"},
+  { id: 1, name: "单屏" },
+  { id: 2, name: "双屏" },
+  { id: 3, name: "多屏" },
+  { id: 4, name: "超高分" },
+  { id: 5, name: "异形屏" },
+  { id: 6, name: "驾驶舱" },
 ])
-const screenModelChange = function(){
+const navUrl = ref([
+  {
+    name: "指挥调度一张图",
+    path: "home",
+    imgUrl: home
+  },
+  {
+    name: "自然灾害",
+    path: "natural",
+    imgUrl: natural
+  },
+  {
+    name: "安全生产",
+    path: "safePage",
+    imgUrl: safePage
+  },
+  {
+    name: "决策分析",
+    path: "decisionAnalysis",
+    imgUrl: decisionAnalysis
+  }
+])
+const dialogList = ref([])
+const dialogValue = ref(false)
+const closeHandle = () => {
+  dialogValue.value = false
+}
+const screenModelChange = function () {
   console.log(typeValue.value)
   const type = typeValue.value;
-  let baseIp = window.location.href.split("/#/")[0]+"/#/"
-  if(type===1 || type === 4){
-    window.open(baseIp+"home", "_blank");
-  }else if(type===2){
-    window.open(baseIp+"home", "_blank");
-    window.open(baseIp+"natural", "_blank");
-  }else if(type===3){
-    window.open(baseIp+"home", "_blank");
-    window.open(baseIp+"natural", "_blank");
-    window.open(baseIp+"safePage", "_blank");
-    window.open(baseIp+"decisionAnalysis", "_blank");
-    window.open("http://10.112.143.191:20128/map/analysis/page/danger/sjfx", "_blank");
+  dialogList.value = []
+  let baseIp = window.location.href.split("/#/")[0] + "/#/"
+  if (type === 1 || type === 4) {
+    // window.open(baseIp + "home", "_blank");
+    navUrl.value.forEach((v, i) => {
+      if (i < 1) {
+        v.paths = baseIp + '/' + v.path
+        dialogList.value.push(v)
+      }
+    })
+  } else if (type === 2) {
+    // window.open(baseIp + "home", "_blank");
+    // window.open(baseIp + "natural", "_blank");
+    navUrl.value.forEach((v, i) => {
+      if (i < 2) {
+        v.paths = baseIp + '/' + v.path
+        dialogList.value.push(v)
+      }
+    })
+  } else if (type === 3) {
+    // window.open(baseIp + "home", "_blank");
+    // window.open(baseIp + "natural", "_blank");
+    // window.open(baseIp + "safePage", "_blank");
+    // window.open(baseIp + "decisionAnalysis", "_blank");
+    // window.open("http://10.112.143.191:20128/map/analysis/page/danger/sjfx", "_blank");
+    navUrl.value.forEach((v, i) => {
+      v.paths = baseIp + '/' + v.pat
+      dialogList.value.push(v)
+    })
   }
+  dialogValue.value = true
 }
 </script>
 
@@ -139,14 +192,8 @@ const screenModelChange = function(){
     <header ref="pageHeader">
       <div class="left_content">
         <ul class="tabs">
-          <li
-            @click="navCheckHandle(it)"
-            v-for="(it, ix) in data.navList.slice(0, 2)"
-            :key="ix"
-          >
-            <img
-              :src="[it.value === data.checkValue ? it.activeurl : it.taburl]"
-            />
+          <li @click="navCheckHandle(it)" v-for="(it, ix) in data.navList.slice(0, 2)" :key="ix">
+            <img :src="[it.value === data.checkValue ? it.activeurl : it.taburl]" />
           </li>
         </ul>
       </div>
@@ -156,15 +203,8 @@ const screenModelChange = function(){
       </div>
       <div class="right_content">
         <ul class="tabs">
-          <li
-            @click="navCheckHandle(it)"
-            v-for="(it, ix) in data.navList.slice(-2)"
-            :key="ix"
-          >
-            <img
-              :src="[it.value === data.checkValue ? it.activeurl : it.taburl]"
-              alt=""
-            />
+          <li @click="navCheckHandle(it)" v-for="(it, ix) in data.navList.slice(-2)" :key="ix">
+            <img :src="[it.value === data.checkValue ? it.activeurl : it.taburl]" alt="" />
           </li>
         </ul>
       </div>
@@ -175,6 +215,9 @@ const screenModelChange = function(){
       </div>
       <div class="aside-link" @click="gosjfx()"></div>
       <div class="home" @click="gohome()"></div>
+
+      <dialogNav :title="'选择页面'" :dialogValue="dialogValue" :dialogList="dialogList" @closeHandle="closeHandle">
+      </dialogNav>
     </header>
 
     <!-- <div class="back-color"></div> -->
@@ -292,27 +335,29 @@ header {
   top: 0;
   width: 100%;
   height: 69px;
-  background: linear-gradient(
-    145deg,
-    rgba(1, 23, 65, 0.9) 0%,
-    rgba(17, 48, 106, 0.9) 50%,
-    rgba(1, 23, 65, 0.9) 100%
-  );
+  background: linear-gradient(145deg,
+      rgba(1, 23, 65, 0.9) 0%,
+      rgba(17, 48, 106, 0.9) 50%,
+      rgba(1, 23, 65, 0.9) 100%);
   background-size: 100% 100%;
   z-index: 3;
 }
-.model_selects{
+
+.model_selects {
   position: absolute;
   right: 120px;
   top: 30px;
-  >select{
+
+  >select {
     color: #fff;
     border: 1px solid #1E89FD;
     height: 24px;
-    border-radius: 2px;;
+    border-radius: 2px;
+    ;
     padding: 0 6px;
   }
-  option{
+
+  option {
     color: #fff;
     background-color: #122F4F;
   }
