@@ -137,7 +137,7 @@ const handleScreenAuto = () => {
   <div class="home-container">
     <div class="screenBox" id="screen">
       <!-- 头部 -->
-      <pageHeader></pageHeader>
+      <pageHeader style="position: relative;z-index: 100000;"></pageHeader>
       <div class="mapBox">
         <map2d></map2d>
       </div>

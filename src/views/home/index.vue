@@ -745,7 +745,7 @@ onMounted(() => {
   margin-left: -263px;
   top: 98px;
   cursor: pointer;
-  z-index: 9999;
+  z-index: 999;
   display: flex;
   align-items: center;
 
