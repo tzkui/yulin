@@ -646,7 +646,6 @@ const getAllDisasters = function () {
     typeIds: disaster_check_data.value.map((item) => item.value),
   };
   getZdfhmb(params).then((res) => {
-    console.log("zzzzz", res);
     showNum.value = true;
     effect_cont.value[0].num = Math.floor(res.data.totalArea);
     effect_cont.value[1].num = Math.floor(res.data.total);
@@ -665,13 +664,13 @@ const getAllDisasters = function () {
       });
     });
     console.log("xxxxxx:", allDisasters.value);
-    nextTick(() => {
-      for (const key in allDisasters.value) {
-        allDisasters.value[key].forEach((item) => {
-          $mitt.emit("addMarker", item.markerInfo);
-        });
-      }
-    });
+    // nextTick(() => {
+    //   for (const key in allDisasters.value) {
+    //     allDisasters.value[key].forEach((item) => {
+    //       $mitt.emit("addMarker", item.markerInfo);
+    //     });
+    //   }
+    // });
   });
 };
 let allAnalysis = ref({});

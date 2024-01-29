@@ -79,6 +79,8 @@ const initZqfxLeveldata = async (id) => {
   let res = await getZqfxLeveldata(param);
   console.log("getZqfxLeveldata=========>灾情", res);
   chartData.value = res.data;
+  
+  addHotMap()
 };
 const typeId = ref("");
 const startTime = ref("");

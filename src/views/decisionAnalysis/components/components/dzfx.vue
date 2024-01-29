@@ -1,22 +1,6 @@
 <template>
   <ViewBox title="地震分析">
     <div class="disaster_situation">
-      <div class="type_select_box">
-        <!-- <el-select
-          @change="changeDisaster"
-          v-model="current_disater_type"
-          placeholder="请选择类型"
-          :teleported="false"
-        >
-          <el-option
-            v-for="item in disaster_types"
-            :key="item.value"
-            :label="item.name"
-            :value="item.value"
-          >
-          </el-option>
-        </el-select> -->
-      </div>
       <timeSelect @selectTime="selectTime" :isEarthquake="true"></timeSelect>
       <!-- tab 切换chart -->
       <div class="disaster_tabs">
@@ -56,7 +40,7 @@ const disaster_tab = ref([
   "重点关注",
   "地震频发区",
 ]);
-const current_disater_tab = ref("震级分析");
+const current_disater_tab = ref("类型占比");
 // 下拉选项
 const disaster_types = ref([]);
 const current_disater_type = ref();
@@ -291,6 +275,7 @@ const setLxfbChart = function () {
     yAxis: [
       {
         type: "value",
+          minInterval: 1,
         axisLabel: {
           show: true,
           textStyle: {

@@ -52,7 +52,7 @@ const drawShequWg = function(){
   lastType = "shequ"
   console.log("开始绘制社区网格")
   try {
-    window.map.getLayerById("jiedaoLayer").clear()
+    window.map.getLayerById("window.wgLayer").clear()
   } catch {}
   drawWg(shequWgFeature)
 }
@@ -73,7 +73,7 @@ let drawWg = function(features){
       },
       attr: { remark: "示例1" }
     })
-    jiedaoLayer.addGraphic(poly);
+    window.wgLayer.addGraphic(poly);
     let label = new mars2d.graphic.Label({
       latlng: [poly.center.lat, poly.center.lng],
       style: {
@@ -81,9 +81,10 @@ let drawWg = function(features){
       },
     });
     label.text = obj.attributes["所属街道办"] || obj.attributes.streetname;
-    jiedaoLayer.addGraphic(label)
+    window.wgLayer.addGraphic(label)
   }
   sessionStorage.setItem("isWg", 1)
+  console.log(window.wgLayer.getGraphics())
 }
 
 const clickWg = function(){

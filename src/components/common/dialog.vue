@@ -30,7 +30,7 @@ export default {
       default: "",
     },
     top: {
-      type: Number,
+      type: Number || String,
       default: -40,
     },
     title: {

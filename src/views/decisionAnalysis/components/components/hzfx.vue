@@ -45,7 +45,7 @@ const disaster_tab = ref([
   "区域分析",
   "热力图",
 ]);
-const current_disater_tab = ref("趋势分析");
+const current_disater_tab = ref("总体分析");
 // 下拉选项
 const disaster_types = ref([]);
 const current_disater_type = ref();

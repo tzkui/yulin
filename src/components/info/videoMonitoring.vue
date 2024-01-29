@@ -102,10 +102,8 @@ const { initTree } = commonFun();
 
 const showDialog = ref(false);
 const openDialog = function (e) {
-  console.log(e);
   showDialog.value = true;
   if (e && e.playerUrl) {
-    console.log(allList, treeData.value)
     nextTick(() => {
       for (const item of allList) {
           if (item.id === e.id) {
@@ -143,36 +141,18 @@ let allList = [];
 const treeData = ref([]);
 let originTreeData = ref([]);
 getSpjk().then((res) => {
-  console.log("spjk,", res);
   let arr = [];
   for(let i=0;i <res.data.length;i++) {
     getSpjkTree(res.data[i].typeId).then(resp=>{
-      console.log("spjk_tree", resp)
       resp.data.forEach(item=>{
         item.label = item.title
         allList.push({...item})
       })
       arr[i] = initTree(resp.data)[0]
-      console.log("zzzzzzz", arr[i], treeData.value)
     })
   }
-  // res.data.forEach((item) => {
-  //   arr.push({
-  //     id: item.typeId,
-  //     label: item.mc,
-  //     children: item.jh.map((info) => {
-  //       return {
-  //         id: info.id,
-  //         type: info.typeName,
-  //         playerUrl: info.playerUrl,
-  //         label: info.monitorName,
-  //       };
-  //     }),
-  //   });
-  // });
   treeData.value = arr;
   originTreeData.value = treeData.value
-  console.log(treeData.value);
 });
 const meetingList = ref([]);
 

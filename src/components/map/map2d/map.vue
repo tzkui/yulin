@@ -131,7 +131,7 @@ const initMap = () => {
     name: "点图层",
     id: "pointLayer",
   });
-  wgLayer = new mars2d.layer.GraphicLayer({
+  window.wgLayer = wgLayer = new mars2d.layer.GraphicLayer({
     name: "网格图层",
     id: "wgLayer",
   });
