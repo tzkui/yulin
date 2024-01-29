@@ -16,7 +16,7 @@
           <div class="name">{{ item.name }}</div>
           <!-- <img :src="item.imgUrl" alt="" class="img" :style="{ height: dialogList.length > 1 ? '480px' : '950px' }"> -->
           <iframe :src="item.paths" frameborder="0" class="img"
-            :style="{ height: dialogList.length > 1 ? '480px' : '800px' }"></iframe>
+            :style="{ height: dialogList.length > 3 ? '480px' : '950px' }"></iframe>
         </div>
       </div>
     </div>
