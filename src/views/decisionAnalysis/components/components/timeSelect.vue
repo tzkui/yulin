@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import moment from "moment";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
@@ -30,6 +30,14 @@ const parseTime = function (type) {
     return moment().format("YYYY-MM-DD");
   }
 };
+
+onMounted(()=>{
+  if(props.isEarthquake){
+    selectTime(tabs.value[2])
+  }else{
+    selectTime(tabs.value[3])
+  }
+})
 
 const tabs = ref([
   { id: 1, name: "上月", startTime: parseTime(1), endTime: parseTime(5) },

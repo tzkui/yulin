@@ -201,7 +201,6 @@ import {
   getZdfhmbType,
   getYybzfxType,
   getZqzhcx,
-  getAlkList,
   doGdApi,
 } from "@/api/decision_analysis.js";
 
@@ -248,12 +247,10 @@ const disaster_check_data = ref([]);
 const disaster_checked_data = ref("");
 
 const analysis_check_data = ref([]);
-// 应用统计 选择tab  已选择内容
-const analysis_checked_data = ref("");
+
 onMounted(() => {
   initType();
   initZqzhcx();
-  // initAlk()
 });
 let timer1 = null;
 // 滑块改变
@@ -724,23 +721,10 @@ const flyTo = function (info) {
 const zddxList = computed(() => {
   return allDisasters.value[disaster_checked_data.value] || [];
 });
-const yjbzfxList = computed(() => {
-  return allAnalysis.value[analysis_checked_data.value] || [];
-});
 const selectZddx = function (info) {
   console.log(info, info.value)
   disaster_checked_data.value = info.value;
 };
-const selectYjbzfx = function (info) {
-  analysis_checked_data.value = info.value;
-};
-
-const alk_list = ref([])
-const initAlk = function () {
-  getAlkList({ page: 1, limit: -1 }).then(res => {
-    alk_list.value = res.data
-  })
-}
 
 const goPgae = function () {
   window.location.href = window.baseIp1 + ":20128/basics/eventcase"
@@ -754,7 +738,6 @@ const initZqzhcx = async () => {
   let res = await getZqzhcx();
   console.log("getZqzhcx===========>", res);
   disaster_synthesis.value = res.data;
-  // setMarker("zqzhcx", disaster_synthesis.value[0]);
 };
 // 列表点击撒点...
 const setMarker = (type, data) => {

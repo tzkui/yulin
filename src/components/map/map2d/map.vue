@@ -67,7 +67,8 @@ let map = null,
   pointLayer = null,
   editLayerGroup = {},
   labelLayer = null,
-  routeLayer = null;
+  routeLayer = null,
+  wgLayer = null;
 // labelClusterLayer =null;
 let moveLayer = null;
 let labeltxt = ref(""),
@@ -86,7 +87,7 @@ let layerWork = null;
 const initMap = () => {
   //104.07217,30.663277
   let myBase = deepmerge(mapDeafultOps, props.mapOptions);
-  map = new mars2d.Map("map2d", myBase);
+  window.map = map = new mars2d.Map("map2d", myBase);
   // labelClusterLayer = new mars2d.layer.ClusterLayer()//ClusterLayer();
   LineLayer = new mars2d.layer.GraphicLayer({
     name: "线路绘制图层",
@@ -130,6 +131,11 @@ const initMap = () => {
     name: "点图层",
     id: "pointLayer",
   });
+  wgLayer = new mars2d.layer.GraphicLayer({
+    name: "网格图层",
+    id: "wgLayer",
+  });
+  map.addLayer(wgLayer)
   map.addLayer(pointLayer);
   // drawLayer = new mars2d.layer.GraphicLayer({
   //     hasEdit: true,
@@ -151,9 +157,18 @@ const initMap = () => {
   editEvent(); //编辑图层事件绑定
   routeRef.value.setLayer(map);
   map.on(mars2d.EventType.zoomend, (data) => {
-    console.log("zoomEnd--->", data);
+    console.log("zoomEnd--->", data, data.target.zoom);
     let endData = data.target;
     $mitt.emit("zoomEnd", { newZoom: endData._zoom });
+    if(sessionStorage.getItem("isWg")==="1"){
+      if(endData.zoom>=14){
+        $mitt.emit("wgChild")
+      }else if(endData.zoom>=12){
+        $mitt.emit("wgParent")
+      }else{
+        $mitt.emit("wgHide")
+      }
+    }
   });
 };
 //添加图层数据
@@ -295,25 +310,6 @@ const addLayer = (data) => {
   });
   addListOrObj(clusterLayer, data);
 };
-const drawWg = function(data){
-  fetch(assetsUrl(data.url)).then(res=>res.json()).then(res=>{
-    let features = res.features;
-    for(const obj of features){
-      let lnglatArray = obj.geometry.rings[0];
-      let poly = new mars2d.graphic.Polygon({
-        latlngs: lnglatArray,
-        style: {
-          fillColor: "red",
-          fill: true,
-          outlineWidth: 100
-        }
-      })
-      poly.addTo(map)
-    }
-    console.log(map)
-  })
-}
-
 //隐藏大类或数据
 const hideMarker = (data) => {
   console.log("hideMarker--->", data);
@@ -1183,9 +1179,6 @@ onMounted(() => {
     }
     updataMoveRoute(data);
   });
-  $mitt.on("drawWg",(data)=>{
-    drawWg(data)
-  })
   $mitt.on("clearAll", (data) => {
     let layers = map.getLayers();
     let ignoreAry = data && data.ignore ? data.ignore : []; // ['geo绘制图层','聚合图层_wz','路径规划']//data.ignore;

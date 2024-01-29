@@ -18,28 +18,86 @@ const toggleRightBottomList = function () {
   show_right_bottom_list.value = !show_right_bottom_list.value;
 };
 
-const clickWg = function(){
-  $mitt.emit("drawWg",{url: "/geoJson/jiedao.json"})
-  // fetch(assetsUrl("/geoJson/jiedao.json")).then(res=>res.json()).then(res=>{
-  //   console.log("jiedao",res)
-  // })
-  // fetch(assetsUrl("/geoJson/yl.json")).then(res=>res.json()).then(res=>{
-  //   console.log("yj",res)
-  // })
-  // let mittData = {
-  //   url: assetsUrl("/geoJson/jiedao.json"),
-  //   // url: "http://1.85.55.225:8085/YouMapServer/rest/service/sxwwCGCS2000/VectorTileServer/styles/blue_yj-225.json",
-  //   geoType: "maskGeo",
-  //   mask: true,
-  //   type: "mask",
-  //   style: {
-  //     outlineColor: "#fff",
-  //     outlineWidth: 5, //宽度
-  //   },
-  // };
-  // $mitt.emit("drawGeoGraph", mittData);
+// javascript 转换
+function mercatorTolonlat(mercator){
+  var lonlat=[0,0]
+  var x = mercator[0]/20037508.34*180;
+  var y = mercator[1]/20037508.34*180;
+  y= 180/Math.PI*(2*Math.atan(Math.exp(y*Math.PI/180))-Math.PI/2);
+  lonlat[0] = x;
+  lonlat[1] = y;
+  return lonlat;
 }
 
+let jiedaoWgFeature = null,shequWgFeature = null;
+fetch(assetsUrl("/geoJson/jiedao.json")).then(res=>res.json()).then(res=>{
+  jiedaoWgFeature = res.features;
+})
+fetch(assetsUrl("/geoJson/shequ.json")).then(res=>res.json()).then(res=>{
+  shequWgFeature = res.features;
+})
+let lastType = ""
+const drawJiedaoWg = function(){
+  if(lastType == "jiedao"){
+    return ;
+  }
+  lastType = "jiedao"
+  console.log("开始绘制街道网格")
+  drawWg(jiedaoWgFeature)
+}
+const drawShequWg = function(){
+  if(lastType == "shequ"){
+    return ;
+  }
+  lastType = "shequ"
+  console.log("开始绘制社区网格")
+  try {
+    window.map.getLayerById("jiedaoLayer").clear()
+  } catch {}
+  drawWg(shequWgFeature)
+}
+let drawWg = function(features){
+  for(const obj of features){
+    let lnglatArray = obj.geometry.rings[0].map(item=>mercatorTolonlat(item));
+    const latlngs = mars2d.PointTrans.coords2latlngs(lnglatArray)
+    let poly = new mars2d.graphic.Polygon({
+      latlngs,
+      style: {
+        fill: false,
+        fillColor: "transparent",
+        fillOpacity: 0.3,
+        outline: true,
+        outlineWidth: 2,
+        outlineColor: "#42FFFF",
+        outlineOpacity: 0.5
+      },
+      attr: { remark: "示例1" }
+    })
+    jiedaoLayer.addGraphic(poly);
+    let label = new mars2d.graphic.Label({
+      latlng: [poly.center.lat, poly.center.lng],
+      style: {
+        color: "#fff"
+      },
+    });
+    label.text = obj.attributes["所属街道办"] || obj.attributes.streetname;
+    jiedaoLayer.addGraphic(label)
+  }
+  sessionStorage.setItem("isWg", 1)
+}
+
+const clickWg = function(){
+  if(sessionStorage.getItem("isWg")==="1"){
+    window.wgLayer.clear();
+    sessionStorage.setItem("isWg", 0)
+    return ;
+  }
+  drawJiedaoWg()
+  window.map.flyTo([38.06,109.75],12)
+}
+$mitt.on("wgChild", drawShequWg)
+$mitt.on("wgParent", drawJiedaoWg)
+$mitt.on("wgHide", clickWg)
 </script>
 
 <template>
