@@ -96,6 +96,7 @@ const navCheckHandle = (row) => {
   }
   if (data.pageRoute !== row.path) {
     ROUTER_INFO.push(row.path);
+    $mitt.emit("removeHostLayer")
     data.pageRoute = row.path;
   }
   data.checkValue = row.value;

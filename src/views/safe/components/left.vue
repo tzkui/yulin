@@ -135,6 +135,7 @@ const getdatasj = async function () {
           content: v.content,
         }
     }
+    $mitt.emit("addMarker", v.marker)
   });
 };
 // 定义数据,决定是查看还是隐藏
@@ -198,7 +199,6 @@ const setMarker = function (type, item, index) {
     mmid.value = item.marker.id;
     let mardata = item.marker;
     $mitt.emit("addMarker", mardata);
-    $mitt.emit("openPopup", mardata);
     $mitt.emit("openPopup", mardata);
     // 然后还要把我打了点的数据保存下来,待会把她清楚掉
     monedata.value = item.marker;

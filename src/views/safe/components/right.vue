@@ -313,53 +313,22 @@ const getAccidentLevelList = async function (type = "1") {
 
 };
 const nowType = ref(-1)
-// 获取事故类型分析数据
-import img1 from "../../../assets/safe/type1.png";
-import img2 from "../../../assets/safe/type2.png";
-import img3 from "../../../assets/safe/type3.png";
-import img4 from "../../../assets/safe/type4.png";
-// '/src/assets/safe/num' + (index + 1) + '.png'
-// import imm1 from "../../../assets/safe/num1.png"
-// const getAccidentTypeList = async function (type = "4",id) {
-//   let res = await getSglxfx(type);
-//   const IMGLIST = [img1, img2, img3, img4];
-//   if (res.code == 200) {
-//     accidentTypeList.value = res.data.map((item, index) => {
-//       return {
-//         imgSrc: IMGLIST[index],
-//         id: index,
-//         num: item.sz,
-//         name: item.mc,
-//         ...item,
-//       };
-//     });
-//     if(id){
-//       nextTick(()=>{
-//         $mitt.emit("hideAllMarker")
-//         emit("updatePopupData",accidentTypeList.value[nowType.value].jh,id)
-//       })
-//     }
-//   }
-// };
 const coxdata = ref();
 // 下面就是数量的数据了
 const echarts = inject("echarts");
 const cxydata = ref();
-const sum = function (arr) {
-  return eval(arr.join("+"));
-};
+
 let myChart = null;
 const getAccidentTypeList = async function (type = "4", id) {
   let res = await getSglxfx(type);
   if (res.code == 200) {
     coxdata.value = [];
     cxydata.value = [];
+    // 建设安全，爆炸事故，矿山安全，突发环境，交通运营，危化品
     coxdata.value = res.data.map((item) => item.name);
     cxydata.value = res.data.map((item) => item.value);
     // 下面就是柱状图的一些配置的了
     var chartDom = document.getElementById("columnartype");
-    // const pageZoom = document.getElementById("app").style.zoom;
-    // chartDom.style.zoom = 1 / pageZoom;
     myChart = echarts.init(chartDom);
     var option;
     option = {
@@ -423,7 +392,7 @@ const getAccidentTypeList = async function (type = "4", id) {
       ],
       series: [
         {
-          // name: "企业总数:" ,s
+          name: "企业总数:" ,
           type: "bar",
           barWidth: "12px",
           data: cxydata.value,
