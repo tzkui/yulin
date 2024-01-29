@@ -89,6 +89,7 @@ let drawWg = function(features){
     });
     label.on(mars2d.EventType.click, e=>{
       let json = JSON.stringify({
+        id: obj.attributes.commuid || obj.attributes.streetid,
         text: label.text,
         isLabel: true,
         markerType: "wgxx",
