@@ -14,7 +14,9 @@
         <div v-for="item in dialogList" :key="item.id" @click="windowOpen(item)" class="vfor"
           :style="{ width: dialogList.length > 1 ? '49%' : '1900px' }">
           <div class="name">{{ item.name }}</div>
-          <img :src="item.imgUrl" alt="" class="img" :style="{ height: dialogList.length > 1 ? '480px' : '950px' }">
+          <!-- <img :src="item.imgUrl" alt="" class="img" :style="{ height: dialogList.length > 1 ? '480px' : '950px' }"> -->
+          <iframe :src="item.paths" frameborder="0" class="img"
+            :style="{ height: dialogList.length > 1 ? '480px' : '800px' }"></iframe>
         </div>
       </div>
     </div>
@@ -90,7 +92,7 @@ export default {
   position: relative;
   // width: 100%;
   height: 1080px;
-  z-index: 15;
+  z-index: 99999999;
 
   .dialog-wid-center {
     position: absolute;
@@ -100,6 +102,8 @@ export default {
     // width: 1500px;
     height: 1080px;
     background: #051e3a;
+    z-index: 99999999;
+
     // background: linear-gradient(
     //   to top,
     //   rgba(1, 40, 59, 1) 0%,

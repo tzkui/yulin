@@ -159,7 +159,7 @@ const screenModelChange = function () {
     // window.open(baseIp + "home", "_blank");
     navUrl.value.forEach((v, i) => {
       if (i < 1) {
-        v.paths = baseIp + '/' + v.path
+        v.paths = baseIp + v.path
         dialogList.value.push(v)
       }
     })
@@ -168,7 +168,7 @@ const screenModelChange = function () {
     // window.open(baseIp + "natural", "_blank");
     navUrl.value.forEach((v, i) => {
       if (i < 2) {
-        v.paths = baseIp + '/' + v.path
+        v.paths = baseIp + v.path
         dialogList.value.push(v)
       }
     })
@@ -179,7 +179,7 @@ const screenModelChange = function () {
     // window.open(baseIp + "decisionAnalysis", "_blank");
     // window.open("http://10.112.143.191:20128/map/analysis/page/danger/sjfx", "_blank");
     navUrl.value.forEach((v, i) => {
-      v.paths = baseIp + '/' + v.pat
+      v.paths = baseIp + v.path
       dialogList.value.push(v)
     })
   }
@@ -216,7 +216,7 @@ const screenModelChange = function () {
       <div class="aside-link" @click="gosjfx()"></div>
       <div class="home" @click="gohome()"></div>
 
-      <dialogNav :title="'选择页面'" :dialogValue="dialogValue" :dialogList="dialogList" @closeHandle="closeHandle">
+      <dialogNav :title="'选择页面'" :dialogValue="dialogValue" :dialogList="dialogList" @closeHandle="closeHandle" style="position: relative;z-index: 100000;">
       </dialogNav>
     </header>
 
