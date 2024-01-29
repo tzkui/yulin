@@ -82,6 +82,22 @@ let drawWg = function(features){
     });
     label.text = obj.attributes["所属街道办"] || obj.attributes.streetname;
     window.wgLayer.addGraphic(label)
+    label.bindPopup(null, {
+      className: "myPopup",
+      closeButton: true,
+      maxWidth: 500,
+    });
+    label.on(mars2d.EventType.click, e=>{
+      console.log("带年纪label", e)
+      e.target.setPopupContent(`<map-popup data=${label.text}></map-popup>`)
+      let back = {
+        cartesian: e.containerPoint, //转geojson需要的数据
+        point: e.latlng, //点击点的经纬度
+        graphic: e.target, //图层数据
+        data: e.target.options.data, //前端挂在的data数据
+      };
+      $mitt.emit("markerClick", back);
+    })
   }
   sessionStorage.setItem("isWg", 1)
   console.log(window.wgLayer.getGraphics())

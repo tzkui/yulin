@@ -238,7 +238,6 @@ const addGraphicMarker = (graphicLayer, item) => {
       graphic: e.target, //图层数据
       data: e.target.options.data, //前端挂在的data数据
     };
-    console.log("markerClickBck--->", back);
     $mitt.emit("markerClick", back);
     // setTimeout(() => {
     //   map.setZoom(16)
