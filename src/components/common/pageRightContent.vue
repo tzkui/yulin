@@ -88,15 +88,17 @@ let drawWg = function(features){
       maxWidth: 500,
     });
     label.on(mars2d.EventType.click, e=>{
-      console.log("带年纪label", e)
-      e.target.setPopupContent(`<map-popup data=${label.text}></map-popup>`)
-      let back = {
-        cartesian: e.containerPoint, //转geojson需要的数据
-        point: e.latlng, //点击点的经纬度
-        graphic: e.target, //图层数据
-        data: e.target.options.data, //前端挂在的data数据
-      };
-      $mitt.emit("markerClick", back);
+      let json = JSON.stringify({
+        text: label.text,
+        isLabel: true,
+        markerType: "wgxx",
+        dialogType: "wgxx",
+        details: {
+          text: label.text,
+        }
+      })
+      label.setPopupContent(`<map-popup data=${json}></map-popup>`)
+      label.openPopup()
     })
   }
   sessionStorage.setItem("isWg", 1)

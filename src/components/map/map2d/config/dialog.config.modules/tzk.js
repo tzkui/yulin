@@ -1008,4 +1008,12 @@ export default {
     // 左下角的列表
     leftBtns: [],
   },
+  wgxx: {
+    title: "网格信息",
+    rows: [
+      {name: "网格名称", key: "text"},
+      {name: "网格员", key: "linkName"},
+      {name: "联系方式", key: "linkPhone"},
+    ]
+  }
 };

@@ -201,6 +201,7 @@ const addGraphicMarker = (graphicLayer, item) => {
     // template:`{content}`
   });
   graphic.on(mars2d.EventType.click, (e) => {
+    console.log("这里点击了")
     let json = JSON.stringify(item);
     json = json.replaceAll(" ", "#####");
     e.target.setPopupContent(`<map-popup data=${json}></map-popup>`);
