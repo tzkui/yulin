@@ -884,6 +884,15 @@ const openPopup = (data) => {
   // markerLayer[type].openPopup(new L.LatLng(data.lat, data.lng));
 };
 const hidePopup = (data) => {
+  if(data.isLabel){
+    wgLayer.eachGraphic((graphic) => {
+      console.log(graphic)
+      if (graphic.id == id) {
+        graphic.closePopup();
+      }
+    });
+    return ;
+  }
   //直接关闭信息框
   let type = data.markerType;
   let id = data.id;
