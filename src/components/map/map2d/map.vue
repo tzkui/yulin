@@ -68,7 +68,8 @@ let map = null,
   editLayerGroup = {},
   labelLayer = null,
   routeLayer = null,
-  wgLayer = null;
+  wgLayer = null,
+  wgShequLayer = null;
 // labelClusterLayer =null;
 let moveLayer = null;
 let labeltxt = ref(""),
@@ -132,10 +133,17 @@ const initMap = () => {
     id: "pointLayer",
   });
   window.wgLayer = wgLayer = new mars2d.layer.GraphicLayer({
-    name: "网格图层",
+    name: "网格街道图层",
     id: "wgLayer",
+    show: true,
+  });
+  window.wgShequLayer = wgShequLayer = new mars2d.layer.GraphicLayer({
+    name: "网格社区图层",
+    id: "wgShequLayer",
+    show: true,
   });
   map.addLayer(wgLayer)
+  map.addLayer(wgShequLayer)
   map.addLayer(pointLayer);
   // drawLayer = new mars2d.layer.GraphicLayer({
   //     hasEdit: true,
@@ -162,11 +170,15 @@ const initMap = () => {
     $mitt.emit("zoomEnd", { newZoom: endData._zoom });
     if(sessionStorage.getItem("isWg")==="1"){
       if(endData.zoom>=14){
-        $mitt.emit("wgChild")
+        wgLayer.show = true;
+        wgShequLayer.show = true;
       }else if(endData.zoom>=12){
-        $mitt.emit("wgParent")
+        wgLayer.show = true;
+        wgShequLayer.show = false;
+        console.log(wgLayer)
       }else{
-        $mitt.emit("wgHide")
+        wgLayer.show = false;
+        wgShequLayer.show = false;
       }
     }
   });

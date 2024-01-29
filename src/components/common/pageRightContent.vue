@@ -29,6 +29,7 @@ function mercatorTolonlat(mercator){
   return lonlat;
 }
 
+sessionStorage.setItem("isWg", 0)
 let jiedaoWgFeature = null,shequWgFeature = null;
 fetch(assetsUrl("/geoJson/jiedao.json")).then(res=>res.json()).then(res=>{
   jiedaoWgFeature = res.features;
@@ -36,27 +37,13 @@ fetch(assetsUrl("/geoJson/jiedao.json")).then(res=>res.json()).then(res=>{
 fetch(assetsUrl("/geoJson/shequ.json")).then(res=>res.json()).then(res=>{
   shequWgFeature = res.features;
 })
-let lastType = ""
 const drawJiedaoWg = function(){
-  if(lastType == "jiedao"){
-    return ;
-  }
-  lastType = "jiedao"
-  console.log("开始绘制街道网格")
-  drawWg(jiedaoWgFeature)
+  drawWg(jiedaoWgFeature, "wgLayer")
 }
 const drawShequWg = function(){
-  if(lastType == "shequ"){
-    return ;
-  }
-  lastType = "shequ"
-  console.log("开始绘制社区网格")
-  try {
-    window.map.getLayerById("window.wgLayer").clear()
-  } catch {}
-  drawWg(shequWgFeature)
+  drawWg(shequWgFeature, "wgShequLayer")
 }
-let drawWg = function(features){
+let drawWg = function(features, layerName){
   for(const obj of features){
     let lnglatArray = obj.geometry.rings[0].map(item=>mercatorTolonlat(item));
     const latlngs = mars2d.PointTrans.coords2latlngs(lnglatArray)
@@ -73,15 +60,16 @@ let drawWg = function(features){
       },
       attr: { remark: "示例1" }
     })
-    window.wgLayer.addGraphic(poly);
+    window[layerName].addGraphic(poly);
     let label = new mars2d.graphic.Label({
+      id: obj.attributes.commuid || obj.attributes.streetid,
       latlng: [poly.center.lat, poly.center.lng],
       style: {
         color: "#fff"
       },
     });
     label.text = obj.attributes["所属街道办"] || obj.attributes.streetname;
-    window.wgLayer.addGraphic(label)
+    window[layerName].addGraphic(label)
     label.bindPopup(null, {
       className: "myPopup",
       closeButton: true,
@@ -103,7 +91,6 @@ let drawWg = function(features){
     })
   }
   sessionStorage.setItem("isWg", 1)
-  console.log(window.wgLayer.getGraphics())
 }
 
 const clickWg = function(){
@@ -113,11 +100,9 @@ const clickWg = function(){
     return ;
   }
   drawJiedaoWg()
+  drawShequWg()
   window.map.flyTo([38.06,109.75],12)
 }
-$mitt.on("wgChild", drawShequWg)
-$mitt.on("wgParent", drawJiedaoWg)
-$mitt.on("wgHide", clickWg)
 </script>
 
 <template>
