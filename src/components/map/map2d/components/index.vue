@@ -38,7 +38,7 @@ const closeDialog = function () {
     mitter.emit("hidePopup", {
         markerType: info.markerType,
         id: info.id,
-        isLabel: props.data.isLabel
+        isLabel: info.isLabel
     })
 }
 
