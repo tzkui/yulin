@@ -12,10 +12,7 @@
         >
           <!-- 标题 -->
           <div class="titlesmal">
-            <span class="icon" v-if="item.name == '较大'">{{ item.name }}</span>
-            <span class="icontwo" v-if="item.name !== '较大'">{{
-              item.name
-            }}</span>
+            <span :class="item.name == '较大'?'icon':'icontwo'">{{ item.name }}</span>
             <span class="title">{{ item.title }}</span>
             <span class="time">{{ item.time }}</span>
           </div>
@@ -111,7 +108,8 @@ const getdatasj = async function () {
     secureList.value = res.data.map((item) => {
       return {
         ...item,
-        name: item.eventLevel == 1 ? "较大" : "一般",
+        // name: item.eventLevel == 1 ? "较大" : "一般",
+        name: "一般",
         title: item.eventName,
         time: item.eventDate,
         content: item.eventContent,
@@ -130,7 +128,8 @@ const getdatasj = async function () {
         dialogType: "whqyxx",
         details: {
           name: v.title,
-          level: v.eventLvl===0?'一般':'重大',
+          // level: v.eventLvl===0?'一般':'重大',
+          level: '一般',
           time: v.eventDate,
           content: v.content,
         }

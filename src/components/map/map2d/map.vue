@@ -898,7 +898,11 @@ const openPopup = (data) => {
 const hidePopup = (data) => {
   if(data.isLabel){
     wgLayer.eachGraphic((graphic) => {
-      console.log(graphic)
+      if (graphic.id == data.id) {
+        graphic.closePopup();
+      }
+    });
+    wgShequLayer.eachGraphic((graphic) => {
       if (graphic.id == data.id) {
         graphic.closePopup();
       }
