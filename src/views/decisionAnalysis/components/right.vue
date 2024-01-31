@@ -1,7 +1,7 @@
 <template>
   <div class="right">
     <!-- 灾情分析 / 重点防护目标 -->
-    <zddxfxVue :center="eventCenter"></zddxfxVue>
+    <zddxfxVue :center="eventCenter" ref="zddxfxRef"></zddxfxVue>
     <ViewBox title="灾情综合查询">
       <div class="disaster_synthesis">
         <div v-show="showDetail" class="disaster_synthesis_details">
@@ -158,6 +158,7 @@ import zpgzDialogVue from "./components/zpgzDialog.vue";
 import ViewBox from "@/components/common/view-box.vue";
 import zddxfxVue from "./components/zddxfx.vue";
 
+const zddxfxRef = ref()
 const eventCenter = ref([]);
 const zpgzDialogRef = ref();
 const showDetail = ref(false);
@@ -179,15 +180,24 @@ const initZqzhcx = async () => {
 };
 // 列表点击撒点...
 const setMarker = (type, data) => {
-  console.log(type, data);
-  eventCenter.value = [data.event.mapX, data.event.mapY];
   disaster_synthesis_details.value = data.eventDynamics;
 
   let item = data.event;
   currentEvent.value = item.id;
   // 先清除 再撒点
   $mitt.emit("clearAll", { ignore: ["geo绘制图层"] });
-  emit("eventClick", item);
+  eventCenter.value = [data.event.mapX, data.event.mapY];
+  $mitt.emit('drawTypeGraph', {
+    type: 'Circle',
+    id: 'effect_radius',
+    positions: eventCenter.value,
+    style: {
+      radius: zddxfxRef.value.radius,
+      fillColor: "rgba(255,0,0,.3)",
+      outlineColor: "#ee3844",
+      outlineWidth: 5,
+    }
+  })
   let markerData = {
     markerType: "sj",
     id: item.id,

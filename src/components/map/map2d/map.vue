@@ -650,7 +650,6 @@ const drawPolygonLayer = (data) => {
     key = "latlngs";
     latlngs = mars2d.PointTrans.coords2latlngs(data.positions);
   }
-  //showLayer[data.type]
   showLayer[data.type] = new mars2d.graphic[data.type]({
     type: data.type,
     id: data.type + "_" + data.id,
@@ -658,9 +657,13 @@ const drawPolygonLayer = (data) => {
     style: mystyle,
   });
   showLayer.addGraphic(showLayer[data.type]);
+  console.log("falfs",showLayer.getGraphicById(data.type + "_" + data.id))
+  setTimeout(()=>{
+  console.log("falfs",showLayer.getGraphicById(data.type + "_" + data.id))
+
+  },1000)
 };
 const upDataRadius = (data) => {
-  console.log(data.type)
   let graphic = showLayer.getGraphicById(data.type + "_" + data.id);
   graphic.radius = data.radius;
 };
@@ -1172,7 +1175,7 @@ onMounted(() => {
   $mitt.on("flyHome", () => {
     //回到初始位置
     console.log("flyHome--->");
-    map.flyHome({ animate: true, duration: 0.4 });
+    map.flyHome({ animate: true, duration: 2 });
   });
   $mitt.on("postBounds", (data) => {
     //获取可视区域坐标

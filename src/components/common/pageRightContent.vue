@@ -103,6 +103,10 @@ const clickWg = function(){
   drawShequWg()
   window.map.flyTo([38.06,109.75],12)
 }
+
+const resetZoom = function(){
+  $mitt.emit("flyHome")
+}
 </script>
 
 <template>
@@ -115,6 +119,9 @@ const clickWg = function(){
   >
     <div class="rightContent">
       <slot></slot>
+      <div class="resetZoom" @click="resetZoom">
+        <img src="@/assets/common/reset.png" alt="">
+      </div>
       <div class="openAudio">
         <soundRecording></soundRecording>
       </div>
@@ -307,5 +314,24 @@ const clickWg = function(){
   border-radius: 4px;
   border: 1px solid #1b8ae4;
   cursor: pointer;
+}
+.resetZoom{
+  position: absolute;
+  right: 590px;
+  bottom: 10px;
+  width: 40px;
+  height: 40px;
+  background: #04417d;
+  border-radius: 4px;
+  border: 1px solid #1b8ae4;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  >img{
+    width: 36px;
+    height: 36px;
+  }
+
 }
 </style>

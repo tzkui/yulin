@@ -1,9 +1,8 @@
 <script setup>
-import { onMounted, ref, computed, inject } from "vue";
+import { onMounted, ref, computed, inject, nextTick } from "vue";
 import ViewBox from "@/components/common/view-box.vue";
-import { getZdfhmb, getZdfhmbType } from '@/api/decision_analysis.js'
-import {getMarkerInfo} from './getMarkerInfo.js'
-import {ElMessage} from 'element-plus'
+import { getZdfhmb, getZdfhmbType } from "@/api/decision_analysis.js";
+import { getMarkerInfo } from "./getMarkerInfo.js";
 
 const props = defineProps({
   center: {
@@ -12,24 +11,24 @@ const props = defineProps({
   },
 });
 
-const $mitt = inject("$mitt")
-const radius = ref(3000)
+const $mitt = inject("$mitt");
+const radius = ref(3000);
 let timer = null;
-const changeRadius = function(radius){
-    if(props.center.length!==2){
-      console.log("zzzzz")
-      ElMessage.warning("请先选择事件")
-      return 
-    }
-  if(timer){
+const changeRadius = function (radius) {
+  $mitt.emit("upDataRadius", {
+    type: "Circle",
+    id: "effect_radius",
+    radius: radius,
+  });
+  if (timer) {
     clearTimeout(timer);
   }
-  timer = setTimeout(()=>{
-    console.log('xxxx',props.center)
-    getAllDisasters()
-  },500)
-}
-const showNum = ref(false)
+  timer = setTimeout(() => {
+    console.log("xxxx", props.center);
+    getAllDisasters();
+  }, 500);
+};
+const showNum = ref(false);
 // 灾情影响 统计内容
 const effect_cont = ref([
   {
@@ -43,29 +42,28 @@ const effect_cont = ref([
     type: "防护目标",
   },
 ]);
-const placeList = ref([])
-const selectedPlace = ref("")
+const placeList = ref([]);
+const selectedPlace = ref("");
 const selectZddx = function (info) {
   selectedPlace.value = info.value;
 };
 const dxzhtData = ref({
   name: "大型综合体",
   num: 0,
-  value: "大型综合体"
-})
+  value: "大型综合体",
+});
 let allDisasters = ref({});
 const zddxList = computed(() => {
   return allDisasters.value[selectedPlace.value] || [];
 });
 const getAllDisasters = function () {
-  console.log(placeList.value)
+  console.log(placeList.value);
   const params = {
     map_x: props.center[0],
     map_y: props.center[1],
     radius: radius.value / 1000,
     typeIds: placeList.value.map((item) => item.value),
   };
-  console.log("xxx",params)
   getZdfhmb(params).then((res) => {
     showNum.value = true;
     effect_cont.value[0].num = Math.floor(res.data.totalArea);
@@ -83,36 +81,47 @@ const getAllDisasters = function () {
           markerInfo: getMarkerInfo(item.typeId, info),
         };
       });
+      nextTick(() => {
+        for (const key in allDisasters.value) {
+          allDisasters.value[key].forEach((item) => {
+            $mitt.emit("addMarker", item.markerInfo);
+          });
+        }
+      });
     });
   });
 };
-const initType = function(){
+const initType = function () {
   getZdfhmbType().then((res) => {
     placeList.value = res.data;
     // getAllDisasters();
   });
-}
-onMounted(()=>{
+};
+onMounted(() => {
   initType();
-})
+});
 
 const flyTo = function (info) {
   $mitt.emit("openPopup", info.markerInfo);
   $mitt.emit("flyTo", info.markerInfo);
 };
+
+defineExpose({
+  radius: radius.value,
+});
 </script>
 
 <template>
   <ViewBox title="重点对象分析">
     <div class="resources">
       <div class="effect_radius">
-        影响半径<span class="blue">{{radius}}米</span>
+        影响半径<span class="blue">{{ radius }}米</span>
         <el-slider
           v-model="radius"
           :max="100000"
           @input="changeRadius"
-          :show-tooltip="true"
-          :disabled = "center.length<2"
+          :show-tooltip="false"
+          :disabled="center.length < 2"
         ></el-slider>
         <!-- 受灾内容 -->
         <div class="effect_cont_lists">
@@ -141,7 +150,7 @@ const flyTo = function (info) {
             @click="selectZddx(item)"
           >
             <span>{{ item.name }}&nbsp;</span>
-            <span style="color: #e6964f">{{item.num}}</span>
+            <span style="color: #e6964f">{{ item.num }}</span>
           </div>
           <div
             :class="{
@@ -151,7 +160,9 @@ const flyTo = function (info) {
             @click="selectZddx(dxzhtData)"
           >
             <span>{{ dxzhtData.name }}&nbsp;</span>
-            <span style="color: #e6964f" v-if="showNum">{{dxzhtData.num}}</span>
+            <span style="color: #e6964f" v-if="showNum">{{
+              dxzhtData.num
+            }}</span>
           </div>
         </div>
         <!-- 列表 -->
@@ -219,114 +230,112 @@ const flyTo = function (info) {
   }
 
   .effect_radius {
-    .effect_radius {
-      margin-top: 10px;
-      font-size: 15px;
+    margin-top: 10px;
+    font-size: 15px;
 
-      .blue {
-        margin-left: 8px;
-        color: #59d4d1;
-        font-weight: bold;
-      }
-
-      .cont_lists {
-        overflow: auto;
-
-        // margin-top: 8px;
-        .cont_list {
-          display: flex;
-          line-height: 38px;
-          margin: 4px 0;
-          padding: 0 10px;
-          position: relative;
-
-          &:nth-child(even) {
-            background: #081c25;
-          }
-
-          &:hover {
-            background: #092a33;
-
-            &::before {
-              position: absolute;
-              content: "";
-              height: 16px;
-              width: 2px;
-              left: 0;
-              top: 10px;
-              background: #56cecc;
-            }
-          }
-
-          .label {
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-          }
-        }
-      }
+    .blue {
+      margin-left: 8px;
+      color: #59d4d1;
+      font-weight: bold;
     }
 
-    :deep(.el-slider) {
-      margin-top: 5px;
+    .cont_lists {
+      overflow: auto;
 
-      .el-slider__runway {
-        background-color: #062f41;
-        border: 1px solid #1b4257;
-      }
+      // margin-top: 8px;
+      .cont_list {
+        display: flex;
+        line-height: 38px;
+        margin: 4px 0;
+        padding: 0 10px;
+        position: relative;
 
-      .el-slider__bar {
-        background: linear-gradient(90deg, #1a678b 0%, #1b9dbf 100%);
-      }
-
-      .el-slider__button {
-        background: radial-gradient(circle, #a9eefa, #4eb3cd);
-        box-shadow: 0 0 12px 5px #1393bf;
-        border: none;
-        height: 10px;
-        width: 10px;
+        &:nth-child(even) {
+          background: #081c25;
+        }
 
         &:hover {
-          transform: scale(1.01);
-        }
-      }
-    }
+          background: #092a33;
 
-    .checkboxs {
-      margin-top: 20px;
-      display: flex;
-      flex-wrap: wrap;
-
-      .check_item {
-        height: 45px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        width: calc((100% - 15px) / 4);
-        font-size: 14px;
-        background: url("@/assets/decisionAnalysis/tab.png") center/99% 100%
-          no-repeat;
-        margin-bottom: 8px;
-        margin-right: 5px;
-
-        &:nth-child(4n) {
-          margin: 0;
+          &::before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 2px;
+            left: 0;
+            top: 10px;
+            background: #56cecc;
+          }
         }
 
-        &.active {
-          background: url("@/assets/decisionAnalysis/tab_active.png") center/99%
-            100% no-repeat;
-        }
-      }
-    }
-    .cont_lists {
-      height: 145px;
-
-      .cont_list {
         .label {
-          width: 80%;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
+      }
+    }
+  }
+
+  :deep(.el-slider) {
+    margin-top: 5px;
+
+    .el-slider__runway {
+      background-color: #062f41;
+      border: 1px solid #1b4257;
+    }
+
+    .el-slider__bar {
+      background: linear-gradient(90deg, #1a678b 0%, #1b9dbf 100%);
+    }
+
+    .el-slider__button {
+      background: radial-gradient(circle, #a9eefa, #4eb3cd);
+      box-shadow: 0 0 12px 5px #1393bf;
+      border: none;
+      height: 10px;
+      width: 10px;
+
+      &:hover {
+        transform: scale(1.01);
+      }
+    }
+  }
+
+  .checkboxs {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+
+    .check_item {
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      width: calc((100% - 15px) / 4);
+      font-size: 14px;
+      background: url("@/assets/decisionAnalysis/tab.png") center/99% 100%
+        no-repeat;
+      margin-bottom: 8px;
+      margin-right: 5px;
+
+      &:nth-child(4n) {
+        margin: 0;
+      }
+
+      &.active {
+        background: url("@/assets/decisionAnalysis/tab_active.png") center/99%
+          100% no-repeat;
+      }
+    }
+  }
+  .cont_lists {
+    height: 145px;
+
+    .cont_list {
+      .label {
+        width: 80%;
       }
     }
   }
