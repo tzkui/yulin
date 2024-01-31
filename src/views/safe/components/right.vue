@@ -209,7 +209,7 @@ const newenterpriseTypeList = ref([
   },
   {
     lx: "B类企业",
-    zb: "17.5%",
+    zb: "12.5%",
     img: imms3,
     color: "#FFF200",
     // 下面就是一个数组,然后是一个数据的了
@@ -240,7 +240,7 @@ const newenterpriseTypeList = ref([
   },
   {
     lx: "A类企业",
-    zb: "17.5%",
+    zb: "12.5%",
     img: imms4,
     color: "#DE1B23",
     // 下面就是一个数组,然后是一个数据的了
