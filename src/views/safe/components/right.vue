@@ -6,7 +6,7 @@ import { useEventBus } from "@vueuse/core";
 import rtspPlayer from "../../../components/common/rtspPlayer.vue";
 import h265 from "@/components/common/h265Play.vue";
 
-const $mitt = inject("$mitt")
+const $mitt = inject("$mitt");
 
 const dataSelectors = reactive({
   sgdj: "day",
@@ -14,7 +14,7 @@ const dataSelectors = reactive({
   qylx: "day",
 });
 
-const videoConferencingBus = useEventBus("openVideoMonitoring")
+const videoConferencingBus = useEventBus("openVideoMonitoring");
 const openVideoConferencing = function (info) {
   $mitt.emit("addMarker", {
     markerType: "spjk",
@@ -31,9 +31,9 @@ const openVideoConferencing = function (info) {
       location: info.location,
       playerUrl: info.playerUrl,
     },
-  })
-  videoConferencingBus.emit(info)
-}
+  });
+  videoConferencingBus.emit(info);
+};
 const toogleDate = function (key, val) {
   if (dataSelectors[key] !== val) {
     dataSelectors[key] = val;
@@ -282,16 +282,16 @@ const getRandom = function (max = 100) {
 // 获取事故等级分析数据
 const getAccidentLevelList = async function (type = "1") {
   let res = await getSgdjfx(type);
-  console.log(res, "我现在看看res的一个数据的呢")
+  console.log(res, "我现在看看res的一个数据的呢");
   if (res.code == 200) {
     accidentData.value = res.data.map((item, index) => {
       return {
         name: item.mc,
         value: item.sz,
         id: index,
-        ...item
-      }
-    })
+        ...item,
+      };
+    });
     option.series[0].data = accidentData.value;
     option.series[1].data = accidentData.value;
     setAccidentTypeChart(option);
@@ -310,9 +310,8 @@ const getAccidentLevelList = async function (type = "1") {
       setChartAction();
     }, 50);
   }
-
 };
-const nowType = ref(-1)
+const nowType = ref(-1);
 const coxdata = ref();
 // 下面就是数量的数据了
 const echarts = inject("echarts");
@@ -392,7 +391,7 @@ const getAccidentTypeList = async function (type = "4", id) {
       ],
       series: [
         {
-          name: "企业总数:" ,
+          name: "企业总数:",
           type: "bar",
           barWidth: "12px",
           data: cxydata.value,
@@ -481,8 +480,43 @@ const getAccidentTypeList = async function (type = "4", id) {
     };
 
     option && myChart.setOption(option);
-     myChart.on("click", function (params) {
-       emit("updatePopupData", res.data[params.dataIndex].list, `id${params.dataIndex}`)
+    myChart.on("click", function (params) {
+      let list = res.data[params.dataIndex].list;
+      $mitt.emit("hideAllMarker")
+      let flag = true;
+      list.forEach((item) => {
+        let l1 = ["待处理", "属实"];
+        const l2 = ["属实", "已启动响应"];
+        let pointInfo = {
+          markerType: "sj",
+          id: item.id,
+          icon: "/images/marker/1.gif",
+          lng: item.mapX,
+          lat: item.mapY,
+          name: "化工厂",
+          label: { text: "事件", font_size: 16 },
+          dialogType: "sj",
+          // dialogType: "sgxx",
+          details: {
+            name: item.eventName,
+            location: item.eventAddress,
+            typeName: item.typeName,
+            time: item.reportDate,
+            cont: item.eventContent,
+            id: item.id,
+            popupTitle: "事故类型",
+            hideEventSupplementaryRecording: !l1.includes(item.stateName),
+            hideDispatch: !l2.includes(item.stateName),
+            hideEventVerification: item.stateName !== "待处理",
+          },
+        };
+        $mitt.emit("addMarker", pointInfo);
+        if(flag){
+          $mitt.emit("flyTo", pointInfo);
+          $mitt.emit("openPopup", pointInfo);
+          flag = false;
+        }
+      });
     });
     // tools.loopShowTooltip(myChart, option, { loopSeries: true });//自动轮播主要看这段话
     window.onresize = function () {
@@ -535,7 +569,7 @@ const getEnterpriseTypeList = async function (type = "1") {
 const getmonitorList = async function (type = "1") {
   let res = await getZdddspjk({ type });
   if (res.code == 200) {
-    monitorList.value = res.data.slice(0, 4)
+    monitorList.value = res.data.slice(0, 4);
   }
 };
 
@@ -554,7 +588,7 @@ const setAccidentTypeChart = function (option) {
       name: params.name + "事故",
       id: params.data.id,
       num: params.data.sz,
-      jh: params.data.jh
+      jh: params.data.jh,
     });
   });
 };
@@ -666,19 +700,19 @@ let timer = null;
 let videoTimer = null;
 let chartDataIndex = 0;
 
-const monitorListRef = ref()
+const monitorListRef = ref();
 const scrollVideo = function () {
-  let i = 1
+  let i = 1;
   videoTimer = setInterval(() => {
     monitorListRef.value.scrollTo({
       left: 382 * i++,
       behavior: "smooth",
-    })
+    });
     if (monitorList.value.length / 2 <= i) {
-      i = 0
+      i = 0;
     }
-  }, 10000)
-}
+  }, 10000);
+};
 
 onMounted(() => {
   getAccidentTypeList();
@@ -687,9 +721,9 @@ onMounted(() => {
   getAccidentLevelList();
   $mitt.on("changeEventState", function (info) {
     let id = info.id;
-    getAccidentTypeList("4", id)
-  })
-  scrollVideo()
+    getAccidentTypeList("4", id);
+  });
+  scrollVideo();
   // chartAutoPlay();
   window.addEventListener("resize", () => {
     myChart.resize();
@@ -697,13 +731,13 @@ onMounted(() => {
 });
 onUnmounted(() => {
   clearInterval(timer);
-  clearInterval(videoTimer)
+  clearInterval(videoTimer);
   $mitt.all.delete("changeEventState");
 });
 // 使用defineEmits注册一个自定义事件
 const emit = defineEmits(["getValue10", "openDialog", "updatePopupData"]);
 const openDialog = function (type, info, index) {
-  nowType.value = index
+  nowType.value = index;
   emit("openDialog", type, info);
 };
 const qylxisshow = ref(true);
@@ -711,13 +745,6 @@ const qylxcl = (item, index) => {
   console.log(item, "看看我是个什么东东");
   emit("getValue10", item, index, qylxisshow.value);
 };
-
-
-
-// 下面这个就是企业类型的的相关的打点的事件的了
-// const qilxclick=function(item){
-//   transValue(item)
-// }
 </script>
 
 <template>
@@ -728,7 +755,11 @@ const qylxcl = (item, index) => {
           <div class="header">
             <div class="title">事故等级分析</div>
             <div class="dates">
-              <selectDate :now-date="dataSelectors.sgdj" dateType="sgdj" @toogleDate="toogleDate"></selectDate>
+              <selectDate
+                :now-date="dataSelectors.sgdj"
+                dateType="sgdj"
+                @toogleDate="toogleDate"
+              ></selectDate>
             </div>
           </div>
           <div class="main">
@@ -740,35 +771,28 @@ const qylxcl = (item, index) => {
           <div class="header">
             <div class="title">事故类型分析</div>
             <div class="dates">
-              <selectDate :now-date="dataSelectors.sglx" dateType="sglx" @toogleDate="toogleDate"></selectDate>
+              <selectDate
+                :now-date="dataSelectors.sglx"
+                dateType="sglx"
+                @toogleDate="toogleDate"
+              ></selectDate>
             </div>
           </div>
           <div class="main">
             <div class="cosss">
               <div id="columnartype"></div>
             </div>
-            <!-- <div class="typeList">
-              <div class="typeItem" @click="openDialog('eventLevel', item, index)"
-                v-for="(item, index) in accidentTypeList" :key="item.id">
-                <div class="imgBox">
-                  <img :src="item.imgSrc" alt="" />
-                </div>
-                <div class="infos_box">
-                  <div class="numBox">
-                    <span class="num">{{ item.num }}</span>
-                    <span class="chu">处</span>
-                  </div>
-                  <div class="typeBox">{{ item.name }}</div>
-                </div>
-              </div>
-            </div> -->
           </div>
         </div>
         <div class="qylxfx">
           <div class="header">
             <div class="title">危化企业事故类型分析</div>
             <div class="dates">
-              <selectDate :now-date="dataSelectors.qylx" dateType="qylx" @toogleDate="toogleDate"></selectDate>
+              <selectDate
+                :now-date="dataSelectors.qylx"
+                dateType="qylx"
+                @toogleDate="toogleDate"
+              ></selectDate>
             </div>
           </div>
           <div class="type_list_item list_header">
@@ -777,8 +801,12 @@ const qylxcl = (item, index) => {
             <div class="line3">事故占比</div>
           </div>
           <ul class="type_list">
-            <li class="type_list_item" v-for="(item, index) in newenterpriseTypeList" :key="index"
-              @click="qylxcl(item, index)">
+            <li
+              class="type_list_item"
+              v-for="(item, index) in newenterpriseTypeList"
+              :key="index"
+              @click="qylxcl(item, index)"
+            >
               <div class="line1">
                 <img :src="item.img" alt="" />
                 <div class="word" :style="{ color: item.color }">
@@ -795,7 +823,11 @@ const qylxcl = (item, index) => {
     <ViewBox title="风险隐患点视频监控" :height="198">
       <div class="box2">
         <ul class="monitorList" ref="monitorListRef">
-          <li v-for="(item, index) in monitorList" :key="item.id" @click="openVideoConferencing(item)">
+          <li
+            v-for="(item, index) in monitorList"
+            :key="item.id"
+            @click="openVideoConferencing(item)"
+          >
             <h265 :playerUrl="item.playerUrl"></h265>
             <div class="infoBox">
               <div class="word">{{ item.monitorName }}</div>
@@ -804,7 +836,6 @@ const qylxcl = (item, index) => {
         </ul>
       </div>
     </ViewBox>
-
   </div>
 </template>
 
@@ -958,9 +989,12 @@ const qylxcl = (item, index) => {
           margin-bottom: 4px;
           box-sizing: border-box;
           border: 1px solid;
-          border-image: linear-gradient(180deg,
+          border-image: linear-gradient(
+              180deg,
               rgba(0, 96, 128, 0.56),
-              rgba(0, 96, 128, 0.23)) 1 1;
+              rgba(0, 96, 128, 0.23)
+            )
+            1 1;
           border-radius: 4px;
           cursor: pointer;
 

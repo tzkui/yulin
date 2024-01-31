@@ -211,35 +211,36 @@ const updatePopupData = function (info, id) {
   console.log(id);
   console.log(info);
   // let item = info.find((item) => item.id === id);
-  let item = info[0];
-  let l1 = ["待处理", "属实"];
-  const l2 = ["属实", "已启动响应"];
-  let pointInfo = {
-    mardata: {
-      markerType: "sj",
-      id: item.id,
-      icon: "/images/marker/1.gif",
-      lng: item.mapX,
-      lat: item.mapY,
-      name: "化工厂",
-      label: { text: item.eventName, font_size: 16 },
-      dialogType: "sj",
-      // dialogType: "sgxx",
-      details: {
-        name: item.eventName,
-        location: item.eventAddress,
-        typeName: item.typeName,
-        time: item.reportDate,
-        cont: item.eventContent,
+  info.forEach((item) => {
+    let l1 = ["待处理", "属实"];
+    const l2 = ["属实", "已启动响应"];
+    let pointInfo = {
+      mardata: {
+        markerType: "sj",
         id: item.id,
-        popupTitle: "事故类型",
-        hideEventSupplementaryRecording: !l1.includes(item.stateName),
-        hideDispatch: !l2.includes(item.stateName),
-        hideEventVerification: item.stateName !== "待处理",
+        icon: "/images/marker/1.gif",
+        lng: item.mapX,
+        lat: item.mapY,
+        name: "化工厂",
+        label: { text: item.eventName, font_size: 16 },
+        dialogType: "sj",
+        // dialogType: "sgxx",
+        details: {
+          name: item.eventName,
+          location: item.eventAddress,
+          typeName: item.typeName,
+          time: item.reportDate,
+          cont: item.eventContent,
+          id: item.id,
+          popupTitle: "事故类型",
+          hideEventSupplementaryRecording: !l1.includes(item.stateName),
+          hideDispatch: !l2.includes(item.stateName),
+          hideEventVerification: item.stateName !== "待处理",
+        },
       },
-    },
-  };
-  clickEventLevel(pointInfo);
+    };
+    clickEventLevel(pointInfo);
+  });
 };
 // 把打点的数据放进行添加进去
 const getdatasj = function (index) {
@@ -253,16 +254,16 @@ const currentEventLevelType = ref({ markerType: "", id: "" });
 const clickEventLevel = (item) => {
   closeDialog("eventLevel");
 
-  // // 先清除之前的 再撒点
-  // if (currentEventLevelType.value.markerType) {
-  //   $mitt.emit("changeMarkerState", {
-  //     markerType: currentEventLevelType.value.markerType,
-  //     id: currentEventLevelType.value.id,
-  //     show: false,
-  //   });
-  // }
+  // 先清除之前的 再撒点
+  if (currentEventLevelType.value.markerType) {
+    $mitt.emit("changeMarkerState", {
+      markerType: currentEventLevelType.value.markerType,
+      id: currentEventLevelType.value.id,
+      show: false,
+    });
+  }
+  $mitt.emit("flyTo", item.mardata);
   $mitt.emit("addMarker", item.mardata);
-  $mitt.emit("openPopup", item.mardata);
   $mitt.emit("openPopup", item.mardata);
 
   currentEventLevelType.value.markerType = item.mardata.markerType;
