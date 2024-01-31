@@ -298,7 +298,7 @@ const getMeetingMemberById = function () {
 const getRtspUrl = function (resourceId) {
   const params = {
     resourceId: resourceId,
-    protocol: "flv",
+    protocol: "rtsp",
     requestType: "flv"
   };
   getResourceLiveUrl(params).then((res) => {

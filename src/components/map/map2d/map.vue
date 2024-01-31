@@ -660,6 +660,7 @@ const drawPolygonLayer = (data) => {
   showLayer.addGraphic(showLayer[data.type]);
 };
 const upDataRadius = (data) => {
+  console.log(data.type)
   let graphic = showLayer.getGraphicById(data.type + "_" + data.id);
   graphic.radius = data.radius;
 };

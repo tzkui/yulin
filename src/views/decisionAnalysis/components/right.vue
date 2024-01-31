@@ -1,51 +1,7 @@
 <template>
   <div class="right">
     <!-- 灾情分析 / 重点防护目标 -->
-    <ViewBox title="重点对象分析">
-      <div class="resources">
-        <div class="effect_radius">
-          影响半径<span class="blue">{{ radius.effect_radius }}米</span>
-          <el-slider v-model="radius.effect_radius" :max="100000" @input="($event) => {
-              changeRaduis('effect_radius', $event);
-            }
-            " :show-tooltip="false"></el-slider>
-          <!-- 受灾内容 -->
-          <div class="effect_cont_lists">
-            <div class="effect_cont_list" v-for="(item, index) in effect_cont" :key="index">
-              <div class="cont_num">
-                <span class="num">{{ item.num.toFixed(0) }}</span>{{ item.unit }}
-              </div>
-              <div class="cont_type">
-                {{ item.type }}
-              </div>
-            </div>
-          </div>
-          <div class="checkboxs">
-            <div v-for="(item, index) in disaster_check_data" :key="index" :class="{
-              check_item: true,
-              active: disaster_checked_data === item.value,
-            }" @click="selectZddx(item)">
-              {{ item.name }}&nbsp;<span style="color: #e6964f;">{{ item.num }}</span>
-            </div>
-            <div :class="{
-              check_item: true,
-              active: disaster_checked_data === dxzhtData.value,
-            }" @click="selectZddx(dxzhtData)">
-              {{ dxzhtData.name }}&nbsp;<span style="color: #e6964f;" v-if="showNum">{{ dxzhtData.num }}</span>
-            </div>
-          </div>
-          <!-- 列表 -->
-          <div class="cont_lists">
-            <div class="cont_list" v-for="(item, index) in zddxList" :key="index" @click="flyTo(item)">
-              <div class="label">{{ item.name }}</div>
-              <div class="value_1">
-                {{ item.distance }}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </ViewBox>
+    <zddxfxVue :center="eventCenter"></zddxfxVue>
     <!-- <ViewBox title="应急保障分析">
       <div class="application_object">
         <div class="analysis_radius">
@@ -94,12 +50,6 @@
     </ViewBox> -->
     <ViewBox title="灾情综合查询">
       <div class="disaster_synthesis">
-        <!-- 搜索框 -->
-        <!-- <div class="synthesis_search">
-          <el-input v-model="disaster_serach" placeholder="" />
-          <div class="search_btn">搜索</div>
-        </div> -->
-        <!-- 列表 -->
         <div v-show="showDetail" class="disaster_synthesis_details">
           <button class="back_list" @click="() => {
               showDetail = false;
@@ -206,6 +156,8 @@ import {
 
 import zpgzDialog from './components/zpgzDialog.vue'
 import ViewBox from "@/components/common/view-box.vue";
+import zddxfxVue from './components/zddxfx.vue'
+
 const props = defineProps({
   radius: {
     type: Object,
@@ -219,7 +171,7 @@ const props = defineProps({
     default: [],
   },
 });
-
+const eventCenter = ref([])
 const zpgzDialogRef = ref()
 const showDetail = ref(false)
 const showNum = ref(false)
@@ -740,6 +692,8 @@ const initZqzhcx = async () => {
 };
 // 列表点击撒点...
 const setMarker = (type, data) => {
+  console.log(type, data)
+  eventCenter.value = [data.event.mapX, data.event.mapY]
   // console.log("item===========>", data);
   // return
   disaster_synthesis_details.value = data.eventDynamics;
