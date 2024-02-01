@@ -57,3 +57,15 @@ export function getResourceLiveUrl(data){
     }
   })
 }
+
+// 呼叫会议成员
+export function callGroupMember(data){
+  return axios({
+    url: "https://10.112.143.193/dispatch-micoservice/meeting/meetingMember/batch",
+    method: 'post',
+    data: data,
+    headers: {
+      apiKey: kdApiKey,
+    }
+  })
+}

@@ -81,3 +81,8 @@ export const getRygj =  (data) => {
   // return request.post("/home/rygj"+str,{});
   return request.post("/home/rygj",data);
 }
+
+export const sendDuanxin = function(phones){
+  return request.post("/home/fsdx?phones="+phones,{});
+
+}

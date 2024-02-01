@@ -112,6 +112,7 @@ import {
   getMeetingMember,
   getResourceLiveUrl,
   deleteMeeting,
+  callGroupMember, 
 } from "@/api/modules/kd.js";
 import { ElMessage } from "element-plus";
 const txlLists = ref([]);
@@ -216,62 +217,53 @@ const changeFullscreen = () => {
 
 const showMeeting = ref(false);
 let meetingIns = null;
-// const beginConferencing = function () {
-//   if (meetingIns || meetingList.value.length === 0) return;
-//   showMeeting.value = true;
-//   let options = {
-//     access_type: 2,
-//     devices: meetingList.value.map((item, index) => {
-//       return {
-//         id: item.id,
-//         type: item.type,
-//         index,
-//       };
-//     }),
-//     key: window.kdApiKey,
-//     isDemo: true
-//   };
-//   console.log(options)
-//   meetingIns = kdDispatchConference.createMeeting(
-//     "#meeting_box",
-//     options,
-//     (data, name) => {
-//       // data 回调数据  name 回调事件名称
-//       console.log("回调数据", data, name);
-//       // data.groupId 用于还原调度组组件或者调用http高级接口
-//       console.log("组件Id", data.groupId);
-//       if (data.status === 13) {
-//         closeMeeting();
-//       }
-//     }
-//   );
-// };
 const groupId = ref("MS8d11f0dd0f45aa9bbc5154e09c8d84");
 const beginConferencing = function () {
   if (meetingIns || meetingList.value.length === 0) return;
   // showMeeting.value = true;
   let options = {
     layoutType: "AUTO",
-    meetDevices: meetingList.value.map((item, index) => {
-      return {
-        id: item.id,
-        type: item.type,
-        index: index,
-      };
-    }),
+    meetDevices: [],
     listenDevices: [],
   };
   initMeeting(options).then((res) => {
-    console.log(res);
     groupId.value = res.data.result?.groupId || "";
     if (groupId.value) {
-      getMeetingMemberById();
+      let param = {
+        groupId: groupId.value,
+        deviceList: meetingList.value.map(item=>{
+          return {
+            id: item.id,
+            type: item.type,
+          }
+        })
+      };
+      callGroupMember(param).then(res=>{
+        console.log("xxxx", res)
+        getMeetingMemberById()
+        if(res.data.status==200){
+
+        }
+      })
+      // meetingList.value.forEach((item, index) => {
+      //   let param = {
+      //     groupId: groupId.value,
+      //     device: {
+      //       id: item.id,
+      //       type: item.type,
+      //     }
+      //   };
+      //   callGroupMember(param).then(res=>{
+      //     console.log("开始呼叫", res)
+      //   })
+      // })
+      // getMeetingMemberById();
     }
-    if (res.data.result.failDevices.length > 0) {
-      for (const info of res.data.result.failDevices) {
-        ElMessage.error(info.messageBody.desc);
-      }
-    }
+    // if (res.data.result.failDevices.length > 0) {
+    //   for (const info of res.data.result.failDevices) {
+    //     ElMessage.error(info.messageBody.desc);
+    //   }
+    // }
   });
 };
 let meetingTimer = null;

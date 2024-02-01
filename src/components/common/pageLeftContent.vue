@@ -137,6 +137,7 @@ const getper = async () => {
 }
 getper()
 
+const sendDuanxin = function (){}
 </script>
 
 <template>
@@ -206,7 +207,7 @@ getper()
       <button @click="negotiateC">会商</button>
     </div> -->
     <div class="footerbt">
-      <button @click="cancellation">短信</button>
+      <button @click="sendDuanxin">短信</button>
       <button @click="cancellation">传真</button>
       <button @click="cancellation">取消</button>
       <button @click="okC">确定</button>
