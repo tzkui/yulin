@@ -52,7 +52,7 @@
             class="monitorVideoFence"
           >
             <!-- 假装是视屏 -->
-            <div class="video"></div>
+            <div class="video" :id="'video_'+meetingList[index]?.id"></div>
             <!-- 视频移入  顶部遮罩 -->
             <div class="video_top_model">
               <div class="video_title">
@@ -105,6 +105,7 @@ import { useEventBus, useDraggable } from "@vueuse/core";
 import { getOrgRoot, getOrgById } from "@/api/modules/videoConferencing.js";
 const showDialog = ref(false);
 import { addressBook } from "@/api/addressBook.js";
+import flvjs from "flv.js";
 import {
   getDeviceTree,
   getDeviceList,
@@ -241,9 +242,6 @@ const beginConferencing = function () {
       callGroupMember(param).then(res=>{
         console.log("xxxx", res)
         getMeetingMemberById()
-        if(res.data.status==200){
-
-        }
       })
       // meetingList.value.forEach((item, index) => {
       //   let param = {
@@ -272,7 +270,7 @@ const getMeetingMemberById = function () {
   getMeetingMember(groupId.value).then((res) => {
     res.data.result.forEach((item) => {
       if (item.videoSendResourceId) {
-        getRtspUrl(item.videoSendResourceId);
+        getRtspUrl(item.videoSendResourceId, item.id);
       } else {
         if (meetingTimer) {
           clearTimeout(meetingTimer);
@@ -287,7 +285,7 @@ const getMeetingMemberById = function () {
     });
   });
 };
-const getRtspUrl = function (resourceId) {
+const getRtspUrl = function (resourceId, id) {
   const params = {
     resourceId: resourceId,
     protocol: "rtsp",
@@ -295,6 +293,16 @@ const getRtspUrl = function (resourceId) {
   };
   getResourceLiveUrl(params).then((res) => {
     console.log(res);
+    let videoElement = document.getElementById("video_"+id)
+    console.log("dom",videoElement)
+    var flvPlayer = flvjs.createPlayer({
+      type: 'flv',
+      url: res.data.reslut,
+      isLive: true,
+    });
+    flvPlayer.attachMediaElement(videoElement);
+    flvPlayer.load();
+    flvPlayer.play();
   });
 };
 const closeMeeting = function () {
@@ -529,6 +537,8 @@ defineExpose({
             letter-spacing: 1px;
             display: flex;
             align-items: center;
+            left: 0;
+            top: 0;
 
             .video_title {
               flex: 1;
@@ -579,7 +589,9 @@ defineExpose({
           width: calc((100% - 8px) / 4);
         }
       }
-
+      .video{
+        height: 100%;
+      }
       .fences_box {
         width: 100%;
         height: 43px;
