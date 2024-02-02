@@ -7,33 +7,26 @@
   >
     <div class="dialog_head" ref="dialogHeaderRef">
       <h2 class="dialog_title">视频会商</h2>
-      <img
-        @click="closeDialog"
-        class="dialog_close"
-        src="@/assets/integratedCommunication/dialog_close.png"
-        alt=""
-      />
+      <div>
+        <img 
+          @click="suoxiaoDialog"
+          class="dialog_suoxiao"
+          src="@/assets/common/suoxiao.png"
+          title="缩小"
+          alt=""
+        />
+        <img
+          @click="closeDialog"
+          class="dialog_close"
+          src="@/assets/integratedCommunication/dialog_close.png"
+          alt=""
+        />
+      </div>
     </div>
     <div class="dialog_body">
       <div class="cont_left">
-        <!-- 搜索框 -->
-        <!-- <div class="video_searchbar">
-          <input class="video_inout" placeholder="请输入号码" type="">
-          <button class="video_search_btn">
-            <img class="icon_phone" src="@/assets/integratedCommunication/icon_phone.png" alt="">
-          </button>
-        </div> -->
         <!-- 树结构列表 -->
         <div class="tree_list">
-          <!-- <el-tree
-            :data="treeData"
-            :props="treeProps"
-            show-checkbox
-            @check-change="handleCheckChange"
-            lazy
-            :load="loadOrgNode"
-          >
-          </el-tree> -->
           <el-tree
             :data="treeData"
             :props="treeProps"
@@ -52,7 +45,10 @@
             class="monitorVideoFence"
           >
             <!-- 假装是视屏 -->
-            <div class="video" :id="'video_'+meetingList[index]?.id"></div>
+            <video
+              class="video"
+              :id="'video_' + meetingList[index]?.id"
+            ></video>
             <!-- 视频移入  顶部遮罩 -->
             <div class="video_top_model">
               <div class="video_title">
@@ -98,13 +94,22 @@
       </div>
     </div>
   </div>
+  <div v-if="showFangdaIcon">
+    
+    <img 
+      @click="fangdaDialog"
+      class="dialog_fangda"
+      src="@/assets/common/fangda.png"
+      title="缩小"
+      alt=""
+    />
+  </div>
 </template>
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref, inject } from "vue";
 import { useEventBus, useDraggable } from "@vueuse/core";
 import { getOrgRoot, getOrgById } from "@/api/modules/videoConferencing.js";
 const showDialog = ref(false);
-import { addressBook } from "@/api/addressBook.js";
 import flvjs from "flv.js";
 import {
   getDeviceTree,
@@ -113,11 +118,13 @@ import {
   getMeetingMember,
   getResourceLiveUrl,
   deleteMeeting,
-  callGroupMember, 
+  callGroupMember,
 } from "@/api/modules/kd.js";
 import { ElMessage } from "element-plus";
 const txlLists = ref([]);
 const kdLists = ref([]);
+
+const $mitt = inject("$mitt");
 getDeviceTree().then((res) => {
   kdLists.value = res.data.result || [];
   kdLists.value.forEach((item) => {
@@ -140,28 +147,22 @@ const openDialog = function (e) {
 const dialogHeaderRef = ref();
 const videoConferencingRef = ref();
 const { x, y, style } = useDraggable(dialogHeaderRef, {
-  initialValue: { x: 454, y: 404 },
+  initialValue: { x: window.innerWidth / 2 - 493, y: 204 },
   draggingElement: videoConferencingRef.value,
 });
 const meetingList = ref([]);
-const loadOrgNode = async function (node, resolve) {
-  console.log("node: ", node);
-  if (node.level === 0) {
-    let res = await getOrgRoot();
-    return resolve(res.data);
-  } else {
-    const param = {
-      xzqh: node.data.id,
-      grade: node.data.grade,
-      type: "all",
-    };
-    let res = await getOrgById(param);
-    return resolve(res.data);
-  }
-};
 const remove = function (i) {
   meetingList.value.splice(i, 1);
 };
+const showFangdaIcon = ref(false)
+const suoxiaoDialog = function(){
+  showDialog.value = false;
+  showFangdaIcon.value = true;
+}
+const fangdaDialog = function(){
+  showDialog.value = true;
+  showFangdaIcon.value = false;
+}
 const openVideoConferencingBus = useEventBus("openVideoConferencing");
 openVideoConferencingBus.on(openDialog);
 onMounted(() => {
@@ -220,7 +221,12 @@ const showMeeting = ref(false);
 let meetingIns = null;
 const groupId = ref("MS8d11f0dd0f45aa9bbc5154e09c8d84");
 const beginConferencing = function () {
+      $mitt.emit("openSoundDialog")
+      setTimeout(()=>{
+        $mitt.emit("receiveMessage", {text: "打开安全生产"})
+      },1000)
   if (meetingIns || meetingList.value.length === 0) return;
+  beginRecord()
   // showMeeting.value = true;
   let options = {
     layoutType: "AUTO",
@@ -232,30 +238,17 @@ const beginConferencing = function () {
     if (groupId.value) {
       let param = {
         groupId: groupId.value,
-        deviceList: meetingList.value.map(item=>{
+        deviceList: meetingList.value.map((item) => {
           return {
             id: item.id,
             type: item.type,
-          }
-        })
+          };
+        }),
       };
-      callGroupMember(param).then(res=>{
-        console.log("xxxx", res)
-        getMeetingMemberById()
-      })
-      // meetingList.value.forEach((item, index) => {
-      //   let param = {
-      //     groupId: groupId.value,
-      //     device: {
-      //       id: item.id,
-      //       type: item.type,
-      //     }
-      //   };
-      //   callGroupMember(param).then(res=>{
-      //     console.log("开始呼叫", res)
-      //   })
-      // })
-      // getMeetingMemberById();
+      callGroupMember(param).then((res) => {
+        console.log("xxxx", res);
+        getMeetingMemberById();
+      });
     }
     // if (res.data.result.failDevices.length > 0) {
     //   for (const info of res.data.result.failDevices) {
@@ -276,8 +269,8 @@ const getMeetingMemberById = function () {
           clearTimeout(meetingTimer);
         }
         meetingTimer = setTimeout(() => {
-          if(times++>10){
-            return times = 0
+          if (times++ > 10) {
+            return (times = 0);
           }
           getMeetingMemberById();
         }, 2000);
@@ -288,35 +281,72 @@ const getMeetingMemberById = function () {
 const getRtspUrl = function (resourceId, id) {
   const params = {
     resourceId: resourceId,
-    protocol: "rtsp",
-    requestType: "flv"
+    protocol: "http",
+    requestType: "flv",
   };
   getResourceLiveUrl(params).then((res) => {
     console.log(res);
-    let videoElement = document.getElementById("video_"+id)
-    console.log("dom",videoElement)
+    let videoElement = document.getElementById("video_" + id);
     var flvPlayer = flvjs.createPlayer({
-      type: 'flv',
-      url: res.data.reslut,
+      type: "flv",
+      url: res.data.result,
       isLive: true,
     });
     flvPlayer.attachMediaElement(videoElement);
     flvPlayer.load();
     flvPlayer.play();
+    setTimeout(()=>{
+      $mitt.emit("openSoundDialog")
+      let json = JSON.stringify({
+        type: "data",
+        data: {
+          pcmUrl: res.data.result
+        }
+      })
+      recordWebsocket.send(json)
+    }, 200)
   });
 };
+let recordWebsocket = null;
+const beginRecord = function () {
+  recordWebsocket = new WebSocket("ws://10.112.143.190:8892/server/pcm");
+  recordWebsocket.onopen = function (event) {
+    console.log("服务已连接");
+    let json = JSON.stringify({
+      type: "start",
+    })
+    recordWebsocket.send(json);
+  };
+  recordWebsocket.onmessage = function(event){
+    let data = JSON.parse(event.data);
+    if(data.data.type === "mid_text"){
+      let text = data.data.data.text;
+      $mitt.emit("receiveMessage", {text: text})
+    }
+  }
+  recordWebsocket.onclose = function(event) {
+    console.log("服务连接关闭")
+  };
+  recordWebsocket.onerror = function(event) {
+    console.log(event,"连接出错")
+  };
+};
+const closeWs = function(){
+  if(recordWebsocket){
+    recordWebsocket.close()
+    recordWebsocket = null;
+  }
+}
 const closeMeeting = function () {
-  deleteMeeting(groupId.value).then(res=>{
-    console.log(res)
-  })
-  // if (meetingIns) {
-  //   showMeeting.value = false;
-  //   meetingIns.closeMeeting();
-  //   meetingIns = null;
-  // }
+  deleteMeeting(groupId.value).then((res) => {
+    console.log(res);
+  });
+  if (meetingTimer) {
+    clearTimeout(meetingTimer);
+  }
+  closeWs()
 };
 const onNodeClick = function (info) {
-  console.log(info);
   if (!info.children) {
     let id = info.id;
     let index = meetingList.value.findIndex((item) => item.id === id);
@@ -325,7 +355,6 @@ const onNodeClick = function (info) {
     } else {
       meetingList.value.splice(index, 1);
     }
-    console.log(meetingList.value);
   }
 };
 defineExpose({
@@ -364,7 +393,12 @@ defineExpose({
       font-weight: 500;
       color: #ffffff;
     }
+    .dialog_suoxiao{
+      height: 25px;
+      width: 25px;
+      cursor: pointer;
 
+    }
     .dialog_close {
       height: 33.65px;
       width: 33.65px;
@@ -589,8 +623,12 @@ defineExpose({
           width: calc((100% - 8px) / 4);
         }
       }
-      .video{
-        height: 100%;
+      .video {
+        height: 98%;
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
       }
       .fences_box {
         width: 100%;
@@ -697,5 +735,14 @@ defineExpose({
   #meeting_box {
     height: 500px;
   }
+}
+.dialog_fangda{
+  position: absolute;
+  bottom: 14px;
+  left: 485px;
+  z-index: 2;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
 }
 </style>

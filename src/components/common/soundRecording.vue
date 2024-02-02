@@ -1,5 +1,5 @@
 <script setup>
-import { ref, inject } from "vue";
+import { ref, inject, onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
@@ -12,15 +12,28 @@ const showDialog = ref(false);
 const closeDialog = function () {
   showDialog.value = false;
 };
-const recordList = ref([
-  { id: 1, label: "语音1：", content: "需要打开自然灾害监测专题页面" },
-  { id: 2, label: "语音2：", content: "打开自然灾害监测专题页面" },
-  { id: 3, label: "语音3：", content: "打开自然灾害监测专题页面" },
-  { id: 4, label: "语音4：", content: "打开自然灾害监测专题页面" },
-  { id: 5, label: "语音5：", content: "打开自然灾害监测专题页面" },
-  { id: 6, label: "语音6：", content: "打开自然灾害监测专题页面" },
-]);
-
+const recordList = ref([]);
+const getRandomId = function(){
+  let time = new Date().getTime()+"";
+  let str = parseInt(Math.random()*10000)
+  return time + str
+}
+$mitt.on("openSoundDialog",function(){
+  openDialog()
+})
+$mitt.on("receiveMessage",function(data){
+  recordList.value.push({
+    id: getRandomId(),
+    content: data.text
+  })
+  search(data.text)
+})
+onMounted(()=>{
+})
+onUnmounted(()=>{
+  $mitt.all.delete("openSoundDialog")
+  $mitt.all.delete("receiveMessage")
+})
 const audioVal = ref("");
 const yjzyList = [
   { type: "jydw", name: "救援队伍" },
@@ -67,8 +80,8 @@ const zrzhYjzyList = [
   { id: "bncs", name: "避灾场所" },
   { id: "spjk", name: "视频监控" },
 ];
-const search = function () {
-  const val = audioVal.value;
+const search = function (val) {
+  // const val = audioVal.value;
   if (val.includes("打开指挥调度一张图")) {
     $mitt.emit("audioControl", { order: "changeRoute", index: 0 });
   } else if (val.includes("打开自然灾害")) {
@@ -142,7 +155,7 @@ const search = function () {
         @click.stop="closeDialog"
         alt=""
       />
-      <div class="input_box">
+      <!-- <div class="input_box">
         <input
           type="text"
           style="border: 1px solid #00ffff; color: #fff"
@@ -151,7 +164,7 @@ const search = function () {
           @keyup.enter="search"
         />
         <button @click="search">指令</button>
-      </div>
+      </div> -->
       <div class="record_content">
         <ul class="record_list">
           <li v-for="item in recordList" :key="item.id">

@@ -1,6 +1,13 @@
 <script setup>
 import fscreen from "@/utils/fullscreen.js";
-import { reactive, ref, onMounted, inject, onUnmounted, defineAsyncComponent } from "vue";
+import {
+  reactive,
+  ref,
+  onMounted,
+  inject,
+  onUnmounted,
+  defineAsyncComponent,
+} from "vue";
 import { useRoute, useRouter } from "vue-router";
 import tabzrurl from "@/assets/header/head_tab1_active.png";
 import zrzh from "@/assets/header/head_tab1.png";
@@ -18,8 +25,7 @@ import safePage from "@/assets/header/safePage.png";
 import natural from "@/assets/header/natural.png";
 import home from "@/assets/header/home.png";
 
-const dialogNav = defineAsyncComponent(() => import('./dialogNav.vue'))
-
+const dialogNav = defineAsyncComponent(() => import("./dialogNav.vue"));
 
 const $mitt = inject("$mitt");
 const pageHeader = ref();
@@ -74,7 +80,7 @@ const data = reactive({
 const audioControlFun = function (info = {}) {
   if (info.order === "changeRoute") {
     let index = info.index;
-    navCheckHandle(data.navList[index])
+    navCheckHandle(data.navList[index]);
   }
 };
 onMounted(() => {
@@ -84,7 +90,7 @@ onMounted(() => {
       data.checkValue = item.value;
     }
   });
-  $mitt.on("audioControl", audioControlFun)
+  $mitt.on("audioControl", audioControlFun);
 });
 onUnmounted(() => {
   $mitt.off("audioControl", audioControlFun);
@@ -96,7 +102,7 @@ const navCheckHandle = (row) => {
   }
   if (data.pageRoute !== row.path) {
     ROUTER_INFO.push(row.path);
-    $mitt.emit("removeHostLayer")
+    $mitt.emit("removeHostLayer");
     data.pageRoute = row.path;
   }
   data.checkValue = row.value;
@@ -123,56 +129,66 @@ const typeList = ref([
   { id: 4, name: "超高分" },
   { id: 5, name: "异形屏" },
   { id: 6, name: "驾驶舱" },
-])
+]);
+const getVideoUrl = function (type) {
+  let res =
+    window.baseRequestUrl + "/home/file/screen/" + type + ".mp4?access_token=";
+  res += sessionStorage.getItem("token");
+  return res;
+};
 const navUrl = ref([
   {
     name: "指挥调度一张图",
     path: "home",
-    imgUrl: home
+    imgUrl: home,
+    videoUrl: getVideoUrl("home"),
   },
   {
     name: "自然灾害",
     path: "natural",
-    imgUrl: natural
+    imgUrl: natural,
+    videoUrl: getVideoUrl("zrzh"),
   },
   {
     name: "安全生产",
     path: "safePage",
-    imgUrl: safePage
+    imgUrl: safePage,
+    videoUrl: getVideoUrl("aqsc"),
   },
   {
     name: "决策分析",
     path: "decisionAnalysis",
-    imgUrl: decisionAnalysis
-  }
-])
-const dialogList = ref([])
-const dialogValue = ref(false)
+    imgUrl: decisionAnalysis,
+    videoUrl: getVideoUrl("fzjcfx"),
+  },
+]);
+const dialogList = ref([]);
+const dialogValue = ref(false);
 const closeHandle = () => {
-  dialogValue.value = false
-}
+  dialogValue.value = false;
+};
 const screenModelChange = function () {
-  console.log(typeValue.value)
+  console.log(typeValue.value);
   const type = typeValue.value;
-  dialogList.value = []
-  let baseIp = window.location.href.split("/#/")[0] + "/#/"
+  dialogList.value = [];
+  let baseIp = window.location.href.split("/#/")[0] + "/#/";
   if (type === 1 || type === 4) {
     // window.open(baseIp + "home", "_blank");
     navUrl.value.forEach((v, i) => {
       if (i < 1) {
-        v.paths = baseIp + v.path
-        dialogList.value.push(v)
+        v.paths = baseIp + v.path;
+        dialogList.value.push(v);
       }
-    })
+    });
   } else if (type === 2) {
     // window.open(baseIp + "home", "_blank");
     // window.open(baseIp + "natural", "_blank");
     navUrl.value.forEach((v, i) => {
       if (i < 2) {
-        v.paths = baseIp + v.path
-        dialogList.value.push(v)
+        v.paths = baseIp + v.path;
+        dialogList.value.push(v);
       }
-    })
+    });
   } else if (type === 3) {
     // window.open(baseIp + "home", "_blank");
     // window.open(baseIp + "natural", "_blank");
@@ -180,12 +196,22 @@ const screenModelChange = function () {
     // window.open(baseIp + "decisionAnalysis", "_blank");
     // window.open("http://10.112.143.191:20128/map/analysis/page/danger/sjfx", "_blank");
     navUrl.value.forEach((v, i) => {
-      v.paths = baseIp + v.path
-      dialogList.value.push(v)
-    })
+      v.paths = baseIp + v.path;
+      dialogList.value.push(v);
+    });
+  } else if (type === 6) {
+    dialogList.value.push({
+      type: "img",
+      id: "jsc",
+      imgUrl:
+        window.baseRequestUrl +
+        "/home/file/screen/jsc.png?access_token=" +
+        sessionStorage.getItem("token"),
+      paths: "http://10.112.143.191:20128/map/analysis/page/danger/sjfx"
+    });
   }
-  dialogValue.value = true
-}
+  dialogValue.value = true;
+};
 </script>
 
 <template>
@@ -193,8 +219,14 @@ const screenModelChange = function () {
     <header ref="pageHeader">
       <div class="left_content">
         <ul class="tabs">
-          <li @click="navCheckHandle(it)" v-for="(it, ix) in data.navList.slice(0, 2)" :key="ix">
-            <img :src="[it.value === data.checkValue ? it.activeurl : it.taburl]" />
+          <li
+            @click="navCheckHandle(it)"
+            v-for="(it, ix) in data.navList.slice(0, 2)"
+            :key="ix"
+          >
+            <img
+              :src="[it.value === data.checkValue ? it.activeurl : it.taburl]"
+            />
           </li>
         </ul>
       </div>
@@ -204,20 +236,35 @@ const screenModelChange = function () {
       </div>
       <div class="right_content">
         <ul class="tabs">
-          <li @click="navCheckHandle(it)" v-for="(it, ix) in data.navList.slice(-2)" :key="ix">
-            <img :src="[it.value === data.checkValue ? it.activeurl : it.taburl]" alt="" />
+          <li
+            @click="navCheckHandle(it)"
+            v-for="(it, ix) in data.navList.slice(-2)"
+            :key="ix"
+          >
+            <img
+              :src="[it.value === data.checkValue ? it.activeurl : it.taburl]"
+              alt=""
+            />
           </li>
         </ul>
       </div>
       <div class="model_selects">
         <select v-model="typeValue" @change="screenModelChange">
-          <option v-for="item in typeList" :key="item.id" :value="item.id">{{ item.name }}</option>
+          <option v-for="item in typeList" :key="item.id" :value="item.id">
+            {{ item.name }}
+          </option>
         </select>
       </div>
       <div class="aside-link" @click="gosjfx()"></div>
       <div class="home" @click="gohome()"></div>
 
-      <dialogNav :title="'选择页面'" :dialogValue="dialogValue" :dialogList="dialogList" @closeHandle="closeHandle" style="position: relative;z-index: 100000;">
+      <dialogNav
+        :title="'选择页面'"
+        :dialogValue="dialogValue"
+        :dialogList="dialogList"
+        @closeHandle="closeHandle"
+        style="position: relative; z-index: 100000"
+      >
       </dialogNav>
     </header>
 
@@ -336,10 +383,12 @@ header {
   top: 0;
   width: 100%;
   height: 69px;
-  background: linear-gradient(145deg,
-      rgba(1, 23, 65, 0.9) 0%,
-      rgba(17, 48, 106, 0.9) 50%,
-      rgba(1, 23, 65, 0.9) 100%);
+  background: linear-gradient(
+    145deg,
+    rgba(1, 23, 65, 0.9) 0%,
+    rgba(17, 48, 106, 0.9) 50%,
+    rgba(1, 23, 65, 0.9) 100%
+  );
   background-size: 100% 100%;
   z-index: 3;
 }
@@ -349,18 +398,17 @@ header {
   right: 120px;
   top: 30px;
 
-  >select {
+  > select {
     color: #fff;
-    border: 1px solid #1E89FD;
+    border: 1px solid #1e89fd;
     height: 24px;
     border-radius: 2px;
-    ;
     padding: 0 6px;
   }
 
   option {
     color: #fff;
-    background-color: #122F4F;
+    background-color: #122f4f;
   }
 }
 </style>
