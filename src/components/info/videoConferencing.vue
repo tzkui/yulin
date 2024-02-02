@@ -221,10 +221,6 @@ const showMeeting = ref(false);
 let meetingIns = null;
 const groupId = ref("MS8d11f0dd0f45aa9bbc5154e09c8d84");
 const beginConferencing = function () {
-      $mitt.emit("openSoundDialog")
-      setTimeout(()=>{
-        $mitt.emit("receiveMessage", {text: "打开安全生产"})
-      },1000)
   if (meetingIns || meetingList.value.length === 0) return;
   beginRecord()
   // showMeeting.value = true;
