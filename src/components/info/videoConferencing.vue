@@ -119,11 +119,16 @@ import {
   getResourceLiveUrl,
   deleteMeeting,
   callGroupMember,
+  hangUpGroupMember,
 } from "@/api/modules/kd.js";
 import { ElMessage } from "element-plus";
 const txlLists = ref([]);
 const kdLists = ref([]);
+setTimeout(()=>{
+  console.log("zzzzzzzzzz")
+ElMessage.warning("jfldffkf")
 
+},5000)
 const $mitt = inject("$mitt");
 getDeviceTree().then((res) => {
   kdLists.value = res.data.result || [];
@@ -152,7 +157,20 @@ const { x, y, style } = useDraggable(dialogHeaderRef, {
 });
 const meetingList = ref([]);
 const remove = function (i) {
-  meetingList.value.splice(i, 1);
+  let info = meetingList.value.splice(i, 1);
+  if(groupId.value){
+    let param = {
+      groupId: groupId.value,
+      device: {
+        id: info[0].id,
+        type: info[0].type
+      }
+    }
+    hangUpGroupMember(param).then(res=>{
+      console.log(res)
+    })
+  }
+  
 };
 const showFangdaIcon = ref(false)
 const suoxiaoDialog = function(){
@@ -244,6 +262,12 @@ const beginConferencing = function () {
       callGroupMember(param).then((res) => {
         console.log("xxxx", res);
         getMeetingMemberById();
+        if(res.data.code==='1'){
+          res.data.dispatchMessageList.forEach(item=>{
+            console.log("进来了：",item.desc)
+            ElMessage.warning(item.desc)
+          })
+        }
       });
     }
     // if (res.data.result.failDevices.length > 0) {

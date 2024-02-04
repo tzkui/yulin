@@ -69,3 +69,14 @@ export function callGroupMember(data){
     }
   })
 }
+// 挂断单个会议成员
+export function hangUpGroupMember(data){
+  return axios({
+    url: "https://10.112.143.193/dispatch-micoservice/meeting/device/hangUp",
+    method: 'post',
+    data: data,
+    headers: {
+      apiKey: kdApiKey,
+    }
+  })
+}

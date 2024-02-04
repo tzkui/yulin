@@ -231,7 +231,7 @@ const search = function (val) {
     .record_list {
       height: 192px;
       overflow-y: auto;
-      margin-top: 10px;
+      margin-top: 50px;
       > li {
         display: flex;
         font-size: 16px;
