@@ -15,9 +15,7 @@
           :style="{ width: dialogList.length > 1 ? '49%' : '1900px' }">
           <div class="name">{{ item.name }}</div>
           <img v-if="item.type==='img'" :src="item.imgUrl" alt="" class="img" :style="{ height: dialogList.length > 1 ? '480px' : '950px' }">
-          <video v-else :src="item.videoUrl" class="video" style="{ height: dialogList.length > 1 ? '480px' : '950px' }"></video>
-          <!-- <iframe :src="item.paths" frameborder="0" class="img"
-            :style="{ height: dialogList.length > 3 ? '480px' : '950px' }"></iframe> -->
+          <video v-else :src="item.videoUrl" class="video" :style="{ height: dialogList.length > 1 ? '480px' : '950px' }"></video>
         </div>
       </div>
     </div>
