@@ -114,9 +114,9 @@ export default {
   watch: {},
   computed: {},
   mounted() {
-    this.$nextTick(() => {
-      this.initPlayer(this.playUrl, this.videoId);
-    });
+    // this.$nextTick(() => {
+    //   this.initPlayer(this.playUrl, this.videoId);
+    // });
   },
   created() {},
   destroyed() {},

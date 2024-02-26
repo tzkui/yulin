@@ -146,6 +146,13 @@ getSpjk().then((res) => {
     getSpjkTree(res.data[i].typeId).then(resp=>{
       resp.data.forEach(item=>{
         item.label = item.title
+        if(item.spare1){
+          try {
+            item.playerUrl = JSON.parse(item.spare1).playerUrl
+          } catch (error) {
+            
+          }
+        }
         allList.push({...item})
       })
       arr[i] = initTree(resp.data)[0]

@@ -7,7 +7,7 @@ const playerRef = ref();
 const props = defineProps({
   playerUrl: {
     type: String,
-    default: "rtsp://10.112.143.192:554/tel:2011",
+    default: "",
   },
 });
 const getRandomId = function () {
@@ -73,7 +73,7 @@ const initPlayer = function () {
   pullRtsp();
 };
 const pullRtsp = function () {
-  console.log("开始拉流");
+  console.log("开始拉流:", props.playerUrl);
   wbrtc256pull({ rtsp: props.playerUrl, videoId: videoId.value }).then(
     (res) => {
       if (res.data && res.data.code === 0) {

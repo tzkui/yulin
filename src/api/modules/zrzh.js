@@ -42,4 +42,4 @@ export const eventUpdata = (data) => request.postForm("/zrzh/event_update",data)
 export const uploadFile = (data) => request.postForm("/zrzh/eventfile_upload",data)
 
 // 地震速报
-export const getDzsb = (data) => request.postForm("/zrzh/dzsb",data)
+export const getDzsb = (data) => request.post("/zrzh/dzsb",data)
