@@ -56,9 +56,9 @@ let resources_list_all = ref([
   ],
   [
     { name: "应急单兵", num: 5, type: "yjdb", icon: "yjdb" },
-    { name: "无人机", num: 3, type: "wrj", icon: "wrj" },
+    { name: "无人机", num: 12, type: "wrj", icon: "wrj" },
     { name: "卫星电话", num: 2, type: "wxdh", icon: "wxdh" },
-    { name: "窄带通信", num: 10, type: "zdtx", icon: "zdtx" },
+    { name: "4G布控球", num: 3, type: "zdtx", icon: "zdtx" },
     { name: "通讯录", num: 10, type: "txl", icon: "txl" },
     { name: "视频会商", num: 16, type: "sphs", icon: "sphs" },
   ],

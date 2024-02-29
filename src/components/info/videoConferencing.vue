@@ -124,11 +124,6 @@ import {
 import { ElMessage } from "element-plus";
 const txlLists = ref([]);
 const kdLists = ref([]);
-setTimeout(()=>{
-  console.log("zzzzzzzzzz")
-ElMessage.warning("jfldffkf")
-
-},5000)
 const $mitt = inject("$mitt");
 getDeviceTree().then((res) => {
   kdLists.value = res.data.result || [];
@@ -185,6 +180,13 @@ const openVideoConferencingBus = useEventBus("openVideoConferencing");
 openVideoConferencingBus.on(openDialog);
 onMounted(() => {
   // getOrgs();
+  
+  let lastMeetingGroupId = localStorage.getItem("lastMeetingGroupId");
+  if(lastMeetingGroupId){
+    deleteMeeting(lastMeetingGroupId).then((res) => {
+      console.log(res);
+    });
+  }
 });
 onUnmounted(() => {
   openVideoConferencingBus.off(openDialog);
@@ -237,7 +239,7 @@ const changeFullscreen = () => {
 
 const showMeeting = ref(false);
 let meetingIns = null;
-const groupId = ref("MS8d11f0dd0f45aa9bbc5154e09c8d84");
+const groupId = ref("");
 const beginConferencing = function () {
   if (meetingIns || meetingList.value.length === 0) return;
   beginRecord()
@@ -249,6 +251,7 @@ const beginConferencing = function () {
   };
   initMeeting(options).then((res) => {
     groupId.value = res.data.result?.groupId || "";
+    localStorage.setItem("lastMeetingGroupId")
     if (groupId.value) {
       let param = {
         groupId: groupId.value,
@@ -361,6 +364,7 @@ const closeMeeting = function () {
   deleteMeeting(groupId.value).then((res) => {
     console.log(res);
   });
+  
   if (meetingTimer) {
     clearTimeout(meetingTimer);
   }
@@ -394,7 +398,7 @@ defineExpose({
   position: absolute;
   top: calc((100% - 676px) / 2);
   left: calc((100% - 986px) / 2);
-  z-index: 1111;
+  z-index: 1111111;
   display: flex;
   flex-direction: column;
 

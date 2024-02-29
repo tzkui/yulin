@@ -252,7 +252,7 @@ const changeFullscreen = () => {
   position: absolute;
   top: calc((100% - 676px) / 2);
   left: calc((100% - 986px) / 2);
-  z-index: 1111;
+  z-index: 111111;
   display: flex;
   flex-direction: column;
 
