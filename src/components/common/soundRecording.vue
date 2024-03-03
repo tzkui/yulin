@@ -12,21 +12,32 @@ const showDialog = ref(false);
 const closeDialog = function () {
   showDialog.value = false;
 };
-const recordList = ref([]);
 const getRandomId = function(){
   let time = new Date().getTime()+"";
   let str = parseInt(Math.random()*10000)
   return time + str
 }
+const recordList = ref([{type: 0, id: getRandomId(), content: ""}]);
 $mitt.on("openSoundDialog",function(){
   openDialog()
 })
 $mitt.on("receiveMessage",function(data){
-  recordList.value.push({
-    id: getRandomId(),
-    content: data.text
-  })
-  search(data.text)
+  let n = recordList.value.length-1;
+  if(data.type===0){
+    if(recordList.value[n].type===0){
+      recordList.value[n].content = data.text
+    }else{
+      recordList.value.push({
+        id: getRandomId(),
+        content: data.text,
+        type: 0
+      })
+    }
+  }else{
+    recordList.value[n].type = 1;
+    recordList.value[n].content = data.text;
+    search(data.text)
+  }
 })
 onMounted(()=>{
 })

@@ -142,6 +142,7 @@ getDeviceTree().then((res) => {
 });
 const openDialog = function (e) {
   showDialog.value = true;
+  clearLastMeeting()
   console.log("视频会商参数：", e);
 };
 const dialogHeaderRef = ref();
@@ -180,14 +181,16 @@ const openVideoConferencingBus = useEventBus("openVideoConferencing");
 openVideoConferencingBus.on(openDialog);
 onMounted(() => {
   // getOrgs();
-  
+  clearLastMeeting()
+});
+const clearLastMeeting = () => {
   let lastMeetingGroupId = localStorage.getItem("lastMeetingGroupId");
   if(lastMeetingGroupId){
     deleteMeeting(lastMeetingGroupId).then((res) => {
       console.log(res);
     });
   }
-});
+}
 onUnmounted(() => {
   openVideoConferencingBus.off(openDialog);
 });
@@ -251,7 +254,7 @@ const beginConferencing = function () {
   };
   initMeeting(options).then((res) => {
     groupId.value = res.data.result?.groupId || "";
-    localStorage.setItem("lastMeetingGroupId")
+    localStorage.setItem("lastMeetingGroupId", groupId.value)
     if (groupId.value) {
       let param = {
         groupId: groupId.value,
@@ -344,7 +347,9 @@ const beginRecord = function () {
     let data = JSON.parse(event.data);
     if(data.data.type === "mid_text"){
       let text = data.data.data.text;
-      $mitt.emit("receiveMessage", {text: text})
+      $mitt.emit("receiveMessage", {text: text, type: 0})  // 0是中间的文本,1是结束的文本
+    }else if(data.data.type === "fin_text"){
+      $mitt.emit("receiveMessage", {text: text, type: 1})
     }
   }
   recordWebsocket.onclose = function(event) {

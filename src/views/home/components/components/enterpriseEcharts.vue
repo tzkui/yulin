@@ -8,6 +8,8 @@ let commonFunc = Common();
 const $mitt = inject("$mitt");
 const emits = defineEmits(["clickEcharts"]);
 import { getQyfb, getQyfbTree } from "@/api/modules/home.js";
+
+const selectDialogRef = ref()
 // echarts实例
 const echarts = inject("echarts");
 const initChart = (option) => {
@@ -59,6 +61,7 @@ const initChart = (option) => {
 
   Mychart.on("click", async (params) => {
     showSelect.value = true;
+    // selectDialogRef.value.openDialog(listData.value)
   });
 };
 // 图表内容
@@ -169,7 +172,7 @@ const listData = ref([])
 const showSelect = ref(false)
 const getInfos = function () {
   getQyfb().then((res) => {
-    console.log("企业分布：", res);
+    let list = res.data.filter(item=>item.mc!=='榆林市')
     const arr = [
       { name: "非煤矿山", key: "fmks", data: [] },
       { name: "煤炭", key: "mk", data: [] },
@@ -183,13 +186,13 @@ const getInfos = function () {
       // { name: "金属冶炼", key: "jsyl", data: [] },
       // { name: "机械", key: "jx", data: [] },
     ];
-    res.data.forEach(item => {
+    list.forEach(item => {
       arr.forEach(info => {
         info.data.push(item[info.key])
       })
     })
     company_chart_data.value = arr;
-    option.value.xAxis[0].data = res.data.map(item => item.mc)
+    option.value.xAxis[0].data = list.map(item => item.mc)
     initChart(option.value);
   });
   getQyfbTree().then(res=>{
