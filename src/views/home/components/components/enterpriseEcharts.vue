@@ -3,13 +3,14 @@ import ViewBox from "@/components/common/view-box.vue";
 import { onMounted, ref, inject } from "vue";
 import Common from "@/utils/common.js";
 import selectDialogVue from "@/views/natural/components/selectDialog.vue";
+import qyfb from "./dialogs/qyfb.vue";
 let commonFunc = Common();
 
 const $mitt = inject("$mitt");
 const emits = defineEmits(["clickEcharts"]);
 import { getQyfb, getQyfbTree } from "@/api/modules/home.js";
 
-const selectDialogRef = ref()
+const qyfbRef = ref()
 // echarts实例
 const echarts = inject("echarts");
 const initChart = (option) => {
@@ -60,7 +61,8 @@ const initChart = (option) => {
   };
 
   Mychart.on("click", async (params) => {
-    showSelect.value = true;
+    // showSelect.value = true;
+    qyfbRef.value.openDialog(listData.value)
     // selectDialogRef.value.openDialog(listData.value)
   });
 };
@@ -196,16 +198,10 @@ const getInfos = function () {
     initChart(option.value);
   });
   getQyfbTree().then(res=>{
-    listData.value = res.data.filter(item=>item.dataType===2).map(item=>{
-      let info = JSON.parse(item.spare1)
-      return {
-        ...item,
-        label: item.title,
-        treeId: item.id,
-        mapX: info.longitude,
-        mapY: info.latitude
-      }
-    })
+    let list = res.data
+    // .filter(item=>item.dataType===2)
+    
+    listData.value = list
     window.STORE_INFO["qyxxListData"] = listData.value
     // sessionStorage.setItem("qyxxListData",JSON.stringify(listData.value))
   })
@@ -229,12 +225,13 @@ onMounted(() => {
   <selectDialogVue
     name="企业分布"
     :listData="listData"
-    listType="list"
+    listType="tree"
     @closeDialog="closeDialog"
     dialogType="qyxx"
     v-if="showSelect"
   >
   </selectDialogVue>
+  <qyfb ref="qyfbRef"></qyfb>
 </template>
 <style lang="scss" scoped>
 .enterprise_distribution {

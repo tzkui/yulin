@@ -187,7 +187,7 @@ watch(selectedMarkers, (val, old) => {
       markerType: props.dialogType,
       id: "1000",
       icon: markerList[0].icon,
-      name: "地灾隐患点",
+      name: "企业信息",
       markerList: markerList,
     });
     $mitt.emit("flyTo", markerList[0]);
