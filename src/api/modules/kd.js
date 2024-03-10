@@ -57,8 +57,19 @@ export function getResourceLiveUrl(data){
     }
   })
 }
+// 呼叫单个会议成员
+export function callSingleMember(data){
+  return axios({
+    url: "https://10.112.143.193/dispatch-micoservice/meeting/device/callMember",
+    method: 'post',
+    data: data,
+    headers: {
+      apiKey: kdApiKey,
+    }
+  })
+}
 
-// 呼叫会议成员
+// 添加多个会议成员
 export function callGroupMember(data){
   return axios({
     url: "https://10.112.143.193/dispatch-micoservice/meeting/meetingMember/batch",
@@ -73,6 +84,18 @@ export function callGroupMember(data){
 export function hangUpGroupMember(data){
   return axios({
     url: "https://10.112.143.193/dispatch-micoservice/meeting/device/hangUp",
+    method: 'post',
+    data: data,
+    headers: {
+      apiKey: kdApiKey,
+    }
+  })
+}
+
+// 获取通讯录数据
+export function getAllTxls(data){
+  return axios({
+    url: "http://10.112.143.193/kiop-gateway-core/tongxunlu/dept/getDeptContactAllTree",
     method: 'post',
     data: data,
     headers: {

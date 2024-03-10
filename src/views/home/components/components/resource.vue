@@ -6,7 +6,14 @@ import { bg_config } from "../../config";
 import { useEventBus } from "@vueuse/core";
 import selectDialogVue from "@/views/natural/components/selectDialog.vue";
 import addressBoox from "./dialogs/addressBoox.vue";
-import { getYjjy, getRhtx, getSpjk, getTxl, getSpjkTree } from "@/api/modules/home.js";
+import {
+  getYjjy,
+  getRhtx,
+  getSpjk,
+  getTxl,
+  getSpjkTree,
+} from "@/api/modules/home.js";
+import { getDeviceList } from "@/api/modules/kd.js";
 const imgefileUrl = (url) => {
   return new URL(url, import.meta.url).href;
 };
@@ -58,7 +65,7 @@ let resources_list_all = ref([
     { name: "应急单兵", num: 5, type: "yjdb", icon: "yjdb" },
     { name: "无人机", num: 12, type: "wrj", icon: "wrj" },
     { name: "卫星电话", num: 2, type: "wxdh", icon: "wxdh" },
-    { name: "4G布控球", num: 3, type: "zdtx", icon: "zdtx" },
+    { name: "4G布控球", num: 3, type: "bkq4g", icon: "zdtx" },
     { name: "通讯录", num: 10, type: "txl", icon: "txl" },
     { name: "视频会商", num: 16, type: "sphs", icon: "sphs" },
   ],
@@ -113,11 +120,11 @@ const getYjjyList = function () {
       // 向右下侧选择框传值
       let info = res.data[key];
       if (info.lx === "list") {
-        window.STORE_INFO[key + "ListData"] = info.jh
+        window.STORE_INFO[key + "ListData"] = info.jh;
         // sessionStorage.setItem(key + "ListData", JSON.stringify(info.jh));
       } else {
         let arr = info.jh.filter((item) => item.dataType === 2);
-        window.STORE_INFO[key + "ListData"] = arr
+        window.STORE_INFO[key + "ListData"] = arr;
         // sessionStorage.setItem(key + "ListData", JSON.stringify(arr));
       }
     }
@@ -154,57 +161,90 @@ const getRhtxList = function () {
       sl: 3,
       jh: wrjList,
     };
-    window.STORE_INFO.wrjListData = wrjList
+    window.STORE_INFO.wrjListData = wrjList;
     // sessionStorage.setItem("wrjListData", JSON.stringify(wrjList));
   });
+  let kdDataKeys = [
+    { id: "10000_ZFY_cdevice", name: "应急单兵" },
+    { id: "10000_610800000_cdevice", name: "无人机" },
+    { id: "10000_6108000002_cdevice", name: "4G布控球" },
+  ];
+  // 应急单兵
+  getDeviceList({groupId: "10000_ZFY_cdevice"}).then(res=>{
+    let yjdbList = res.data.result.data;
+    markerDatas.yjdb = {
+      type: "list",
+      sl: res.result.total,
+      jh: yjdbList,
+    }
+    window.STORE_INFO.yjdbListData = yjdbList;
+  })
+  // 无人机
+  getDeviceList({groupId: "10000_610800000_cdevice"}).then(res=>{
+    let wrjList = res.data.result.data;
+    markerDatas.wrj = {
+      type: "list",
+      sl: res.result.total,
+      jh: wrjList,
+    }
+    window.STORE_INFO.wrjListData = wrjList;
+  })
+  // 4G布控球
+  getDeviceList({groupId: "10000_6108000002_cdevice"}).then(res=>{
+    let bkq4gList = res.data.result.data;
+    markerDatas.bkq4g = {
+      type: "list",
+      sl: res.result.total,
+      jh: bkq4gList,
+    }
+    window.STORE_INFO.bkq4gListData = bkq4gList;
+  })
 };
-const getTxlList = function(){
-  getTxl().then(res=>{
-    let list = res.data.map(item=>{
-      if(item.dataType == 1){
+const getTxlList = function () {
+  getTxl().then((res) => {
+    let list = res.data.map((item) => {
+      if (item.dataType == 1) {
         return {
           ...item,
-          name: item.title
-        }
-      }else{
+          name: item.title,
+        };
+      } else {
         try {
           return {
             ...item,
             name: item.personalName,
-            linkPhone: JSON.parse(item.spare1)?.linkPhone
-          }
-          
+            linkPhone: JSON.parse(item.spare1)?.linkPhone,
+          };
         } catch (error) {
           return {
             ...item,
             name: item.personalName,
-
-          }
+          };
         }
       }
-    })
-    resources_list_all.value[1][4].num=list.length - 13
+    });
+    resources_list_all.value[1][4].num = list.length - 13;
     markerDatas.txl = {
       lx: "tree",
-      sl: list.length-13,
+      sl: list.length - 13,
       jh: list,
     };
-    window.STORE_INFO.txlList = list
-  })
-}
+    window.STORE_INFO.txlList = list;
+  });
+};
 const getSpjkList = function () {
   getSpjk().then((res) => {
-    console.log("Spjk: ",res)
+    console.log("Spjk: ", res);
     const list = resources_list_all.value[3];
     for (const info of list) {
       for (const data of res.data) {
         if (data.mc.startsWith(info.name)) {
           info.num = data.sz;
           markerDatas[info.type] = { ...data, lx: "tree", sl: data.sz };
-          getSpjkTree(data.typeId).then(resp=>{
-            console.log("spjk_tree", resp)
-            markerDatas[info.type].jh = resp.data
-          })
+          getSpjkTree(data.typeId).then((resp) => {
+            console.log("spjk_tree", resp);
+            markerDatas[info.type].jh = resp.data;
+          });
         }
       }
     }
@@ -229,8 +269,8 @@ const changeResources = (type, index) => {
 };
 const showTxl = ref(false);
 const openDialog = (item, index) => {
-  console.log(item, index,selectDatas)
-  if(item.num===0) return ;
+  console.log(item, index, selectDatas);
+  if (item.num === 0) return;
   $mitt.emit("hideAllMarker");
   if (markerDatas[item.type]) {
     let info = markerDatas[item.type];
@@ -268,22 +308,21 @@ const openDialog = (item, index) => {
 const audioControlFun = function (info = {}) {
   if (info.order === "openHomeYjzy") {
     let type = info.type;
-    outer: for(let i=0;i<resources_list_all.value.length; i++){
-      let list = resources_list_all.value[i]
-      console.log(list)
-      let index=0;
-      for(const item of list){
-        if(item.type===type){
-          changeResources(resources_tab.value[i].type,i)
-          nextTick(()=>{
-            openDialog(item,index)
-          })
+    outer: for (let i = 0; i < resources_list_all.value.length; i++) {
+      let list = resources_list_all.value[i];
+      console.log(list);
+      let index = 0;
+      for (const item of list) {
+        if (item.type === type) {
+          changeResources(resources_tab.value[i].type, i);
+          nextTick(() => {
+            openDialog(item, index);
+          });
           break outer;
         }
         index++;
       }
     }
-
   }
 };
 const closeDialog = function () {
@@ -296,7 +335,7 @@ onMounted(() => {
   getSpjkList();
   getTxlList();
   mockData();
-  $mitt.on("audioControl", audioControlFun)
+  $mitt.on("audioControl", audioControlFun);
 });
 onUnmounted(() => {
   $mitt.off("audioControl", audioControlFun);

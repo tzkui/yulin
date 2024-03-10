@@ -88,7 +88,7 @@
               @click="changeFullscreen"
             ></div>
           </div>
-          <div class="mute_btn" @click="beginConferencing">开始会商</div>
+          <!-- <div class="mute_btn" @click="beginConferencing">开始会商</div> -->
           <div class="mute_btn red" @click="closeMeeting">结束会商</div>
         </div>
       </div>
@@ -120,6 +120,8 @@ import {
   deleteMeeting,
   callGroupMember,
   hangUpGroupMember,
+  callSingleMember,
+  getAllTxls
 } from "@/api/modules/kd.js";
 import { ElMessage } from "element-plus";
 const txlLists = ref([]);
@@ -140,11 +142,44 @@ getDeviceTree().then((res) => {
     });
   });
 });
+getAllTxls()
 const openDialog = function (e) {
   showDialog.value = true;
-  clearLastMeeting()
+  // clearLastMeeting()
+  beginConferencing()
   console.log("视频会商参数：", e);
 };
+
+const addGroupMember = (info) => {
+  let param = {
+    groupId: groupId.value,
+    deviceList: [{
+      id: info.id,
+      type: info.type
+    }]
+  }
+  callGroupMember(param).then(res=>{
+    getMeetingMemberById()
+  })
+  // callSingleMember({
+  //   groupId: groupId.value,
+  //   device: {
+  //     id: info.id,
+  //     type: info.type
+  //   }
+  // }).then(res=>{
+  //   console.log("开始了")
+  // })
+}
+const removeGroupMember = (info) => {
+  hangUpGroupMember({
+    groupId: groupId.value,
+    device: {
+      id: info.id,
+      type: info.type
+    }
+  })
+}
 const dialogHeaderRef = ref();
 const videoConferencingRef = ref();
 const { x, y, style } = useDraggable(dialogHeaderRef, {
@@ -241,10 +276,8 @@ const changeFullscreen = () => {
 };
 
 const showMeeting = ref(false);
-let meetingIns = null;
 const groupId = ref("");
 const beginConferencing = function () {
-  if (meetingIns || meetingList.value.length === 0) return;
   beginRecord()
   // showMeeting.value = true;
   let options = {
@@ -266,7 +299,6 @@ const beginConferencing = function () {
         }),
       };
       callGroupMember(param).then((res) => {
-        console.log("xxxx", res);
         getMeetingMemberById();
         if(res.data.code==='1'){
           res.data.dispatchMessageList.forEach(item=>{
@@ -276,11 +308,6 @@ const beginConferencing = function () {
         }
       });
     }
-    // if (res.data.result.failDevices.length > 0) {
-    //   for (const info of res.data.result.failDevices) {
-    //     ElMessage.error(info.messageBody.desc);
-    //   }
-    // }
   });
 };
 let meetingTimer = null;
@@ -381,8 +408,10 @@ const onNodeClick = function (info) {
     let index = meetingList.value.findIndex((item) => item.id === id);
     if (index === -1) {
       meetingList.value.push(info);
+      addGroupMember(info)
     } else {
       meetingList.value.splice(index, 1);
+      removeGroupMember(info)
     }
   }
 };
