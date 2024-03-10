@@ -62,7 +62,7 @@ let resources_list_all = ref([
     { name: "防护目标", num: 453, type: "fhmb", icon: "fhmb" },
   ],
   [
-    { name: "应急单兵", num: 5, type: "yjdb", icon: "yjdb" },
+    { name: "应急单兵", num: 1, type: "yjdb", icon: "yjdb" },
     { name: "无人机", num: 12, type: "wrj", icon: "wrj" },
     { name: "卫星电话", num: 2, type: "wxdh", icon: "wxdh" },
     { name: "4G布控球", num: 3, type: "bkq4g", icon: "zdtx" },
@@ -151,17 +151,17 @@ const getRhtxList = function () {
     };
     sessionStorage.setItem("wxdhListData", JSON.stringify(wxdhList));
 
-    let wrjList = [
-      { name: "无人机1", mapX: 109.488, mapY: 38.013, id: "112345" },
-      { name: "无人机2", mapX: 108.888, mapY: 37.413, id: "1212112" },
-      { name: "无人机3", mapX: 110.188, mapY: 38.713, id: "9988" },
-    ];
-    markerDatas.wrj = {
-      type: "list",
-      sl: 3,
-      jh: wrjList,
-    };
-    window.STORE_INFO.wrjListData = wrjList;
+    // let wrjList = [
+    //   { name: "无人机1", mapX: 109.488, mapY: 38.013, id: "112345" },
+    //   { name: "无人机2", mapX: 108.888, mapY: 37.413, id: "1212112" },
+    //   { name: "无人机3", mapX: 110.188, mapY: 38.713, id: "9988" },
+    // ];
+    // markerDatas.wrj = {
+    //   type: "list",
+    //   sl: 3,
+    //   jh: wrjList,
+    // };
+    // window.STORE_INFO.wrjListData = wrjList;
     // sessionStorage.setItem("wrjListData", JSON.stringify(wrjList));
   });
   let kdDataKeys = [
@@ -171,20 +171,22 @@ const getRhtxList = function () {
   ];
   // 应急单兵
   getDeviceList({groupId: "10000_ZFY_cdevice"}).then(res=>{
+    console.log("应急单兵", res)
     let yjdbList = res.data.result.data;
     markerDatas.yjdb = {
       type: "list",
-      sl: res.result.total,
+      sl: res.data.result.total,
       jh: yjdbList,
     }
     window.STORE_INFO.yjdbListData = yjdbList;
   })
   // 无人机
   getDeviceList({groupId: "10000_610800000_cdevice"}).then(res=>{
+    console.log("无人机", res)
     let wrjList = res.data.result.data;
     markerDatas.wrj = {
-      type: "list",
-      sl: res.result.total,
+      type: "lsit",
+      sl: res.data.result.total,
       jh: wrjList,
     }
     window.STORE_INFO.wrjListData = wrjList;
@@ -194,7 +196,7 @@ const getRhtxList = function () {
     let bkq4gList = res.data.result.data;
     markerDatas.bkq4g = {
       type: "list",
-      sl: res.result.total,
+      sl: res.data.result.total,
       jh: bkq4gList,
     }
     window.STORE_INFO.bkq4gListData = bkq4gList;

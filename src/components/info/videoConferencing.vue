@@ -44,10 +44,10 @@
             :key="item"
             class="monitorVideoFence"
           >
-            <!-- 假装是视屏 -->
             <video
               class="video"
               :id="'video_' + meetingList[index]?.id"
+              v-if="meetingList[index]"
             ></video>
             <!-- 视频移入  顶部遮罩 -->
             <div class="video_top_model">
@@ -89,7 +89,8 @@
             ></div>
           </div>
           <!-- <div class="mute_btn" @click="beginConferencing">开始会商</div> -->
-          <div class="mute_btn red" @click="closeMeeting">结束会商</div>
+          <!-- <div class="mute_btn red" @click="closeMeeting">结束会商</div> -->
+          <div class="mute_btn red" @click="closeDialog">结束会商</div>
         </div>
       </div>
     </div>
@@ -216,7 +217,7 @@ const openVideoConferencingBus = useEventBus("openVideoConferencing");
 openVideoConferencingBus.on(openDialog);
 onMounted(() => {
   // getOrgs();
-  clearLastMeeting()
+  clearLastMeeting();
 });
 const clearLastMeeting = () => {
   let lastMeetingGroupId = localStorage.getItem("lastMeetingGroupId");

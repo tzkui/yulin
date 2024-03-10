@@ -1,5 +1,5 @@
 <script setup>
-import { ref, inject, onMounted, onUnmounted } from "vue";
+import { ref, inject, onMounted, onUnmounted, nextTick } from "vue";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
@@ -12,39 +12,42 @@ const showDialog = ref(false);
 const closeDialog = function () {
   showDialog.value = false;
 };
-const getRandomId = function(){
-  let time = new Date().getTime()+"";
-  let str = parseInt(Math.random()*10000)
-  return time + str
-}
-const recordList = ref([{type: 0, id: getRandomId(), content: ""}]);
-$mitt.on("openSoundDialog",function(){
-  openDialog()
-})
-$mitt.on("receiveMessage",function(data){
-  let n = recordList.value.length-1;
-  if(data.type===0){
-    if(recordList.value[n].type===0){
-      recordList.value[n].content = data.text
-    }else{
+const getRandomId = function () {
+  let time = new Date().getTime() + "";
+  let str = parseInt(Math.random() * 10000);
+  return time + str;
+};
+const recordList = ref([]);
+$mitt.on("openSoundDialog", function () {
+  openDialog();
+});
+$mitt.on("receiveMessage", function (data) {
+  let n = recordList.value.length - 1;
+  if (data.type === 0) {
+    if (recordList.value[n].type === 0) {
+      recordList.value[n].content = data.text;
+    } else {
       recordList.value.push({
         id: getRandomId(),
         content: data.text,
-        type: 0
-      })
+        type: 0,
+      });
     }
-  }else{
+  } else {
     recordList.value[n].type = 1;
     recordList.value[n].content = data.text;
-    search(data.text)
+    search(data.text);
   }
-})
-onMounted(()=>{
-})
-onUnmounted(()=>{
-  $mitt.all.delete("openSoundDialog")
-  $mitt.all.delete("receiveMessage")
-})
+  nextTick(()=>{
+    recordListRef.value?.scrollTop = recordListRef.value.scrollHeight
+  })
+});
+onMounted(() => {});
+onUnmounted(() => {
+  $mitt.all.delete("openSoundDialog");
+  $mitt.all.delete("receiveMessage");
+});
+const recordListRef = ref()
 const audioVal = ref("");
 const yjzyList = [
   { type: "jydw", name: "救援队伍" },
@@ -92,7 +95,7 @@ const zrzhYjzyList = [
   { id: "spjk", name: "视频监控" },
 ];
 const search = function (val) {
-  // const val = audioVal.value;
+  console.log("执行搜索了：", val)
   if (val.includes("打开指挥调度一张图")) {
     $mitt.emit("audioControl", { order: "changeRoute", index: 0 });
   } else if (val.includes("打开自然灾害")) {
@@ -177,7 +180,7 @@ const search = function (val) {
         <button @click="search">指令</button>
       </div> -->
       <div class="record_content">
-        <ul class="record_list">
+        <ul class="record_list" ref="recordListRef">
           <li v-for="item in recordList" :key="item.id">
             <div class="label">{{ item.label }}</div>
             <div class="value">{{ item.content }}</div>
@@ -240,9 +243,12 @@ const search = function (val) {
   }
   .record_content {
     .record_list {
-      height: 192px;
+      height: 208px;
       overflow-y: auto;
-      margin-top: 50px;
+      margin-top: 44px;
+      &::-webkit-scrollbar {
+        display: block;
+      }
       > li {
         display: flex;
         font-size: 16px;
