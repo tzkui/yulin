@@ -39,7 +39,9 @@ $mitt.on("receiveMessage", function (data) {
     search(data.text);
   }
   nextTick(()=>{
-    recordListRef.value?.scrollTop = recordListRef.value.scrollHeight
+    if(recordListRef.value){
+      recordListRef.value.scrollTop = recordListRef.value.scrollHeight
+    }
   })
 });
 onMounted(() => {});

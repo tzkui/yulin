@@ -131,12 +131,7 @@ const onCheckedChange = function (data, flag) {
   }
 };
 const getMarkerInfoByType = function (info) {
-  let type = props.dialogType;
-  if(type==="txl"){
-    type = "yjry"
-  }
-  const model = fxyhLists[type] || yjzyLists[type];
-  console.log("xxxxxxx",model)
+  const model = fxyhLists[props.dialogType] || yjzyLists[props.dialogType];
   if (model) {
     let base = JSON.parse(JSON.stringify(model[0].markerList[0]));
     base.id = info.id;
@@ -146,29 +141,10 @@ const getMarkerInfoByType = function (info) {
     if (info.spare1) {
       try {
         let details = JSON.parse(info.spare1);
-        let dict = entityDict[type];
+        let dict = entityDict[props.dialogType];
         base.details = {};
         for (let key in dict) {
           base.details[key] = details[dict[key]];
-        }
-        if(type==='yjry'){
-          base = {
-            markerType: "yjry",
-            id: info.id,
-            icon: "/images/marker/icon_renyuan.png",
-            lng: info.mapX,
-            lat: info.mapY,
-            name: "应急人员",
-            label: { text: "应急人员", font_size: 16 },
-            dialogType: "yjry",
-            details: {
-              personalName: details.personalName,
-              job: details.jobShortName,
-              orgName: details.orgName,
-              linkPhone: details.linkPhone,
-              duties: details.duties,
-            },
-          }
         }
       } catch (error) {
         console.log("解析JSON出错了--->", info);
@@ -242,9 +218,9 @@ const filterMethod = (value, data) => {
         @clear="searchTxl"
         clearable
       >
-      <!-- <template #append>
-        <el-button :icon="Search" style="background-color: #3F85FF;" type="primary" @click="searchTxl" />
-      </template> -->
+      <template #append>
+        <el-button :icon="Search" @click="doSearch" />
+      </template>
     </el-input>
     </div>
     <div class="checkbox_popup">

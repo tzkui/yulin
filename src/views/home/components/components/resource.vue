@@ -2,7 +2,6 @@
 import ViewBox from "@/components/common/view-box.vue";
 import { onMounted, ref, nextTick, inject, onUnmounted } from "vue";
 import { bg_config } from "../../config";
-
 import { useEventBus } from "@vueuse/core";
 import selectDialogVue from "@/views/natural/components/selectDialog.vue";
 import addressBoox from "./dialogs/addressBoox.vue";
@@ -212,10 +211,15 @@ const getTxlList = function () {
         };
       } else {
         try {
+          let info = JSON.parse(item.spare1)
           return {
             ...item,
             name: item.personalName,
-            linkPhone: JSON.parse(item.spare1)?.linkPhone,
+            linkPhone: info?.linkPhone,
+            mapX: info.mapX,
+            mapY: info.mapY,
+            appdlzt: info.appdlzt,
+            linkPhone: info.linkPhone
           };
         } catch (error) {
           return {

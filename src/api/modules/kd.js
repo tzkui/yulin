@@ -95,7 +95,7 @@ export function hangUpGroupMember(data){
 // 获取通讯录数据
 export function getAllTxls(data){
   return axios({
-    url: "http://10.112.143.193/kiop-gateway-core/tongxunlu/dept/getDeptContactAllTree",
+    url: "http://10.112.143.193/kiop-gateway-core/tongxunlu/dept/getDeptContactAllTree?apikey="+kdApiKey,
     method: 'post',
     data: data,
     headers: {
