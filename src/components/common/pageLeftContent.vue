@@ -4,9 +4,9 @@ import { Search } from "@element-plus/icons-vue";
 // 导入这个弹框的组件
 import dialogVue from "@/components/common/dialog.vue";
 // 导入获取这个人员的接口
-import { getpersonalList } from "../../api/modules/home"
-
-import resourceAnalysis from '@/components/info/resourceAnalysis.vue'
+import { getpersonalList, sendDuanxin } from "../../api/modules/home";
+import resourceAnalysis from "@/components/info/resourceAnalysis.vue";
+import { ElMessage } from "element-plus";
 
 const isHide = ref(false);
 const tooglePosition = function () {
@@ -22,6 +22,8 @@ const xxshow = ref(false);
 //弹出弹框
 const xxshowclick = function () {
   xxshow.value = true;
+  selectedPersonPhones.value = []
+  xxform.value = {}
 };
 // 关闭的方法
 const closeHandle = function () {
@@ -57,91 +59,116 @@ const okC = function () {
 // 表格的一些数据
 const tableData = ref([
   {
-    date: '2016-05-03',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
+    date: "2016-05-03",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
   },
   {
-    date: '2016-05-02',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
+    date: "2016-05-02",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
   },
   {
-    date: '2016-05-04',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
+    date: "2016-05-04",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
   },
   {
-    date: '2016-05-01',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },])
+    date: "2016-05-01",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+]);
 // 控制表格显示还说隐藏的
-const pershow = ref(false)
+const pershow = ref(false);
 // 搜索表单需要的参数
-const serpersonnel = ref('')
+const serpersonnel = ref("");
 // 页码和页数的参数
-const currentPage3 = ref(1)
-const pageSize3 = ref(10)
+const currentPage3 = ref(1);
+const pageSize3 = ref(10);
 // 总条数
-const total = ref(0)
+const total = ref(0);
 //页码和页数发生变化的时候
-const handleSizeChange = () => {
-}
-const handleCurrentChange = () => {
-}
+const handleSizeChange = (size) => {
+  pageSize3.value = size;
+  getper()
+};
+const handleCurrentChange = (page) => {
+  currentPage3.value = page;
+  getper()
+};
 // 点击输入框的时间
 const perCl = () => {
-  pershow.value = true
-  console.log(pershow.value,"看结果")
-}
+  pershow.value = true;
+  console.log(pershow.value, "看结果");
+};
 // 下面是这个确定选择的方法
+const selectedPersonPhones = ref([])
 const selectok = () => {
-  pershow.value = false
-  let newdata=ref([])
-  xzdata.value.forEach(v=>{
-    newdata.value.push(v.personalName)
-  })
-  xxform.personnel=JSON.stringify(newdata.value)
-  console.log(JSON.stringify(newdata.value),"看结果选择的相关的一些东西的了")
-}
+  pershow.value = false;
+  let newdata = ref([]);
+  xzdata.value.forEach((v) => {
+    newdata.value.push(v.personalName);
+    if(!selectedPersonPhones.value.includes(v.username)){
+      selectedPersonPhones.value.push(v.username)
+    }
+  });
+  xxform.personnel = JSON.stringify(newdata.value);
+  console.log(JSON.stringify(newdata.value), "看结果选择的相关的一些东西的了");
+};
 // 选择的个数
-const xznum = ref()
+const xznum = ref();
 // 选择的数据的了
-const xzdata=ref()
+const xzdata = ref();
 // 点击勾选框的时间
 const select = (selection, row) => {
-  xznum.value = selection.length
-  xzdata.value=selection
-  console.log(selection, row, "看看这个两个是什么")
-}
+  xznum.value = selection.length;
+  xzdata.value = selection;
+  console.log(selection, row, "看看这个两个是什么");
+};
 const handleSelectionChange = (selection, row) => {
-  console.log(selection)
-  xzdata.value=selection
-  xznum.value = selection.length
-}
+  console.log(selection);
+  xzdata.value = selection;
+  xznum.value = selection.length;
+};
 // 定义一个数据是这个表格头部的数据
 const tableherader = ref([
-  { label: '人员名称', value: 'personalName' },
-  { label: '性别', value: 'sex' },
-  { label: '部门', value: 'departmentName' },
-  { label: '职务', value: 'jobShortName' },
-])
+  { label: "人员名称", value: "personalName" },
+  { label: "性别", value: "sex" },
+  { label: "部门", value: "departmentName" },
+  { label: "职务", value: "jobShortName" },
+]);
 
 // 获取发布人员信息的
 const getper = async () => {
-  let res = await getpersonalList(currentPage3.value, pageSize3.value, serpersonnel.value)
-  tableData.value = res.data
-  total.value = res.count
-  console.log(res, "=====>我是数据")
-}
-getper()
+  let res = await getpersonalList(
+    currentPage3.value,
+    pageSize3.value,
+    serpersonnel.value
+  );
+  tableData.value = res.data;
+  total.value = res.count;
+  console.log(res, "=====>我是数据");
+};
+getper();
 
-const sendDuanxin = function (){}
+const sendDuanxinFun = function () {
+  console.log("发送短信了：",selectedPersonPhones.value)
+  sendDuanxin(selectedPersonPhones.value.join(",")).then(res=>{
+  // sendDuanxin("15682381478").then(res=>{
+    closeHandle()
+    ElMessage.success("发送成功")
+  });
+};
 </script>
 
 <template>
-  <div :class="['left_content animate__animated  animate__fadeInLeft', isHide ? 'hide_content' : '']">
+  <div
+    :class="[
+      'left_content animate__animated  animate__fadeInLeft',
+      isHide ? 'hide_content' : '',
+    ]"
+  >
     <div class="leftContent">
       <slot></slot>
     </div>
@@ -151,49 +178,83 @@ const sendDuanxin = function (){}
     </div> -->
     <!-- 信息发布 -->
     <div class="msg-fb" @click="xxshowclick">
-      <img src="../../assets/header/msg-fb.png">
+      <img src="../../assets/header/msg-fb.png" />
     </div>
     <div @click="tooglePosition" :class="['arrow_box', isHide ? 'rotate' : '']">
       <el-icon size="32" color="#fff">
         <ArrowLeft />
       </el-icon>
     </div>
-  <resourceAnalysis></resourceAnalysis>
+    <resourceAnalysis></resourceAnalysis>
   </div>
 
   <!-- 然后这个信息发布的弹框就写在这里了 -->
-  <dialogVue :dialogValue="xxshow" :title="'信息发布'" width="640px" height="455px" top="500px" @closeHandle="closeHandle">
+  <dialogVue
+    :dialogValue="xxshow"
+    :title="'信息发布'"
+    width="640px"
+    height="455px"
+    top="500px"
+    @closeHandle="closeHandle"
+  >
     <el-form :model="xxform" class="xxform">
-      <el-form-item class="peritem" label="发布人员" prop="personnel" @click="perCl">
+      <el-form-item
+        class="peritem"
+        label="发布人员"
+        prop="personnel"
+        @click="perCl"
+      >
         <el-input v-model="xxform.personnel" placeholder="'" clearable />
         <!-- 这里先写一个表格,点击的时候把这个产生出来 -->
         <div class="sercehtable" v-show="pershow">
           <div class="tabletitle">
-            <div><input class="serinput" v-model="serpersonnel" placeholder="搜索名称" clearable />
+            <div>
+              <input
+                class="serinput"
+                v-model="serpersonnel"
+                placeholder="搜索名称"
+                clearable
+              />
               <el-button :icon="Search" @click="getper"></el-button>
             </div>
-            <el-button type="primary" @click.stop="selectok">选择{{ xznum }}</el-button>
+            <el-button type="primary" @click.stop="selectok"
+              >选择{{ xznum }}</el-button
+            >
           </div>
 
-          <el-table class="tableAll" ref="multipleTableRef" :data="tableData" style="width: 100%"
-            @selection-change="handleSelectionChange" @select="select">
+          <el-table
+            class="tableAll"
+            ref="multipleTableRef"
+            :data="tableData"
+            style="width: 100%"
+            @selection-change="handleSelectionChange"
+            @select="select"
+          >
             <el-table-column type="selection" width="55" />
             <!-- <el-table-column label="时间">
               <template #default="scope">{{ scope.row.date }}</template>
             </el-table-column> -->
-            <el-table-column v-for="item in tableherader" :property="item.value" :label="item.label" />
+            <el-table-column
+              v-for="item in tableherader"
+              :property="item.value"
+              :label="item.label"
+            />
             <!-- <el-table-column property="address" label="排名" show-overflow-tooltip /> -->
           </el-table>
 
           <div class="demo-pagination-block">
             <div class="demonstration">Jump to</div>
-            <el-pagination v-model:current-page="currentPage3" v-model:page-size="pageSize3"
-              :page-sizes="[10, 20, 30, 40]" layout="total, sizes, prev, pager, next, jumper" :total="total"
-              @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+            <el-pagination
+              v-model:current-page="currentPage3"
+              v-model:page-size="pageSize3"
+              :page-sizes="[10, 20, 30, 40]"
+              layout="total, prev, pager, next"
+              :total="total"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+            />
           </div>
         </div>
-
-
       </el-form-item>
       <el-form-item label="发布内容" prop="content" class="biginput">
         <el-input v-model="xxform.content" placeholder="'" clearable />
@@ -207,13 +268,12 @@ const sendDuanxin = function (){}
       <button @click="negotiateC">会商</button>
     </div> -->
     <div class="footerbt">
-      <button @click="sendDuanxin">短信</button>
+      <button @click="sendDuanxinFun">短信</button>
       <button @click="cancellation">传真</button>
       <button @click="cancellation">取消</button>
       <button @click="okC">确定</button>
     </div>
   </dialogVue>
-
 </template>
 
 <style lang="less" scoped>
@@ -252,7 +312,7 @@ const sendDuanxin = function (){}
 }
 
 // 表格的相关的样式
-::v-deep .el-table--fit{
+::v-deep .el-table--fit {
   height: 230px;
   overflow: auto;
 }
@@ -267,8 +327,6 @@ const sendDuanxin = function (){}
   margin-top: -10px;
   margin-bottom: 10px;
 }
-
-
 
 .left_content {
   width: @boxWidth + @padding_left;
